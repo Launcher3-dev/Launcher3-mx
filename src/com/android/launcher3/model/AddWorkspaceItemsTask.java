@@ -21,13 +21,9 @@ import android.os.UserHandle;
 import android.util.Pair;
 
 import com.android.launcher3.AllAppsList;
-import com.android.launcher3.FolderInfo;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.LauncherAppState;
-import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherModel;
-import com.android.launcher3.LauncherModel.CallbackTask;
-import com.android.launcher3.LauncherModel.Callbacks;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.Utilities;
@@ -82,58 +78,14 @@ public class AddWorkspaceItemsTask extends BaseModelUpdateTask {
                 filteredItems.add(item);
             }
 
-            for (ItemInfo item : filteredItems) {
-                // Find appropriate space for the item.
-                Pair<Long, int[]> coords = findSpaceForItem(app, dataModel, workspaceScreens,
-                        addedWorkspaceScreensFinal, item.spanX, item.spanY);
-                long screenId = coords.first;
-                int[] cordinates = coords.second;
-
-                ItemInfo itemInfo;
-                if (item instanceof ShortcutInfo || item instanceof FolderInfo ||
-                        item instanceof LauncherAppWidgetInfo) {
-                    itemInfo = item;
-                } else {
-                    throw new RuntimeException("Unexpected info type");
-                }
-
-                // Add the shortcut to the db
-                getModelWriter().addItemToDatabase(itemInfo,
-                        LauncherSettings.Favorites.CONTAINER_DESKTOP, screenId,
-                        cordinates[0], cordinates[1]);
-
-                // Save the ShortcutInfo for binding in the workspace
-                addedItemsFinal.add(itemInfo);
-            }
+            filterAddedItemsFinal(app, dataModel, apps, workspaceScreens, filteredItems, addedWorkspaceScreensFinal, addedItemsFinal);
         }
 
         // Update the workspace screens
         updateScreens(context, workspaceScreens);
 
-        if (!addedItemsFinal.isEmpty()) {
-            scheduleCallbackTask(new CallbackTask() {
-                @Override
-                public void execute(Callbacks callbacks) {
-                    final ArrayList<ItemInfo> addAnimated = new ArrayList<>();
-                    final ArrayList<ItemInfo> addNotAnimated = new ArrayList<>();
-                    if (!addedItemsFinal.isEmpty()) {
-                        ItemInfo info = addedItemsFinal.get(addedItemsFinal.size() - 1);
-                        long lastScreenId = info.screenId;
-                        for (ItemInfo i : addedItemsFinal) {
-                            if (i.screenId == lastScreenId) {
-                                addAnimated.add(i);
-                            } else {
-                                addNotAnimated.add(i);
-                            }
-                        }
-                    }
-                    callbacks.bindAppsAdded(addedWorkspaceScreensFinal,
-                            addNotAnimated, addAnimated);
-                }
-            });
-        }
+        bindAddedItemsFinal(addedWorkspaceScreensFinal, addedItemsFinal);
     }
-
 
 
     /**

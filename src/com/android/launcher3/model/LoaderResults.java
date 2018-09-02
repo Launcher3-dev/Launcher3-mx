@@ -28,7 +28,6 @@ import com.android.launcher3.LauncherModel.Callbacks;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.MainThreadExecutor;
 import com.android.launcher3.PagedView;
-import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.util.ComponentKey;
@@ -351,25 +350,10 @@ public class LoaderResults {
         mUiExecutor.execute(r);
     }
 
-    public void bindAllAppsNoPositon() {
-        final ArrayList<ShortcutInfo> list = (ArrayList<ShortcutInfo>) mBgAllAppsList.noPosition.clone();
+    public void bindAllAppsNoPosition() {
+        final ArrayList<ItemInfo> list = (ArrayList<ItemInfo>) mBgAllAppsList.noPosition.clone();
         XLog.e(XLog.getTag(), XLog.TAG_GU + list.size());
         mApp.getModel().addAndBindNoPositionWorkspaceItems(list);
-    }
-
-    public void bindAllApps() {
-        // shallow copy
-        @SuppressWarnings("unchecked") final ArrayList<ShortcutInfo> list = (ArrayList<ShortcutInfo>) mBgAllAppsList.data.clone();
-
-        Runnable r = new Runnable() {
-            public void run() {
-                Callbacks callbacks = mCallbacks.get();
-                if (callbacks != null) {
-                    callbacks.bindAllApplications(list);
-                }
-            }
-        };
-        mUiExecutor.execute(r);
     }
 
     public void bindWidgets() {

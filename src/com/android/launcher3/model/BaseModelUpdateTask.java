@@ -21,9 +21,11 @@ import android.util.LongSparseArray;
 import android.util.Pair;
 
 import com.android.launcher3.AllAppsList;
+import com.android.launcher3.FolderInfo;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.LauncherAppState;
+import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherModel;
 import com.android.launcher3.LauncherModel.CallbackTask;
 import com.android.launcher3.LauncherModel.Callbacks;
@@ -38,6 +40,7 @@ import com.android.launcher3.util.XLog;
 import com.android.launcher3.widget.WidgetListRowEntry;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 /**
@@ -56,7 +59,7 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
     private boolean mForceExecute = false;
 
     public void init(LauncherAppState app, LauncherModel model,
-            BgDataModel dataModel, AllAppsList allAppsList, Executor uiExecutor) {
+                     BgDataModel dataModel, AllAppsList allAppsList, Executor uiExecutor) {
         mApp = app;
         mModel = model;
         mDataModel = dataModel;
@@ -233,6 +236,60 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
             }
         }
         return occupied.findVacantCell(xy, spanX, spanY);
+    }
+
+    protected void filterAddedItemsFinal(LauncherAppState app, BgDataModel dataModel, AllAppsList apps,
+                                         ArrayList<Long> workspaceScreens, List<ItemInfo> filteredItems,
+                                         ArrayList<Long> addedWorkspaceScreensFinal, ArrayList<ItemInfo> addedItemsFinal) {
+        for (ItemInfo item : filteredItems) {
+            // Find appropriate space for the item.
+            Pair<Long, int[]> coords = findSpaceForItem(app, dataModel, workspaceScreens,
+                    addedWorkspaceScreensFinal, item.spanX, item.spanY);
+            long screenId = coords.first;
+            int[] cordinates = coords.second;
+
+            ItemInfo itemInfo;
+            if (item instanceof ShortcutInfo || item instanceof FolderInfo ||
+                    item instanceof LauncherAppWidgetInfo) {
+                itemInfo = item;
+            } else {
+                throw new RuntimeException("Unexpected info type");
+            }
+
+            // Add the shortcut to the db
+            getModelWriter().addItemToDatabase(itemInfo,
+                    LauncherSettings.Favorites.CONTAINER_DESKTOP, screenId,
+                    cordinates[0], cordinates[1]);
+
+            // Save the ShortcutInfo for binding in the workspace
+            addedItemsFinal.add(itemInfo);
+        }
+    }
+
+    protected void bindAddedItemsFinal(ArrayList<Long> addedWorkspaceScreensFinal,
+                                       List<ItemInfo> addedItemsFinal) {
+        if (!addedItemsFinal.isEmpty()) {
+            scheduleCallbackTask(new CallbackTask() {
+                @Override
+                public void execute(Callbacks callbacks) {
+                    final ArrayList<ItemInfo> addAnimated = new ArrayList<>();
+                    final ArrayList<ItemInfo> addNotAnimated = new ArrayList<>();
+                    if (!addedItemsFinal.isEmpty()) {
+                        ItemInfo info = addedItemsFinal.get(addedItemsFinal.size() - 1);
+                        long lastScreenId = info.screenId;
+                        for (ItemInfo i : addedItemsFinal) {
+                            if (i.screenId == lastScreenId) {
+                                addAnimated.add(i);
+                            } else {
+                                addNotAnimated.add(i);
+                            }
+                        }
+                    }
+                    callbacks.bindAppsAdded(addedWorkspaceScreensFinal,
+                            addNotAnimated, addAnimated);
+                }
+            });
+        }
     }
 
     protected void updateScreens(Context context, ArrayList<Long> workspaceScreens) {

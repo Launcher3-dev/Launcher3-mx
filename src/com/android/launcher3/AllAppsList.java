@@ -53,7 +53,7 @@ public class AllAppsList {
     /** The list of apps that have been modified since the last notify() call. */
     public ArrayList<ShortcutInfo> modified = new ArrayList<>();
     /** The list of apps that have not position */
-    public ArrayList<ShortcutInfo> noPosition = new ArrayList<>();
+    public ArrayList<ItemInfo> noPosition = new ArrayList<>();
 
     private IconCache mIconCache;
 

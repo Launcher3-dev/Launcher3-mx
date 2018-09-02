@@ -189,8 +189,7 @@ public class LoaderTask implements Runnable {
 
             TraceHelper.partitionSection(TAG, "step 2.2: Binding all apps");
             verifyNotStopped();
-//            mResults.bindAllApps();
-            mResults.bindAllAppsNoPositon();
+            mResults.bindAllAppsNoPosition();
 
             verifyNotStopped();
             TraceHelper.partitionSection(TAG, "step 2.3: Update icon cache");

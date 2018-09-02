@@ -145,7 +145,6 @@ public class LauncherModel extends BroadcastReceiver
         public void bindScreens(ArrayList<Long> orderedScreenIds);
         public void finishFirstPageBind(ViewOnDrawExecutor executor);
         public void finishBindingItems();
-        public void bindAllApplications(ArrayList<ShortcutInfo> apps);
         public void bindAppsAddedOrUpdated(ArrayList<ShortcutInfo> apps);
         public void bindAppsAdded(ArrayList<Long> newScreens,
                                   ArrayList<ItemInfo> addNotAnimated,
@@ -203,7 +202,7 @@ public class LauncherModel extends BroadcastReceiver
      * Adds the no position items to workspace.
      * @param itemList
      */
-    public void addAndBindNoPositionWorkspaceItems(List<ShortcutInfo> itemList){
+    public void addAndBindNoPositionWorkspaceItems(List<ItemInfo> itemList){
         enqueueModelUpdateTask(new AddWorkspaceItemsNoPositionTask(itemList));
     }
 
@@ -468,8 +467,7 @@ public class LauncherModel extends BroadcastReceiver
                     loaderResults.bindWorkspace();
                     // For now, continue posting the binding of AllApps as there are other
                     // issues that arise from that.
-//                    loaderResults.bindAllApps();
-                    loaderResults.bindAllAppsNoPositon();
+                    loaderResults.bindAllAppsNoPosition();
                     loaderResults.bindDeepShortcuts();
                     loaderResults.bindWidgets();
                     return true;

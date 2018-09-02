@@ -2175,19 +2175,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     /**
-     * Add the icons for all apps.
-     *
-     * Implementation of the method from LauncherModel.Callbacks.
-     */
-    public void bindAllApplications(ArrayList<ShortcutInfo> apps) {
-        mAppsView.getAppsStore().setApps(apps);
-
-        if (mLauncherCallbacks != null) {
-            mLauncherCallbacks.bindAllApplications(apps);
-        }
-    }
-
-    /**
      * Copies LauncherModel's map of activities to shortcut ids to Launcher's. This is necessary
      * because LauncherModel's map is updated in the background, while Launcher runs on the UI.
      */
