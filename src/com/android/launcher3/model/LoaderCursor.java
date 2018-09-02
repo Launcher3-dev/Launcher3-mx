@@ -24,7 +24,6 @@ import android.content.Intent.ShortcutIconResource;
 import android.content.pm.LauncherActivityInfo;
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.UserHandle;
 import android.provider.BaseColumns;
@@ -32,7 +31,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.ItemInfo;
@@ -272,7 +270,7 @@ public class LoaderCursor extends CursorWrapper {
         }
 
         if (lai != null) {
-            AppInfo.updateRuntimeFlagsForActivityTarget(info, lai);
+            ShortcutInfo.updateRuntimeFlagsForActivityTarget(info, lai);
         }
 
         // from the db

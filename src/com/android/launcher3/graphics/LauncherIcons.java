@@ -16,11 +16,6 @@
 
 package com.android.launcher3.graphics;
 
-import static android.graphics.Paint.DITHER_FLAG;
-import static android.graphics.Paint.FILTER_BITMAP_FLAG;
-
-import static com.android.launcher3.graphics.ShadowGenerator.BLUR_FACTOR;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -43,19 +38,23 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.support.annotation.Nullable;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.FastBitmapDrawable;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.ItemInfoWithIcon;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.R;
+import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.model.PackageItemInfo;
 import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.shortcuts.ShortcutInfoCompat;
 import com.android.launcher3.util.Provider;
 import com.android.launcher3.util.Themes;
+
+import static android.graphics.Paint.DITHER_FLAG;
+import static android.graphics.Paint.FILTER_BITMAP_FLAG;
+import static com.android.launcher3.graphics.ShadowGenerator.BLUR_FACTOR;
 
 /**
  * Helper methods for generating various launcher icons
@@ -398,7 +397,7 @@ public class LauncherIcons implements AutoCloseable {
         boolean hasBadgePkgSet = !badgePkg.equals(shortcutInfo.getPackage());
         if (cn != null && !hasBadgePkgSet) {
             // Get the app info for the source activity.
-            AppInfo appInfo = new AppInfo();
+            ShortcutInfo appInfo = new ShortcutInfo();
             appInfo.user = shortcutInfo.getUserHandle();
             appInfo.componentName = cn;
             appInfo.intent = new Intent(Intent.ACTION_MAIN)

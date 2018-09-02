@@ -16,7 +16,6 @@ import android.view.View.AccessibilityDelegate;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.AppWidgetResizeFrame;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.ButtonDropTarget;
@@ -140,7 +139,7 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
             }
         }
 
-        if ((item instanceof AppInfo) || (item instanceof PendingAddItemInfo)) {
+        if ((item instanceof ShortcutInfo) || (item instanceof PendingAddItemInfo)) {
             info.addAction(mActions.get(ADD_TO_WORKSPACE));
         }
     }
@@ -164,8 +163,8 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
 
                 @Override
                 public void run() {
-                    if (item instanceof AppInfo) {
-                        ShortcutInfo info = ((AppInfo) item).makeShortcut();
+                    if (item instanceof ShortcutInfo) {
+                        ShortcutInfo info = (ShortcutInfo) item;
                         mLauncher.getModelWriter().addItemToDatabase(info,
                                 Favorites.CONTAINER_DESKTOP,
                                 screenId, coordinates[0], coordinates[1]);

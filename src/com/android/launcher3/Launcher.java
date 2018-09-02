@@ -2179,7 +2179,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      *
      * Implementation of the method from LauncherModel.Callbacks.
      */
-    public void bindAllApplications(ArrayList<AppInfo> apps) {
+    public void bindAllApplications(ArrayList<ShortcutInfo> apps) {
         mAppsView.getAppsStore().setApps(apps);
 
         if (mLauncherCallbacks != null) {
@@ -2202,7 +2202,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      * Implementation of the method from LauncherModel.Callbacks.
      */
     @Override
-    public void bindAppsAddedOrUpdated(ArrayList<AppInfo> apps) {
+    public void bindAppsAddedOrUpdated(ArrayList<ShortcutInfo> apps) {
         mAppsView.getAppsStore().addOrUpdateApps(apps);
     }
 
@@ -2253,7 +2253,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     @Override
-    public void bindAppInfosRemoved(final ArrayList<AppInfo> appInfos) {
+    public void bindAppInfosRemoved(final ArrayList<ShortcutInfo> appInfos) {
         mAppsView.getAppsStore().removeApps(appInfos);
     }
 

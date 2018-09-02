@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -47,19 +47,17 @@ android {
     productFlavors {
         aosp {
             dimension "default"
-            applicationId 'com.android.launcher31'
+            applicationId 'com.android.mxlauncher31'
             testApplicationId 'com.android.launcher3.tests'
         }
-
         l3go {
             dimension "default"
-            applicationId 'com.android.launcher3'
+            applicationId 'com.android.mxlauncher3'
             testApplicationId 'com.android.launcher3.tests'
         }
-
         quickstep {
             dimension "default"
-            applicationId 'com.android.launcher3'
+            applicationId 'com.android.mxlauncher3'
             testApplicationId 'com.android.launcher3.tests'
         }
     }
@@ -130,11 +128,9 @@ dependencies {
     implementation "com.android.support:support-dynamic-animation:${SUPPORT_LIBS_VERSION}"
     implementation "com.android.support:recyclerview-v7:${SUPPORT_LIBS_VERSION}"
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.2.0rc2'
-
     quickstepImplementation fileTree(dir: "quickstep/libs", include: 'sysui_shared.jar')
-
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation "org.mockito:mockito-core:2.15.0"
+    androidTestImplementation 'org.mockito:mockito-core:2.15.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

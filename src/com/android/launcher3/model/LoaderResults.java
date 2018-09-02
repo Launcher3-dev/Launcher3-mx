@@ -20,7 +20,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.android.launcher3.AllAppsList;
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.LauncherAppState;
@@ -29,12 +28,14 @@ import com.android.launcher3.LauncherModel.Callbacks;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.MainThreadExecutor;
 import com.android.launcher3.PagedView;
+import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.LooperIdleLock;
 import com.android.launcher3.util.MultiHashMap;
 import com.android.launcher3.util.ViewOnDrawExecutor;
+import com.android.launcher3.util.XLog;
 import com.android.launcher3.widget.WidgetListRowEntry;
 
 import java.lang.ref.WeakReference;
@@ -65,7 +66,7 @@ public class LoaderResults {
     private final WeakReference<Callbacks> mCallbacks;
 
     public LoaderResults(LauncherAppState app, BgDataModel dataModel,
-            AllAppsList allAppsList, int pageToBindFirst, WeakReference<Callbacks> callbacks) {
+                         AllAppsList allAppsList, int pageToBindFirst, WeakReference<Callbacks> callbacks) {
         mUiExecutor = new MainThreadExecutor();
         mApp = app;
         mBgDataModel = dataModel;
@@ -207,12 +208,14 @@ public class LoaderResults {
     }
 
 
-    /** Filters the set of items who are directly or indirectly (via another container) on the
-     * specified screen. */
+    /**
+     * Filters the set of items who are directly or indirectly (via another container) on the
+     * specified screen.
+     */
     public static <T extends ItemInfo> void filterCurrentWorkspaceItems(long currentScreenId,
-            ArrayList<T> allWorkspaceItems,
-            ArrayList<T> currentScreenItems,
-            ArrayList<T> otherScreenItems) {
+                                                                        ArrayList<T> allWorkspaceItems,
+                                                                        ArrayList<T> currentScreenItems,
+                                                                        ArrayList<T> otherScreenItems) {
         // Purge any null ItemInfos
         Iterator<T> iter = allWorkspaceItems.iterator();
         while (iter.hasNext()) {
@@ -254,8 +257,10 @@ public class LoaderResults {
         }
     }
 
-    /** Sorts the set of items by hotseat, workspace (spatially from top to bottom, left to
-     * right) */
+    /**
+     * Sorts the set of items by hotseat, workspace (spatially from top to bottom, left to
+     * right)
+     */
     private void sortWorkspaceItemsSpatially(ArrayList<ItemInfo> workspaceItems) {
         final InvariantDeviceProfile profile = mApp.getInvariantDeviceProfile();
         final int screenCols = profile.numColumns;
@@ -293,20 +298,20 @@ public class LoaderResults {
     }
 
     private void bindWorkspaceItems(final ArrayList<ItemInfo> workspaceItems,
-            final ArrayList<LauncherAppWidgetInfo> appWidgets,
-            final Executor executor) {
+                                    final ArrayList<LauncherAppWidgetInfo> appWidgets,
+                                    final Executor executor) {
 
         // Bind the workspace items
         int N = workspaceItems.size();
         for (int i = 0; i < N; i += ITEMS_CHUNK) {
             final int start = i;
-            final int chunkSize = (i+ITEMS_CHUNK <= N) ? ITEMS_CHUNK : (N-i);
+            final int chunkSize = (i + ITEMS_CHUNK <= N) ? ITEMS_CHUNK : (N - i);
             final Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     Callbacks callbacks = mCallbacks.get();
                     if (callbacks != null) {
-                        callbacks.bindItems(workspaceItems.subList(start, start+chunkSize), false);
+                        callbacks.bindItems(workspaceItems.subList(start, start + chunkSize), false);
                     }
                 }
             };
@@ -346,10 +351,15 @@ public class LoaderResults {
         mUiExecutor.execute(r);
     }
 
+    public void bindAllAppsNoPositon() {
+        final ArrayList<ShortcutInfo> list = (ArrayList<ShortcutInfo>) mBgAllAppsList.noPosition.clone();
+        XLog.e(XLog.getTag(), XLog.TAG_GU + list.size());
+        mApp.getModel().addAndBindNoPositionWorkspaceItems(list);
+    }
+
     public void bindAllApps() {
         // shallow copy
-        @SuppressWarnings("unchecked")
-        final ArrayList<AppInfo> list = (ArrayList<AppInfo>) mBgAllAppsList.data.clone();
+        @SuppressWarnings("unchecked") final ArrayList<ShortcutInfo> list = (ArrayList<ShortcutInfo>) mBgAllAppsList.data.clone();
 
         Runnable r = new Runnable() {
             public void run() {

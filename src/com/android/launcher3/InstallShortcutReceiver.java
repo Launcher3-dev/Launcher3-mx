@@ -364,7 +364,7 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
             user = info.getUser();
             mContext = context;
 
-            launchIntent = AppInfo.makeLaunchIntent(info);
+            launchIntent = ShortcutInfo.makeLaunchIntent(info);
             label = info.getLabel().toString();
         }
 
@@ -477,12 +477,11 @@ public class InstallShortcutReceiver extends BroadcastReceiver {
 
         public Pair<ItemInfo, Object> getItemInfo() {
             if (activityInfo != null) {
-                AppInfo appInfo = new AppInfo(mContext, activityInfo, user);
+                ShortcutInfo si = new ShortcutInfo(mContext, activityInfo, user);
                 final LauncherAppState app = LauncherAppState.getInstance(mContext);
                 // Set default values until proper values is loaded.
-                appInfo.title = "";
-                app.getIconCache().getDefaultIcon(user).applyTo(appInfo);
-                final ShortcutInfo si = appInfo.makeShortcut();
+                si.title = "";
+                app.getIconCache().getDefaultIcon(user).applyTo(si);
                 if (Looper.myLooper() == LauncherModel.getWorkerLooper()) {
                     app.getIconCache().getTitleAndIcon(si, activityInfo, false /* useLowResIcon */);
                 } else {

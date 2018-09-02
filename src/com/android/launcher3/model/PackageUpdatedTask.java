@@ -18,14 +18,12 @@ package com.android.launcher3.model;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Process;
 import android.os.UserHandle;
 import android.util.ArrayMap;
 import android.util.Log;
 
 import com.android.launcher3.AllAppsList;
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.InstallShortcutReceiver;
 import com.android.launcher3.ItemInfo;
@@ -151,16 +149,16 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
                 break;
         }
 
-        final ArrayList<AppInfo> addedOrModified = new ArrayList<>();
+        final ArrayList<ShortcutInfo> addedOrModified = new ArrayList<>();
         addedOrModified.addAll(appsList.added);
         appsList.added.clear();
         addedOrModified.addAll(appsList.modified);
         appsList.modified.clear();
 
-        final ArrayList<AppInfo> removedApps = new ArrayList<>(appsList.removed);
+        final ArrayList<ShortcutInfo> removedApps = new ArrayList<>(appsList.removed);
         appsList.removed.clear();
 
-        final ArrayMap<ComponentName, AppInfo> addedOrUpdatedApps = new ArrayMap<>();
+        final ArrayMap<ComponentName, ShortcutInfo> addedOrUpdatedApps = new ArrayMap<>();
         if (!addedOrModified.isEmpty()) {
             scheduleCallbackTask(new CallbackTask() {
                 @Override
@@ -168,7 +166,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
                     callbacks.bindAppsAddedOrUpdated(addedOrModified);
                 }
             });
-            for (AppInfo ai : addedOrModified) {
+            for (ShortcutInfo ai : addedOrModified) {
                 addedOrUpdatedApps.put(ai.componentName, ai);
             }
         }
@@ -203,7 +201,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
 
                         ComponentName cn = si.getTargetComponent();
                         if (cn != null && matcher.matches(si, cn)) {
-                            AppInfo appInfo = addedOrUpdatedApps.get(cn);
+                            ShortcutInfo appInfo = addedOrUpdatedApps.get(cn);
 
                             if (si.hasStatusFlag(ShortcutInfo.FLAG_SUPPORTS_WEB_UI)) {
                                 removedShortcuts.put(si.id, false);
@@ -314,7 +312,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
             }
 
             // Update removedComponents as some components can get removed during package update
-            for (AppInfo info : removedApps) {
+            for (ShortcutInfo info : removedApps) {
                 removedComponents.add(info.componentName);
             }
         }

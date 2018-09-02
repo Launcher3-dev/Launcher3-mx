@@ -19,7 +19,7 @@ import android.content.Context;
 import android.os.Process;
 import android.os.UserHandle;
 
-import com.android.launcher3.AppInfo;
+import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.util.LabelComparator;
 
@@ -28,7 +28,7 @@ import java.util.Comparator;
 /**
  * A comparator to arrange items based on user profiles.
  */
-public class AppInfoComparator implements Comparator<AppInfo> {
+public class AppInfoComparator implements Comparator<ShortcutInfo> {
 
     private final UserManagerCompat mUserManager;
     private final UserHandle mMyUser;
@@ -41,7 +41,7 @@ public class AppInfoComparator implements Comparator<AppInfo> {
     }
 
     @Override
-    public int compare(AppInfo a, AppInfo b) {
+    public int compare(ShortcutInfo a, ShortcutInfo b) {
         // Order by the title in the current locale
         int result = mLabelComparator.compare(a.title.toString(), b.title.toString());
         if (result != 0) {

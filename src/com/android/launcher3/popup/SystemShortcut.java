@@ -1,8 +1,5 @@
 package com.android.launcher3.popup;
 
-import static com.android.launcher3.userevent.nano.LauncherLogProto.Action;
-import static com.android.launcher3.userevent.nano.LauncherLogProto.ControlType;
-
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -21,6 +18,9 @@ import com.android.launcher3.util.PackageUserKey;
 import com.android.launcher3.widget.WidgetsBottomSheet;
 
 import java.util.List;
+
+import static com.android.launcher3.userevent.nano.LauncherLogProto.Action;
+import static com.android.launcher3.userevent.nano.LauncherLogProto.ControlType;
 
 /**
  * Represents a system shortcut for a given app. The shortcut should have a static label and
@@ -96,8 +96,8 @@ public abstract class SystemShortcut<T extends BaseDraggingActivity> extends Ite
             boolean supportsWebUI = (itemInfo instanceof ShortcutInfo) &&
                     ((ShortcutInfo) itemInfo).hasStatusFlag(ShortcutInfo.FLAG_SUPPORTS_WEB_UI);
             boolean isInstantApp = false;
-            if (itemInfo instanceof com.android.launcher3.AppInfo) {
-                com.android.launcher3.AppInfo appInfo = (com.android.launcher3.AppInfo) itemInfo;
+            if (itemInfo instanceof com.android.launcher3.ShortcutInfo) {
+                com.android.launcher3.ShortcutInfo appInfo = (com.android.launcher3.ShortcutInfo) itemInfo;
                 isInstantApp = InstantAppResolver.newInstance(activity).isInstantApp(appInfo);
             }
             boolean enabled = supportsWebUI || isInstantApp;

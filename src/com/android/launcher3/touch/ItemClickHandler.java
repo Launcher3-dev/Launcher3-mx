@@ -15,14 +15,6 @@
  */
 package com.android.launcher3.touch;
 
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_BY_PUBLISHER;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_LOCKED_USER;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_QUIET_USER;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SAFEMODE;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SUSPENDED;
-import static com.android.launcher3.Launcher.REQUEST_BIND_PENDING_APPWIDGET;
-import static com.android.launcher3.Launcher.REQUEST_RECONFIGURE_APPWIDGET;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Process;
@@ -31,7 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.FolderInfo;
 import com.android.launcher3.ItemInfo;
@@ -47,6 +38,14 @@ import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.widget.PendingAppWidgetHostView;
 import com.android.launcher3.widget.WidgetAddFlowHandler;
+
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_BY_PUBLISHER;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_LOCKED_USER;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_QUIET_USER;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SAFEMODE;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SUSPENDED;
+import static com.android.launcher3.Launcher.REQUEST_BIND_PENDING_APPWIDGET;
+import static com.android.launcher3.Launcher.REQUEST_RECONFIGURE_APPWIDGET;
 
 /**
  * Class for handling clicks on workspace and all-apps items
@@ -77,8 +76,6 @@ public class ItemClickHandler {
             if (v instanceof FolderIcon) {
                 onClickFolderIcon(v);
             }
-        } else if (tag instanceof AppInfo) {
-            startAppShortcutOrInfoActivity(v, (AppInfo) tag, launcher);
         } else if (tag instanceof LauncherAppWidgetInfo) {
             if (v instanceof PendingAppWidgetHostView) {
                 onClickPendingWidget((PendingAppWidgetHostView) v, launcher);
@@ -134,7 +131,7 @@ public class ItemClickHandler {
     }
 
     private static void onClickPendingAppItem(View v, Launcher launcher, String packageName,
-            boolean downloadStarted) {
+                                              boolean downloadStarted) {
         if (downloadStarted) {
             // If the download has started, simply direct to the market app.
             startMarketIntentForPackage(v, launcher, packageName);

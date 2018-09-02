@@ -205,7 +205,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
         applyBadgeState(info, false /* animate */);
     }
 
-    public void applyFromApplicationInfo(AppInfo info) {
+    public void applyFromApplicationInfo(ShortcutInfo info) {
         applyIconAndLabel(info);
 
         // We don't need to check the info since it's not a ShortcutInfo
@@ -586,8 +586,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
             // Optimization: Starting in N, pre-uploads the bitmap to RenderThread.
             info.iconBitmap.prepareToDraw();
 
-            if (info instanceof AppInfo) {
-                applyFromApplicationInfo((AppInfo) info);
+            if (info instanceof ShortcutInfo) {
+                applyFromApplicationInfo((ShortcutInfo) info);
             } else if (info instanceof ShortcutInfo) {
                 applyFromShortcutInfo((ShortcutInfo) info);
                 mActivity.invalidateParent(info);

@@ -16,12 +16,6 @@
 
 package com.android.launcher3.model;
 
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_LOCKED_USER;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SAFEMODE;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SUSPENDED;
-import static com.android.launcher3.folder.ClippedFolderIconLayoutRule.MAX_NUM_ITEMS_IN_PREVIEW;
-import static com.android.launcher3.model.LoaderResults.filterCurrentWorkspaceItems;
-
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -41,11 +35,11 @@ import android.util.LongSparseArray;
 import android.util.MutableInt;
 
 import com.android.launcher3.AllAppsList;
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.FolderInfo;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.InstallShortcutReceiver;
 import com.android.launcher3.ItemInfo;
+import com.android.launcher3.ItemInfoWithIcon;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherModel;
@@ -71,6 +65,7 @@ import com.android.launcher3.util.MultiHashMap;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.util.Provider;
 import com.android.launcher3.util.TraceHelper;
+import com.android.launcher3.util.XLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,12 +75,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
 
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_LOCKED_USER;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SAFEMODE;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_SUSPENDED;
+import static com.android.launcher3.folder.ClippedFolderIconLayoutRule.MAX_NUM_ITEMS_IN_PREVIEW;
+import static com.android.launcher3.model.LoaderResults.filterCurrentWorkspaceItems;
+
 /**
  * Runnable for the thread that loads the contents of the launcher:
- *   - workspace icons
- *   - widgets
- *   - all apps icons
- *   - deep shortcuts within apps
+ * - workspace icons
+ * - widgets
+ * - all apps icons
+ * - deep shortcuts within apps
  */
 public class LoaderTask implements Runnable {
     private static final String TAG = "LoaderTask";
@@ -108,7 +109,7 @@ public class LoaderTask implements Runnable {
     private boolean mStopped;
 
     public LoaderTask(LauncherAppState app, AllAppsList bgAllAppsList, BgDataModel dataModel,
-            LoaderResults results) {
+                      LoaderResults results) {
         mApp = app;
         mBgAllAppsList = bgAllAppsList;
         mBgDataModel = dataModel;
@@ -129,7 +130,7 @@ public class LoaderTask implements Runnable {
         LooperIdleLock idleLock = mResults.newIdleLock(this);
         // Just in case mFlushingWorkerThread changes but we aren't woken up,
         // wait no longer than 1sec at a time
-        while (!mStopped && idleLock.awaitLocked(1000));
+        while (!mStopped && idleLock.awaitLocked(1000)) ;
     }
 
     private synchronized void verifyNotStopped() throws CancellationException {
@@ -183,10 +184,13 @@ public class LoaderTask implements Runnable {
             // second step
             TraceHelper.partitionSection(TAG, "step 2.1: loading all apps");
             loadAllApps();
+            loadAllAppsBind();
+            filterNoPositionAllApps();
 
             TraceHelper.partitionSection(TAG, "step 2.2: Binding all apps");
             verifyNotStopped();
-            mResults.bindAllApps();
+//            mResults.bindAllApps();
+            mResults.bindAllAppsNoPositon();
 
             verifyNotStopped();
             TraceHelper.partitionSection(TAG, "step 2.3: Update icon cache");
@@ -337,361 +341,361 @@ public class LoaderTask implements Runnable {
 
                         boolean allowMissingTarget = false;
                         switch (c.itemType) {
-                        case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
-                        case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
-                        case LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT:
-                            intent = c.parseIntent();
-                            if (intent == null) {
-                                c.markDeleted("Invalid or null intent");
-                                continue;
-                            }
-
-                            int disabledState = quietMode.get(c.serialNumber) ?
-                                    ShortcutInfo.FLAG_DISABLED_QUIET_USER : 0;
-                            ComponentName cn = intent.getComponent();
-                            targetPkg = cn == null ? intent.getPackage() : cn.getPackageName();
-
-                            if (!Process.myUserHandle().equals(c.user)) {
-                                if (c.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
-                                    c.markDeleted("Legacy shortcuts are only allowed for default user");
-                                    continue;
-                                } else if (c.restoreFlag != 0) {
-                                    // Don't restore items for other profiles.
-                                    c.markDeleted("Restore from managed profile not supported");
+                            case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
+                            case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
+                            case LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT:
+                                intent = c.parseIntent();
+                                if (intent == null) {
+                                    c.markDeleted("Invalid or null intent");
                                     continue;
                                 }
-                            }
-                            if (TextUtils.isEmpty(targetPkg) &&
-                                    c.itemType != LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
-                                c.markDeleted("Only legacy shortcuts can have null package");
-                                continue;
-                            }
 
-                            // If there is no target package, its an implicit intent
-                            // (legacy shortcut) which is always valid
-                            boolean validTarget = TextUtils.isEmpty(targetPkg) ||
-                                    mLauncherApps.isPackageEnabledForProfile(targetPkg, c.user);
+                                int disabledState = quietMode.get(c.serialNumber) ?
+                                        ShortcutInfo.FLAG_DISABLED_QUIET_USER : 0;
+                                ComponentName cn = intent.getComponent();
+                                targetPkg = cn == null ? intent.getPackage() : cn.getPackageName();
 
-                            if (cn != null && validTarget) {
-                                // If the apk is present and the shortcut points to a specific
-                                // component.
+                                if (!Process.myUserHandle().equals(c.user)) {
+                                    if (c.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
+                                        c.markDeleted("Legacy shortcuts are only allowed for default user");
+                                        continue;
+                                    } else if (c.restoreFlag != 0) {
+                                        // Don't restore items for other profiles.
+                                        c.markDeleted("Restore from managed profile not supported");
+                                        continue;
+                                    }
+                                }
+                                if (TextUtils.isEmpty(targetPkg) &&
+                                        c.itemType != LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
+                                    c.markDeleted("Only legacy shortcuts can have null package");
+                                    continue;
+                                }
 
-                                // If the component is already present
-                                if (mLauncherApps.isActivityEnabledForProfile(cn, c.user)) {
-                                    // no special handling necessary for this item
-                                    c.markRestored();
-                                } else {
-                                    if (c.hasRestoreFlag(ShortcutInfo.FLAG_AUTOINSTALL_ICON)) {
-                                        // We allow auto install apps to have their intent
-                                        // updated after an install.
-                                        intent = pmHelper.getAppLaunchIntent(targetPkg, c.user);
-                                        if (intent != null) {
-                                            c.restoreFlag = 0;
-                                            c.updater().put(
-                                                    LauncherSettings.Favorites.INTENT,
-                                                    intent.toUri(0)).commit();
-                                            cn = intent.getComponent();
+                                // If there is no target package, its an implicit intent
+                                // (legacy shortcut) which is always valid
+                                boolean validTarget = TextUtils.isEmpty(targetPkg) ||
+                                        mLauncherApps.isPackageEnabledForProfile(targetPkg, c.user);
+
+                                if (cn != null && validTarget) {
+                                    // If the apk is present and the shortcut points to a specific
+                                    // component.
+
+                                    // If the component is already present
+                                    if (mLauncherApps.isActivityEnabledForProfile(cn, c.user)) {
+                                        // no special handling necessary for this item
+                                        c.markRestored();
+                                    } else {
+                                        if (c.hasRestoreFlag(ShortcutInfo.FLAG_AUTOINSTALL_ICON)) {
+                                            // We allow auto install apps to have their intent
+                                            // updated after an install.
+                                            intent = pmHelper.getAppLaunchIntent(targetPkg, c.user);
+                                            if (intent != null) {
+                                                c.restoreFlag = 0;
+                                                c.updater().put(
+                                                        LauncherSettings.Favorites.INTENT,
+                                                        intent.toUri(0)).commit();
+                                                cn = intent.getComponent();
+                                            } else {
+                                                c.markDeleted("Unable to find a launch target");
+                                                continue;
+                                            }
                                         } else {
-                                            c.markDeleted("Unable to find a launch target");
+                                            // The app is installed but the component is no
+                                            // longer available.
+                                            c.markDeleted("Invalid component removed: " + cn);
                                             continue;
                                         }
+                                    }
+                                }
+                                // else if cn == null => can't infer much, leave it
+                                // else if !validPkg => could be restored icon or missing sd-card
+
+                                if (!TextUtils.isEmpty(targetPkg) && !validTarget) {
+                                    // Points to a valid app (superset of cn != null) but the apk
+                                    // is not available.
+
+                                    if (c.restoreFlag != 0) {
+                                        // Package is not yet available but might be
+                                        // installed later.
+                                        FileLog.d(TAG, "package not yet restored: " + targetPkg);
+
+                                        if (c.hasRestoreFlag(ShortcutInfo.FLAG_RESTORE_STARTED)) {
+                                            // Restore has started once.
+                                        } else if (installingPkgs.containsKey(targetPkg)) {
+                                            // App restore has started. Update the flag
+                                            c.restoreFlag |= ShortcutInfo.FLAG_RESTORE_STARTED;
+                                            c.updater().commit();
+                                        } else {
+                                            c.markDeleted("Unrestored app removed: " + targetPkg);
+                                            continue;
+                                        }
+                                    } else if (pmHelper.isAppOnSdcard(targetPkg, c.user)) {
+                                        // Package is present but not available.
+                                        disabledState |= ShortcutInfo.FLAG_DISABLED_NOT_AVAILABLE;
+                                        // Add the icon on the workspace anyway.
+                                        allowMissingTarget = true;
+                                    } else if (!isSdCardReady) {
+                                        // SdCard is not ready yet. Package might get available,
+                                        // once it is ready.
+                                        Log.d(TAG, "Missing pkg, will check later: " + targetPkg);
+                                        pendingPackages.addToList(c.user, targetPkg);
+                                        // Add the icon on the workspace anyway.
+                                        allowMissingTarget = true;
                                     } else {
-                                        // The app is installed but the component is no
-                                        // longer available.
-                                        c.markDeleted("Invalid component removed: " + cn);
+                                        // Do not wait for external media load anymore.
+                                        c.markDeleted("Invalid package removed: " + targetPkg);
                                         continue;
                                     }
                                 }
-                            }
-                            // else if cn == null => can't infer much, leave it
-                            // else if !validPkg => could be restored icon or missing sd-card
 
-                            if (!TextUtils.isEmpty(targetPkg) && !validTarget) {
-                                // Points to a valid app (superset of cn != null) but the apk
-                                // is not available.
+                                if ((c.restoreFlag & ShortcutInfo.FLAG_SUPPORTS_WEB_UI) != 0) {
+                                    validTarget = false;
+                                }
+
+                                if (validTarget) {
+                                    // The shortcut points to a valid target (either no target
+                                    // or something which is ready to be used)
+                                    c.markRestored();
+                                }
+
+                                boolean useLowResIcon = !c.isOnWorkspaceOrHotseat() &&
+                                        !verifier.isItemInPreview(c.getInt(rankIndex));
 
                                 if (c.restoreFlag != 0) {
-                                    // Package is not yet available but might be
-                                    // installed later.
-                                    FileLog.d(TAG, "package not yet restored: " + targetPkg);
+                                    // Already verified above that user is same as default user
+                                    info = c.getRestoredItemInfo(intent);
+                                } else if (c.itemType ==
+                                        LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
+                                    info = c.getAppShortcutInfo(
+                                            intent, allowMissingTarget, useLowResIcon);
+                                } else if (c.itemType ==
+                                        LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
 
-                                    if (c.hasRestoreFlag(ShortcutInfo.FLAG_RESTORE_STARTED)) {
-                                        // Restore has started once.
-                                    } else if (installingPkgs.containsKey(targetPkg)) {
-                                        // App restore has started. Update the flag
-                                        c.restoreFlag |= ShortcutInfo.FLAG_RESTORE_STARTED;
-                                        c.updater().commit();
-                                    } else {
-                                        c.markDeleted("Unrestored app removed: " + targetPkg);
-                                        continue;
-                                    }
-                                } else if (pmHelper.isAppOnSdcard(targetPkg, c.user)) {
-                                    // Package is present but not available.
-                                    disabledState |= ShortcutInfo.FLAG_DISABLED_NOT_AVAILABLE;
-                                    // Add the icon on the workspace anyway.
-                                    allowMissingTarget = true;
-                                } else if (!isSdCardReady) {
-                                    // SdCard is not ready yet. Package might get available,
-                                    // once it is ready.
-                                    Log.d(TAG, "Missing pkg, will check later: " + targetPkg);
-                                    pendingPackages.addToList(c.user, targetPkg);
-                                    // Add the icon on the workspace anyway.
-                                    allowMissingTarget = true;
-                                } else {
-                                    // Do not wait for external media load anymore.
-                                    c.markDeleted("Invalid package removed: " + targetPkg);
-                                    continue;
-                                }
-                            }
-
-                            if ((c.restoreFlag & ShortcutInfo.FLAG_SUPPORTS_WEB_UI) != 0) {
-                                validTarget = false;
-                            }
-
-                            if (validTarget) {
-                                // The shortcut points to a valid target (either no target
-                                // or something which is ready to be used)
-                                c.markRestored();
-                            }
-
-                            boolean useLowResIcon = !c.isOnWorkspaceOrHotseat() &&
-                                    !verifier.isItemInPreview(c.getInt(rankIndex));
-
-                            if (c.restoreFlag != 0) {
-                                // Already verified above that user is same as default user
-                                info = c.getRestoredItemInfo(intent);
-                            } else if (c.itemType ==
-                                    LauncherSettings.Favorites.ITEM_TYPE_APPLICATION) {
-                                info = c.getAppShortcutInfo(
-                                        intent, allowMissingTarget, useLowResIcon);
-                            } else if (c.itemType ==
-                                    LauncherSettings.Favorites.ITEM_TYPE_DEEP_SHORTCUT) {
-
-                                ShortcutKey key = ShortcutKey.fromIntent(intent, c.user);
-                                if (unlockedUsers.get(c.serialNumber)) {
-                                    ShortcutInfoCompat pinnedShortcut =
-                                            shortcutKeyToPinnedShortcuts.get(key);
-                                    if (pinnedShortcut == null) {
-                                        // The shortcut is no longer valid.
-                                        c.markDeleted("Pinned shortcut not found");
-                                        continue;
-                                    }
-                                    info = new ShortcutInfo(pinnedShortcut, context);
-                                    final ShortcutInfo finalInfo = info;
-                                    Provider<Bitmap> fallbackIconProvider = new Provider<Bitmap>() {
-                                        @Override
-                                        public Bitmap get() {
-                                            // If the pinned deep shortcut is no longer published,
-                                            // use the last saved icon instead of the default.
-                                            return c.loadIcon(finalInfo)
-                                                    ? finalInfo.iconBitmap : null;
+                                    ShortcutKey key = ShortcutKey.fromIntent(intent, c.user);
+                                    if (unlockedUsers.get(c.serialNumber)) {
+                                        ShortcutInfoCompat pinnedShortcut =
+                                                shortcutKeyToPinnedShortcuts.get(key);
+                                        if (pinnedShortcut == null) {
+                                            // The shortcut is no longer valid.
+                                            c.markDeleted("Pinned shortcut not found");
+                                            continue;
                                         }
-                                    };
-                                    LauncherIcons li = LauncherIcons.obtain(context);
-                                    li.createShortcutIcon(pinnedShortcut,
-                                            true /* badged */, fallbackIconProvider).applyTo(info);
-                                    li.recycle();
-                                    if (pmHelper.isAppSuspended(
-                                            pinnedShortcut.getPackage(), info.user)) {
-                                        info.runtimeStatusFlags |= FLAG_DISABLED_SUSPENDED;
+                                        info = new ShortcutInfo(pinnedShortcut, context);
+                                        final ShortcutInfo finalInfo = info;
+                                        Provider<Bitmap> fallbackIconProvider = new Provider<Bitmap>() {
+                                            @Override
+                                            public Bitmap get() {
+                                                // If the pinned deep shortcut is no longer published,
+                                                // use the last saved icon instead of the default.
+                                                return c.loadIcon(finalInfo)
+                                                        ? finalInfo.iconBitmap : null;
+                                            }
+                                        };
+                                        LauncherIcons li = LauncherIcons.obtain(context);
+                                        li.createShortcutIcon(pinnedShortcut,
+                                                true /* badged */, fallbackIconProvider).applyTo(info);
+                                        li.recycle();
+                                        if (pmHelper.isAppSuspended(
+                                                pinnedShortcut.getPackage(), info.user)) {
+                                            info.runtimeStatusFlags |= FLAG_DISABLED_SUSPENDED;
+                                        }
+                                        intent = info.intent;
+                                    } else {
+                                        // Create a shortcut info in disabled mode for now.
+                                        info = c.loadSimpleShortcut();
+                                        info.runtimeStatusFlags |= FLAG_DISABLED_LOCKED_USER;
                                     }
-                                    intent = info.intent;
-                                } else {
-                                    // Create a shortcut info in disabled mode for now.
+                                } else { // item type == ITEM_TYPE_SHORTCUT
                                     info = c.loadSimpleShortcut();
-                                    info.runtimeStatusFlags |= FLAG_DISABLED_LOCKED_USER;
-                                }
-                            } else { // item type == ITEM_TYPE_SHORTCUT
-                                info = c.loadSimpleShortcut();
 
-                                // Shortcuts are only available on the primary profile
-                                if (!TextUtils.isEmpty(targetPkg)
-                                        && pmHelper.isAppSuspended(targetPkg, c.user)) {
-                                    disabledState |= FLAG_DISABLED_SUSPENDED;
-                                }
+                                    // Shortcuts are only available on the primary profile
+                                    if (!TextUtils.isEmpty(targetPkg)
+                                            && pmHelper.isAppSuspended(targetPkg, c.user)) {
+                                        disabledState |= FLAG_DISABLED_SUSPENDED;
+                                    }
 
-                                // App shortcuts that used to be automatically added to Launcher
-                                // didn't always have the correct intent flags set, so do that
-                                // here
-                                if (intent.getAction() != null &&
-                                    intent.getCategories() != null &&
-                                    intent.getAction().equals(Intent.ACTION_MAIN) &&
-                                    intent.getCategories().contains(Intent.CATEGORY_LAUNCHER)) {
-                                    intent.addFlags(
-                                        Intent.FLAG_ACTIVITY_NEW_TASK |
-                                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                                }
-                            }
-
-                            if (info != null) {
-                                c.applyCommonProperties(info);
-
-                                info.intent = intent;
-                                info.rank = c.getInt(rankIndex);
-                                info.spanX = 1;
-                                info.spanY = 1;
-                                info.runtimeStatusFlags |= disabledState;
-                                if (isSafeMode && !Utilities.isSystemApp(context, intent)) {
-                                    info.runtimeStatusFlags |= FLAG_DISABLED_SAFEMODE;
-                                }
-
-                                if (c.restoreFlag != 0 && !TextUtils.isEmpty(targetPkg)) {
-                                    SessionInfo si = installingPkgs.get(targetPkg);
-                                    if (si == null) {
-                                        info.status &= ~ShortcutInfo.FLAG_INSTALL_SESSION_ACTIVE;
-                                    } else {
-                                        info.setInstallProgress((int) (si.getProgress() * 100));
+                                    // App shortcuts that used to be automatically added to Launcher
+                                    // didn't always have the correct intent flags set, so do that
+                                    // here
+                                    if (intent.getAction() != null &&
+                                            intent.getCategories() != null &&
+                                            intent.getAction().equals(Intent.ACTION_MAIN) &&
+                                            intent.getCategories().contains(Intent.CATEGORY_LAUNCHER)) {
+                                        intent.addFlags(
+                                                Intent.FLAG_ACTIVITY_NEW_TASK |
+                                                        Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                                     }
                                 }
 
-                                c.checkAndAddItem(info, mBgDataModel);
-                            } else {
-                                throw new RuntimeException("Unexpected null ShortcutInfo");
-                            }
-                            break;
+                                if (info != null) {
+                                    c.applyCommonProperties(info);
 
-                        case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
-                            FolderInfo folderInfo = mBgDataModel.findOrMakeFolder(c.id);
-                            c.applyCommonProperties(folderInfo);
+                                    info.intent = intent;
+                                    info.rank = c.getInt(rankIndex);
+                                    info.spanX = 1;
+                                    info.spanY = 1;
+                                    info.runtimeStatusFlags |= disabledState;
+                                    if (isSafeMode && !Utilities.isSystemApp(context, intent)) {
+                                        info.runtimeStatusFlags |= FLAG_DISABLED_SAFEMODE;
+                                    }
 
-                            // Do not trim the folder label, as is was set by the user.
-                            folderInfo.title = c.getString(c.titleIndex);
-                            folderInfo.spanX = 1;
-                            folderInfo.spanY = 1;
-                            folderInfo.options = c.getInt(optionsIndex);
-
-                            // no special handling required for restored folders
-                            c.markRestored();
-
-                            c.checkAndAddItem(folderInfo, mBgDataModel);
-                            break;
-
-                        case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
-                            if (FeatureFlags.GO_DISABLE_WIDGETS) {
-                                c.markDeleted("Only legacy shortcuts can have null package");
-                                continue;
-                            }
-                            // Follow through
-                        case LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET:
-                            // Read all Launcher-specific widget details
-                            boolean customWidget = c.itemType ==
-                                LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET;
-
-                            int appWidgetId = c.getInt(appWidgetIdIndex);
-                            String savedProvider = c.getString(appWidgetProviderIndex);
-
-                            final ComponentName component =
-                                    ComponentName.unflattenFromString(savedProvider);
-
-                            final boolean isIdValid = !c.hasRestoreFlag(
-                                    LauncherAppWidgetInfo.FLAG_ID_NOT_VALID);
-                            final boolean wasProviderReady = !c.hasRestoreFlag(
-                                    LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY);
-
-                            if (widgetProvidersMap == null) {
-                                widgetProvidersMap = mAppWidgetManager.getAllProvidersMap();
-                            }
-                            final AppWidgetProviderInfo provider = widgetProvidersMap.get(
-                                    new ComponentKey(
-                                            ComponentName.unflattenFromString(savedProvider),
-                                            c.user));
-
-                            final boolean isProviderReady = isValidProvider(provider);
-                            if (!isSafeMode && !customWidget &&
-                                    wasProviderReady && !isProviderReady) {
-                                c.markDeleted(
-                                        "Deleting widget that isn't installed anymore: "
-                                        + provider);
-                            } else {
-                                if (isProviderReady) {
-                                    appWidgetInfo = new LauncherAppWidgetInfo(appWidgetId,
-                                            provider.provider);
-
-                                    // The provider is available. So the widget is either
-                                    // available or not available. We do not need to track
-                                    // any future restore updates.
-                                    int status = c.restoreFlag &
-                                            ~LauncherAppWidgetInfo.FLAG_RESTORE_STARTED &
-                                            ~LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY;
-                                    if (!wasProviderReady) {
-                                        // If provider was not previously ready, update the
-                                        // status and UI flag.
-
-                                        // Id would be valid only if the widget restore broadcast was received.
-                                        if (isIdValid) {
-                                            status |= LauncherAppWidgetInfo.FLAG_UI_NOT_READY;
+                                    if (c.restoreFlag != 0 && !TextUtils.isEmpty(targetPkg)) {
+                                        SessionInfo si = installingPkgs.get(targetPkg);
+                                        if (si == null) {
+                                            info.status &= ~ShortcutInfo.FLAG_INSTALL_SESSION_ACTIVE;
+                                        } else {
+                                            info.setInstallProgress((int) (si.getProgress() * 100));
                                         }
                                     }
-                                    appWidgetInfo.restoreStatus = status;
-                                } else {
-                                    Log.v(TAG, "Widget restore pending id=" + c.id
-                                            + " appWidgetId=" + appWidgetId
-                                            + " status =" + c.restoreFlag);
-                                    appWidgetInfo = new LauncherAppWidgetInfo(appWidgetId,
-                                            component);
-                                    appWidgetInfo.restoreStatus = c.restoreFlag;
-                                    SessionInfo si =
-                                            installingPkgs.get(component.getPackageName());
-                                    Integer installProgress = si == null
-                                            ? null
-                                            : (int) (si.getProgress() * 100);
 
-                                    if (c.hasRestoreFlag(LauncherAppWidgetInfo.FLAG_RESTORE_STARTED)) {
-                                        // Restore has started once.
-                                    } else if (installProgress != null) {
-                                        // App restore has started. Update the flag
-                                        appWidgetInfo.restoreStatus |=
-                                                LauncherAppWidgetInfo.FLAG_RESTORE_STARTED;
-                                    } else if (!isSafeMode) {
-                                        c.markDeleted("Unrestored widget removed: " + component);
+                                    c.checkAndAddItem(info, mBgDataModel);
+                                } else {
+                                    throw new RuntimeException("Unexpected null ShortcutInfo");
+                                }
+                                break;
+
+                            case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
+                                FolderInfo folderInfo = mBgDataModel.findOrMakeFolder(c.id);
+                                c.applyCommonProperties(folderInfo);
+
+                                // Do not trim the folder label, as is was set by the user.
+                                folderInfo.title = c.getString(c.titleIndex);
+                                folderInfo.spanX = 1;
+                                folderInfo.spanY = 1;
+                                folderInfo.options = c.getInt(optionsIndex);
+
+                                // no special handling required for restored folders
+                                c.markRestored();
+
+                                c.checkAndAddItem(folderInfo, mBgDataModel);
+                                break;
+
+                            case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
+                                if (FeatureFlags.GO_DISABLE_WIDGETS) {
+                                    c.markDeleted("Only legacy shortcuts can have null package");
+                                    continue;
+                                }
+                                // Follow through
+                            case LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET:
+                                // Read all Launcher-specific widget details
+                                boolean customWidget = c.itemType ==
+                                        LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET;
+
+                                int appWidgetId = c.getInt(appWidgetIdIndex);
+                                String savedProvider = c.getString(appWidgetProviderIndex);
+
+                                final ComponentName component =
+                                        ComponentName.unflattenFromString(savedProvider);
+
+                                final boolean isIdValid = !c.hasRestoreFlag(
+                                        LauncherAppWidgetInfo.FLAG_ID_NOT_VALID);
+                                final boolean wasProviderReady = !c.hasRestoreFlag(
+                                        LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY);
+
+                                if (widgetProvidersMap == null) {
+                                    widgetProvidersMap = mAppWidgetManager.getAllProvidersMap();
+                                }
+                                final AppWidgetProviderInfo provider = widgetProvidersMap.get(
+                                        new ComponentKey(
+                                                ComponentName.unflattenFromString(savedProvider),
+                                                c.user));
+
+                                final boolean isProviderReady = isValidProvider(provider);
+                                if (!isSafeMode && !customWidget &&
+                                        wasProviderReady && !isProviderReady) {
+                                    c.markDeleted(
+                                            "Deleting widget that isn't installed anymore: "
+                                                    + provider);
+                                } else {
+                                    if (isProviderReady) {
+                                        appWidgetInfo = new LauncherAppWidgetInfo(appWidgetId,
+                                                provider.provider);
+
+                                        // The provider is available. So the widget is either
+                                        // available or not available. We do not need to track
+                                        // any future restore updates.
+                                        int status = c.restoreFlag &
+                                                ~LauncherAppWidgetInfo.FLAG_RESTORE_STARTED &
+                                                ~LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY;
+                                        if (!wasProviderReady) {
+                                            // If provider was not previously ready, update the
+                                            // status and UI flag.
+
+                                            // Id would be valid only if the widget restore broadcast was received.
+                                            if (isIdValid) {
+                                                status |= LauncherAppWidgetInfo.FLAG_UI_NOT_READY;
+                                            }
+                                        }
+                                        appWidgetInfo.restoreStatus = status;
+                                    } else {
+                                        Log.v(TAG, "Widget restore pending id=" + c.id
+                                                + " appWidgetId=" + appWidgetId
+                                                + " status =" + c.restoreFlag);
+                                        appWidgetInfo = new LauncherAppWidgetInfo(appWidgetId,
+                                                component);
+                                        appWidgetInfo.restoreStatus = c.restoreFlag;
+                                        SessionInfo si =
+                                                installingPkgs.get(component.getPackageName());
+                                        Integer installProgress = si == null
+                                                ? null
+                                                : (int) (si.getProgress() * 100);
+
+                                        if (c.hasRestoreFlag(LauncherAppWidgetInfo.FLAG_RESTORE_STARTED)) {
+                                            // Restore has started once.
+                                        } else if (installProgress != null) {
+                                            // App restore has started. Update the flag
+                                            appWidgetInfo.restoreStatus |=
+                                                    LauncherAppWidgetInfo.FLAG_RESTORE_STARTED;
+                                        } else if (!isSafeMode) {
+                                            c.markDeleted("Unrestored widget removed: " + component);
+                                            continue;
+                                        }
+
+                                        appWidgetInfo.installProgress =
+                                                installProgress == null ? 0 : installProgress;
+                                    }
+                                    if (appWidgetInfo.hasRestoreFlag(
+                                            LauncherAppWidgetInfo.FLAG_DIRECT_CONFIG)) {
+                                        appWidgetInfo.bindOptions = c.parseIntent();
+                                    }
+
+                                    c.applyCommonProperties(appWidgetInfo);
+                                    appWidgetInfo.spanX = c.getInt(spanXIndex);
+                                    appWidgetInfo.spanY = c.getInt(spanYIndex);
+                                    appWidgetInfo.user = c.user;
+
+                                    if (!c.isOnWorkspaceOrHotseat()) {
+                                        c.markDeleted("Widget found where container != " +
+                                                "CONTAINER_DESKTOP nor CONTAINER_HOTSEAT - ignoring!");
                                         continue;
                                     }
 
-                                    appWidgetInfo.installProgress =
-                                            installProgress == null ? 0 : installProgress;
-                                }
-                                if (appWidgetInfo.hasRestoreFlag(
-                                        LauncherAppWidgetInfo.FLAG_DIRECT_CONFIG)) {
-                                    appWidgetInfo.bindOptions = c.parseIntent();
-                                }
-
-                                c.applyCommonProperties(appWidgetInfo);
-                                appWidgetInfo.spanX = c.getInt(spanXIndex);
-                                appWidgetInfo.spanY = c.getInt(spanYIndex);
-                                appWidgetInfo.user = c.user;
-
-                                if (!c.isOnWorkspaceOrHotseat()) {
-                                    c.markDeleted("Widget found where container != " +
-                                            "CONTAINER_DESKTOP nor CONTAINER_HOTSEAT - ignoring!");
-                                    continue;
-                                }
-
-                                if (!customWidget) {
-                                    String providerName =
-                                            appWidgetInfo.providerName.flattenToString();
-                                    if (!providerName.equals(savedProvider) ||
-                                            (appWidgetInfo.restoreStatus != c.restoreFlag)) {
-                                        c.updater()
-                                                .put(LauncherSettings.Favorites.APPWIDGET_PROVIDER,
-                                                        providerName)
-                                                .put(LauncherSettings.Favorites.RESTORED,
-                                                        appWidgetInfo.restoreStatus)
-                                                .commit();
+                                    if (!customWidget) {
+                                        String providerName =
+                                                appWidgetInfo.providerName.flattenToString();
+                                        if (!providerName.equals(savedProvider) ||
+                                                (appWidgetInfo.restoreStatus != c.restoreFlag)) {
+                                            c.updater()
+                                                    .put(LauncherSettings.Favorites.APPWIDGET_PROVIDER,
+                                                            providerName)
+                                                    .put(LauncherSettings.Favorites.RESTORED,
+                                                            appWidgetInfo.restoreStatus)
+                                                    .commit();
+                                        }
                                     }
-                                }
 
-                                if (appWidgetInfo.restoreStatus !=
-                                        LauncherAppWidgetInfo.RESTORE_COMPLETED) {
-                                    String pkg = appWidgetInfo.providerName.getPackageName();
-                                    appWidgetInfo.pendingItemInfo = new PackageItemInfo(pkg);
-                                    appWidgetInfo.pendingItemInfo.user = appWidgetInfo.user;
-                                    mIconCache.getTitleAndIconForApp(
-                                            appWidgetInfo.pendingItemInfo, false);
-                                }
+                                    if (appWidgetInfo.restoreStatus !=
+                                            LauncherAppWidgetInfo.RESTORE_COMPLETED) {
+                                        String pkg = appWidgetInfo.providerName.getPackageName();
+                                        appWidgetInfo.pendingItemInfo = new PackageItemInfo(pkg);
+                                        appWidgetInfo.pendingItemInfo.user = appWidgetInfo.user;
+                                        mIconCache.getTitleAndIconForApp(
+                                                appWidgetInfo.pendingItemInfo, false);
+                                    }
 
-                                c.checkAndAddItem(appWidgetInfo, mBgDataModel);
-                            }
-                            break;
+                                    c.checkAndAddItem(appWidgetInfo, mBgDataModel);
+                                }
+                                break;
                         }
                     } catch (Exception e) {
                         Log.e(TAG, "Desktop items loading interrupted", e);
@@ -770,7 +774,7 @@ public class LoaderTask implements Runnable {
 
             // Remove any empty screens
             ArrayList<Long> unusedScreens = new ArrayList<>(mBgDataModel.workspaceScreens);
-            for (ItemInfo item: mBgDataModel.itemsIdMap) {
+            for (ItemInfo item : mBgDataModel.itemsIdMap) {
                 long screenId = item.screenId;
                 if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP &&
                         unusedScreens.contains(screenId)) {
@@ -820,12 +824,13 @@ public class LoaderTask implements Runnable {
             if (apps == null || apps.isEmpty()) {
                 return;
             }
+            XLog.e(XLog.getTag(), XLog.TAG_GU +"appps:  "+ apps.size());
             boolean quietMode = mUserManager.isQuietModeEnabled(user);
             // Create the ApplicationInfos
             for (int i = 0; i < apps.size(); i++) {
                 LauncherActivityInfo app = apps.get(i);
                 // This builds the icon bitmaps.
-                mBgAllAppsList.add(new AppInfo(app, user, quietMode), app);
+                mBgAllAppsList.add(new ShortcutInfo(app, user, quietMode), app);
             }
         }
 
@@ -839,6 +844,42 @@ public class LoaderTask implements Runnable {
         }
 
         mBgAllAppsList.added = new ArrayList<>();
+    }
+
+    // 加载所有已绑定的应用，包括已绑定文件夹中的应用
+    private void loadAllAppsBind() {
+        List<ItemInfo> list = mBgDataModel.workspaceItems;
+        for (ItemInfo info : list) {
+            if (info instanceof ItemInfoWithIcon) {
+                mBgDataModel.workspaceShortcuts.put(info.getTargetComponent(), info);
+            } else if (info instanceof FolderInfo) {
+                ArrayList<ShortcutInfo> contents = ((FolderInfo) info).contents;
+                if (contents == null || contents.isEmpty()) {
+                    return;
+                }
+                for (ShortcutInfo shortcutInfo : contents) {
+                    mBgDataModel.workspaceShortcuts.put(shortcutInfo.componentName, shortcutInfo);
+                }
+            }
+        }
+    }
+
+    private void filterNoPositionAllApps() {
+        HashMap<ComponentName, ItemInfo> workspaceShortcuts = mBgDataModel.workspaceShortcuts;
+        XLog.e(XLog.getTag(), XLog.TAG_GU +"workspaceShortcuts:  "+ workspaceShortcuts.size());
+        if (workspaceShortcuts.isEmpty()) {
+            return;
+        }
+        ArrayList<ShortcutInfo> data = mBgAllAppsList.data;
+        if (data.isEmpty()) {
+            return;
+        }
+        XLog.e(XLog.getTag(), XLog.TAG_GU +"All apps count:  "+ data.size());
+        for (ShortcutInfo info : data) {
+            if (!workspaceShortcuts.containsKey(info.componentName)) {
+                mBgAllAppsList.noPosition.add(info);
+            }
+        }
     }
 
     private void loadDeepShortcuts() {

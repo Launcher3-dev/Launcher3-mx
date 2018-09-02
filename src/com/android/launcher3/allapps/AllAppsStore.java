@@ -18,10 +18,10 @@ package com.android.launcher3.allapps;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.PromiseAppInfo;
+import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.PackageUserKey;
 
@@ -37,26 +37,26 @@ import java.util.Set;
 public class AllAppsStore {
 
     private PackageUserKey mTempKey = new PackageUserKey(null, null);
-    private final HashMap<ComponentKey, AppInfo> mComponentToAppMap = new HashMap<>();
+    private final HashMap<ComponentKey, ShortcutInfo> mComponentToAppMap = new HashMap<>();
     private final List<OnUpdateListener> mUpdateListeners = new ArrayList<>();
     private final ArrayList<ViewGroup> mIconContainers = new ArrayList<>();
 
     private boolean mDeferUpdates = false;
     private boolean mUpdatePending = false;
 
-    public Collection<AppInfo> getApps() {
+    public Collection<ShortcutInfo> getApps() {
         return mComponentToAppMap.values();
     }
 
     /**
      * Sets the current set of apps.
      */
-    public void setApps(List<AppInfo> apps) {
+    public void setApps(List<ShortcutInfo> apps) {
         mComponentToAppMap.clear();
         addOrUpdateApps(apps);
     }
 
-    public AppInfo getApp(ComponentKey key) {
+    public ShortcutInfo getApp(ComponentKey key) {
         return mComponentToAppMap.get(key);
     }
 
@@ -74,8 +74,8 @@ public class AllAppsStore {
     /**
      * Adds or updates existing apps in the list
      */
-    public void addOrUpdateApps(List<AppInfo> apps) {
-        for (AppInfo app : apps) {
+    public void addOrUpdateApps(List<ShortcutInfo> apps) {
+        for (ShortcutInfo app : apps) {
             mComponentToAppMap.put(app.toComponentKey(), app);
         }
         notifyUpdate();
@@ -84,8 +84,8 @@ public class AllAppsStore {
     /**
      * Removes some apps from the list.
      */
-    public void removeApps(List<AppInfo> apps) {
-        for (AppInfo app : apps) {
+    public void removeApps(List<ShortcutInfo> apps) {
+        for (ShortcutInfo app : apps) {
             mComponentToAppMap.remove(app.toComponentKey());
         }
         notifyUpdate();

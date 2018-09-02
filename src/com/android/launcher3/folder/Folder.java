@@ -40,7 +40,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewDebug;
-import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
@@ -48,7 +47,6 @@ import android.widget.TextView;
 
 import com.android.launcher3.AbstractFloatingView;
 import com.android.launcher3.Alarm;
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.CellLayout;
 import com.android.launcher3.DeviceProfile;
@@ -1152,9 +1150,6 @@ public class Folder extends AbstractFloatingView implements DragSource,
             final ShortcutInfo si;
             if (pasiSi != null) {
                 si = pasiSi;
-            } else if (d.dragInfo instanceof AppInfo) {
-                // Came from all apps -- make a copy.
-                si = ((AppInfo) d.dragInfo).makeShortcut();
             } else {
                 // ShortcutInfo
                 si = (ShortcutInfo) d.dragInfo;

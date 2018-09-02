@@ -37,7 +37,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.launcher3.AppInfo;
 import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.DeviceProfile.OnDeviceProfileChangeListener;
 import com.android.launcher3.DragSource;
@@ -47,6 +46,7 @@ import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
+import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.keyboard.FocusedItemDecorator;
@@ -146,7 +146,7 @@ public class AllAppsContainerView extends SpringRelativeLayout implements DragSo
     private void onAppsUpdated() {
         if (FeatureFlags.ALL_APPS_TABS_ENABLED) {
             boolean hasWorkApps = false;
-            for (AppInfo app : mAllAppsStore.getApps()) {
+            for (ShortcutInfo app : mAllAppsStore.getApps()) {
                 if (mWorkMatcher.matches(app, null)) {
                     hasWorkApps = true;
                     break;
