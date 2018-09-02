@@ -857,7 +857,7 @@ public class LoaderTask implements Runnable {
                     return;
                 }
                 for (ShortcutInfo shortcutInfo : contents) {
-                    mBgDataModel.workspaceShortcuts.put(shortcutInfo.componentName, shortcutInfo);
+                    mBgDataModel.workspaceShortcuts.put(shortcutInfo.getTargetComponent(), shortcutInfo);
                 }
             }
         }
