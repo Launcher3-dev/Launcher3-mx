@@ -21,6 +21,7 @@ public class AddWorkspaceItemsNoPositionTask extends BaseModelUpdateTask {
 
     @Override
     public void execute(LauncherAppState app, BgDataModel dataModel, AllAppsList apps) {
+        setForceExecute(false);
         if (mAllAppsNoPotion.isEmpty()) {
             return;
         }

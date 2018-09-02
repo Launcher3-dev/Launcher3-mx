@@ -34,7 +34,6 @@ import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.R;
 import com.android.launcher3.uioverrides.OverviewState;
 import com.android.launcher3.util.Themes;
-import com.android.launcher3.views.ScrimView;
 
 /**
  * Scrim used for all-apps and shelf in Overview

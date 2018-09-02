@@ -1,22 +1,9 @@
 package com.android.launcher3.allapps;
 
-import static com.android.launcher3.LauncherState.ALL_APPS_CONTENT;
-import static com.android.launcher3.LauncherState.ALL_APPS_HEADER;
-import static com.android.launcher3.LauncherState.ALL_APPS_HEADER_EXTRA;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.launcher3.LauncherState.VERTICAL_SWIPE_INDICATOR;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_VERTICAL_PROGRESS;
-import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
-import static com.android.launcher3.util.SystemUiController.UI_STATE_ALL_APPS;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.util.Property;
-import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.android.launcher3.DeviceProfile;
@@ -25,12 +12,17 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.LauncherStateManager.AnimationConfig;
 import com.android.launcher3.LauncherStateManager.StateHandler;
-import com.android.launcher3.R;
 import com.android.launcher3.anim.AnimationSuccessListener;
 import com.android.launcher3.anim.AnimatorSetBuilder;
 import com.android.launcher3.anim.PropertySetter;
-import com.android.launcher3.util.Themes;
-import com.android.launcher3.views.ScrimView;
+import com.android.launcher3.menu.MenuView;
+
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_VERTICAL_PROGRESS;
+import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
 
 /**
  * Handles AllApps view transition.
@@ -58,11 +50,9 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         }
     };
 
-    private AllAppsContainerView mAppsView;
-    private ScrimView mScrimView;
+    private MenuView mMenuView;
 
     private final Launcher mLauncher;
-    private final boolean mIsDarkTheme;
     private boolean mIsVerticalLayout;
 
     // Animation in this class is controlled by a single variable {@link mProgress}.
@@ -81,7 +71,6 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         mShiftRange = mLauncher.getDeviceProfile().heightPx;
         mProgress = 1f;
 
-        mIsDarkTheme = Themes.getAttrBoolean(mLauncher, R.attr.isMainColorDark);
         mIsVerticalLayout = mLauncher.getDeviceProfile().isVerticalBarLayout();
         mLauncher.addOnDeviceProfileChangeListener(this);
     }
@@ -92,7 +81,7 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
 
     private void onProgressAnimationStart() {
         // Initialize values that should not change until #onDragEnd
-        mAppsView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -101,7 +90,6 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         setScrollRangeDelta(mScrollRangeDelta);
 
         if (mIsVerticalLayout) {
-            mAppsView.setAlpha(1);
             mLauncher.getHotseat().setTranslationY(0);
             mLauncher.getWorkspace().getPageIndicator().setTranslationY(0);
         }
@@ -118,10 +106,10 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
      */
     public void setProgress(float progress) {
         mProgress = progress;
-        mScrimView.setProgress(progress);
         float shiftCurrent = progress * mShiftRange;
 
-        mAppsView.setTranslationY(shiftCurrent);
+//        mMenuView.setTranslationY(shiftCurrent);
+
         float hotseatTranslation = -mShiftRange + shiftCurrent;
 
         if (!mIsVerticalLayout) {
@@ -129,15 +117,6 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
             mLauncher.getWorkspace().getPageIndicator().setTranslationY(hotseatTranslation);
         }
 
-        // Use a light system UI (dark icons) if all apps is behind at least half of the
-        // status bar.
-        boolean forceChange = shiftCurrent - mScrimView.getDragHandleSize()
-                <= mLauncher.getDeviceProfile().getInsets().top / 2;
-        if (forceChange) {
-            mLauncher.getSystemUiController().updateUiState(UI_STATE_ALL_APPS, !mIsDarkTheme);
-        } else {
-            mLauncher.getSystemUiController().updateUiState(UI_STATE_ALL_APPS, 0);
-        }
     }
 
     public float getProgress() {
@@ -191,17 +170,10 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
 
     private void setAlphas(LauncherState toState, PropertySetter setter) {
         int visibleElements = toState.getVisibleElements(mLauncher);
-        boolean hasHeader = (visibleElements & ALL_APPS_HEADER) != 0;
-        boolean hasHeaderExtra = (visibleElements & ALL_APPS_HEADER_EXTRA) != 0;
-        boolean hasContent = (visibleElements & ALL_APPS_CONTENT) != 0;
 
-        setter.setViewAlpha(mAppsView.getSearchView(), hasHeader ? 1 : 0, LINEAR);
-        setter.setViewAlpha(mAppsView.getContentView(), hasContent ? 1 : 0, LINEAR);
-        setter.setViewAlpha(mAppsView.getScrollBar(), hasContent ? 1 : 0, LINEAR);
-        mAppsView.getFloatingHeaderView().setContentVisibility(hasHeaderExtra, hasContent, setter);
 
-        setter.setInt(mScrimView, ScrimView.DRAG_HANDLE_ALPHA,
-                (visibleElements & VERTICAL_SWIPE_INDICATOR) != 0 ? 255 : 0, LINEAR);
+
+
     }
 
     public AnimatorListenerAdapter getProgressAnimatorListener() {
@@ -218,9 +190,8 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         };
     }
 
-    public void setupViews(AllAppsContainerView appsView) {
-        mAppsView = appsView;
-        mScrimView = mLauncher.findViewById(R.id.scrim_view);
+    public void setupViews(MenuView menuView) {
+        mMenuView = menuView;
     }
 
     /**
@@ -230,9 +201,7 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         mScrollRangeDelta = delta;
         mShiftRange = mLauncher.getDeviceProfile().heightPx - mScrollRangeDelta;
 
-        if (mScrimView != null) {
-            mScrimView.reInitUi();
-        }
+
     }
 
     /**
@@ -241,13 +210,11 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
      */
     private void onProgressAnimationEnd() {
         if (Float.compare(mProgress, 1f) == 0) {
-            mAppsView.setVisibility(View.INVISIBLE);
-            mAppsView.reset(false /* animate */);
+
         } else if (Float.compare(mProgress, 0f) == 0) {
-            mAppsView.setVisibility(View.VISIBLE);
-            mAppsView.onScrollUpEnd();
+
         } else {
-            mAppsView.setVisibility(View.VISIBLE);
+
         }
     }
 }

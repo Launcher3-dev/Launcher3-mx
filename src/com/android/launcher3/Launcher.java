@@ -66,7 +66,6 @@ import android.widget.Toast;
 import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.Workspace.ItemOperator;
 import com.android.launcher3.accessibility.LauncherAccessibilityDelegate;
-import com.android.launcher3.allapps.AllAppsContainerView;
 import com.android.launcher3.allapps.AllAppsTransitionController;
 import com.android.launcher3.allapps.DiscoveryBounce;
 import com.android.launcher3.badge.BadgeInfo;
@@ -133,8 +132,8 @@ import java.util.Set;
 import static android.content.pm.ActivityInfo.CONFIG_ORIENTATION;
 import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
 import static com.android.launcher3.LauncherAnimUtils.SPRING_LOADED_EXIT_DELAY;
-import static com.android.launcher3.LauncherState.ALL_APPS;
 import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
 import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_LAUNCHER_LOAD;
 import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
 import static com.android.launcher3.logging.LoggerUtils.newTarget;
@@ -206,8 +205,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     private DropTargetBar mDropTargetBar;
 
-    // Main container view for the all apps screen.
-    @Thunk AllAppsContainerView mAppsView;
     AllAppsTransitionController mAllAppsController;
 
     // UI and state for the overview panel
@@ -934,14 +931,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // Get the search/delete/uninstall bar
         mDropTargetBar = mDragLayer.findViewById(R.id.drop_target_bar);
 
-        // Setup Apps
-        mAppsView = findViewById(R.id.apps_view);
-
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
         mDragController.setMoveTarget(mWorkspace);
         mDropTargetBar.setup(mDragController);
-
-        mAllAppsController.setupViews(mAppsView);
     }
 
     /**
@@ -1112,8 +1104,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     public void updateIconBadges(final Set<PackageUserKey> updatedBadges) {
         mWorkspace.updateIconBadges(updatedBadges);
-        mAppsView.getAppsStore().updateIconBadges(updatedBadges);
-
         PopupContainerWithArrow popup = PopupContainerWithArrow.getOpen(Launcher.this);
         if (popup != null) {
             popup.updateNotificationHeader(updatedBadges);
@@ -1151,10 +1141,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public DragLayer getDragLayer() {
         return mDragLayer;
-    }
-
-    public AllAppsContainerView getAppsView() {
-        return mAppsView;
     }
 
     public Workspace getWorkspace() {
@@ -1241,7 +1227,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
                 // Reset the apps view
                 if (!alreadyOnHome) {
-                    mAppsView.reset(isStarted() /* animate */);
+
                 }
 
                 if (shouldMoveToDefaultScreen && !mWorkspace.isTouchActive()) {
@@ -1655,8 +1641,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             targets[2] = newTarget(Target.Type.CONTAINER);
             event.srcTarget = targets;
             LauncherState state = mStateManager.getState();
-            if (state == LauncherState.ALL_APPS) {
-                event.srcTarget[2].containerType = ContainerType.ALLAPPS;
+            if (state == LauncherState.MENU) {
+                event.srcTarget[2].containerType = ContainerType.MENU;
             } else if (state == LauncherState.OVERVIEW) {
                 event.srcTarget[2].containerType = ContainerType.TASKSWITCHER;
             }
@@ -2105,10 +2091,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mPendingExecutor.markCompleted();
         }
         mPendingExecutor = executor;
-        if (!isInState(ALL_APPS)) {
-            mAppsView.getAppsStore().setDeferUpdates(true);
-            mPendingExecutor.execute(() -> mAppsView.getAppsStore().setDeferUpdates(false));
-        }
 
         executor.attachTo(this);
     }
@@ -2190,12 +2172,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      */
     @Override
     public void bindAppsAddedOrUpdated(ArrayList<ShortcutInfo> apps) {
-        mAppsView.getAppsStore().addOrUpdateApps(apps);
+
     }
 
     @Override
     public void bindPromiseAppProgressUpdated(PromiseAppInfo app) {
-        mAppsView.getAppsStore().updatePromiseAppProgress(app);
+
     }
 
     @Override
@@ -2241,7 +2223,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     @Override
     public void bindAppInfosRemoved(final ArrayList<ShortcutInfo> appInfos) {
-        mAppsView.getAppsStore().removeApps(appInfos);
+
     }
 
     @Override
@@ -2348,7 +2330,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             switch (keyCode) {
                 case KeyEvent.KEYCODE_A:
                     if (isInState(NORMAL)) {
-                        getStateManager().goToState(ALL_APPS);
+                        getStateManager().goToState(OVERVIEW);
                         return true;
                     }
                     break;

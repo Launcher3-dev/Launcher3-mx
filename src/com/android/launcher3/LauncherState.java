@@ -15,31 +15,29 @@
  */
 package com.android.launcher3;
 
-import static android.view.View.IMPORTANT_FOR_ACCESSIBILITY_AUTO;
-import static android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS;
-import static android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
-
-import static com.android.launcher3.anim.Interpolators.ACCEL_2;
-import static com.android.launcher3.states.RotationHelper.REQUEST_NONE;
-
 import android.graphics.Rect;
 import android.view.animation.Interpolator;
 
+import com.android.launcher3.states.EditingState;
+import com.android.launcher3.states.MenuState;
 import com.android.launcher3.states.SpringLoadedState;
-import com.android.launcher3.uioverrides.AllAppsState;
-import com.android.launcher3.uioverrides.FastOverviewState;
 import com.android.launcher3.uioverrides.OverviewState;
 import com.android.launcher3.uioverrides.UiFactory;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 
 import java.util.Arrays;
 
+import static android.view.View.IMPORTANT_FOR_ACCESSIBILITY_AUTO;
+import static android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS;
+import static android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
+import static com.android.launcher3.anim.Interpolators.ACCEL_2;
+import static com.android.launcher3.states.RotationHelper.REQUEST_NONE;
+
 
 /**
  * Base state for various states used for the Launcher
  */
 public class LauncherState {
-
 
     /**
      * Set of elements indicating various workspace elements which change visibility across states
@@ -86,8 +84,8 @@ public class LauncherState {
      */
     public static final LauncherState SPRING_LOADED = new SpringLoadedState(1);
     public static final LauncherState OVERVIEW = new OverviewState(2);
-    public static final LauncherState FAST_OVERVIEW = new FastOverviewState(3);
-    public static final LauncherState ALL_APPS = new AllAppsState(4);
+    public static final LauncherState EDITING = new EditingState(3);
+    public static final LauncherState MENU = new MenuState(4);
 
     protected static final Rect sTempRect = new Rect();
 

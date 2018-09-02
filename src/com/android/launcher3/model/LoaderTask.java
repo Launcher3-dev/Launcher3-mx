@@ -810,6 +810,9 @@ public class LoaderTask implements Runnable {
         mIconCache.updateDbIcons(packagesToIgnore);
     }
 
+    /**
+     * Load all apps in the system.
+     */
     private void loadAllApps() {
         final List<UserHandle> profiles = mUserManager.getUserProfiles();
 
@@ -845,7 +848,9 @@ public class LoaderTask implements Runnable {
         mBgAllAppsList.added = new ArrayList<>();
     }
 
-    // 加载所有已绑定的应用，包括已绑定文件夹中的应用
+    /**
+     * Load all the apps bind, include apps in the folder that bind.
+     */
     private void loadAllAppsBind() {
         List<ItemInfo> list = mBgDataModel.workspaceItems;
         for (ItemInfo info : list) {
@@ -863,6 +868,9 @@ public class LoaderTask implements Runnable {
         }
     }
 
+    /**
+     * filter all not bind apps
+     */
     private void filterNoPositionAllApps() {
         HashMap<ComponentName, ItemInfo> workspaceShortcuts = mBgDataModel.workspaceShortcuts;
         XLog.e(XLog.getTag(), XLog.TAG_GU +"workspaceShortcuts:  "+ workspaceShortcuts.size());

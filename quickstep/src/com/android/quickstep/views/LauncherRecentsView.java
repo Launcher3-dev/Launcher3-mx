@@ -37,7 +37,6 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.R;
 import com.android.launcher3.anim.Interpolators;
-import com.android.launcher3.views.ScrimView;
 import com.android.quickstep.OverviewInteractionState;
 import com.android.quickstep.util.ClipAnimationHelper;
 import com.android.quickstep.util.LayoutUtils;

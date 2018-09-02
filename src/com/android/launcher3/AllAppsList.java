@@ -113,6 +113,11 @@ public class AllAppsList {
         modified.clear();
     }
 
+    // clear no position apps after bind
+    public void clearNoPositionList(){
+        noPosition.clear();
+    }
+
     public int size() {
         return data.size();
     }

@@ -287,6 +287,7 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
                     }
                     callbacks.bindAppsAdded(addedWorkspaceScreensFinal,
                             addNotAnimated, addAnimated);
+                    mAllAppsList.clearNoPositionList();
                 }
             });
         }
