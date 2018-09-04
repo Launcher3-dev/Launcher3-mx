@@ -70,6 +70,7 @@ import com.android.launcher3.graphics.DragPreviewProvider;
 import com.android.launcher3.graphics.PreloadIconDrawable;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
+import com.android.launcher3.setting.Settings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
 import com.android.launcher3.touch.ItemLongClickListener;
 import com.android.launcher3.touch.WorkspaceTouchListener;
@@ -306,16 +307,6 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         Rect padding = grid.workspacePadding;
         setPadding(padding.left, padding.top, padding.right, padding.bottom);
-
-        if (grid.shouldFadeAdjacentWorkspaceScreens()) {
-            // In landscape mode the page spacing is set to the default.
-            setPageSpacing(grid.defaultPageSpacingPx);
-        } else {
-            // In portrait, we want the pages spaced such that there is no
-            // overhang of the previous / next page into the current page viewport.
-            // We assume symmetrical padding in portrait mode.
-            setPageSpacing(Math.max(grid.defaultPageSpacingPx, padding.left + 1));
-        }
 
         int paddingLeftRight = grid.cellLayoutPaddingLeftRightPx;
         int paddingBottom = grid.cellLayoutBottomPaddingPx;
@@ -3367,6 +3358,11 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     protected String getCurrentPageDescription() {
         int page = (mNextPage != INVALID_PAGE) ? mNextPage : mCurrentPage;
         return getPageDescription(page);
+    }
+
+    @Override
+    protected boolean isPagedViewCircledScroll() {
+        return Settings.sIsPagedViewCircleScroll;
     }
 
     private String getPageDescription(int page) {

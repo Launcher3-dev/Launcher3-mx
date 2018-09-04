@@ -261,8 +261,8 @@ public class LauncherStateManager {
 
     /**
      * Prepares for a non-user controlled animation from fromState to toState. Preparations include:
-     * - Setting interpolators for various animations included in the state transition.
-     * - Setting some start values (e.g. scale) for views that are hidden but about to be shown.
+     * - Settings interpolators for various animations included in the state transition.
+     * - Settings some start values (e.g. scale) for views that are hidden but about to be shown.
      */
     public void prepareForAtomicAnimation(LauncherState fromState, LauncherState toState,
             AnimatorSetBuilder builder) {

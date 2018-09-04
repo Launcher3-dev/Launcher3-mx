@@ -2366,7 +2366,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
                 // Close any open floating views.
                 AbstractFloatingView.closeAllOpenViews(this);
 
-                // Setting the touch point to (-1, -1) will show the options popup in the center of
+                // Settings the touch point to (-1, -1) will show the options popup in the center of
                 // the screen.
                 OptionsPopupView.showDefaultOptions(this, -1, -1);
             }

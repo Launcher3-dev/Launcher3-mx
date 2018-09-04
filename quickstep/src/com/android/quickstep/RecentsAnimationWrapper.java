@@ -111,7 +111,7 @@ public class RecentsAnimationWrapper {
         mExecutorService.submit(() -> {
             RecentsAnimationControllerCompat controller = mController;
             TraceHelper.partitionSection("RecentsController",
-                    "Setting behind system bars on " + controller);
+                    "Settings behind system bars on " + controller);
             if (controller != null) {
                 controller.setAnimationTargetsBehindSystemBars(behindSystemBars);
             }
@@ -132,7 +132,7 @@ public class RecentsAnimationWrapper {
         mExecutorService.submit(() -> {
             RecentsAnimationControllerCompat controller = mController;
             TraceHelper.partitionSection("RecentsController",
-                    "Setting minimize dock on " + controller);
+                    "Settings minimize dock on " + controller);
             if (controller != null) {
                 controller.setSplitScreenMinimized(minimized);
             }

@@ -309,7 +309,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
         }
         target.play(launcherAnim);
 
-        // Set the current animation first, before adding windowAnimEndListener. Setting current
+        // Set the current animation first, before adding windowAnimEndListener. Settings current
         // animation adds some listeners which need to be called before windowAnimEndListener
         // (the ordering of listeners matter in this case).
         mLauncher.getStateManager().setCurrentAnimation(target, childStateAnimation);
