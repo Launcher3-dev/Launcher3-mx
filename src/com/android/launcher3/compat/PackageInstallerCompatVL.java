@@ -30,7 +30,6 @@ import android.util.SparseArray;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherModel;
-import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.util.Thunk;
 
 import java.util.ArrayList;
@@ -96,14 +95,9 @@ public class PackageInstallerCompatVL extends PackageInstallerCompat {
 
         @Override
         public void onCreated(int sessionId) {
-            SessionInfo sessionInfo = pushSessionDisplayToLauncher(sessionId);
-            if (FeatureFlags.LAUNCHER3_PROMISE_APPS_IN_ALL_APPS && sessionInfo != null) {
-                LauncherAppState app = LauncherAppState.getInstanceNoCreate();
-                if (app != null) {
-                    app.getModel().onInstallSessionCreated(
-                            PackageInstallInfo.fromInstallingState(sessionInfo));
-                }
-            }
+            // --- modify by codemx.cn --- 2018/09/05 --- start
+            pushSessionDisplayToLauncher(sessionId);
+            // --- modify by codemx.cn --- 2018/09/05 --- end
         }
 
         @Override

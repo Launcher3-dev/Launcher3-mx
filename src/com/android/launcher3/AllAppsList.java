@@ -116,6 +116,7 @@ public class AllAppsList {
     // clear no position apps after bind
     public void clearNoPositionList(){
         noPosition.clear();
+        added.clear();
     }
 
     public int size() {
