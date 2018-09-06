@@ -1,19 +1,16 @@
 package com.android.launcher3.setting;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+
+import com.android.launcher3.util.LauncherSpUtil;
 
 public final class Settings {
-
-    private static final String SHARED = "launcher_share";
-    private static final String SHARE_CYCLE = "share_cycle";
 
     /**
      * PagedView can scroll circle-endless.
      */
     public static boolean sIsPagedViewCircleScroll = false;
-
-    private SharedPreferences mShared;
+    private Context mContext;
 
 
     private static class SettingHolder {
@@ -25,17 +22,16 @@ public final class Settings {
     }
 
     public void loadSettings(Context context) {
-        mShared = context.getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+        mContext = context;
     }
 
     public void setPagedViewCircleScroll(boolean isPagedViewCircleScroll) {
         Settings.sIsPagedViewCircleScroll = isPagedViewCircleScroll;
-        mShared.edit().putInt(SHARE_CYCLE, isPagedViewCircleScroll ? 1 : 0).apply();
+        LauncherSpUtil.saveBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE, isPagedViewCircleScroll);
     }
 
     public void loadScreenCycle() {
-        int isScreenCycle = mShared.getInt(SHARE_CYCLE, 0);
-        sIsPagedViewCircleScroll = isScreenCycle == 1;
+        sIsPagedViewCircleScroll = LauncherSpUtil.getBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE);
     }
 
 }
