@@ -35,6 +35,8 @@ public class AddWorkspaceItemsNoPositionTask extends BaseModelUpdateTask {
         // called.
         ArrayList<Long> workspaceScreens = LauncherModel.loadWorkspaceScreensDb(context);
 
+        XLog.e(XLog.getTag(),XLog.TAG_GU + mAllAppsNoPotion.size());
+
         filterAddedItemsFinal(app, dataModel, apps, workspaceScreens, mAllAppsNoPotion, addedWorkspaceScreensFinal, addedItemsFinal);
 
         // Update the workspace screens

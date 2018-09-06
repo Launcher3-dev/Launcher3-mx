@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.LauncherActivityInfo;
-import android.content.pm.PackageInstaller;
 import android.content.pm.PackageInstaller.SessionInfo;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -842,6 +841,7 @@ public class LoaderTask implements Runnable {
      * Load all the apps bind, include apps in the folder that bind.
      */
     private void loadAllAppsBind() {
+        XLog.e(XLog.getTag(),XLog.TAG_GU);
         List<ItemInfo> list = mBgDataModel.workspaceItems;
         for (ItemInfo info : list) {
             if (info instanceof ItemInfoWithIcon) {

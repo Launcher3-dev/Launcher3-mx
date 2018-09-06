@@ -130,6 +130,7 @@ public class BgDataModel {
         workspaceScreens.clear();
         pinnedShortcutCounts.clear();
         deepShortcutMap.clear();
+        workspaceShortcuts.clear();
     }
 
     public synchronized void dump(String prefix, FileDescriptor fd, PrintWriter writer,
