@@ -11,7 +11,7 @@ public final class Settings {
     /**
      * PagedView can scroll circle-endless.
      */
-    public static boolean sIsPagedViewCircleScroll = true;
+    public static boolean sIsPagedViewCircleScroll = false;
 
     private SharedPreferences mShared;
 

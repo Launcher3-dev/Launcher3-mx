@@ -1759,29 +1759,31 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         // Find out which screens are visible; as an optimization we only call draw on them
         final int pageCount = getChildCount();
         if (pageCount > 0) {
-            boolean isXBeforeFirstPage = mIsRtl ? (getScrollX() > mMaxScrollX) : (getScrollX() < 0);
-            boolean isXAfterLastPage = mIsRtl ? (getScrollX() < 0) : (getScrollX() > mMaxScrollX);
-            if (isXBeforeFirstPage || isXAfterLastPage) {
-                long drawingTime = getDrawingTime();
-                int width = mViewport.width();
-                int childCount = getChildCount();
-                canvas.save();
-                canvas.clipRect(getScrollX(), getScrollY(), getScrollX() + getRight() - getLeft(),
-                        getScrollY() + getBottom() - getTop());
-                // here we assume that a page's horizontal padding plus it's measured width
-                // equals to ViewPort's width
-                int offset = (mIsRtl ? - childCount : childCount) * (width);
-                if (isXBeforeFirstPage) {
-                    canvas.translate(- offset, 0);
-                    drawChild(canvas, getPageAt(childCount - 1), drawingTime);
-                    canvas.translate(+ offset, 0);
-                } else if (isXAfterLastPage) {
-                    canvas.translate(+ offset, 0);
-                    drawChild(canvas, getPageAt(0), drawingTime);
-                    canvas.translate(- offset, 0);
-                }
+            if (isPagedViewCircledScroll()) {
+                boolean isXBeforeFirstPage = mIsRtl ? (getScrollX() > mMaxScrollX) : (getScrollX() < 0);
+                boolean isXAfterLastPage = mIsRtl ? (getScrollX() < 0) : (getScrollX() > mMaxScrollX);
+                if (isXBeforeFirstPage || isXAfterLastPage) {
+                    long drawingTime = getDrawingTime();
+                    int width = mViewport.width();
+                    int childCount = getChildCount();
+                    canvas.save();
+                    canvas.clipRect(getScrollX(), getScrollY(), getScrollX() + getRight() - getLeft(),
+                            getScrollY() + getBottom() - getTop());
+                    // here we assume that a page's horizontal padding plus it's measured width
+                    // equals to ViewPort's width
+                    int offset = (mIsRtl ? -childCount : childCount) * (width);
+                    if (isXBeforeFirstPage) {
+                        canvas.translate(-offset, 0);
+                        drawChild(canvas, getPageAt(childCount - 1), drawingTime);
+                        canvas.translate(+offset, 0);
+                    } else if (isXAfterLastPage) {
+                        canvas.translate(+offset, 0);
+                        drawChild(canvas, getPageAt(0), drawingTime);
+                        canvas.translate(-offset, 0);
+                    }
 
-                canvas.restore();
+                    canvas.restore();
+                }
             }
             super.dispatchDraw(canvas);
         }
