@@ -1111,10 +1111,9 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         enableHwLayersOnVisiblePages();
 
         // --- add by comde.cn ---- 2018/09/06 --- start
-        int screenCenter = getScrollX() + getViewportWidth() / 2;
         mTransitionEffect.clearRotation();
         if (Settings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
-            startScrollWithAnim(screenCenter);
+            startScrollWithAnim(getScrollX());
         }
         // --- add by comde.cn ---- 2018/09/06 --- end
 
@@ -1127,10 +1126,10 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         return mTransitionEffect;
     }
 
-    private void startScrollWithAnim(int screenCenter) {
+    private void startScrollWithAnim(int screenScroll) {
         // -1,7,15,1,6,4
         int screenEffectNum = Settings.sLauncherEffect;
-        mTransitionEffect.screenScrollByTransitionEffect(screenCenter, screenEffectNum);
+        mTransitionEffect.screenScrollByTransitionEffect(screenScroll, screenEffectNum);
     }
 
     private static final int WORKSPACE_MSG_PREVIEW_EFFECT = 100;
@@ -1427,11 +1426,10 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         // We need to check the isDragging case because updatePageAlphaValues is called between
         // goToState(SPRING_LOADED) and onStartStateTransition.
         if (!workspaceInModalState() && !mIsSwitchingState && !mDragController.isDragging()) {
-            int screenCenter = getScrollX() + getMeasuredWidth() / 2;
             for (int i = 0; i < getChildCount(); i++) {
                 CellLayout child = (CellLayout) getChildAt(i);
                 if (child != null) {
-                    float scrollProgress = getScrollProgress(screenCenter, child, i);
+                    float scrollProgress = getScrollProgress(getScrollX(), child, i);
                     float alpha = 1 - Math.abs(scrollProgress);
                     if (mWorkspaceFadeInAdjacentScreens) {
                         child.getShortcutsAndWidgets().setAlpha(alpha);

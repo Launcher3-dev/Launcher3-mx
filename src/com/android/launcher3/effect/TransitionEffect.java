@@ -70,65 +70,65 @@ public class TransitionEffect {
         this.mWorkspace = workspace;
     }
 
-    public void screenScrollByTransitionEffect(int screenCenter, int screenEffectNum) {
+    public void screenScrollByTransitionEffect(int screenScroll, int screenEffectNum) {
 
         switch (screenEffectNum) {
             case TRANSITION_EFFECT_NONE:// 0
-                screenScrollByTransitionEffectStandard(screenCenter);
+                screenScrollByTransitionEffectStandard(screenScroll);
                 break;
             case TRANSITION_EFFECT_ZOOM_IN:// 1
-                screenScrollByTransitionEffectZoom(true, screenCenter);
+                screenScrollByTransitionEffectZoom(true, screenScroll);
                 break;
             case TRANSITION_EFFECT_ZOOM_OUT:// 2
-                screenScrollByTransitionEffectZoom(false, screenCenter);
+                screenScrollByTransitionEffectZoom(false, screenScroll);
                 break;
             case TRANSITION_EFFECT_ROTATE_UP:// 3
-                screenScrollByTransitionEffectRotate(true, screenCenter);
+                screenScrollByTransitionEffectRotate(true, screenScroll);
                 break;
             case TRANSITION_EFFECT_ROTATE_DOWN:// 4
-                screenScrollByTransitionEffectRotate(false, screenCenter);
+                screenScrollByTransitionEffectRotate(false, screenScroll);
                 break;
             case TRANSITION_EFFECT_CUBE_IN:// 5
-                screenScrollByTransitionEffectCube(true, screenCenter);
+                screenScrollByTransitionEffectCube(true, screenScroll);
                 break;
             case TRANSITION_EFFECT_CUBE_OUT:// 6
-                screenScrollByTransitionEffectCube(false, screenCenter);
+                screenScrollByTransitionEffectCube(false, screenScroll);
                 break;
             case TRANSITION_EFFECT_STACK:// 7
-                screenScrollByTransitionEffectStack(screenCenter);
+                screenScrollByTransitionEffectStack(screenScroll);
                 break;
             case TRANSITION_EFFECT_ACCORDION:// 8
-                screenScrollByTransitionEffectAccordion(screenCenter);
+                screenScrollByTransitionEffectAccordion(screenScroll);
                 break;
             case TRANSITION_EFFECT_FLIP:// 9----有问题
-                screenScrollByTransitionEffectFlip(screenCenter);
+                screenScrollByTransitionEffectFlip(screenScroll);
                 break;
             case TRANSITION_EFFECT_CYLINDER_IN:// 10
-                screenScrollByTransitionEffectCylinder(true, screenCenter);
+                screenScrollByTransitionEffectCylinder(true, screenScroll);
                 break;
             case TRANSITION_EFFECT_CYLINDER_OUT:// 11
-                screenScrollByTransitionEffectCylinder(false, screenCenter);
+                screenScrollByTransitionEffectCylinder(false, screenScroll);
                 break;
             case TRANSITION_EFFECT_CROSS_FADE:// 12
-                screenScrollByTransitionEffectCrossFade(screenCenter);
+                screenScrollByTransitionEffectCrossFade(screenScroll);
                 break;
             case TRANSITION_EFFECT_OVERVIEW:// 13----效果不好
-                screenScrollByTransitionEffectCrossOverview(screenCenter);
+                screenScrollByTransitionEffectCrossOverview(screenScroll);
                 break;
             case TRANSITION_EFFECT_OVERVIEW_SCALE:// 14
-                screenScrollByTransitionEffectOverviewScale(screenCenter);
+                screenScrollByTransitionEffectOverviewScale(screenScroll);
                 break;
             case TRANSITION_EFFECT_PAGE:// 15
-                screenScrollByTransitionEffectPage(screenCenter);
+                screenScrollByTransitionEffectPage(screenScroll);
                 break;
             case TRANSITION_EFFECT_WINDMILL_UP:// 16
-                screenScrollByTransitionEffectWindMill(true, screenCenter);
+                screenScrollByTransitionEffectWindMill(true, screenScroll);
                 break;
             case TRANSITION_EFFECT_WINDMILL_DOWN:// 17
-                screenScrollByTransitionEffectWindMill(false, screenCenter);
+                screenScrollByTransitionEffectWindMill(false, screenScroll);
                 break;
             default:
-                screenScrollByTransitionEffectStandard(screenCenter);
+                screenScrollByTransitionEffectStandard(screenScroll);
                 break;
         }
     }
@@ -194,11 +194,11 @@ public class TransitionEffect {
         return value;
     }
 
-    private void screenScrollByTransitionEffectStandard(int screenCenter) {
+    private void screenScrollByTransitionEffectStandard(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             if (mFadeInAdjacentScreens) {
                 float alpha = 1 - Math.abs(scrollProgress);
                 ((CellLayout) v).getShortcutsAndWidgets().setAlpha(alpha);
@@ -206,11 +206,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectZoom(boolean in, int screenCenter) {
+    private void screenScrollByTransitionEffectZoom(boolean in, int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float scale = 1.0f + (in ? -0.8f : 0.4f) * Math.abs(scrollProgress);
             scale = resetValueByMode(scale);
             // Extra translation to account for the increase in size
@@ -224,11 +224,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectRotate(boolean up, int screenCenter) {
+    private void screenScrollByTransitionEffectRotate(boolean up, int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float rotation =
                     (up ? TRANSITION_SCREEN_ROTATION : -TRANSITION_SCREEN_ROTATION) * scrollProgress;
 
@@ -249,11 +249,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectCube(boolean in, int screenCenter) {
+    private void screenScrollByTransitionEffectCube(boolean in, int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float rotation = (in ? 90.0f : -90.0f) * scrollProgress;
             v.setCameraDistance(mCameraDistance);
             v.setPivotX(scrollProgress < 0 ? 0 : v.getMeasuredWidth());
@@ -264,11 +264,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectStack(int screenCenter) {
+    private void screenScrollByTransitionEffectStack(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             if (mZInterpolator == null) {
                 mZInterpolator = new ZInterpolator(0.5f);
             }
@@ -327,11 +327,11 @@ public class TransitionEffect {
 
     }
 
-    private void screenScrollByTransitionEffectAccordion(int screenCenter) {
+    private void screenScrollByTransitionEffectAccordion(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float scale = 1.0f - Math.abs(scrollProgress);
             v.setScaleX(scale);
             v.setPivotX(scrollProgress < 0 ? 0 : v.getMeasuredWidth());
@@ -339,11 +339,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectFlip(int screenCenter) {
+    private void screenScrollByTransitionEffectFlip(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
 //            float rotation = -180.0f * scrollProgress;
 //            if (scrollProgress != 0) {
 //                mWorkspace.mLauncher.changeBackgroundAlpha(1.0f);
@@ -401,13 +401,13 @@ public class TransitionEffect {
      * 柱面切换效果，不是立方切换效果
      *
      * @param in             向内或者向外
-     * @param screenCenter 滑动进度
+     * @param screenScroll 滑动进度
      */
-    private void screenScrollByTransitionEffectCylinder(boolean in, int screenCenter) {
+    private void screenScrollByTransitionEffectCylinder(boolean in, int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float rotation = (in ? TRANSITION_SCREEN_ROTATION : -TRANSITION_SCREEN_ROTATION) * scrollProgress;
             v.setCameraDistance(v.getMeasuredWidth() * 4);
             v.setPivotX((scrollProgress + 1) * v.getMeasuredWidth() * 0.5f);
@@ -416,11 +416,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectCrossFade(int screenCenter) {
+    private void screenScrollByTransitionEffectCrossFade(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float alpha = 1 - Math.abs(scrollProgress);
             v.setPivotX(v.getMeasuredWidth() * 0.5f);
             v.setPivotY(v.getMeasuredHeight() * 0.5f);
@@ -428,11 +428,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectCrossOverview(int screenCenter) {
+    private void screenScrollByTransitionEffectCrossOverview(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             if (mScaleInterpolator == null) {
                 mScaleInterpolator = new AccelerateDecelerateInterpolator();
             }
@@ -446,11 +446,11 @@ public class TransitionEffect {
         }
     }
 
-    private void screenScrollByTransitionEffectOverviewScale(int screenCenter) {
+    private void screenScrollByTransitionEffectOverviewScale(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float scale = (scrollProgress >= 0 ? 1 - scrollProgress : 1 + scrollProgress);
             scale = resetValueByMode(scale);
             v.setCameraDistance(mCameraDistance);
@@ -473,11 +473,11 @@ public class TransitionEffect {
     }
 
     // 翻页
-    private void screenScrollByTransitionEffectPage(int screenCenter) {
+    private void screenScrollByTransitionEffectPage(int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float translationX = v.getMeasuredWidth() * scrollProgress;
             translationX = resetValueByMode(translationX);
             float rotation = scrollProgress > 0 ? scrollProgress * (-120.f) : scrollProgress * 120.0f;
@@ -507,11 +507,11 @@ public class TransitionEffect {
     }
 
     // 大风车
-    private void screenScrollByTransitionEffectWindMill(boolean up, int screenCenter) {
+    private void screenScrollByTransitionEffectWindMill(boolean up, int screenScroll) {
         final int N = mWorkspace.getChildCount();
         for (int i = 0; i < N; i++) {
             View v = mWorkspace.getPageAt(i);
-            float scrollProgress = mWorkspace.getScrollProgress(screenCenter, v, i);
+            float scrollProgress = mWorkspace.getScrollProgress(screenScroll, v, i);
             float rotation =
                     (up ? TRANSITION_SCREEN_WINDMILL : -TRANSITION_SCREEN_WINDMILL) * scrollProgress;
 

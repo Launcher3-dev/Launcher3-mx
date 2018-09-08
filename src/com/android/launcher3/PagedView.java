@@ -1018,30 +1018,23 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
     }
 
-    public float getScrollProgress(int screenCenter, View v, int page) {
-        final int halfScreenSize = getMeasuredWidth() / 2;
-
+    // --- modify by codemx.cn --- 2018/09/08 -- start
+    public float getScrollProgress(int screenScroll, View v, int page) {
+        final int halfScreenSize = getViewportWidth() / 2;
+        int screenCenter = screenScroll + getViewportWidth() / 2;
+        int totalDistance = mMeasureWidth;
         int delta = screenCenter - (getScrollForPage(page) + halfScreenSize);
-        int count = getChildCount();
-
-        final int totalDistance;
-
-        int adjacentPage = page + 1;
-        if ((delta < 0 && !mIsRtl) || (delta > 0 && mIsRtl)) {
-            adjacentPage = page - 1;
-        }
-
-        if (adjacentPage < 0 || adjacentPage > count - 1) {
-            totalDistance = v.getMeasuredWidth() + mPageSpacing;
-        } else {
-            totalDistance = Math.abs(getScrollForPage(adjacentPage) - getScrollForPage(page));
-        }
-
         float scrollProgress = delta / (totalDistance * 1.0f);
+        if (screenScroll < 0 && page == getPageCount() - 1) {
+            scrollProgress = getPageCount() + scrollProgress;
+        } else if (screenScroll > mMaxScrollX && page == 0) {
+            scrollProgress = scrollProgress - getPageCount();
+        }
         scrollProgress = Math.min(scrollProgress, MAX_SCROLL_PROGRESS);
         scrollProgress = Math.max(scrollProgress, -MAX_SCROLL_PROGRESS);
         return scrollProgress;
     }
+    // --- modify by codemx.cn --- 2018/09/08 -- end
 
     public int getScrollForPage(int index) {
         if (mPageScrolls == null || index >= mPageScrolls.length || index < 0) {
@@ -1417,7 +1410,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     private int getPageNearestToCenterOfScreen(int scaledScrollX) {
-        int screenCenter = scaledScrollX + (getMeasuredWidth() / 2);
+        int screenCenter = scaledScrollX + (getMeasuredWidth() / 2) + getViewportOffsetX();
         int minDistanceFromScreenCenter = Integer.MAX_VALUE;
         int minDistanceFromScreenCenterIndex = -1;
         final int childCount = getChildCount();
@@ -1425,8 +1418,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             View layout = getPageAt(i);
             int childWidth = layout.getMeasuredWidth();
             int halfChildWidth = (childWidth / 2);
-            int childCenter = getChildOffset(i) + halfChildWidth;
+            int childCenter = getViewportOffsetX() + getChildOffset(i) + halfChildWidth;
 
+            // --- add by codemx.cn --- 2018/09/08 --- start
             if (isPagedViewCircledScroll()) {
                 if (getScrollX() < 0 && i == childCount - 1) {
                     childCenter = -mMeasureWidth + halfChildWidth;
@@ -1434,6 +1428,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     childCenter = getChildCount() * mMeasureWidth + halfChildWidth;
                 }
             }
+            // --- add by codemx.cn --- 2018/09/08 --- end
 
             int distanceFromScreenCenter = Math.abs(childCenter - screenCenter);
             if (distanceFromScreenCenter < minDistanceFromScreenCenter) {
@@ -1485,7 +1480,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         mLastWhichPage = whichPage;
         // --- add by codemx.cn ----- 2018/09/04 --- end
 
-        int delta = newX - getUnboundedScrollX();
+        int delta = newX - getScrollX();
+//        int delta = newX - getUnboundedScrollX();
         int duration = 0;
 
         if (Math.abs(velocity) < mMinFlingVelocity) {
@@ -1765,6 +1761,10 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         // Find out which screens are visible; as an optimization we only call draw on them
         final int pageCount = getChildCount();
         if (pageCount > 0) {
+
+            int halfScreenSize = getViewportWidth() / 2;
+            int screenCenter = getScrollX() + halfScreenSize;
+
             if (isPagedViewCircledScroll()) {
                 boolean isXBeforeFirstPage = mIsRtl ? (getScrollX() > mMaxScrollX) : (getScrollX() < 0);
                 boolean isXAfterLastPage = mIsRtl ? (getScrollX() < 0) : (getScrollX() > mMaxScrollX);
