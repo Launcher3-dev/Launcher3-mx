@@ -1019,6 +1019,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     // --- modify by codemx.cn --- 2018/09/08 -- start
+    // 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
     public float getScrollProgress(int screenScroll, View v, int page) {
         final int halfScreenSize = getViewportWidth() / 2;
         int screenCenter = screenScroll + getViewportWidth() / 2;
