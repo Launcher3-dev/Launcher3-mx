@@ -304,6 +304,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
                 getResources().getInteger(R.integer.config_workspaceOverviewShrinkPercentage) / 100f;
 
         mTransitionEffect = new TransitionEffect(mLauncher);
+        mTransitionEffect.setWorkspace(this);
         // --- add by comde.cn ---- 2018/09/06 --- end
     }
 

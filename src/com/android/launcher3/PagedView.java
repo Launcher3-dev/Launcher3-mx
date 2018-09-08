@@ -1787,7 +1787,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                         drawChild(canvas, getPageAt(0), drawingTime);
                         canvas.translate(-offset, 0);
                     }
-
                     canvas.restore();
                 }
             }

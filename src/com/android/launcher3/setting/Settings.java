@@ -9,7 +9,7 @@ public final class Settings {
 
     // 特效标记
 //    public static int sLauncherEffect = TransitionEffect.TRANSITION_EFFECT_NONE;
-    public static int sLauncherEffect = 1;
+    public static int sLauncherEffect = 3;
 
     /**
      * PagedView can scroll circle-endless.
