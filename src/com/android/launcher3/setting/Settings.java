@@ -6,10 +6,15 @@ import com.android.launcher3.util.LauncherSpUtil;
 
 public final class Settings {
 
+
+    // 特效标记
+//    public static int sLauncherEffect = TransitionEffect.TRANSITION_EFFECT_NONE;
+    public static int sLauncherEffect = 1;
+
     /**
      * PagedView can scroll circle-endless.
      */
-    public static boolean sIsPagedViewCircleScroll = false;
+    public static boolean sIsPagedViewCircleScroll = true;
     private Context mContext;
 
 
@@ -23,6 +28,7 @@ public final class Settings {
 
     public void loadSettings(Context context) {
         mContext = context;
+//        sLauncherEffect = LauncherSpUtil.getIntData(mContext, LauncherSpUtil.KEY_SCROLL_EFFECT, TransitionEffect.TRANSITION_EFFECT_NONE);
     }
 
     public void setPagedViewCircleScroll(boolean isPagedViewCircleScroll) {
@@ -32,6 +38,11 @@ public final class Settings {
 
     public void loadScreenCycle() {
         sIsPagedViewCircleScroll = LauncherSpUtil.getBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE);
+    }
+
+    public void setLauncherEffect(int effect) {
+        sLauncherEffect = effect;
+        LauncherSpUtil.saveIntData(mContext, LauncherSpUtil.KEY_SCROLL_EFFECT, effect);
     }
 
 }

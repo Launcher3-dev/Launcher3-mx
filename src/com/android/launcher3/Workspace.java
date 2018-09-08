@@ -36,6 +36,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Parcelable;
 import android.os.UserHandle;
 import android.util.AttributeSet;
@@ -63,6 +64,7 @@ import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragOptions;
 import com.android.launcher3.dragndrop.DragView;
 import com.android.launcher3.dragndrop.SpringLoadedDragController;
+import com.android.launcher3.effect.TransitionEffect;
 import com.android.launcher3.folder.Folder;
 import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.folder.PreviewBackground;
@@ -77,6 +79,7 @@ import com.android.launcher3.touch.WorkspaceTouchListener;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
+import com.android.launcher3.util.AbstractHandler;
 import com.android.launcher3.util.ItemInfoMatcher;
 import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.PackageUserKey;
@@ -295,6 +298,13 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         // Disable multitouch across the workspace/all apps/customize tray
         setMotionEventSplittingEnabled(true);
         setOnTouchListener(new WorkspaceTouchListener(mLauncher, this));
+
+        // --- add by comde.cn ---- 2018/09/06 --- start
+        mOverviewModeShrinkFactor =
+                getResources().getInteger(R.integer.config_workspaceOverviewShrinkPercentage) / 100f;
+
+        mTransitionEffect = new TransitionEffect(mLauncher);
+        // --- add by comde.cn ---- 2018/09/06 --- end
     }
 
     @Override
@@ -1098,7 +1108,116 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         updatePageAlphaValues();
         enableHwLayersOnVisiblePages();
+
+        // --- add by comde.cn ---- 2018/09/06 --- start
+        int screenCenter = getScrollX() + getViewportWidth() / 2;
+        mTransitionEffect.clearRotation();
+        if (Settings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
+            startScrollWithAnim(screenCenter);
+        }
+        // --- add by comde.cn ---- 2018/09/06 --- end
+
     }
+
+    // add by comdex.cn ---特效---2018/09/06-------start
+    private TransitionEffect mTransitionEffect;
+
+    public TransitionEffect getTransitionEffect() {
+        return mTransitionEffect;
+    }
+
+    private void startScrollWithAnim(int screenCenter) {
+        // -1,7,15,1,6,4
+        int screenEffectNum = Settings.sLauncherEffect;
+        mTransitionEffect.screenScrollByTransitionEffect(screenCenter, screenEffectNum);
+    }
+
+    private static final int WORKSPACE_MSG_PREVIEW_EFFECT = 100;
+    private static final int WORKSPACE_MSG_BACK_EFFECT = 101;
+    protected static final int SLOW_PAGE_SNAP_ANIMATION_DURATION = 950;
+
+//    public void previewTransitionEffect(MenuItem effect, MenuEffectController controller) {
+//        if (!mScroller.isFinished() || getChildCount() < 2) {
+//            return;
+//        }
+//        LauncherSetting.getInstance().setLauncherEffect(effect.getPosition());
+//        controller.getAdapter().setSelected(effect);
+//        mTransitionEffectHandler.removeMessages(WORKSPACE_MSG_PREVIEW_EFFECT);
+//        Message msg = mTransitionEffectHandler.obtainMessage();
+//        msg.what = WORKSPACE_MSG_PREVIEW_EFFECT;
+//        mTransitionEffectHandler.sendMessage(msg);
+//    }
+
+    private TransitionEffectHandler mTransitionEffectHandler;
+
+    private static class TransitionEffectHandler extends AbstractHandler<Workspace> {
+
+        TransitionEffectHandler(Workspace workspace) {
+            super(workspace);
+        }
+
+        @Override
+        protected void handleMessage(Message msg, final Workspace workspace) {
+            switch (msg.what) {
+                case WORKSPACE_MSG_PREVIEW_EFFECT:
+                    workspace.mTransitionEffect.clearTransitionEffect();
+                    int previewPage;
+                    if (workspace.getNextPage() == workspace.getChildCount() - 1) {
+                        previewPage = workspace.getChildCount() - 2;
+                    } else {
+                        previewPage = workspace.getNextPage() + 1;
+                    }
+                    workspace.snapToPage(previewPage);
+                    sendEmptyMessageDelayed(WORKSPACE_MSG_BACK_EFFECT, SLOW_PAGE_SNAP_ANIMATION_DURATION);
+                    break;
+                case WORKSPACE_MSG_BACK_EFFECT:
+                    final int backPage = workspace.getNextPage();
+                    workspace.snapToPage(backPage);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @return The open folder on the current screen, or null if there is none
+     */
+    public Folder getOpenFolder() {
+        DragLayer dragLayer = mLauncher.getDragLayer();
+        // Iterate in reverse order. Folder is added later to the dragLayer,
+        // and will be one of the last views.
+        for (int i = dragLayer.getChildCount() - 1; i >= 0; i--) {
+            View child = dragLayer.getChildAt(i);
+            if (child instanceof Folder) {
+                Folder folder = (Folder) child;
+                if (folder.isOpen())
+                    return folder;
+            }
+        }
+        return null;
+    }
+
+    private float mOverviewModeShrinkFactor;
+
+    // 计算需要移动的距离
+    public int getOverviewModeTranslationY() {
+//        DeviceProfile grid = mLauncher.getDeviceProfile();
+//        int overviewButtonBarHeight = grid.getOverviewModeButtonBarHeight();
+//
+//        int scaledHeight = (int) (mOverviewModeShrinkFactor * getNormalChildHeight());
+//        Rect workspacePadding = grid.getWorkspacePadding(sTempRect);
+//        int workspaceTop = mInsets.top + workspacePadding.top;
+//        int workspaceBottom = getViewportHeight() - mInsets.bottom - workspacePadding.bottom;
+//        int overviewTop = mInsets.top;
+//        int overviewBottom = getViewportHeight() - mInsets.bottom - overviewButtonBarHeight;
+//        int workspaceOffsetTopEdge = workspaceTop + ((workspaceBottom - workspaceTop) - scaledHeight) / 2;
+//        int overviewOffsetTopEdge = overviewTop + (overviewBottom - overviewTop - scaledHeight) / 2;
+//        return -workspaceOffsetTopEdge + overviewOffsetTopEdge;
+        return 0;
+    }
+
+    // add by comdex.cn ---特效---2018/09/06-------end
 
     public void showPageIndicatorAtCurrentScroll() {
         if (mPageIndicator != null) {

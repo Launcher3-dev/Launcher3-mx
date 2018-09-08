@@ -18,16 +18,13 @@ package com.android.launcher3;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
-import android.os.Process;
 import android.os.UserHandle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.launcher3.compat.LauncherAppsCompat;
-import com.android.launcher3.compat.PackageInstallerCompat;
 import com.android.launcher3.util.FlagOp;
 import com.android.launcher3.util.ItemInfoMatcher;
 
@@ -44,15 +41,25 @@ public class AllAppsList {
 
     public static final int DEFAULT_APPLICATIONS_NUMBER = 42;
 
-    /** The list off all apps. */
+    /**
+     * The list off all apps.
+     */
     public final ArrayList<ShortcutInfo> data = new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
-    /** The list of apps that have been added since the last notify() call. */
+    /**
+     * The list of apps that have been added since the last notify() call.
+     */
     public ArrayList<ShortcutInfo> added = new ArrayList<>(DEFAULT_APPLICATIONS_NUMBER);
-    /** The list of apps that have been removed since the last notify() call. */
+    /**
+     * The list of apps that have been removed since the last notify() call.
+     */
     public ArrayList<ShortcutInfo> removed = new ArrayList<>();
-    /** The list of apps that have been modified since the last notify() call. */
+    /**
+     * The list of apps that have been modified since the last notify() call.
+     */
     public ArrayList<ShortcutInfo> modified = new ArrayList<>();
-    /** The list of apps that have not position */
+    /**
+     * The list of apps that have not position
+     */
     public ArrayList<ItemInfo> noPosition = new ArrayList<>();
 
     private IconCache mIconCache;
@@ -67,37 +74,38 @@ public class AllAppsList {
         mAppFilter = appFilter;
     }
 
+    // --- add by codemx.cn ---- 2018/09/08 -- start
+    public void addAll(ShortcutInfo info, LauncherActivityInfo activityInfo) {
+        if (isAdded(info, activityInfo)) {
+            data.add(info);
+        }
+    }
+    // --- add by codemx.cn ---- 2018/09/08 -- end
+
     /**
      * Add the supplied ApplicationInfo objects to the list, and enqueue it into the
      * list to broadcast when notify() is called.
-     *
+     * <p>
      * If the app is already in the list, doesn't add it.
      */
     public void add(ShortcutInfo info, LauncherActivityInfo activityInfo) {
-        if (!mAppFilter.shouldShowApp(info.componentName)) {
-            return;
-        }
-        if (findShortcutInfo(info.componentName, info.user) != null) {
-            return;
-        }
-        mIconCache.getTitleAndIcon(info, activityInfo, true /* useLowResIcon */);
-
-        data.add(info);
-        added.add(info);
-    }
-
-    public void addPromiseApp(Context context,
-                              PackageInstallerCompat.PackageInstallInfo installInfo) {
-        ApplicationInfo applicationInfo = LauncherAppsCompat.getInstance(context)
-                .getApplicationInfo(installInfo.packageName, 0, Process.myUserHandle());
-        // only if not yet installed
-        if (applicationInfo == null) {
-            PromiseAppInfo info = new PromiseAppInfo(installInfo);
-            mIconCache.getTitleAndIcon(info, info.usingLowResIcon);
-            data.add(info);
+        if (isAdded(info, activityInfo)) {
             added.add(info);
         }
     }
+
+    // --- add by codemx.cn ---- 2018/09/08 -- start
+    private boolean isAdded(ShortcutInfo info, LauncherActivityInfo activityInfo) {
+        if (!mAppFilter.shouldShowApp(info.componentName)) {
+            return false;
+        }
+        if (findShortcutInfo(info.componentName, info.user) != null) {
+            return false;
+        }
+        mIconCache.getTitleAndIcon(info, activityInfo, true /* useLowResIcon */);
+        return true;
+    }
+    // --- add by codemx.cn ---- 2018/09/08 -- end
 
     public void removePromiseApp(ShortcutInfo appInfo) {
         // the <em>removed</em> list is handled by the caller
@@ -114,7 +122,7 @@ public class AllAppsList {
     }
 
     // clear no position apps after bind
-    public void clearNoPositionList(){
+    public void clearNoPositionList() {
         noPosition.clear();
         added.clear();
     }
@@ -169,7 +177,7 @@ public class AllAppsList {
     }
 
     public void updateIconsAndLabels(HashSet<String> packages, UserHandle user,
-            ArrayList<ShortcutInfo> outUpdates) {
+                                     ArrayList<ShortcutInfo> outUpdates) {
         for (ShortcutInfo info : data) {
             if (info.user.equals(user) && packages.contains(info.componentName.getPackageName())) {
                 mIconCache.updateTitleAndIcon(info);
@@ -230,7 +238,7 @@ public class AllAppsList {
      * Returns whether <em>apps</em> contains <em>component</em>.
      */
     private static boolean findActivity(List<LauncherActivityInfo> apps,
-            ComponentName component) {
+                                        ComponentName component) {
         for (LauncherActivityInfo info : apps) {
             if (info.getComponentName().equals(component)) {
                 return true;
@@ -244,9 +252,10 @@ public class AllAppsList {
      *
      * @return the corresponding ShortcutInfo or null
      */
-    private @Nullable ShortcutInfo findShortcutInfo(@NonNull ComponentName componentName,
-                                          @NonNull UserHandle user) {
-        for (ShortcutInfo info: data) {
+    private @Nullable
+    ShortcutInfo findShortcutInfo(@NonNull ComponentName componentName,
+                                  @NonNull UserHandle user) {
+        for (ShortcutInfo info : data) {
             if (componentName.equals(info.componentName) && user.equals(info.user)) {
                 return info;
             }

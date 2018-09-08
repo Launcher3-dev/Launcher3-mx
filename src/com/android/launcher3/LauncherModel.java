@@ -521,25 +521,6 @@ public class LauncherModel extends BroadcastReceiver
                 screensUri, null, null, null, LauncherSettings.WorkspaceScreens.SCREEN_RANK));
     }
 
-    public void onInstallSessionCreated(final PackageInstallInfo sessionInfo) {
-        enqueueModelUpdateTask(new BaseModelUpdateTask() {
-            @Override
-            public void execute(LauncherAppState app, BgDataModel dataModel, AllAppsList apps) {
-                apps.addPromiseApp(app.getContext(), sessionInfo);
-                if (!apps.added.isEmpty()) {
-                    final ArrayList<ShortcutInfo> arrayList = new ArrayList<>(apps.added);
-                    apps.added.clear();
-                    scheduleCallbackTask(new CallbackTask() {
-                        @Override
-                        public void execute(Callbacks callbacks) {
-                            callbacks.bindAppsAddedOrUpdated(arrayList);
-                        }
-                    });
-                }
-            }
-        });
-    }
-
     public class LoaderTransaction implements AutoCloseable {
 
         private final LoaderTask mTask;

@@ -831,7 +831,7 @@ public class LoaderTask implements Runnable {
             for (int i = 0; i < apps.size(); i++) {
                 LauncherActivityInfo app = apps.get(i);
                 // This builds the icon bitmaps.
-                mBgAllAppsList.add(new ShortcutInfo(app, user, quietMode), app);
+                mBgAllAppsList.addAll(new ShortcutInfo(app, user, quietMode), app);
             }
         }
         mBgAllAppsList.added = new ArrayList<>();

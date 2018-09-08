@@ -149,6 +149,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private Rect mViewport = new Rect();
     private int mMeasureWidth;
     private int mLastWhichPage = 0;
+
+    public static float mDensity;
     // add by codemx.cn ---- 2018/09/04 -- end
 
     // Convenience/caching
@@ -196,6 +198,10 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         final ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledPagingTouchSlop();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+
+        // --- add by codemx.cn --- 2018/09/06 --- start
+        mDensity = getResources().getDisplayMetrics().density;
+        // --- add by codemx.cn --- 2018/09/06 --- end
 
         float density = getResources().getDisplayMetrics().density;
         mFlingThresholdVelocity = (int) (FLING_THRESHOLD_VELOCITY * density);
@@ -1012,7 +1018,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
     }
 
-    protected float getScrollProgress(int screenCenter, View v, int page) {
+    public float getScrollProgress(int screenCenter, View v, int page) {
         final int halfScreenSize = getMeasuredWidth() / 2;
 
         int delta = screenCenter - (getScrollForPage(page) + halfScreenSize);

@@ -110,6 +110,7 @@ import com.android.launcher3.util.Thunk;
 import com.android.launcher3.util.TraceHelper;
 import com.android.launcher3.util.UiThreadHelper;
 import com.android.launcher3.util.ViewOnDrawExecutor;
+import com.android.launcher3.util.XLog;
 import com.android.launcher3.views.OptionsPopupView;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
@@ -1805,6 +1806,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void bindAppsAdded(ArrayList<Long> newScreens, ArrayList<ItemInfo> addNotAnimated,
             ArrayList<ItemInfo> addAnimated) {
+        XLog.e(XLog.getTag(),XLog.TAG_GU + addNotAnimated.size() + "     " + addAnimated.size());
         // Add the new screens
         if (newScreens != null) {
             bindAddScreens(newScreens);
@@ -1830,6 +1832,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      */
     @Override
     public void bindItems(final List<ItemInfo> items, final boolean forceAnimateIcons) {
+        XLog.e(XLog.getTag(),XLog.TAG_GU + items.size());
         // Get the list of added items and intersect them with the set of items here
         final AnimatorSet anim = LauncherAnimUtils.createAnimatorSet();
         final Collection<Animator> bounceAnims = new ArrayList<>();
@@ -2194,6 +2197,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void bindShortcutsChanged(ArrayList<ShortcutInfo> updated, final UserHandle user) {
         if (!updated.isEmpty()) {
+            XLog.e(XLog.getTag(),XLog.TAG_GU + updated.size());
             mWorkspace.updateShortcuts(updated);
         }
     }
@@ -2389,4 +2393,23 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         void onLauncherResume();
     }
+
+    // --- add by codemx.cn --- 2018/09/06 --- start
+    public void changeBackgroundAlpha(float alpha) {
+        View currentPage = null;
+        if (mWorkspace != null) {
+            currentPage = mWorkspace.getPageAt(mWorkspace.getCurrentPage());
+        }
+        if (currentPage != null) {
+            currentPage.setAlpha(alpha);
+        }
+        if (mHotseat != null) {
+            mHotseat.setAlpha(alpha);
+        }
+//        if (mPageIndicators != null) {
+//            mPageIndicators.setAlpha(alpha);
+//        }
+    }
+    // --- add by codemx.cn --- 2018/09/06 --- end
+
 }
