@@ -15,9 +15,6 @@
  */
 package com.android.launcher3.views;
 
-import static com.android.launcher3.BaseDraggingActivity.INTENT_EXTRA_IGNORE_LAUNCH_ANIMATION;
-import static com.android.launcher3.Utilities.EXTRA_WALLPAPER_OFFSET;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -43,8 +40,13 @@ import com.android.launcher3.widget.WidgetsFullSheet;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.android.launcher3.BaseDraggingActivity.INTENT_EXTRA_IGNORE_LAUNCH_ANIMATION;
+import static com.android.launcher3.Utilities.EXTRA_WALLPAPER_OFFSET;
+
 /**
  * Popup shown on long pressing an empty space in launcher
+ * <p>
+ * 长按桌面空白处弹窗
  */
 public class OptionsPopupView extends ArrowPopup
         implements OnClickListener, OnLongClickListener {
@@ -70,6 +72,14 @@ public class OptionsPopupView extends ArrowPopup
         return handleViewClick(view, Action.Touch.LONGPRESS);
     }
 
+    /**
+     * 处理桌面菜单弹窗点击事件
+     *
+     * @param view   菜单Item的视图
+     * @param action 事件类型
+     *
+     * @return 是否处理
+     */
     private boolean handleViewClick(View view, int action) {
         OptionItem item = mItemMap.get(view);
         if (item == null) {
@@ -116,6 +126,13 @@ public class OptionsPopupView extends ArrowPopup
         mTargetRect.roundOut(outPos);
     }
 
+    /**
+     * 显示桌面菜单弹窗
+     *
+     * @param launcher   Launcher
+     * @param targetRect 目标范围
+     * @param items      菜单项列表
+     */
     public static void show(Launcher launcher, RectF targetRect, List<OptionItem> items) {
         OptionsPopupView popup = (OptionsPopupView) launcher.getLayoutInflater()
                 .inflate(R.layout.longpress_options_menu, launcher.getDragLayer(), false);
@@ -133,6 +150,13 @@ public class OptionsPopupView extends ArrowPopup
         popup.reorderAndShow(popup.getChildCount());
     }
 
+    /**
+     * 显示桌面菜单弹窗
+     *
+     * @param launcher Launcher对象
+     * @param x        显示的x坐标
+     * @param y        显示的y坐标
+     */
     public static void showDefaultOptions(Launcher launcher, float x, float y) {
         float halfSize = launcher.getResources().getDimension(R.dimen.options_menu_thumb_size) / 2;
         if (x < 0 || y < 0) {
@@ -152,6 +176,13 @@ public class OptionsPopupView extends ArrowPopup
         show(launcher, target, options);
     }
 
+    /**
+     * 桌面弹窗小部件菜单点击事件
+     *
+     * @param view 菜单中小部件选项
+     *
+     * @return
+     */
     public static boolean onWidgetsClicked(View view) {
         Launcher launcher = Launcher.getLauncher(view.getContext());
         if (launcher.getPackageManager().isSafeMode()) {
@@ -163,6 +194,13 @@ public class OptionsPopupView extends ArrowPopup
         }
     }
 
+    /**
+     * 桌面弹窗中设置选项
+     *
+     * @param view 菜单中设置视图
+     *
+     * @return
+     */
     public static boolean startSettings(View view) {
         Launcher launcher = Launcher.getLauncher(view.getContext());
         launcher.startActivity(new Intent(Intent.ACTION_APPLICATION_PREFERENCES)
@@ -174,6 +212,8 @@ public class OptionsPopupView extends ArrowPopup
     /**
      * Event handler for the wallpaper picker button that appears after a long press
      * on the home screen.
+     *
+     * @param v 弹窗中壁纸选项
      */
     public static boolean startWallpaperPicker(View v) {
         Launcher launcher = Launcher.getLauncher(v.getContext());
@@ -204,7 +244,7 @@ public class OptionsPopupView extends ArrowPopup
         private final OnLongClickListener mClickListener;
 
         public OptionItem(int labelRes, int iconRes, int controlTypeForLog,
-                OnLongClickListener clickListener) {
+                          OnLongClickListener clickListener) {
             mLabelRes = labelRes;
             mIconRes = iconRes;
             mControlTypeForLog = controlTypeForLog;

@@ -297,6 +297,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         // Disable multitouch across the workspace/all apps/customize tray
         setMotionEventSplittingEnabled(true);
+        // 触摸事件和长按事件
         setOnTouchListener(new WorkspaceTouchListener(mLauncher, this));
 
         // --- add by comde.cn ---- 2018/09/06 --- start

@@ -13,9 +13,9 @@
      limitations under the License.
 -->
 <com.android.launcher3.LauncherRootView
+    android:id="@+id/launcher"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/launcher"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -36,12 +36,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:theme="@style/HomeScreenElementTheme"
-            launcher:pageIndicator="@+id/page_indicator" />
+            launcher:pageIndicator="@+id/page_indicator"/>
 
         <include
             android:id="@+id/overview_panel_container"
             layout="@layout/overview_panel"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <!-- Keep these behind the workspace so that they are not visible when
          we go into AllApps -->
@@ -50,18 +50,25 @@
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:theme="@style/HomeScreenElementTheme" />
+            android:theme="@style/HomeScreenElementTheme"/>
 
         <include
             android:id="@+id/drop_target_bar"
-            layout="@layout/drop_target_bar" />
+            layout="@layout/drop_target_bar"/>
 
         <!-- DO NOT CHANGE THE ID -->
         <include
             android:id="@+id/hotseat"
             layout="@layout/hotseat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
+
+        <com.android.launcher3.menu.MenuView
+            android:id="@+id/menu_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="invisible"
+            android:background="@color/uninstall_target_hover_tint"/>
     </com.android.launcher3.dragndrop.DragLayer>
 
 </com.android.launcher3.LauncherRootView>

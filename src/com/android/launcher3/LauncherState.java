@@ -18,6 +18,7 @@ package com.android.launcher3;
 import android.graphics.Rect;
 import android.view.animation.Interpolator;
 
+import com.android.launcher3.allapps.MenuTransitionController;
 import com.android.launcher3.states.EditingState;
 import com.android.launcher3.states.MenuState;
 import com.android.launcher3.states.SpringLoadedState;
@@ -204,7 +205,7 @@ public class LauncherState {
     /**
      * Fraction shift in the vertical translation UI and related properties
      *
-     * @see com.android.launcher3.allapps.AllAppsTransitionController
+     * @see MenuTransitionController
      */
     public float getVerticalProgress(Launcher launcher) {
         return 1f;

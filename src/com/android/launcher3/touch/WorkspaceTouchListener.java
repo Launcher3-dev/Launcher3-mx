@@ -15,14 +15,6 @@
  */
 package com.android.launcher3.touch;
 
-import static android.view.MotionEvent.ACTION_CANCEL;
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_POINTER_UP;
-import static android.view.MotionEvent.ACTION_UP;
-import static android.view.ViewConfiguration.getLongPressTimeout;
-
-import static com.android.launcher3.LauncherState.NORMAL;
-
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.view.HapticFeedbackConstants;
@@ -36,12 +28,22 @@ import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.dragndrop.DragLayer;
-import com.android.launcher3.views.OptionsPopupView;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
+import com.android.launcher3.util.XLog;
+import com.android.launcher3.views.OptionsPopupView;
+
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_POINTER_UP;
+import static android.view.MotionEvent.ACTION_UP;
+import static android.view.ViewConfiguration.getLongPressTimeout;
+import static com.android.launcher3.LauncherState.NORMAL;
 
 /**
  * Helper class to handle touch on empty space in workspace and show options popup on long press
+ *
+ * TODO:处理workspace空白处触摸事件以及长按显示弹窗
  */
 public class WorkspaceTouchListener implements OnTouchListener, Runnable {
 
@@ -71,11 +73,12 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
         int action = ev.getActionMasked();
+        XLog.e(XLog.getTag(),XLog.TAG_GU + action);
         if (action == ACTION_DOWN) {
             // Check if we can handle long press.
             boolean handleLongPress = canHandleLongPress();
 
-            if (handleLongPress) {
+            if (handleLongPress) {// 可以长按
                 // Check if the event is not near the edges
                 DeviceProfile dp = mLauncher.getDeviceProfile();
                 DragLayer dl = mLauncher.getDragLayer();
@@ -88,7 +91,7 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
             }
 
             cancelLongPress();
-            if (handleLongPress) {
+            if (handleLongPress) {// 可以长按
                 mLongPressState = STATE_REQUESTED;
                 mTouchDownPoint.set(ev.getX(), ev.getY());
                 mWorkspace.postDelayed(this, getLongPressTimeout());
@@ -140,11 +143,13 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
         return result;
     }
 
+    // 是否可以执行长按事件
     private boolean canHandleLongPress() {
         return AbstractFloatingView.getTopOpenView(mLauncher) == null
                 && mLauncher.isInState(NORMAL);
     }
 
+    // 取消长按事件
     private void cancelLongPress() {
         mWorkspace.removeCallbacks(this);
         mLongPressState = STATE_CANCELLED;

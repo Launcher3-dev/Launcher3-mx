@@ -50,7 +50,7 @@ public class DiscoveryBounce extends AbstractFloatingView {
     public DiscoveryBounce(Launcher launcher, float delta) {
         super(launcher, null);
         mLauncher = launcher;
-        AllAppsTransitionController controller = mLauncher.getAllAppsController();
+        MenuTransitionController controller = mLauncher.getAllAppsController();
 
         mDiscoBounceAnimation =
                 AnimatorInflater.loadAnimator(launcher, R.animator.discovery_bounce);
@@ -169,14 +169,14 @@ public class DiscoveryBounce extends AbstractFloatingView {
     }
 
     /**
-     * A wrapper around {@link AllAppsTransitionController} allowing a fixed shift in the value.
+     * A wrapper around {@link MenuTransitionController} allowing a fixed shift in the value.
      */
     public static class VerticalProgressWrapper {
 
         private final float mDelta;
-        private final AllAppsTransitionController mController;
+        private final MenuTransitionController mController;
 
-        private VerticalProgressWrapper(AllAppsTransitionController controller, float delta) {
+        private VerticalProgressWrapper(MenuTransitionController controller, float delta) {
             mController = controller;
             mDelta = delta;
         }

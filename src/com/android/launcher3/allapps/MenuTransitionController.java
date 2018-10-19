@@ -34,18 +34,18 @@ import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
  * If release velocity < THRES1, snap according to either top or bottom depending on whether it's
  * closer to top or closer to the page indicator.
  */
-public class AllAppsTransitionController implements StateHandler, OnDeviceProfileChangeListener {
+public class MenuTransitionController implements StateHandler, OnDeviceProfileChangeListener {
 
-    public static final Property<AllAppsTransitionController, Float> ALL_APPS_PROGRESS =
-            new Property<AllAppsTransitionController, Float>(Float.class, "allAppsProgress") {
+    public static final Property<MenuTransitionController, Float> ALL_APPS_PROGRESS =
+            new Property<MenuTransitionController, Float>(Float.class, "allAppsProgress") {
 
         @Override
-        public Float get(AllAppsTransitionController controller) {
+        public Float get(MenuTransitionController controller) {
             return controller.mProgress;
         }
 
         @Override
-        public void set(AllAppsTransitionController controller, Float progress) {
+        public void set(MenuTransitionController controller, Float progress) {
             controller.setProgress(progress);
         }
     };
@@ -66,7 +66,7 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
 
     private float mScrollRangeDelta = 0;
 
-    public AllAppsTransitionController(Launcher l) {
+    public MenuTransitionController(Launcher l) {
         mLauncher = l;
         mShiftRange = mLauncher.getDeviceProfile().heightPx;
         mProgress = 1f;
@@ -74,6 +74,12 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         mIsVerticalLayout = mLauncher.getDeviceProfile().isVerticalBarLayout();
         mLauncher.addOnDeviceProfileChangeListener(this);
     }
+
+    // add by codemx.cn ---- 20180919 ---- start
+    public void setMenuView(MenuView menuView) {
+        this.mMenuView = menuView;
+    }
+    // add by codemx.cn ---- 20180919 ---- end
 
     public float getShiftRange() {
         return mShiftRange;
@@ -108,7 +114,9 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
         mProgress = progress;
         float shiftCurrent = progress * mShiftRange;
 
-//        mMenuView.setTranslationY(shiftCurrent);
+        // add by codemx.cn ---- 20180919 ---- start
+        mMenuView.setTranslationY(shiftCurrent);
+        // add by codemx.cn ---- 20180919 ---- start
 
         float hotseatTranslation = -mShiftRange + shiftCurrent;
 
@@ -188,10 +196,6 @@ public class AllAppsTransitionController implements StateHandler, OnDeviceProfil
                 onProgressAnimationStart();
             }
         };
-    }
-
-    public void setupViews(MenuView menuView) {
-        mMenuView = menuView;
     }
 
     /**
