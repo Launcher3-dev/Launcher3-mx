@@ -16,6 +16,15 @@
 
 package com.android.launcher3;
 
+import android.view.View;
+import android.view.animation.Interpolator;
+
+import com.android.launcher3.LauncherState.PageAlphaProvider;
+import com.android.launcher3.LauncherStateManager.AnimationConfig;
+import com.android.launcher3.anim.AnimatorSetBuilder;
+import com.android.launcher3.anim.PropertySetter;
+import com.android.launcher3.graphics.WorkspaceAndHotseatScrim;
+
 import static com.android.launcher3.LauncherAnimUtils.DRAWABLE_ALPHA;
 import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
 import static com.android.launcher3.LauncherState.HOTSEAT_ICONS;
@@ -28,15 +37,6 @@ import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
 import static com.android.launcher3.graphics.WorkspaceAndHotseatScrim.SCRIM_PROGRESS;
 import static com.android.launcher3.graphics.WorkspaceAndHotseatScrim.SYSUI_PROGRESS;
 
-import android.view.View;
-import android.view.animation.Interpolator;
-
-import com.android.launcher3.LauncherState.PageAlphaProvider;
-import com.android.launcher3.LauncherStateManager.AnimationConfig;
-import com.android.launcher3.anim.AnimatorSetBuilder;
-import com.android.launcher3.anim.PropertySetter;
-import com.android.launcher3.graphics.WorkspaceAndHotseatScrim;
-
 /**
  * Manages the animations between each of the workspace states.
  */
@@ -46,6 +46,8 @@ public class WorkspaceStateTransitionAnimation {
     private final Workspace mWorkspace;
 
     private float mNewScale;
+
+    public int mOverviewTransitionTime = 300;
 
     public WorkspaceStateTransitionAnimation(Launcher launcher, Workspace workspace) {
         mLauncher = launcher;

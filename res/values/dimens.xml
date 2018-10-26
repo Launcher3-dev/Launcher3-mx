@@ -36,6 +36,7 @@
     <dimen name="dynamic_grid_hotseat_bottom_padding">2dp</dimen>
     <dimen name="dynamic_grid_hotseat_size">80dp</dimen>
     <dimen name="dynamic_grid_hotseat_side_padding">0dp</dimen>
+    <dimen name="dynamic_grid_hotseat_bottom_margin">12dp</dimen>
 
     <!-- Hotseat/all-apps scrim -->
     <dimen name="all_apps_scrim_radius">8dp</dimen>
@@ -223,4 +224,7 @@
 <!-- Overview -->
     <dimen name="options_menu_icon_size">24dp</dimen>
     <dimen name="options_menu_thumb_size">32dp</dimen>
+
+<!-- Menu -->
+    <dimen name="dynamic_grid_menu_bottom_margin">180dp</dimen>
 </resources>

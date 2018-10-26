@@ -141,6 +141,7 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
             }
         } else {
             lp.gravity = Gravity.BOTTOM;
+            lp.bottomMargin = grid.hotseatBarBottomMarginPx;
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
             lp.height = grid.hotseatBarSizePx + insets.bottom;
         }

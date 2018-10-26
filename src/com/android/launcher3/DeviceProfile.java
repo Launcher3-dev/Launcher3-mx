@@ -104,6 +104,13 @@ public class DeviceProfile {
     public final int hotseatBarBottomPaddingPx;
     public final int hotseatBarSidePaddingPx;
 
+    // add by codemx.cn ---- 20181026 ---- start
+    public int hotseatBarBottomMarginPx;
+
+    // Menu
+    public int menBarBottomMarginPx;
+    // add by codemx.cn ---- 20181026 ---- start
+
     // All apps
     public int allAppsCellHeightPx;
     public int allAppsIconSizePx;
@@ -184,6 +191,11 @@ public class DeviceProfile {
                 ? Utilities.pxFromDp(inv.iconSize, dm)
                 : res.getDimensionPixelSize(R.dimen.dynamic_grid_hotseat_size)
                         + hotseatBarTopPaddingPx + hotseatBarBottomPaddingPx;
+
+        // add by codemx.cn ---- 20181026 ---- start
+        hotseatBarBottomMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_hotseat_bottom_margin);
+        menBarBottomMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_menu_bottom_margin);
+        // add by codemx.cn ---- 20181026 ---- end
 
         // Determine sizes.
         widthPx = width;

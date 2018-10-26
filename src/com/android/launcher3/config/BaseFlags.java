@@ -18,15 +18,16 @@ package com.android.launcher3.config;
 
 /**
  * Defines a set of flags used to control various launcher behaviors.
- *
+ * <p>
  * All the flags should be defined here with appropriate default values. To override a value,
  * redefine it in {@link FeatureFlags}.
- *
+ * <p>
  * This class is kept package-private to prevent direct access.
  */
 abstract class BaseFlags {
 
-    BaseFlags() {}
+    BaseFlags() {
+    }
 
     public static final boolean IS_DOGFOOD_BUILD = false;
     public static final String AUTHORITY = "com.android.mxlauncher3.settings".intern();
@@ -55,5 +56,8 @@ abstract class BaseFlags {
     // When true, overview shows screenshots in the orientation they were taken rather than
     // trying to make them fit the orientation the device is in.
     public static final boolean OVERVIEW_USE_SCREENSHOT_ORIENTATION = true;
+
+    // 是否禁用双指捏掐到预览模式
+    public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = false;
 
 }

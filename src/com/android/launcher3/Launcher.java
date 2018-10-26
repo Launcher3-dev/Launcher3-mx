@@ -66,8 +66,8 @@ import android.widget.Toast;
 import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.Workspace.ItemOperator;
 import com.android.launcher3.accessibility.LauncherAccessibilityDelegate;
-import com.android.launcher3.allapps.MenuTransitionController;
 import com.android.launcher3.allapps.DiscoveryBounce;
+import com.android.launcher3.allapps.MenuTransitionController;
 import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherAppsCompatVO;
@@ -82,6 +82,7 @@ import com.android.launcher3.keyboard.ViewGroupFocusHelper;
 import com.android.launcher3.logging.FileLog;
 import com.android.launcher3.logging.UserEventDispatcher;
 import com.android.launcher3.logging.UserEventDispatcher.UserEventDelegate;
+import com.android.launcher3.menu.MenuLayout;
 import com.android.launcher3.menu.MenuView;
 import com.android.launcher3.model.ModelWriter;
 import com.android.launcher3.notification.NotificationListener;
@@ -212,7 +213,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     private DropTargetBar mDropTargetBar;
     // add by codemx.cn ---- 20180919 ---- start
+    // 中间主菜单
     private MenuView mMenuView;
+    // 底部菜单
+    private MenuLayout mMenuLayout;
     // add by codemx.cn ---- 20180919 ---- end
 
     MenuTransitionController mMenuController;
@@ -951,6 +955,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // add by codemx.cn ---- 20180919 ---- start
         mMenuView = findViewById(R.id.menu_view);
         mMenuController.setMenuView(mMenuView);
+        mMenuLayout = findViewById(R.id.menu_layout);
         // add by codemx.cn ---- 20180919 ---- end
     }
 
@@ -2433,6 +2438,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     public MenuView getMenuView() {
         return mMenuView;
+    }
+
+    public MenuLayout getMenuLayout() {
+        return mMenuLayout;
     }
 
     // --- add by codemx.cn --- 2018/09/06 --- end

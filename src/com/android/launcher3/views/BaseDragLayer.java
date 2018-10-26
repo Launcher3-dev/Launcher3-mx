@@ -30,6 +30,7 @@ import com.android.launcher3.BaseActivity;
 import com.android.launcher3.BaseDraggingActivity;
 import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.Utilities;
+import com.android.launcher3.pinch.PinchToOverviewListener;
 import com.android.launcher3.util.MultiValueAlpha;
 import com.android.launcher3.util.MultiValueAlpha.AlphaProperty;
 import com.android.launcher3.util.TouchController;
@@ -53,6 +54,11 @@ public abstract class BaseDragLayer<T extends BaseDraggingActivity> extends Inse
     protected TouchController[] mControllers;
     protected TouchController mActiveController;
     private TouchCompleteListener mTouchCompleteListener;
+
+    // add by codemx.cn --- 20181026 --- start
+    // Related to pinch-to-go-to-overview gesture.
+    protected PinchToOverviewListener mPinchListener = null;
+    // add by codemx.cn --- 20181026 --- end
 
     public BaseDragLayer(Context context, AttributeSet attrs, int alphaChannelCount) {
         super(context, attrs);
@@ -102,6 +108,12 @@ public abstract class BaseDragLayer<T extends BaseDraggingActivity> extends Inse
                 mActiveController = controller;
                 return true;
             }
+        }
+
+        if (mPinchListener != null && mPinchListener.onControllerInterceptTouchEvent(ev)) {
+            // Stop listening for scrolling etc. (onTouchEvent() handles the rest of the pinch.)
+            mActiveController = mPinchListener;
+            return true;
         }
         return false;
     }

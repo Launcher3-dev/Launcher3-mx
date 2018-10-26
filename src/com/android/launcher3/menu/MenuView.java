@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
+import com.android.launcher3.DeviceProfile;
+import com.android.launcher3.LauncherAppState;
+
 public class MenuView extends ViewGroup{
 
     public MenuView(Context context) {
@@ -21,5 +24,13 @@ public class MenuView extends ViewGroup{
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
+    }
+
+
+    // TODO 后期放到底部菜单中
+    // 从隐藏到显示需要上移的距离
+    public float getMenuLayoutShowTranslationY() {
+        DeviceProfile profile = LauncherAppState.getInstance(getContext()).getInvariantDeviceProfile().portraitProfile;
+        return profile.menBarBottomMarginPx + profile.hotseatBarBottomMarginPx;
     }
 }

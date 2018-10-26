@@ -67,8 +67,13 @@
             android:id="@+id/menu_view"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="invisible"
-            android:background="@color/uninstall_target_hover_tint"/>
+            android:background="@color/uninstall_target_hover_tint"
+            android:visibility="invisible"/>
+
+        <include
+            android:id="@+id/menu_layout"
+            layout="@layout/menu_layout"/>
+
     </com.android.launcher3.dragndrop.DragLayer>
 
 </com.android.launcher3.LauncherRootView>
