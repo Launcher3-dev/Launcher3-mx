@@ -1,14 +1,14 @@
 buildscript {
     repositories {
         mavenCentral()
-//        google()
+        google()
         maven {
             url "https://maven.google.com"
         }
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha06'
+        classpath 'com.android.tools.build:gradle:3.4.0-alpha02'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
     }
 }
@@ -116,7 +116,7 @@ repositories {
     maven { url "../../../prebuilts/fullsdk-darwin/extras/android/m2repository" }
     maven { url "../../../prebuilts/fullsdk-linux/extras/android/m2repository" }
     mavenCentral()
-//    google()
+    google()
     jcenter()
     maven {
         url "https://maven.google.com"
