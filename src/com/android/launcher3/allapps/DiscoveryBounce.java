@@ -50,7 +50,7 @@ public class DiscoveryBounce extends AbstractFloatingView {
     public DiscoveryBounce(Launcher launcher, float delta) {
         super(launcher, null);
         mLauncher = launcher;
-        MenuTransitionController controller = mLauncher.getAllAppsController();
+        MenuTransitionController controller = mLauncher.getMenuTransitionController();
 
         mDiscoBounceAnimation =
                 AnimatorInflater.loadAnimator(launcher, R.animator.discovery_bounce);
@@ -98,7 +98,7 @@ public class DiscoveryBounce extends AbstractFloatingView {
             mIsOpen = false;
             mLauncher.getDragLayer().removeView(this);
             // Reset the all-apps progress to what ever it was previously.
-            mLauncher.getAllAppsController().setProgress(mLauncher.getStateManager()
+            mLauncher.getMenuTransitionController().setProgress(mLauncher.getStateManager()
                     .getState().getVerticalProgress(mLauncher));
         }
     }

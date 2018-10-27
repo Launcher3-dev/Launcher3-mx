@@ -2,14 +2,15 @@ package com.android.launcher3.setting;
 
 import android.content.Context;
 
+import com.android.launcher3.effect.TransitionEffect;
 import com.android.launcher3.util.LauncherSpUtil;
 
 public final class Settings {
 
 
     // 特效标记
-//    public static int sLauncherEffect = TransitionEffect.TRANSITION_EFFECT_NONE;
-    public static int sLauncherEffect = 3;
+    public static int sLauncherEffect = TransitionEffect.TRANSITION_EFFECT_NONE;
+//    public static int sLauncherEffect = 3;
 
     /**
      * PagedView can scroll circle-endless.

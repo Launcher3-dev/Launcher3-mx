@@ -45,12 +45,12 @@ public class LauncherState {
      * Note that workspace is not included here as in that case, we animate individual pages
      */
     public static final int NONE = 0;
-    public static final int HOTSEAT_ICONS = 1 << 0;
+    public static final int HOTSEAT_ICONS = 1 << 0;// Hotseat图标
     public static final int HOTSEAT_SEARCH_BOX = 1 << 1;
     public static final int ALL_APPS_HEADER = 1 << 2;
     public static final int ALL_APPS_HEADER_EXTRA = 1 << 3; // e.g. app predictions
     public static final int ALL_APPS_CONTENT = 1 << 4;
-    public static final int VERTICAL_SWIPE_INDICATOR = 1 << 5;
+    public static final int VERTICAL_SWIPE_INDICATOR = 1 << 5;// 抽屉指示器
 
     protected static final int FLAG_MULTI_PAGE = 1 << 0;
     protected static final int FLAG_DISABLE_ACCESSIBILITY = 1 << 1;
@@ -71,6 +71,14 @@ public class LauncherState {
                 }
             };
 
+    protected static final PageScaleProvider DEFAULT_SCALE_PROVIDER =
+            new PageScaleProvider(ACCEL_2) {
+                @Override
+                public float getPageScale(int pageIndex) {
+                    return 0.85f;
+                }
+            };
+
     private static final LauncherState[] sAllStates = new LauncherState[5];
 
     /**
@@ -78,7 +86,7 @@ public class LauncherState {
      */
     public static final LauncherState NORMAL = new LauncherState(0, ContainerType.WORKSPACE, 0,
             FLAG_DISABLE_RESTORE | FLAG_WORKSPACE_ICONS_CAN_BE_DRAGGED | FLAG_HIDE_BACK_BUTTON |
-            FLAG_HAS_SYS_UI_SCRIM);
+                    FLAG_HAS_SYS_UI_SCRIM);
 
     /**
      * Various Launcher states arranged in the increasing order of UI layers
@@ -109,6 +117,7 @@ public class LauncherState {
 
     /**
      * Accessibility flag for workspace and its pages.
+     *
      * @see android.view.View#setImportantForAccessibility(int)
      */
     public final int workspaceAccessibilityFlag;
@@ -140,6 +149,7 @@ public class LauncherState {
 
     /**
      * True if the state has overview panel visible.
+     * 如果是在预览界面则为true
      */
     public final boolean overviewUi;
 
@@ -151,6 +161,14 @@ public class LauncherState {
 
     public final boolean hasSysUiScrim;
 
+    /**
+     * Launcher 状态构造函数
+     *
+     * @param id                 状态id
+     * @param containerType      状态类型
+     * @param transitionDuration 进入当前状态动画时间
+     * @param flags              状态flag
+     */
     public LauncherState(int id, int containerType, int transitionDuration, int flags) {
         this.containerType = containerType;
         this.transitionDuration = transitionDuration;
@@ -177,26 +195,27 @@ public class LauncherState {
     }
 
     public float[] getWorkspaceScaleAndTranslation(Launcher launcher) {
-        return new float[] {1, 0, 0};
+        return new float[]{1, 0, 0};
     }
 
     /**
      * Returns 2 floats designating how to transition overview:
-     *   scale for the current and adjacent pages
-     *   translationY factor where 0 is top aligned and 0.5 is centered vertically
+     * scale for the current and adjacent pages
+     * translationY factor where 0 is top aligned and 0.5 is centered vertically
      */
     public float[] getOverviewScaleAndTranslationYFactor(Launcher launcher) {
-        return new float[] {1.1f, 0f};
+        return new float[]{1.1f, 0f};
     }
 
     public void onStateEnabled(Launcher launcher) {
         dispatchWindowStateChanged(launcher);
     }
 
-    public void onStateDisabled(Launcher launcher) { }
+    public void onStateDisabled(Launcher launcher) {
+    }
 
     public int getVisibleElements(Launcher launcher) {
-        if (launcher.getDeviceProfile().isVerticalBarLayout()) {
+        if (launcher.getDeviceProfile().isVerticalBarLayout()) {// 横屏模式，Hotseat竖直放置
             return HOTSEAT_ICONS | VERTICAL_SWIPE_INDICATOR;
         }
         return HOTSEAT_ICONS | HOTSEAT_SEARCH_BOX | VERTICAL_SWIPE_INDICATOR;
@@ -227,7 +246,21 @@ public class LauncherState {
         return new PageAlphaProvider(ACCEL_2) {
             @Override
             public float getPageAlpha(int pageIndex) {
-                return  pageIndex != centerPage ? 0 : 1f;
+                return pageIndex != centerPage ? 0 : 1f;
+            }
+        };
+    }
+
+    public PageScaleProvider getWorkspacePageScaleProvider(Launcher launcher) {
+        // 正常模式或者竖屏显示
+        if (this != NORMAL || !launcher.getDeviceProfile().shouldFadeAdjacentWorkspaceScreens()) {
+            return DEFAULT_SCALE_PROVIDER;
+        }
+        final int centerPage = launcher.getWorkspace().getNextPage();
+        return new PageScaleProvider(ACCEL_2) {
+            @Override
+            public float getPageScale(int pageIndex) {
+                return pageIndex != centerPage ? 0 : 1f;
             }
         };
     }
@@ -261,5 +294,16 @@ public class LauncherState {
         }
 
         public abstract float getPageAlpha(int pageIndex);
+    }
+
+    public static abstract class PageScaleProvider {
+
+        public final Interpolator interpolator;
+
+        public PageScaleProvider(Interpolator interpolator) {
+            this.interpolator = interpolator;
+        }
+
+        public abstract float getPageScale(int pageIndex);
     }
 }

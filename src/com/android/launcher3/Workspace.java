@@ -74,6 +74,7 @@ import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
 import com.android.launcher3.setting.Settings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
+import com.android.launcher3.touch.ItemClickHandler;
 import com.android.launcher3.touch.ItemLongClickListener;
 import com.android.launcher3.touch.WorkspaceTouchListener;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
@@ -301,6 +302,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         setOnTouchListener(new WorkspaceTouchListener(mLauncher, this));
 
         // --- add by comde.cn ---- 2018/09/06 --- start
+        setOnClickListener(ItemClickHandler.INSTANCE);
         mOverviewModeShrinkFactor =
                 getResources().getInteger(R.integer.config_workspaceOverviewShrinkPercentage) / 100f;
 
@@ -424,7 +426,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             }
         }
 
-        // Always enter the spring loaded mode
+        // Always enter the spring loaded mode(动画)
         mLauncher.getStateManager().goToState(SPRING_LOADED);
     }
 
@@ -574,7 +576,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         mWorkspaceScreens.put(screenId, newScreen);
         mScreenOrder.add(insertIndex, screenId);
         addView(newScreen, insertIndex);
-        mStateTransitionAnimation.applyChildState(
+        mStateTransitionAnimation.applyChildStateAlpha(
                 mLauncher.getStateManager().getState(), newScreen, insertIndex);
 
         if (mLauncher.getAccessibilityDelegate().isInAccessibleDrag()) {
@@ -1561,7 +1563,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         snapToPage(whichPage, OVERVIEW_TRANSITION_MS, Interpolators.ZOOM_IN);
     }
 
-    private void onStartStateTransition(LauncherState state) {
+    public void onStartStateTransition(LauncherState state) {
         mIsSwitchingState = true;
         mTransitionProgress = 0;
 
@@ -1628,7 +1630,13 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     public void setStateWithAnimation(LauncherState toState,
                                       AnimatorSetBuilder builder, AnimationConfig config) {
         StateTransitionListener listener = new StateTransitionListener(toState);
-        mStateTransitionAnimation.setStateWithAnimation(toState, builder, config);
+
+        // modify by codemx.cn ---- 20181027 ---- start
+        // 进入拖拽模式桌面不缩放
+        if (toState != LauncherState.SPRING_LOADED) {
+            mStateTransitionAnimation.setStateWithAnimation(toState, builder, config);
+        }
+        // modify by codemx.cn ---- 20181027 ---- end
 
         // modify by codemx.cn ---- 20181026 ---- start
 //        // Invalidate the pages now, so that we have the visible pages before the

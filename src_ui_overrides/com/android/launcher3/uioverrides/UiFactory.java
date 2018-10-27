@@ -37,7 +37,7 @@ public class UiFactory {
 
     public static StateHandler[] getStateHandler(Launcher launcher) {
         return new StateHandler[] {
-                launcher.getAllAppsController(), launcher.getWorkspace() };
+                launcher.getMenuTransitionController(), launcher.getWorkspace() };
     }
 
     public static void resetOverview(Launcher launcher) { }

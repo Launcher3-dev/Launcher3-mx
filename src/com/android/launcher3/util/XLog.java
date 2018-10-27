@@ -5,6 +5,7 @@ import android.util.Log;
 public class XLog {
 
     public static final String TAG_GU = "TAG_GU --- ";
+    public static final String TAG_GU_STATE = "TAG_GU_STATE --- ";
 
     private static final boolean sEnablePrint = true;
 

@@ -150,6 +150,18 @@ public class TransitionEffect {
         }
     }
 
+    public void clearTranslationX() {
+        final Workspace workspace = mLauncher.getWorkspace();
+        int N = workspace.getChildCount();
+        for (int i = 0; i < N; i++) {
+            CellLayout v = (CellLayout) workspace.getPageAt(i);
+            if (v != null) {
+                v.setTranslationX(0.f);
+                v.setPivotX(v.getMeasuredWidth() * 0.5f);
+            }
+        }
+    }
+
     public void clearTranslation() {
         final Workspace workspace = mLauncher.getWorkspace();
         int N = workspace.getChildCount();

@@ -156,7 +156,7 @@ public abstract class AbstractStateChangeTouchController
     }
 
     protected float getShiftRange() {
-        return mLauncher.getAllAppsController().getShiftRange();
+        return mLauncher.getMenuTransitionController().getShiftRange();
     }
 
     /**

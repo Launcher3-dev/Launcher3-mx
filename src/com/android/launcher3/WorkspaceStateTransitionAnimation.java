@@ -60,7 +60,7 @@ public class WorkspaceStateTransitionAnimation {
     }
 
     public void setStateWithAnimation(LauncherState toState, AnimatorSetBuilder builder,
-            AnimationConfig config) {
+                                      AnimationConfig config) {
         setWorkspaceProperty(toState, config.getPropertySetter(builder), builder, config);
     }
 
@@ -72,19 +72,24 @@ public class WorkspaceStateTransitionAnimation {
      * Starts a transition animation for the workspace.
      */
     private void setWorkspaceProperty(LauncherState state, PropertySetter propertySetter,
-            AnimatorSetBuilder builder, AnimationConfig config) {
+                                      AnimatorSetBuilder builder, AnimationConfig config) {
         float[] scaleAndTranslation = state.getWorkspaceScaleAndTranslation(mLauncher);
         mNewScale = scaleAndTranslation[0];
-        PageAlphaProvider pageAlphaProvider = state.getWorkspacePageAlphaProvider(mLauncher);
+        // modify by comdex.cn ---20181027-------start
+//        PageAlphaProvider pageAlphaProvider = state.getWorkspacePageAlphaProvider(mLauncher);
+        LauncherState.PageScaleProvider pageScaleProvider = state.getWorkspacePageScaleProvider(mLauncher);
         final int childCount = mWorkspace.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            applyChildState(state, (CellLayout) mWorkspace.getChildAt(i), i, pageAlphaProvider,
+//            applyChildStateAlpha(state, (CellLayout) mWorkspace.getChildAt(i), i, pageAlphaProvider,
+//                    propertySetter, builder, config);
+            applyChildStateScale(state, (CellLayout) mWorkspace.getChildAt(i), i, pageScaleProvider,
                     propertySetter, builder, config);
         }
+        // modify by comdex.cn ---20181027-------end
 
         int elements = state.getVisibleElements(mLauncher);
         Interpolator fadeInterpolator = builder.getInterpolator(ANIM_WORKSPACE_FADE,
-                pageAlphaProvider.interpolator);
+                pageScaleProvider.interpolator);
         boolean playAtomicComponent = config.playAtomicComponent();
         if (playAtomicComponent) {
             Interpolator scaleInterpolator = builder.getInterpolator(ANIM_WORKSPACE_SCALE, ZOOM_OUT);
@@ -117,14 +122,25 @@ public class WorkspaceStateTransitionAnimation {
         propertySetter.setFloat(scrim, SYSUI_PROGRESS, state.hasSysUiScrim ? 1 : 0, LINEAR);
     }
 
-    public void applyChildState(LauncherState state, CellLayout cl, int childIndex) {
-        applyChildState(state, cl, childIndex, state.getWorkspacePageAlphaProvider(mLauncher),
+    public void applyChildStateAlpha(LauncherState state, CellLayout cl, int childIndex) {
+        applyChildStateAlpha(state, cl, childIndex, state.getWorkspacePageAlphaProvider(mLauncher),
                 NO_ANIM_PROPERTY_SETTER, new AnimatorSetBuilder(), new AnimationConfig());
     }
 
-    private void applyChildState(LauncherState state, CellLayout cl, int childIndex,
-            PageAlphaProvider pageAlphaProvider, PropertySetter propertySetter,
-            AnimatorSetBuilder builder, AnimationConfig config) {
+    /**
+     * 单个CellLayout的Alpha动画
+     *
+     * @param state             目标状态
+     * @param cl                CellLayout
+     * @param childIndex        CellLayout的Index
+     * @param pageAlphaProvider Alpha值速度值
+     * @param propertySetter    Property设置值
+     * @param builder           动画集合构造器
+     * @param config            动画配置
+     */
+    private void applyChildStateAlpha(LauncherState state, CellLayout cl, int childIndex,
+                                      PageAlphaProvider pageAlphaProvider, PropertySetter propertySetter,
+                                      AnimatorSetBuilder builder, AnimationConfig config) {
         float pageAlpha = pageAlphaProvider.getPageAlpha(childIndex);
         int drawableAlpha = Math.round(pageAlpha * (state.hasWorkspacePageBackground ? 255 : 0));
 
@@ -137,6 +153,39 @@ public class WorkspaceStateTransitionAnimation {
                     pageAlphaProvider.interpolator);
             propertySetter.setFloat(cl.getShortcutsAndWidgets(), View.ALPHA,
                     pageAlpha, fadeInterpolator);
+        }
+    }
+
+    /**
+     * 单个CellLayout的Scale动画
+     *
+     * @param state             目标状态
+     * @param cl                CellLayout
+     * @param childIndex        CellLayout的Index
+     * @param pageScaleProvider Alpha值速度值
+     * @param propertySetter    Property设置值
+     * @param builder           动画集合构造器
+     * @param config            动画配置
+     */
+    private void applyChildStateScale(LauncherState state, CellLayout cl, int childIndex,
+                                      LauncherState.PageScaleProvider pageScaleProvider, PropertySetter propertySetter,
+                                      AnimatorSetBuilder builder, AnimationConfig config) {
+        float pageScale;
+        if (state == LauncherState.NORMAL) {
+            pageScale = 1.0f;
+        } else {
+            pageScale = pageScaleProvider.getPageScale(childIndex);
+        }
+        if (config.playNonAtomicComponent()) {
+            propertySetter.setFloat(cl, SCALE_PROPERTY, pageScale, ZOOM_OUT);
+        }
+        if (config.playAtomicComponent()) {
+            Interpolator scaleInterpolator = builder.getInterpolator(ANIM_WORKSPACE_SCALE,
+                    pageScaleProvider.interpolator);
+            propertySetter.setFloat(cl.getShortcutsAndWidgets(), View.SCALE_X,
+                    pageScale, scaleInterpolator);
+            propertySetter.setFloat(cl.getShortcutsAndWidgets(), View.SCALE_Y,
+                    pageScale, scaleInterpolator);
         }
     }
 }
