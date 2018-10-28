@@ -12,6 +12,9 @@ public final class Settings {
     public static int sLauncherEffect = TransitionEffect.TRANSITION_EFFECT_NONE;
 //    public static int sLauncherEffect = 3;
 
+    // 是否显示卸载按钮标记
+    public static boolean sShowUnInstallIcon = false;
+
     /**
      * PagedView can scroll circle-endless.
      */

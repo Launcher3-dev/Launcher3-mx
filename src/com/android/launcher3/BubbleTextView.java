@@ -49,6 +49,8 @@ import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.graphics.IconPalette;
 import com.android.launcher3.graphics.PreloadIconDrawable;
 import com.android.launcher3.model.PackageItemInfo;
+import com.android.launcher3.setting.Settings;
+import com.android.launcher3.util.DrawEditIcons;
 
 import java.text.NumberFormat;
 
@@ -63,7 +65,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     private static final int DISPLAY_ALL_APPS = 1;
     private static final int DISPLAY_FOLDER = 2;
 
-    private static final int[] STATE_PRESSED = new int[] {android.R.attr.state_pressed};
+    private static final int[] STATE_PRESSED = new int[]{android.R.attr.state_pressed};
 
 
     private static final Property<BubbleTextView, Float> BADGE_SCALE_PROPERTY
@@ -138,6 +140,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
 
     public BubbleTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mLauncher = Launcher.getLauncher(context);
         mActivity = BaseDraggingActivity.fromContext(context);
         DeviceProfile grid = mActivity.getDeviceProfile();
         mSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
@@ -274,7 +277,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
         return drawableState;
     }
 
-    /** Returns the icon for this view. */
+    /**
+     * Returns the icon for this view.
+     */
     public Drawable getIcon() {
         return mIcon;
     }
@@ -348,11 +353,40 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        // 绘制卸载按钮
+        if (isSupportsDrop && (Settings.sShowUnInstallIcon && mLauncher.getStateManager().getState() == LauncherState.SPRING_LOADED)) {
+            if (!isPerformAnim) {
+                uninstallIconPercent = 1.0f;
+            }
+            drawUninstallIndicator(canvas, uninstallIconPercent);
+        }
+
         drawBadgeIfNecessary(canvas);
     }
 
+    // add by codemx.cn ---- 20181027 --- start
+    private Launcher mLauncher;
+    private boolean isSupportsDrop = false;
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (getTag() instanceof ShortcutInfo) {
+            isSupportsDrop = UninstallDropTarget.supportsDrop(mLauncher, (ItemInfo) getTag());
+        }
+    }
+
+    private void drawUninstallIndicator(Canvas canvas, float uninstallIconPercent) {
+        Drawable d = getContext().getDrawable(R.drawable.ic_uninstall);
+        DrawEditIcons.drawUninstallIcon(canvas, this, d, uninstallIconPercent);
+    }
+
+    // add by codemx.cn ---- 20181027 --- end
+
     /**
      * Draws the icon badge in the top right corner of the icon bounds.
+     *
      * @param canvas The canvas to draw to.
      */
     protected void drawBadgeIfNecessary(Canvas canvas) {
@@ -449,6 +483,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
 
     /**
      * Creates an animator to fade the text in or out.
+     *
      * @param fadeIn Whether the text should fade in or fade out.
      */
     public ObjectAnimator createTextAlphaAnimator(boolean fadeIn) {

@@ -381,12 +381,6 @@ public class LauncherStateManager {
         return mConfig.mCurrentAnimation;
     }
 
-    // add by codemx.cn --- 20181027 ---- start
-    public void setState(LauncherState state){
-        this.mState = state;
-    }
-    // add by codemx.cn --- 20181027 ---- end
-
     private void onStateTransitionStart(LauncherState state) {
         mState.onStateDisabled(mLauncher);
         mState = state;
