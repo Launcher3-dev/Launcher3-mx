@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.logging.UserEventDispatcher.LogContainerProvider;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 
@@ -151,4 +152,16 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
         setLayoutParams(lp);
         InsettableFrameLayout.dispatchInsets(this, insets);
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+    public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean perform) {
+        final int N = mContent.getShortcutsAndWidgets().getChildCount();
+        for (int i = 0; i < N; i++) {
+            View view = mContent.getShortcutsAndWidgets().getChildAt(i);
+            if (view.getVisibility() == View.VISIBLE && view instanceof BubbleTextView) {
+                ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, perform);
+            }
+        }
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }

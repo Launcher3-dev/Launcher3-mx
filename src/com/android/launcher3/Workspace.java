@@ -72,11 +72,12 @@ import com.android.launcher3.graphics.DragPreviewProvider;
 import com.android.launcher3.graphics.PreloadIconDrawable;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
-import com.android.launcher3.setting.Settings;
+import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
 import com.android.launcher3.touch.ItemClickHandler;
 import com.android.launcher3.touch.ItemLongClickListener;
 import com.android.launcher3.touch.WorkspaceTouchListener;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
@@ -1115,7 +1116,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         // --- add by comde.cn ---- 2018/09/06 --- start
         mTransitionEffect.clearRotation();
-        if (Settings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
+        if (MxSettings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
             startScrollWithAnim(getScrollX());
         }
         // --- add by comde.cn ---- 2018/09/06 --- end
@@ -1131,7 +1132,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
     private void startScrollWithAnim(int screenScroll) {
         // -1,7,15,1,6,4
-        int screenEffectNum = Settings.sLauncherEffect;
+        int screenEffectNum = MxSettings.sLauncherEffect;
         mTransitionEffect.screenScrollByTransitionEffect(screenScroll, screenEffectNum);
     }
 
@@ -1613,7 +1614,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 //        hideCustomContentIfNecessary();
     }
 
-    public WorkspaceStateTransitionAnimation getStateTransitionAnimation(){
+    public WorkspaceStateTransitionAnimation getStateTransitionAnimation() {
         return mStateTransitionAnimation;
     }
 
@@ -3529,7 +3530,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
     @Override
     protected boolean isPagedViewCircledScroll() {
-        return Settings.sIsPagedViewCircleScroll;
+        return MxSettings.sIsPagedViewCircleScroll;
     }
 
     private String getPageDescription(int page) {
@@ -3637,7 +3638,40 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         @Override
         public void onAnimationEnd(Animator animation) {
+            // TODO 开始判断是否要显示卸载按钮，如果是到预览模式就显示卸载按钮，不是就隐藏
+
+
             onEndStateTransition();
+
         }
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+    private UninstallIconAnimUtil mUninstallIconAnimUtil;
+
+    public UninstallIconAnimUtil getUninstallIconAnimUtil() {
+        return mUninstallIconAnimUtil;
+    }
+
+    /**
+     * 显示卸载按钮
+     *
+     * @param isPerformAnimation 是否执行显示或者隐藏动画
+     */
+    public void showUninstallIcon(boolean isPerformAnimation) {
+        if (mUninstallIconAnimUtil == null) {
+            mUninstallIconAnimUtil = new UninstallIconAnimUtil();
+        }
+        if (mUninstallIconAnimUtil.isStart()) {
+            return;
+        }
+
+        final int N = getChildCount();
+        for (int i = 0; i < N; i++) {
+            CellLayout cellLayout = (CellLayout) getChildAt(i);
+            cellLayout.showChildUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
+        }
+        mLauncher.mHotseat.showUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }

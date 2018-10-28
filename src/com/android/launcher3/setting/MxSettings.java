@@ -5,7 +5,7 @@ import android.content.Context;
 import com.android.launcher3.effect.TransitionEffect;
 import com.android.launcher3.util.LauncherSpUtil;
 
-public final class Settings {
+public final class MxSettings {
 
 
     // 特效标记
@@ -23,11 +23,11 @@ public final class Settings {
 
 
     private static class SettingHolder {
-        private static final Settings SETTINGS = new Settings();
+        private static final MxSettings MX_SETTINGS = new MxSettings();
     }
 
-    public static Settings getInstance() {
-        return SettingHolder.SETTINGS;
+    public static MxSettings getInstance() {
+        return SettingHolder.MX_SETTINGS;
     }
 
     public void loadSettings(Context context) {
@@ -36,7 +36,7 @@ public final class Settings {
     }
 
     public void setPagedViewCircleScroll(boolean isPagedViewCircleScroll) {
-        Settings.sIsPagedViewCircleScroll = isPagedViewCircleScroll;
+        MxSettings.sIsPagedViewCircleScroll = isPagedViewCircleScroll;
         LauncherSpUtil.saveBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE, isPagedViewCircleScroll);
     }
 

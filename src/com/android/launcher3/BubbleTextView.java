@@ -48,8 +48,11 @@ import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.graphics.IconPalette;
 import com.android.launcher3.graphics.PreloadIconDrawable;
+import com.android.launcher3.imp.ImpUninstallIconShowListener;
 import com.android.launcher3.model.PackageItemInfo;
-import com.android.launcher3.setting.Settings;
+import com.android.launcher3.setting.MxSettings;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
+import com.android.launcher3.uninstall.UninstallOrDeleteUtil;
 import com.android.launcher3.util.DrawEditIcons;
 
 import java.text.NumberFormat;
@@ -59,7 +62,8 @@ import java.text.NumberFormat;
  * because we want to make the bubble taller than the text and TextView's clip is
  * too aggressive.
  */
-public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, OnResumeCallback {
+public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, OnResumeCallback
+        , ImpUninstallIconShowListener {
 
     private static final int DISPLAY_WORKSPACE = 0;
     private static final int DISPLAY_ALL_APPS = 1;
@@ -354,32 +358,56 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // add by codemx.cn ---- 20181027 --- start
         // 绘制卸载按钮
-        if (isSupportsDrop && (Settings.sShowUnInstallIcon && mLauncher.getStateManager().getState() == LauncherState.SPRING_LOADED)) {
+        if (isSupportsUninstall && (MxSettings.sShowUnInstallIcon && mLauncher.getStateManager().getState() == LauncherState.SPRING_LOADED)) {
             if (!isPerformAnim) {
                 uninstallIconPercent = 1.0f;
             }
             drawUninstallIndicator(canvas, uninstallIconPercent);
         }
-
+        // add by codemx.cn ---- 20181027 --- end
         drawBadgeIfNecessary(canvas);
     }
 
     // add by codemx.cn ---- 20181027 --- start
     private Launcher mLauncher;
-    private boolean isSupportsDrop = false;
+    private boolean isSupportsUninstall = false;
+    private boolean isPerformAnim = false;
+    private float uninstallIconPercent = 0.0f;
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (getTag() instanceof ShortcutInfo) {
-            isSupportsDrop = UninstallDropTarget.supportsDrop(mLauncher, (ItemInfo) getTag());
+            isSupportsUninstall = UninstallOrDeleteUtil.supportsUninstall(mLauncher, (ItemInfo) getTag());
         }
     }
 
     private void drawUninstallIndicator(Canvas canvas, float uninstallIconPercent) {
         Drawable d = getContext().getDrawable(R.drawable.ic_uninstall);
         DrawEditIcons.drawUninstallIcon(canvas, this, d, uninstallIconPercent);
+    }
+
+    @Override
+    public void onUninstallIconChange(float percent) {
+        uninstallIconPercent = percent;
+        postInvalidate();
+    }
+
+    @Override
+    public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean isPerformAnim) {
+        this.isPerformAnim = isPerformAnim;
+        if (isPerformAnim && uninstallIconAnimUtil != null) {
+            uninstallIconAnimUtil.animateToIconIndicatorDraw(this);
+        } else {
+            if (MxSettings.sShowUnInstallIcon) {
+                uninstallIconPercent = 1.0f;
+            } else {
+                uninstallIconPercent = 0.0f;
+            }
+            invalidate();
+        }
     }
 
     // add by codemx.cn ---- 20181027 --- end
@@ -654,4 +682,6 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     public int getIconSize() {
         return mIconSize;
     }
+
+
 }

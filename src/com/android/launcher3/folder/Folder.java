@@ -68,6 +68,7 @@ import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragOptions;
 import com.android.launcher3.logging.LoggerUtils;
 import com.android.launcher3.pageindicators.PageIndicatorDots;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 import com.android.launcher3.util.Thunk;
@@ -1469,4 +1470,20 @@ public class Folder extends AbstractFloatingView implements DragSource,
         }
         return false;
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+    public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean isPerformAnimation) {
+        if (mContent != null) {
+            int childCount = mContent.getChildCount();
+            if (childCount > 0) {
+                for (int i = 0; i < childCount; i++) {
+                    View child = mContent.getChildAt(i);
+                    if (child instanceof CellLayout) {
+                        ((CellLayout) child).showChildUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
+                    }
+                }
+            }
+        }
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }

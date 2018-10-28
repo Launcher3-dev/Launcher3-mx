@@ -20,8 +20,10 @@ import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.SparseBooleanArray;
@@ -42,11 +44,16 @@ import com.android.launcher3.ItemInfo;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherAppWidgetProviderInfo;
+import com.android.launcher3.LauncherState;
 import com.android.launcher3.R;
 import com.android.launcher3.SimpleOnStylusPressListener;
 import com.android.launcher3.StylusEventHelper;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.dragndrop.DragLayer;
+import com.android.launcher3.imp.ImpUninstallIconShowListener;
+import com.android.launcher3.setting.MxSettings;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
+import com.android.launcher3.util.DrawEditIcons;
 import com.android.launcher3.views.BaseDragLayer.TouchCompleteListener;
 
 import java.util.ArrayList;
@@ -55,7 +62,8 @@ import java.util.ArrayList;
  * {@inheritDoc}
  */
 public class LauncherAppWidgetHostView extends AppWidgetHostView
-        implements TouchCompleteListener, View.OnLongClickListener {
+        implements TouchCompleteListener, View.OnLongClickListener
+        , ImpUninstallIconShowListener {
 
     // Related to the auto-advancing of widgets
     private static final long ADVANCE_INTERVAL = 20000;
@@ -101,7 +109,6 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView
         mInflater = LayoutInflater.from(context);
         setAccessibilityDelegate(mLauncher.getAccessibilityDelegate());
         setBackgroundResource(R.drawable.widget_internal_focus_bg);
-
         if (Utilities.ATLEAST_OREO) {
             setExecutor(Utilities.THREAD_POOL_EXECUTOR);
         }
@@ -145,7 +152,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView
         if (viewGroup instanceof AdapterView) {
             return true;
         } else {
-            for (int i=0; i < viewGroup.getChildCount(); i++) {
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 View child = viewGroup.getChildAt(i);
                 if (child instanceof ViewGroup) {
                     if (checkScrollableRecursively((ViewGroup) child)) {
@@ -182,7 +189,7 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView
                 DragLayer dragLayer = Launcher.getLauncher(getContext()).getDragLayer();
 
                 if (mIsScrollable) {
-                     dragLayer.requestDisallowInterceptTouchEvent(true);
+                    dragLayer.requestDisallowInterceptTouchEvent(true);
                 }
                 if (!mStylusEventHelper.inStylusButtonPressed()) {
                     mLongPressHelper.postCheckForLongPress();
@@ -502,4 +509,36 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView
         mLauncher.removeItem(this, info, false  /* deleteFromDb */);
         mLauncher.bindAppWidget(info);
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        // 绘制卸载按钮
+        if (MxSettings.sShowUnInstallIcon && mLauncher.getStateManager().getState() == LauncherState.EDITING) {
+            drawUninstallIndicator(canvas);
+        } else if (mLauncher.getStateManager().getState() == LauncherState.OVERVIEW) {
+            uninstallIconPercent = 1.0f;
+            drawUninstallIndicator(canvas);
+        }
+    }
+
+    private float uninstallIconPercent = 0.0f;
+
+    private void drawUninstallIndicator(Canvas canvas) {
+        Drawable d = getContext().getDrawable(R.drawable.ic_uninstall);
+        DrawEditIcons.drawStateIcon(canvas, this, d, uninstallIconPercent);
+    }
+
+    @Override
+    public void onUninstallIconChange(float percent) {
+
+    }
+
+    @Override
+    public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean isPerformAnim) {
+
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }
