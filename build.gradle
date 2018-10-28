@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
         google()
         maven {
-            url "https://maven.google.com"
+            url 'https://maven.google.com'
         }
         google()
     }
@@ -13,18 +13,18 @@ buildscript {
     }
 }
 
-final String SUPPORT_LIBS_VERSION = '28.0.0-rc01'
+final String SUPPORT_LIBS_VERSION = '28.0.0'
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -119,7 +119,7 @@ repositories {
     google()
     jcenter()
     maven {
-        url "https://maven.google.com"
+        url 'https://maven.google.com'
     }
 }
 
