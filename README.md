@@ -1,5 +1,11 @@
 # Launcher-master
-基于Android9.0的Launcher3源码，修改单层桌面。
+基于谷歌官方Android-Pie的Launcher3源码进行修改，打造国内习惯的单层桌面，并添很多新的特性。
+
+## 分支介绍：
+* release分支：发布分支
+* feature分支：特性分支，主要是用来开发一些特性的，为不稳定版
+* develop分支：最新代码，所有开发均提交到开发分支
+* master分支：每开发完一个模块会提交到master分支，在正式版之前，master也是有问题的，只不过是按照模块进行提交的。
 
 ## 概述
 本版本基于Android9.0的Launcher3源码进行开发，开发包括：双层改单层，特效，菜单，点击卸载等功能。
