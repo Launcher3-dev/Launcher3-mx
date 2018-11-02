@@ -37,7 +37,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewDebug;
+import android.view.ViewParent;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.launcher3.IconCache.IconLoadRequest;
 import com.android.launcher3.IconCache.ItemInfoUpdateReceiver;
@@ -302,6 +304,10 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                // add by codemx.cn ---- 20181029 ---- start
+                mTouchX = (int) event.getRawX();
+                mTouchY = (int) event.getRawY();
+                // add by codemx.cn ---- 20181029 ---- end
                 // If we're in a stylus button press, don't check for long press.
                 if (!mStylusEventHelper.inStylusButtonPressed()) {
                     mLongPressHelper.postCheckForLongPress();
@@ -371,6 +377,47 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     }
 
     // add by codemx.cn ---- 20181027 --- start
+    // 手指触摸点位置
+    private int mTouchX;
+    private int mTouchY;
+
+    @Override
+    public boolean performClick() {
+        if (mLauncher.getStateManager().getState() == LauncherState.EDITING) {
+            ShortcutInfo info = (ShortcutInfo) getTag();
+            if (info == null) {
+                return super.performClick();
+            }
+
+            if (MxSettings.sShowUnInstallIcon && !isSupportsUninstall) {
+                Toast.makeText(mLauncher, R.string.uninstall_system_app_text, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            // 获取应用在屏幕上的坐标点
+            int[] locs = new int[2];
+            getLocationOnScreen(locs);
+            int width = getWidth() / 2;
+            int height = getHeight() / 2;
+
+            // 点击左上角四分之一区域
+            Rect rect = new Rect(locs[0], locs[1], locs[0] + width, locs[1] + height);
+            if (rect.contains(mTouchX, mTouchY)) {
+                if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {// 删除图标
+                    ViewParent vg = getParent();
+                    if (vg instanceof ShortcutAndWidgetContainer) {
+                        ((ShortcutAndWidgetContainer) vg).removeView(this);
+                    }
+                } else {// 卸载
+                    UninstallOrDeleteUtil.startUninstallApk(mLauncher, info);
+                }
+            }
+            return true;
+        }
+        return super.performClick();
+    }
+
+
     private Launcher mLauncher;
     private boolean isSupportsUninstall = false;
     private boolean isPerformAnim = false;

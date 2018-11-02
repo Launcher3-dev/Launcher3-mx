@@ -533,12 +533,20 @@ public class LauncherAppWidgetHostView extends AppWidgetHostView
 
     @Override
     public void onUninstallIconChange(float percent) {
-
+        uninstallIconPercent = percent;
+        invalidate();
     }
 
     @Override
     public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean isPerformAnim) {
-
+        if (uninstallIconAnimUtil == null) {
+            return;
+        }
+        if (isPerformAnim) {
+            uninstallIconAnimUtil.animateToIconIndicatorDraw(this);
+        } else {
+            invalidate();
+        }
     }
     // add by codemx.cn ---- 20181029 --- end
 }

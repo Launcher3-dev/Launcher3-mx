@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.ArrayMap;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.ItemInfoWithIcon;
@@ -19,7 +21,11 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherAppWidgetProviderInfo;
 import com.android.launcher3.LauncherSettings;
+import com.android.launcher3.R;
 import com.android.launcher3.compat.LauncherAppsCompat;
+import com.android.launcher3.util.XLog;
+
+import java.net.URISyntaxException;
 
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
 import static android.appwidget.AppWidgetProviderInfo.WIDGET_FEATURE_RECONFIGURABLE;
@@ -65,7 +71,7 @@ public final class UninstallOrDeleteUtil {
         Boolean uninstallDisabled = mUninstallDisabledCache.get(info.user);
         if (uninstallDisabled == null) {
             UserManager userManager =
-                    (UserManager) view.getContext().getSystemService(Context.USER_SERVICE);
+                    (UserManager) launcher.getSystemService(Context.USER_SERVICE);
             Bundle restrictions = userManager.getUserRestrictions(info.user);
             uninstallDisabled = restrictions.getBoolean(UserManager.DISALLOW_APPS_CONTROL, false)
                     || restrictions.getBoolean(UserManager.DISALLOW_UNINSTALL_APPS, false);
@@ -128,5 +134,30 @@ public final class UninstallOrDeleteUtil {
         return hostView.getAppWidgetId();
     }
 
+
+    /**
+     * Performs the drop action and returns the target component for the dragObject or null if
+     * the action was not performed.
+     */
+    public static ComponentName startUninstallApk(Launcher launcher, ItemInfo info) {
+
+        ComponentName cn = getUninstallTarget(launcher, info);
+        if (cn == null) {
+            // System applications cannot be installed. For now, show a toast explaining that.
+            // We may give them the option of disabling apps this way.
+            Toast.makeText(launcher, R.string.uninstall_system_app_text, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        try {
+            Intent i = Intent.parseUri(launcher.getString(R.string.delete_package_intent), 0)
+                    .setData(Uri.fromParts("package", cn.getPackageName(), cn.getClassName()))
+                    .putExtra(Intent.EXTRA_USER, info.user);
+            launcher.startActivity(i);
+            return cn;
+        } catch (URISyntaxException e) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + "Failed to parse intent to start uninstall activity for item=" + info);
+            return null;
+        }
+    }
 
 }

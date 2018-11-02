@@ -3621,9 +3621,11 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             implements AnimatorUpdateListener {
 
         private final LauncherState mToState;
+        private final TransitionStates mStates;
 
         StateTransitionListener(LauncherState toState) {
             mToState = toState;
+            mStates = new TransitionStates(mLauncher.getStateManager().getLastState(), toState);
         }
 
         @Override
@@ -3639,7 +3641,25 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         @Override
         public void onAnimationEnd(Animator animation) {
             // TODO 开始判断是否要显示卸载按钮，如果是到预览模式就显示卸载按钮，不是就隐藏
-
+            boolean isShowShortcutUninstall;
+            boolean isPerformAnimation;
+            LauncherState state = mLauncher.getStateManager().getState();
+            if (state == LauncherState.EDITING) {
+                isShowShortcutUninstall = true;
+                isPerformAnimation = true;
+            } else if (mStates.editingToWorkspace || mStates.overviewToWorkspace) {
+                isShowShortcutUninstall = false;
+                isPerformAnimation = false;
+            } else {
+                isShowShortcutUninstall = false;
+                if (state == LauncherState.OVERVIEW) {
+                    isPerformAnimation = true;
+                } else {
+                    isPerformAnimation = false;
+                }
+            }
+            MxSettings.sShowUnInstallIcon = isShowShortcutUninstall;
+            showUninstallIcon(isPerformAnimation);
 
             onEndStateTransition();
 
