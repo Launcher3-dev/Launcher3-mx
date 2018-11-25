@@ -21,6 +21,10 @@ import android.view.animation.Interpolator;
 import com.android.launcher3.allapps.MenuTransitionController;
 import com.android.launcher3.states.EditingState;
 import com.android.launcher3.states.MenuState;
+import com.android.launcher3.states.OverViewClipState;
+import com.android.launcher3.states.OverViewCreateFolderState;
+import com.android.launcher3.states.OverViewMultipleUninstallState;
+import com.android.launcher3.states.OverViewSpringLoadedState;
 import com.android.launcher3.states.SpringLoadedState;
 import com.android.launcher3.uioverrides.OverviewState;
 import com.android.launcher3.uioverrides.UiFactory;
@@ -93,8 +97,14 @@ public class LauncherState {
      */
     public static final LauncherState SPRING_LOADED = new SpringLoadedState(1);
     public static final LauncherState OVERVIEW = new OverviewState(2);
-    public static final LauncherState EDITING = new EditingState(3);
-    public static final LauncherState MENU = new MenuState(4);
+    public static final LauncherState OVERVIEW_SPRING_LOADED = new OverViewSpringLoadedState(3);
+    public static final LauncherState OVERVIEW_CREATE_FOLDER = new OverViewCreateFolderState(4);
+    public static final LauncherState OVERVIEW_MULTIPLE_UNINSTALL = new OverViewMultipleUninstallState(5);
+    public static final LauncherState OVERVIEW_CLIP = new OverViewClipState(6);
+    public static final LauncherState MENU = new MenuState(8);
+
+    // TODO 废除该状态
+    public static final LauncherState EDITING = new EditingState(7);
 
     protected static final Rect sTempRect = new Rect();
 
