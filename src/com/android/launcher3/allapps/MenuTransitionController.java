@@ -15,7 +15,7 @@ import com.android.launcher3.LauncherStateManager.StateHandler;
 import com.android.launcher3.anim.AnimationSuccessListener;
 import com.android.launcher3.anim.AnimatorSetBuilder;
 import com.android.launcher3.anim.PropertySetter;
-import com.android.launcher3.menu.MenuView;
+import com.android.launcher3.menu.CircleMenuView;
 
 import static com.android.launcher3.LauncherState.OVERVIEW;
 import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
@@ -50,7 +50,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
         }
     };
 
-    private MenuView mMenuView;
+    private CircleMenuView mCircleMenuView;
 
     private final Launcher mLauncher;
     private boolean mIsVerticalLayout;
@@ -76,8 +76,8 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
     }
 
     // add by codemx.cn ---- 20180919 ---- start
-    public void setMenuView(MenuView menuView) {
-        this.mMenuView = menuView;
+    public void setMenuView(CircleMenuView circleMenuView) {
+        this.mCircleMenuView = circleMenuView;
     }
     // add by codemx.cn ---- 20180919 ---- end
 
@@ -115,7 +115,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
         float shiftCurrent = progress * mShiftRange;
 
         // add by codemx.cn ---- 20180919 ---- start
-        mMenuView.setTranslationY(shiftCurrent);
+        mCircleMenuView.setTranslationY(shiftCurrent);
         // add by codemx.cn ---- 20180919 ---- start
 
         float hotseatTranslation = -mShiftRange + shiftCurrent;

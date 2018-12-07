@@ -252,7 +252,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
     // State related to Launcher Overlay
     LauncherOverlay mLauncherOverlay;
-    boolean mScrollInteractionBegan;
+    public boolean mScrollInteractionBegan;
     boolean mStartedSendingScrollEvents;
     float mLastOverlayScroll = 0;
     boolean mOverlayShown = false;
@@ -1568,7 +1568,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         updateChildrenLayersEnabled();
     }
 
-    private void onEndStateTransition() {
+    public void onEndStateTransition() {
         mIsSwitchingState = false;
         mForceDrawAdjacentPages = false;
         mTransitionProgress = 1;
@@ -1609,6 +1609,40 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         stepAnimator.addListener(listener);
         builder.play(stepAnimator);
     }
+
+    // add by codemx.cn ---- 20181026 ---- start
+    public boolean isInOverviewMode() {
+        return mLauncher.getStateManager().getState() == LauncherState.OVERVIEW;
+    }
+
+    public float getOverviewModeShrinkFactor() {
+        return mOverviewModeShrinkFactor;
+    }
+
+    public void onPrepareStateTransition(boolean multiplePagesVisible) {
+        mIsSwitchingState = true;
+        mTransitionProgress = 0;
+
+        // Invalidate the pages now, so that we have the visible pages before the
+        // animation is started
+        if (multiplePagesVisible) {
+            mForceDrawAdjacentPages = true;
+        }
+        invalidate();// This will call dispatchDraw(), which calls getVisiblePages().
+
+        updateChildrenLayersEnabled();
+//        hideCustomContentIfNecessary();
+    }
+
+    public WorkspaceStateTransitionAnimation getStateTransitionAnimation() {
+        return mStateTransitionAnimation;
+    }
+
+    public float getPageIndicatorTranslationY() {
+        return -40.0f;
+    }
+
+    // add by codemx.cn ---- 20181026 ---- end
 
     public void updateAccessibilityFlags() {
         // TODO: Update the accessibility flags appropriately when dragging.

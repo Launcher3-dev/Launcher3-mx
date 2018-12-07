@@ -63,12 +63,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.android.launcher3.menu.MenuView
-            android:id="@+id/menu_view"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:visibility="invisible"
-            android:background="@color/uninstall_target_hover_tint"/>
+        <com.android.launcher3.menu.CircleMenuView
+            android:id="@+id/circle_menu"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:visibility="visible"/>
+
+        <include
+            android:id="@+id/menu_layout"
+            layout="@layout/menu_layout"
+            android:visibility="gone"/>
     </com.android.launcher3.dragndrop.DragLayer>
 
 </com.android.launcher3.LauncherRootView>
