@@ -122,6 +122,7 @@ import com.android.launcher3.widget.WidgetHostViewLoader;
 import com.android.launcher3.widget.WidgetListRowEntry;
 import com.android.launcher3.widget.WidgetsFullSheet;
 import com.android.launcher3.widget.custom.CustomWidgetParser;
+import com.android.mxlibrary.util.PermissionUtil;
 import com.android.mxlibrary.util.XLog;
 
 import java.io.FileDescriptor;
@@ -212,7 +213,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private View mHotseatSearchBox;
 
     private DropTargetBar mDropTargetBar;
-
     // add by codemx.cn ---- 20180919 ---- start
     // 中间主菜单
     private CircleMenuView mCircleMenuView;
@@ -282,6 +282,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         super.onCreate(savedInstanceState);
         TraceHelper.partitionSection("Launcher-onCreate", "super call");
+
+        PermissionUtil.requestStoragePermission(this);
 
         LauncherAppState app = LauncherAppState.getInstance(this);
         mOldConfig = new Configuration(getResources().getConfiguration());
@@ -1154,7 +1156,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         }
     }
 
-    public MenuTransitionController getAllAppsController() {
+    public MenuTransitionController getMenuTransitionController() {
         return mMenuController;
     }
 

@@ -74,8 +74,10 @@ import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
 import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
+import com.android.launcher3.touch.ItemClickHandler;
 import com.android.launcher3.touch.ItemLongClickListener;
 import com.android.launcher3.touch.WorkspaceTouchListener;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
@@ -301,6 +303,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         setOnTouchListener(new WorkspaceTouchListener(mLauncher, this));
 
         // --- add by comde.cn ---- 2018/09/06 --- start
+        setOnClickListener(ItemClickHandler.INSTANCE);
         mOverviewModeShrinkFactor =
                 getResources().getInteger(R.integer.config_workspaceOverviewShrinkPercentage) / 100f;
 
@@ -424,7 +427,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             }
         }
 
-        // Always enter the spring loaded mode
+        // Always enter the spring loaded mode(动画)
         mLauncher.getStateManager().goToState(SPRING_LOADED);
     }
 
@@ -574,7 +577,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         mWorkspaceScreens.put(screenId, newScreen);
         mScreenOrder.add(insertIndex, screenId);
         addView(newScreen, insertIndex);
-        mStateTransitionAnimation.applyChildState(
+        mStateTransitionAnimation.applyChildStateAlpha(
                 mLauncher.getStateManager().getState(), newScreen, insertIndex);
 
         if (mLauncher.getAccessibilityDelegate().isInAccessibleDrag()) {
@@ -1561,7 +1564,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         snapToPage(whichPage, OVERVIEW_TRANSITION_MS, Interpolators.ZOOM_IN);
     }
 
-    private void onStartStateTransition(LauncherState state) {
+    public void onStartStateTransition(LauncherState state) {
         mIsSwitchingState = true;
         mTransitionProgress = 0;
 
@@ -1585,29 +1588,6 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         onStartStateTransition(toState);
         mStateTransitionAnimation.setState(toState);
         onEndStateTransition();
-    }
-
-    /**
-     * Sets the current workspace {@link LauncherState}, then animates the UI
-     */
-    @Override
-    public void setStateWithAnimation(LauncherState toState,
-                                      AnimatorSetBuilder builder, AnimationConfig config) {
-        StateTransitionListener listener = new StateTransitionListener(toState);
-        mStateTransitionAnimation.setStateWithAnimation(toState, builder, config);
-
-        // Invalidate the pages now, so that we have the visible pages before the
-        // animation is started
-        if (toState.hasMultipleVisiblePages) {
-            mForceDrawAdjacentPages = true;
-        }
-        invalidate(); // This will call dispatchDraw(), which calls getVisiblePages().
-
-        ValueAnimator stepAnimator = ValueAnimator.ofFloat(0, 1);
-        stepAnimator.addUpdateListener(listener);
-        stepAnimator.setDuration(config.duration);
-        stepAnimator.addListener(listener);
-        builder.play(stepAnimator);
     }
 
     // add by codemx.cn ---- 20181026 ---- start
@@ -1643,6 +1623,41 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     }
 
     // add by codemx.cn ---- 20181026 ---- end
+
+    /**
+     * Sets the current workspace {@link LauncherState}, then animates the UI
+     */
+    @Override
+    public void setStateWithAnimation(LauncherState toState,
+                                      AnimatorSetBuilder builder, AnimationConfig config) {
+        StateTransitionListener listener = new StateTransitionListener(toState);
+
+        // modify by codemx.cn ---- 20181027 ---- start
+        // 进入拖拽模式桌面不缩放
+        if (toState != LauncherState.SPRING_LOADED) {
+            mStateTransitionAnimation.setStateWithAnimation(toState, builder, config);
+        }
+        // modify by codemx.cn ---- 20181027 ---- end
+
+        // modify by codemx.cn ---- 20181026 ---- start
+//        // Invalidate the pages now, so that we have the visible pages before the
+//        // animation is started
+//        if (toState.hasMultipleVisiblePages) {
+//            mForceDrawAdjacentPages = true;
+//        }
+//        invalidate(); // This will call dispatchDraw(), which calls getVisiblePages().
+        // modify by codemx.cn ---- 20181026 ---- end
+
+        // add by codemx.cn ---- 20181026 ---- start
+        onPrepareStateTransition(toState.hasMultipleVisiblePages);
+        // add by codemx.cn ---- 20181026 ---- end
+
+        ValueAnimator stepAnimator = ValueAnimator.ofFloat(0, 1);
+        stepAnimator.addUpdateListener(listener);
+        stepAnimator.setDuration(config.duration);
+        stepAnimator.addListener(listener);
+        builder.play(stepAnimator);
+    }
 
     public void updateAccessibilityFlags() {
         // TODO: Update the accessibility flags appropriately when dragging.
@@ -2186,7 +2201,8 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     public void onNoCellFound(View dropTargetLayout) {
         if (mLauncher.isHotseatLayout(dropTargetLayout)) {
             Hotseat hotseat = mLauncher.getHotseat();
-            boolean droppedOnAllAppsIcon = mTargetCell != null && !mLauncher.getDeviceProfile().inv.isAllAppsButtonRank(
+            boolean droppedOnAllAppsIcon = mTargetCell != null
+                    && !mLauncher.getDeviceProfile().inv.isAllAppsButtonRank(
                     hotseat.getOrderInHotseat(mTargetCell[0], mTargetCell[1]));
             if (!droppedOnAllAppsIcon) {
                 // Only show message when hotseat is full and drop target was not AllApps button
@@ -3605,9 +3621,11 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             implements AnimatorUpdateListener {
 
         private final LauncherState mToState;
+        private final TransitionStates mStates;
 
         StateTransitionListener(LauncherState toState) {
             mToState = toState;
+            mStates = new TransitionStates(mLauncher.getStateManager().getLastState(), toState);
         }
 
         @Override
@@ -3622,7 +3640,58 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         @Override
         public void onAnimationEnd(Animator animation) {
+            // TODO 开始判断是否要显示卸载按钮，如果是到预览模式就显示卸载按钮，不是就隐藏
+            boolean isShowShortcutUninstall;
+            boolean isPerformAnimation;
+            LauncherState state = mLauncher.getStateManager().getState();
+            if (state == LauncherState.EDITING) {
+                isShowShortcutUninstall = true;
+                isPerformAnimation = true;
+            } else if (mStates.editingToWorkspace || mStates.overviewToWorkspace) {
+                isShowShortcutUninstall = false;
+                isPerformAnimation = false;
+            } else {
+                isShowShortcutUninstall = false;
+                if (state == LauncherState.OVERVIEW) {
+                    isPerformAnimation = true;
+                } else {
+                    isPerformAnimation = false;
+                }
+            }
+            MxSettings.sShowUnInstallIcon = isShowShortcutUninstall;
+            showUninstallIcon(isPerformAnimation);
+
             onEndStateTransition();
+
         }
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+    private UninstallIconAnimUtil mUninstallIconAnimUtil;
+
+    public UninstallIconAnimUtil getUninstallIconAnimUtil() {
+        return mUninstallIconAnimUtil;
+    }
+
+    /**
+     * 显示卸载按钮
+     *
+     * @param isPerformAnimation 是否执行显示或者隐藏动画
+     */
+    public void showUninstallIcon(boolean isPerformAnimation) {
+        if (mUninstallIconAnimUtil == null) {
+            mUninstallIconAnimUtil = new UninstallIconAnimUtil();
+        }
+        if (mUninstallIconAnimUtil.isStart()) {
+            return;
+        }
+
+        final int N = getChildCount();
+        for (int i = 0; i < N; i++) {
+            CellLayout cellLayout = (CellLayout) getChildAt(i);
+            cellLayout.showChildUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
+        }
+        mLauncher.mHotseat.showUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }

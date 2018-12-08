@@ -36,7 +36,7 @@ import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
  */
 public class MenuTransitionController implements StateHandler, OnDeviceProfileChangeListener {
 
-    public static final Property<MenuTransitionController, Float> ALL_APPS_PROGRESS =
+    public static final Property<MenuTransitionController, Float> CIRCLE_MENU_VIEW_PROGRESS =
             new Property<MenuTransitionController, Float>(Float.class, "allAppsProgress") {
 
         @Override
@@ -166,7 +166,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
                 ? builder.getInterpolator(ANIM_OVERVIEW_SCALE, FAST_OUT_SLOW_IN)
                 : FAST_OUT_SLOW_IN;
         ObjectAnimator anim =
-                ObjectAnimator.ofFloat(this, ALL_APPS_PROGRESS, mProgress, targetProgress);
+                ObjectAnimator.ofFloat(this, CIRCLE_MENU_VIEW_PROGRESS, mProgress, targetProgress);
         anim.setDuration(config.duration);
         anim.setInterpolator(builder.getInterpolator(ANIM_VERTICAL_PROGRESS, interpolator));
         anim.addListener(getProgressAnimatorListener());

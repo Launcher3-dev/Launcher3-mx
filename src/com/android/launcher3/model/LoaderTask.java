@@ -262,6 +262,7 @@ public class LoaderTask implements Runnable {
         }
 
         Log.d(TAG, "loadWorkspace: loading default favorites");
+        // 加载默认配置的App信息（会回调LauncherProvider里的call方法）
         LauncherSettings.Settings.call(contentResolver,
                 LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);
 
@@ -825,7 +826,7 @@ public class LoaderTask implements Runnable {
             if (apps == null || apps.isEmpty()) {
                 return;
             }
-            XLog.e(XLog.getTag(), XLog.TAG_GU +"appps:  "+ apps.size());
+            XLog.e(XLog.getTag(), XLog.TAG_GU + "appps:  " + apps.size());
             boolean quietMode = mUserManager.isQuietModeEnabled(user);
             // Create the ApplicationInfos
             for (int i = 0; i < apps.size(); i++) {
@@ -863,7 +864,7 @@ public class LoaderTask implements Runnable {
      */
     private void filterNoPositionAllApps() {
         HashMap<ComponentName, ItemInfo> workspaceShortcuts = mBgDataModel.workspaceShortcuts;
-        XLog.e(XLog.getTag(), XLog.TAG_GU +"workspaceShortcuts:  "+ workspaceShortcuts.size());
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "workspaceShortcuts:  " + workspaceShortcuts.size());
         if (workspaceShortcuts.isEmpty()) {
             return;
         }
@@ -871,7 +872,7 @@ public class LoaderTask implements Runnable {
         if (data.isEmpty()) {
             return;
         }
-        XLog.e(XLog.getTag(), XLog.TAG_GU +"All apps count:  "+ data.size());
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "All apps count:  " + data.size());
         for (ShortcutInfo info : data) {
             if (!workspaceShortcuts.containsKey(info.componentName)) {
                 mBgAllAppsList.noPosition.add(info);
