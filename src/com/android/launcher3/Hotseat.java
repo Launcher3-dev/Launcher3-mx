@@ -135,7 +135,7 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
         for (int i = 0; i < N; i++) {
             View view = mContent.getShortcutsAndWidgets().getChildAt(i);
             if (view.getVisibility() == View.VISIBLE && view instanceof BubbleTextView) {
-//                ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, perform);
+                ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, perform);
             }
         }
     }

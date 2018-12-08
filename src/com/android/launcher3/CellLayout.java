@@ -2789,12 +2789,12 @@ public class CellLayout extends ViewGroup {
             if (view instanceof BubbleTextView) {
                 Object o = view.getTag();
                 if ((o instanceof ItemInfo) && UninstallOrDeleteUtil.supportsUninstall(mLauncher, (ItemInfo) o)) {
-//                    ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
+                    ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
                 }
             } else if (view instanceof LauncherAppWidgetHostView) {
-//                ((LauncherAppWidgetHostView) view).showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
+                ((LauncherAppWidgetHostView) view).showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
             } else if (view instanceof FolderIcon) {
-//                ((FolderIcon) view).getFolder().showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
+                ((FolderIcon) view).getFolder().showUninstallIcon(uninstallIconAnimUtil, isPerformAnimation);
             }
         }
     }
