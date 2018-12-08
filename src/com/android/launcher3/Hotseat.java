@@ -18,7 +18,6 @@ package com.android.launcher3;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -27,8 +26,8 @@ import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.logging.UserEventDispatcher.LogContainerProvider;
+import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 
@@ -86,28 +85,6 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
         } else {
             mContent.setGridSize(idp.numHotseatIcons, 1);
         }
-
-        if (!FeatureFlags.NO_ALL_APPS_ICON) {
-            // Add the Apps button
-            Context context = getContext();
-            DeviceProfile grid = mLauncher.getDeviceProfile();
-            int allAppsButtonRank = grid.inv.getAllAppsButtonRank();
-
-            Drawable d = context.getResources().getDrawable(R.drawable.all_apps_button_icon);
-            d.setBounds(0, 0, grid.iconSizePx, grid.iconSizePx);
-
-            int scaleDownPx = getResources().getDimensionPixelSize(R.dimen.all_apps_button_scale_down);
-            Rect bounds = d.getBounds();
-            d.setBounds(bounds.left, bounds.top + scaleDownPx / 2, bounds.right - scaleDownPx,
-                    bounds.bottom - scaleDownPx / 2);
-
-            // Note: We do this to ensure that the hotseat is always laid out in the orientation of
-            // the hotseat in order regardless of which orientation they were added
-            int x = getCellXFromOrder(allAppsButtonRank);
-            int y = getCellYFromOrder(allAppsButtonRank);
-            CellLayout.LayoutParams lp = new CellLayout.LayoutParams(x, y, 1, 1);
-            lp.canReorder = false;
-        }
     }
 
     @Override
@@ -151,4 +128,16 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
         setLayoutParams(lp);
         InsettableFrameLayout.dispatchInsets(this, insets);
     }
+
+    // add by codemx.cn ---- 20181029 --- start
+    public void showUninstallIcon(UninstallIconAnimUtil uninstallIconAnimUtil, boolean perform) {
+        final int N = mContent.getShortcutsAndWidgets().getChildCount();
+        for (int i = 0; i < N; i++) {
+            View view = mContent.getShortcutsAndWidgets().getChildAt(i);
+            if (view.getVisibility() == View.VISIBLE && view instanceof BubbleTextView) {
+//                ((BubbleTextView) view).showUninstallIcon(uninstallIconAnimUtil, perform);
+            }
+        }
+    }
+    // add by codemx.cn ---- 20181029 --- end
 }
