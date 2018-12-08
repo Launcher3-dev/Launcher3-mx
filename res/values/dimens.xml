@@ -227,4 +227,25 @@
 
     <!-- Menu -->
     <dimen name="dynamic_grid_menu_bottom_margin">180dp</dimen>
+
+<!--Uninstall-->
+    <dimen name="unread_minWidth">10dp</dimen>
+    <dimen name="hotseat_unread_margin_top">16dp</dimen>
+    <dimen name="hotseat_unread_margin_right">8dp</dimen>
+    <dimen name="folder_unread_margin_top">4dp</dimen>
+    <dimen name="folder_unread_margin_right">16dp</dimen>
+    <dimen name="workspace_unread_margin_top">0dp</dimen>
+    <dimen name="workspace_unread_margin_right">9dp</dimen>
+    <dimen name="hotseat_uninstall_margin_top">16dp</dimen>
+    <dimen name="hotseat_uninstall_margin_right">4dp</dimen>
+    <dimen name="folder_uninstall_margin_top">2dp</dimen>
+    <dimen name="folder_uninstall_margin_right">2dp</dimen>
+    <dimen name="workspace_uninstall_margin_top">1dp</dimen>
+    <dimen name="workspace_uninstall_margin_right">12dp</dimen>
+    <!--卸载图标位置调整-->
+    <dimen name="uninstall_icon_margin_left">-5dp</dimen>
+    <dimen name="uninstall_icon_margin_top">7dp</dimen>
+
+    <dimen name="uninstall_icon_folder_margin_left">-5dp</dimen>
+    <dimen name="uninstall_icon_folder_margin_top">1dp</dimen>
 </resources>

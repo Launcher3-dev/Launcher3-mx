@@ -64,7 +64,7 @@ import com.android.launcher3.util.MultiHashMap;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.util.Provider;
 import com.android.launcher3.util.TraceHelper;
-import com.android.launcher3.util.XLog;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -43,7 +43,7 @@ import com.android.launcher3.util.ItemInfoMatcher;
 import com.android.launcher3.util.LongArrayMap;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.util.PackageUserKey;
-import com.android.launcher3.util.XLog;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;

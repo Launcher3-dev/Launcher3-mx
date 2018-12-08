@@ -72,7 +72,7 @@ import com.android.launcher3.graphics.DragPreviewProvider;
 import com.android.launcher3.graphics.PreloadIconDrawable;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
-import com.android.launcher3.setting.Settings;
+import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
 import com.android.launcher3.touch.ItemLongClickListener;
 import com.android.launcher3.touch.WorkspaceTouchListener;
@@ -1113,7 +1113,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         // --- add by comde.cn ---- 2018/09/06 --- start
         mTransitionEffect.clearRotation();
-        if (Settings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
+        if (MxSettings.sLauncherEffect != TransitionEffect.TRANSITION_EFFECT_NONE) {
             startScrollWithAnim(getScrollX());
         }
         // --- add by comde.cn ---- 2018/09/06 --- end
@@ -1129,7 +1129,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
     private void startScrollWithAnim(int screenScroll) {
         // -1,7,15,1,6,4
-        int screenEffectNum = Settings.sLauncherEffect;
+        int screenEffectNum = MxSettings.sLauncherEffect;
         mTransitionEffect.screenScrollByTransitionEffect(screenScroll, screenEffectNum);
     }
 
@@ -3515,7 +3515,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
     @Override
     protected boolean isPagedViewCircledScroll() {
-        return Settings.sIsPagedViewCircleScroll;
+        return MxSettings.sIsPagedViewCircleScroll;
     }
 
     private String getPageDescription(int page) {

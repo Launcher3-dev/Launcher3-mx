@@ -6,7 +6,7 @@ import com.android.launcher3.AllAppsList;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherModel;
-import com.android.launcher3.util.XLog;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.List;

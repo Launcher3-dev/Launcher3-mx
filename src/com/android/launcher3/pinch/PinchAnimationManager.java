@@ -196,13 +196,13 @@ public class PinchAnimationManager {
                         LauncherLogProto.Action.Touch.PINCH, LauncherLogProto.Action.Direction.NONE,
                         LauncherLogProto.ContainerType.OVERVIEW, mWorkspace.getCurrentPage());
                 // 显示桌面
-//                mLauncher.showWorkspace(true);
+                mLauncher.getStateManager().goToState(LauncherState.NORMAL);
             } else if (startState == LauncherState.NORMAL && goingTowards == LauncherState.OVERVIEW) {
                 mLauncher.getUserEventDispatcher().logActionOnContainer(
                         LauncherLogProto.Action.Touch.PINCH, LauncherLogProto.Action.Direction.NONE,
                         LauncherLogProto.ContainerType.WORKSPACE, mWorkspace.getCurrentPage());
                 // 显示预览模式
-//                mLauncher.showOverviewMode(true);
+                mLauncher.getStateManager().goToState(LauncherState.OVERVIEW);
             }
         } else {
             Log.e(TAG, "Received unknown threshold to animate: " + threshold);

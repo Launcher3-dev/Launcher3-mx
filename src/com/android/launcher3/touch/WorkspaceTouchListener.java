@@ -30,8 +30,8 @@ import com.android.launcher3.Workspace;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
-import com.android.launcher3.util.XLog;
 import com.android.launcher3.views.OptionsPopupView;
+import com.android.mxlibrary.util.XLog;
 
 import static android.view.MotionEvent.ACTION_CANCEL;
 import static android.view.MotionEvent.ACTION_DOWN;

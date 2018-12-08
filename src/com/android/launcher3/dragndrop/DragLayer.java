@@ -17,8 +17,6 @@
 
 package com.android.launcher3.dragndrop;
 
-import static com.android.launcher3.compat.AccessibilityManagerCompat.sendCustomAccessibilityEvent;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
@@ -45,16 +43,20 @@ import com.android.launcher3.R;
 import com.android.launcher3.ShortcutAndWidgetContainer;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.anim.Interpolators;
+import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.folder.Folder;
 import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.graphics.ViewScrim;
 import com.android.launcher3.graphics.WorkspaceAndHotseatScrim;
 import com.android.launcher3.keyboard.ViewGroupFocusHelper;
+import com.android.launcher3.pinch.PinchToOverviewListener;
 import com.android.launcher3.uioverrides.UiFactory;
 import com.android.launcher3.util.Thunk;
 import com.android.launcher3.views.BaseDragLayer;
 
 import java.util.ArrayList;
+
+import static com.android.launcher3.compat.AccessibilityManagerCompat.sendCustomAccessibilityEvent;
 
 /**
  * A ViewGroup that coordinates dragging across its descendants
@@ -113,6 +115,9 @@ public class DragLayer extends BaseDragLayer<Launcher> {
 
     public void recreateControllers() {
         mControllers = UiFactory.createTouchControllers(mActivity);
+        // add by codemx.cn --- 20181026 --- start
+        mPinchListener = FeatureFlags.LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW ? null : new PinchToOverviewListener(Launcher.getLauncher(getContext()));
+        // add by codemx.cn --- 20181026 --- end
     }
 
     public ViewGroupFocusHelper getFocusIndicatorHelper() {

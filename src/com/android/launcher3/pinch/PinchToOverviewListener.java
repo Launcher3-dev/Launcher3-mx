@@ -72,7 +72,7 @@ public class PinchToOverviewListener extends ScaleGestureDetector.SimpleOnScaleG
 
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
-        if (mLauncher.getStateManager().getState() != LauncherState.NORMAL) {
+        if (mLauncher.getStateManager().getState() == LauncherState.MENU) {
             // Don't listen for the pinch gesture if on all apps, widget picker, -1, etc.
             return false;
         }
@@ -105,6 +105,7 @@ public class PinchToOverviewListener extends ScaleGestureDetector.SimpleOnScaleG
                 : new LogAccelerateInterpolator(100, 0);
         mPinchStarted = true;
         mWorkspace.getTransitionEffect().clearRotation();
+        mWorkspace.getTransitionEffect().clearTranslationX();
         mWorkspace.onPrepareStateTransition(true);
         return true;
     }

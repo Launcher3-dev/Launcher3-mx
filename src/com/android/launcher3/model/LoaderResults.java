@@ -34,8 +34,8 @@ import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.LooperIdleLock;
 import com.android.launcher3.util.MultiHashMap;
 import com.android.launcher3.util.ViewOnDrawExecutor;
-import com.android.launcher3.util.XLog;
 import com.android.launcher3.widget.WidgetListRowEntry;
+import com.android.mxlibrary.util.XLog;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

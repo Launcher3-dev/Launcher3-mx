@@ -1,6 +1,5 @@
 package com.android.launcher3.pinch;
 
-
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.Workspace;
 

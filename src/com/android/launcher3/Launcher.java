@@ -84,7 +84,6 @@ import com.android.launcher3.logging.UserEventDispatcher;
 import com.android.launcher3.logging.UserEventDispatcher.UserEventDelegate;
 import com.android.launcher3.menu.CircleMenuView;
 import com.android.launcher3.menu.MenuLayout;
-import com.android.launcher3.menu.MenuView;
 import com.android.launcher3.model.ModelWriter;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.popup.PopupContainerWithArrow;
@@ -113,7 +112,6 @@ import com.android.launcher3.util.Thunk;
 import com.android.launcher3.util.TraceHelper;
 import com.android.launcher3.util.UiThreadHelper;
 import com.android.launcher3.util.ViewOnDrawExecutor;
-import com.android.launcher3.util.XLog;
 import com.android.launcher3.views.OptionsPopupView;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
@@ -124,6 +122,7 @@ import com.android.launcher3.widget.WidgetHostViewLoader;
 import com.android.launcher3.widget.WidgetListRowEntry;
 import com.android.launcher3.widget.WidgetsFullSheet;
 import com.android.launcher3.widget.custom.CustomWidgetParser;
+import com.android.mxlibrary.util.XLog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -2397,7 +2396,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
                 // Close any open floating views.
                 AbstractFloatingView.closeAllOpenViews(this);
 
-                // Settings the touch point to (-1, -1) will show the options popup in the center of
+                // MxSettings the touch point to (-1, -1) will show the options popup in the center of
                 // the screen.
                 OptionsPopupView.showDefaultOptions(this, -1, -1);
             }

@@ -32,6 +32,7 @@ import com.android.launcher3.LauncherAppWidgetProviderInfo;
 import com.android.launcher3.PromiseAppInfo;
 import com.android.launcher3.R;
 import com.android.launcher3.ShortcutInfo;
+import com.android.launcher3.Workspace;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.folder.Folder;
 import com.android.launcher3.folder.FolderIcon;
@@ -68,6 +69,14 @@ public class ItemClickHandler {
         if (!launcher.getWorkspace().isFinishedSwitchingState()) {
             return;
         }
+
+        // --- add by comde.cn ---- 20181026 --- start
+        // TODO 点击workspace的处理
+        if (v instanceof Workspace){
+
+            return;
+        }
+        // --- add by comde.cn ---- 20181026 --- end
 
         Object tag = v.getTag();
         if (tag instanceof ShortcutInfo) {

@@ -56,4 +56,7 @@ abstract class BaseFlags {
     // trying to make them fit the orientation the device is in.
     public static final boolean OVERVIEW_USE_SCREENSHOT_ORIENTATION = true;
 
+    // 是否禁用双指捏掐到预览模式
+    public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = false;
+
 }

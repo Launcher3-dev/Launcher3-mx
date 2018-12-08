@@ -29,7 +29,7 @@ import com.android.launcher3.compat.PackageInstallerCompat;
 import com.android.launcher3.compat.UserManagerCompat;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.notification.NotificationListener;
-import com.android.launcher3.setting.Settings;
+import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.util.ConfigMonitor;
 import com.android.launcher3.util.Preconditions;
 import com.android.launcher3.util.SettingsObserver;
@@ -133,7 +133,7 @@ public class LauncherAppState {
         }
 
         // --- add by codemx.cn ---- 2019/09/04---start
-        Settings.getInstance().loadSettings(context);
+        MxSettings.getInstance().loadSettings(context);
         // --- add by codemx.cn ---- 2019/09/04---end
 
     }
