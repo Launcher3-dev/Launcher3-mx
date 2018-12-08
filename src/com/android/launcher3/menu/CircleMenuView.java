@@ -653,7 +653,7 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
 
     @Override
     public void setInsets(Rect insets) {
-        LayoutParams lp = (LayoutParams) getLayoutParams();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
         DeviceProfile grid = mLauncher.getDeviceProfile();
         // TODO 设置宽高
 

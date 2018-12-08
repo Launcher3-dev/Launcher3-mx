@@ -52,7 +52,7 @@ public class MenuLayout extends FrameLayout implements UserEventDispatcher.LogCo
 
     @Override
     public void setInsets(Rect insets) {
-        LayoutParams lp = (LayoutParams) getLayoutParams();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
         DeviceProfile grid = mLauncher.getDeviceProfile();
         lp.gravity = Gravity.BOTTOM;
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;

@@ -40,10 +40,10 @@ import com.android.launcher3.util.PendingAnimation;
 import com.android.launcher3.util.TouchController;
 
 import static com.android.launcher3.LauncherAnimUtils.MIN_PROGRESS_TO_MENU;
-import static com.android.launcher3.LauncherState.EDITING;
 import static com.android.launcher3.LauncherState.MENU;
 import static com.android.launcher3.LauncherState.NORMAL;
 import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.LauncherState.OVERVIEW_SPRING_LOADED;
 import static com.android.launcher3.LauncherStateManager.ANIM_ALL;
 import static com.android.launcher3.LauncherStateManager.ATOMIC_COMPONENT;
 import static com.android.launcher3.LauncherStateManager.NON_ATOMIC_COMPONENT;
@@ -233,8 +233,8 @@ public abstract class AbstractStateChangeTouchController
             mStartContainerType = getLogContainerTypeForNormalState();
         } else if (mStartState == OVERVIEW) {
             mStartContainerType = LauncherLogProto.ContainerType.TASKSWITCHER;
-        } else if (mStartState == EDITING) {
-            mStartContainerType = LauncherLogProto.ContainerType.EDITING;
+        } else if (mStartState == OVERVIEW_SPRING_LOADED) {
+            mStartContainerType = LauncherLogProto.ContainerType.OVERVIEW_SPRING_LOADED;
         }
         if (mCurrentAnimation == null) {
             mFromState = mStartState;

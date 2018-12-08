@@ -16,19 +16,6 @@
 
 package com.android.launcher3;
 
-import static android.view.View.VISIBLE;
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_FADE;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_WORKSPACE_FADE;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_WORKSPACE_SCALE;
-import static com.android.launcher3.anim.Interpolators.ACCEL;
-import static com.android.launcher3.anim.Interpolators.DEACCEL;
-import static com.android.launcher3.anim.Interpolators.DEACCEL_1_7;
-import static com.android.launcher3.anim.Interpolators.OVERSHOOT_1_2;
-import static com.android.launcher3.anim.Interpolators.clampToProgress;
-import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -42,51 +29,65 @@ import com.android.launcher3.anim.AnimatorSetBuilder;
 import com.android.launcher3.anim.PropertySetter;
 import com.android.launcher3.anim.PropertySetter.AnimatedPropertySetter;
 import com.android.launcher3.uioverrides.UiFactory;
+import com.android.mxlibrary.util.XLog;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
+import static android.view.View.VISIBLE;
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_FADE;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_WORKSPACE_FADE;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_WORKSPACE_SCALE;
+import static com.android.launcher3.anim.Interpolators.ACCEL;
+import static com.android.launcher3.anim.Interpolators.DEACCEL;
+import static com.android.launcher3.anim.Interpolators.DEACCEL_1_7;
+import static com.android.launcher3.anim.Interpolators.OVERSHOOT_1_2;
+import static com.android.launcher3.anim.Interpolators.clampToProgress;
+import static com.android.launcher3.anim.PropertySetter.NO_ANIM_PROPERTY_SETTER;
+
 /**
  * TODO: figure out what kind of tests we can write for this
- *
+ * <p>
  * Things to test when changing the following class.
- *   - Home from workspace
- *          - from center screen
- *          - from other screens
- *   - Home from all apps
- *          - from center screen
- *          - from other screens
- *   - Back from all apps
- *          - from center screen
- *          - from other screens
- *   - Launch app from workspace and quit
- *          - with back
- *          - with home
- *   - Launch app from all apps and quit
- *          - with back
- *          - with home
- *   - Go to a screen that's not the default, then all
- *     apps, and launch and app, and go back
- *          - with back
- *          -with home
- *   - On workspace, long press power and go back
- *          - with back
- *          - with home
- *   - On all apps, long press power and go back
- *          - with back
- *          - with home
- *   - On workspace, power off
- *   - On all apps, power off
- *   - Launch an app and turn off the screen while in that app
- *          - Go back with home key
- *          - Go back with back key  TODO: make this not go to workspace
- *          - From all apps
- *          - From workspace
- *   - Enter and exit car mode (becase it causes an extra configuration changed)
- *          - From all apps
- *          - From the center workspace
- *          - From another workspace
+ * - Home from workspace
+ * - from center screen
+ * - from other screens
+ * - Home from all apps
+ * - from center screen
+ * - from other screens
+ * - Back from all apps
+ * - from center screen
+ * - from other screens
+ * - Launch app from workspace and quit
+ * - with back
+ * - with home
+ * - Launch app from all apps and quit
+ * - with back
+ * - with home
+ * - Go to a screen that's not the default, then all
+ * apps, and launch and app, and go back
+ * - with back
+ * -with home
+ * - On workspace, long press power and go back
+ * - with back
+ * - with home
+ * - On all apps, long press power and go back
+ * - with back
+ * - with home
+ * - On workspace, power off
+ * - On all apps, power off
+ * - Launch an app and turn off the screen while in that app
+ * - Go back with home key
+ * - Go back with back key  TODO: make this not go to workspace
+ * - From all apps
+ * - From workspace
+ * - Enter and exit car mode (becase it causes an extra configuration changed)
+ * - From all apps
+ * - From the center workspace
+ * - From another workspace
  */
 public class LauncherStateManager {
 
@@ -101,7 +102,9 @@ public class LauncherStateManager {
             ATOMIC_COMPONENT
     })
     @Retention(RetentionPolicy.SOURCE)
-    public @interface AnimationComponents {}
+    public @interface AnimationComponents {
+    }
+
     public static final int NON_ATOMIC_COMPONENT = 1 << 0;
     public static final int ATOMIC_COMPONENT = 1 << 1;
 
@@ -113,10 +116,10 @@ public class LauncherStateManager {
     private final ArrayList<StateListener> mListeners = new ArrayList<>();
 
     private StateHandler[] mStateHandlers;
-    private LauncherState mState = NORMAL;
+    private LauncherState mState = LauncherState.NORMAL;
 
-    private LauncherState mLastStableState = NORMAL;
-    private LauncherState mCurrentStableState = NORMAL;
+    private LauncherState mLastStableState = LauncherState.NORMAL;
+    private LauncherState mCurrentStableState = LauncherState.NORMAL;
 
     private LauncherState mRestState;
 
@@ -162,8 +165,7 @@ public class LauncherStateManager {
      * Changes the Launcher state to the provided state.
      *
      * @param animated false if the state should change immediately without any animation,
-     *                true otherwise
-     * @paras onCompleteRunnable any action to perform at the end of the transition, of null.
+     *                 true otherwise
      */
     public void goToState(LauncherState state, boolean animated, Runnable onCompleteRunnable) {
         goToState(state, animated, 0, onCompleteRunnable);
@@ -198,8 +200,17 @@ public class LauncherStateManager {
         }
     }
 
+    /**
+     * 切换状态动画控制
+     *
+     * @param state              目标状态
+     * @param animated           是否显示动画(长按拖拽进入拖拽模式为true)
+     * @param delay              延迟时间
+     * @param onCompleteRunnable 状态完成回调
+     */
     private void goToState(LauncherState state, boolean animated, long delay,
-            final Runnable onCompleteRunnable) {
+                           final Runnable onCompleteRunnable) {
+        XLog.e(XLog.getTag(),XLog.TAG_GU_STATE +"   state.containerType=  "+ state.containerType + " ,  animated=  " + animated + " ,  delay=   " + delay);
         if (mLauncher.isInState(state)) {
             if (mConfig.mCurrentAnimation == null) {
                 // Run any queued runnable
@@ -265,7 +276,7 @@ public class LauncherStateManager {
      * - MxSettings some start values (e.g. scale) for views that are hidden but about to be shown.
      */
     public void prepareForAtomicAnimation(LauncherState fromState, LauncherState toState,
-            AnimatorSetBuilder builder) {
+                                          AnimatorSetBuilder builder) {
         if (fromState == NORMAL && toState.overviewUi) {
             builder.setInterpolator(ANIM_WORKSPACE_SCALE, OVERSHOOT_1_2);
             builder.setInterpolator(ANIM_WORKSPACE_FADE, OVERSHOOT_1_2);
@@ -299,9 +310,10 @@ public class LauncherStateManager {
     /**
      * Creates a {@link AnimatorPlaybackController} that can be used for a controlled
      * state transition.
-     * @param state the final state for the transition.
+     *
+     * @param state    the final state for the transition.
      * @param duration intended duration for normal playback. Use higher duration for better
-     *                accuracy.
+     *                 accuracy.
      */
     public AnimatorPlaybackController createAnimationToNewWorkspace(
             LauncherState state, long duration) {
@@ -315,8 +327,8 @@ public class LauncherStateManager {
     }
 
     public AnimatorPlaybackController createAnimationToNewWorkspace(LauncherState state,
-            AnimatorSetBuilder builder, long duration, Runnable onCancelRunnable,
-            @AnimationComponents int animComponents) {
+                                                                    AnimatorSetBuilder builder, long duration, Runnable onCancelRunnable,
+                                                                    @AnimationComponents int animComponents) {
         mConfig.reset();
         mConfig.userControlled = true;
         mConfig.animComponents = animComponents;
@@ -328,7 +340,7 @@ public class LauncherStateManager {
     }
 
     protected AnimatorSet createAnimationToNewWorkspaceInternal(final LauncherState state,
-            AnimatorSetBuilder builder, final Runnable onCompleteRunnable) {
+                                                                AnimatorSetBuilder builder, final Runnable onCompleteRunnable) {
 
         for (StateHandler handler : getStateHandlers()) {
             builder.startTag(handler);
@@ -500,7 +512,8 @@ public class LauncherStateManager {
         public long duration;
         public boolean userControlled;
         public AnimatorPlaybackController playbackController;
-        public @AnimationComponents int animComponents = ANIM_ALL;
+        public @AnimationComponents
+        int animComponents = ANIM_ALL;
         private PropertySetter mPropertySetter;
 
         private AnimatorSet mCurrentAnimation;
@@ -569,7 +582,7 @@ public class LauncherStateManager {
          * Sets the UI to {@param state} by animating any changes.
          */
         void setStateWithAnimation(LauncherState toState,
-                AnimatorSetBuilder builder, AnimationConfig config);
+                                   AnimatorSetBuilder builder, AnimationConfig config);
     }
 
     public interface StateListener {
@@ -580,6 +593,7 @@ public class LauncherStateManager {
         void onStateSetImmediately(LauncherState state);
 
         void onStateTransitionStart(LauncherState toState);
+
         void onStateTransitionComplete(LauncherState finalState);
     }
 }

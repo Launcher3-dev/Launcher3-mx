@@ -138,6 +138,7 @@ import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
 import static com.android.launcher3.LauncherAnimUtils.SPRING_LOADED_EXIT_DELAY;
 import static com.android.launcher3.LauncherState.NORMAL;
 import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.LauncherState.SPRING_LOADED;
 import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_LAUNCHER_LOAD;
 import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
 import static com.android.launcher3.logging.LoggerUtils.newTarget;
@@ -1623,6 +1624,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             ued.logActionCommand(Action.Command.BACK, mStateManager.getState().containerType,
                     lastState.containerType);
             mStateManager.goToState(lastState);
+        } else if (isInState(SPRING_LOADED)) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU_STATE + "is Normal----");
+            mStateManager.goToState(NORMAL);
         } else {
             // Back button is a no-op here, but give at least some feedback for the button press
             mWorkspace.showOutlinesTemporarily();

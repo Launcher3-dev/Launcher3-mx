@@ -36,8 +36,8 @@ import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.GridOccupancy;
 import com.android.launcher3.util.ItemInfoMatcher;
 import com.android.launcher3.util.MultiHashMap;
-import com.android.launcher3.widget.WidgetListRowEntry;
 import com.android.mxlibrary.util.XLog;
+import com.android.launcher3.widget.WidgetListRowEntry;
 
 import java.util.ArrayList;
 import java.util.List;
