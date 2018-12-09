@@ -46,7 +46,7 @@ public class DefaultAppSearchAlgorithm implements SearchAlgorithm {
 
     @Override
     public void doSearch(final String query,
-            final AllAppsSearchBarController.Callbacks callback) {
+                         final AllAppsSearchBarController.Callbacks callback) {
         final ArrayList<ComponentKey> result = getTitleMatchResult(query);
         mResultHandler.post(new Runnable() {
 
@@ -102,10 +102,10 @@ public class DefaultAppSearchAlgorithm implements SearchAlgorithm {
     /**
      * Returns true if the current point should be a break point. Following cases
      * are considered as break points:
-     *      1) Any non space character after a space character
-     *      2) Any digit after a non-digit character
-     *      3) Any capital character after a digit or small character
-     *      4) Any capital character before a small character
+     * 1) Any non space character after a space character
+     * 2) Any digit after a non-digit character
+     * 3) Any capital character after a digit or small character
+     * 4) Any capital character before a small character
      */
     private static boolean isBreak(int thisType, int prevType, int nextType) {
         switch (prevType) {
@@ -141,7 +141,7 @@ public class DefaultAppSearchAlgorithm implements SearchAlgorithm {
                 // Always a break point for a symbol
                 return true;
             default:
-                return  false;
+                return false;
         }
     }
 

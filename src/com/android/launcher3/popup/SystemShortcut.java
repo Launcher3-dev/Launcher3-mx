@@ -25,7 +25,7 @@ import static com.android.launcher3.userevent.nano.LauncherLogProto.ControlType;
 /**
  * Represents a system shortcut for a given app. The shortcut should have a static label and
  * icon, and an onClickListener that depends on the item that the shortcut services.
- *
+ * <p>
  * Example system shortcuts, defined as inner classes, include Widgets and AppInfo.
  */
 public abstract class SystemShortcut<T extends BaseDraggingActivity> extends ItemInfo {
@@ -47,7 +47,7 @@ public abstract class SystemShortcut<T extends BaseDraggingActivity> extends Ite
 
         @Override
         public View.OnClickListener getOnClickListener(final Launcher launcher,
-                final ItemInfo itemInfo) {
+                                                       final ItemInfo itemInfo) {
             final List<WidgetItem> widgets =
                     launcher.getPopupDataProvider().getWidgetsForPackageUser(new PackageUserKey(
                             itemInfo.getTargetComponent().getPackageName(), itemInfo.user));

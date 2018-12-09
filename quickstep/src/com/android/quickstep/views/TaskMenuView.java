@@ -50,8 +50,10 @@ public class TaskMenuView extends AbstractFloatingView {
 
     private static final Rect sTempRect = new Rect();
 
-    /** Note that these will be shown in order from top to bottom, if available for the task. */
-    public static final TaskSystemShortcut[] MENU_OPTIONS = new TaskSystemShortcut[] {
+    /**
+     * Note that these will be shown in order from top to bottom, if available for the task.
+     */
+    public static final TaskSystemShortcut[] MENU_OPTIONS = new TaskSystemShortcut[]{
             new TaskSystemShortcut.AppInfo(),
             new TaskSystemShortcut.SplitScreen(),
             new TaskSystemShortcut.Pin(),
@@ -124,7 +126,7 @@ public class TaskMenuView extends AbstractFloatingView {
     public static boolean showForTask(TaskView taskView) {
         BaseDraggingActivity activity = BaseDraggingActivity.fromContext(taskView.getContext());
         final TaskMenuView taskMenuView = (TaskMenuView) activity.getLayoutInflater().inflate(
-                        R.layout.task_menu, activity.getDragLayer(), false);
+                R.layout.task_menu, activity.getDragLayer(), false);
         return taskMenuView.populateAndShowForTask(taskView);
     }
 

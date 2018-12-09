@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.UserHandle;
 import android.util.ArrayMap;
 import android.util.LruCache;
+
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class ShortcutCache {
 
     /**
      * Removes shortcuts from the cache when shortcuts change for a given package.
-     *
+     * <p>
      * Returns a map of ids to their evicted shortcuts.
      *
      * @see android.content.pm.LauncherApps.Callback#onShortcutsChanged(String, List, UserHandle).

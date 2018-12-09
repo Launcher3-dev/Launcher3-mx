@@ -146,7 +146,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
         ArrayList<ShortcutInfo> modified = null;
         final ArrayList<ShortcutInfo> removedApps = new ArrayList<>();
         if (appsList.added.size() > 0) {
-            XLog.e(XLog.getTag(),XLog.TAG_GU + appsList.added.size());
+            XLog.e(XLog.getTag(), XLog.TAG_GU + appsList.added.size());
             added = new ArrayList<>(appsList.added);
             appsList.added.clear();
         }
@@ -316,7 +316,7 @@ public class PackageUpdatedTask extends BaseModelUpdateTask {
         } else if (mOp == OP_UPDATE) {
             // Mark disabled packages in the broadcast to be removed
             final LauncherAppsCompat launcherApps = LauncherAppsCompat.getInstance(context);
-            for (int i=0; i<N; i++) {
+            for (int i = 0; i < N; i++) {
                 if (!launcherApps.isPackageEnabledForProfile(packages[i], mUser)) {
                     removedPackages.add(packages[i]);
                 }

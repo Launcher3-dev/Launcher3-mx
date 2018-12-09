@@ -14,7 +14,7 @@ import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.anim.AnimationLayerSet;
-import com.android.launcher3.menu.MenuLayout;
+import com.android.launcher3.menu.view.MenuLayout;
 import com.android.launcher3.userevent.nano.LauncherLogProto;
 
 /**
@@ -34,7 +34,7 @@ import com.android.launcher3.userevent.nano.LauncherLogProto;
  *
  * @see PinchToOverviewListener
  * @see PinchThresholdManager
- *
+ * <p>
  * add by codemx.cn  20181026
  */
 public class PinchAnimationManager {

@@ -88,7 +88,7 @@ public class DbDowngradeHelper {
     }
 
     public static void updateSchemaFile(File schemaFile, int expectedVersion,
-            Context context, int schemaResId) {
+                                        Context context, int schemaResId) {
         try {
             if (DbDowngradeHelper.parse(schemaFile).version >= expectedVersion) {
                 return;
@@ -99,7 +99,7 @@ public class DbDowngradeHelper {
 
         // Write the updated schema
         try (FileOutputStream fos = new FileOutputStream(schemaFile);
-            InputStream in = context.getResources().openRawResource(schemaResId)) {
+             InputStream in = context.getResources().openRawResource(schemaResId)) {
             IOUtils.copy(in, fos);
         } catch (IOException e) {
             Log.e(TAG, "Error writing schema file", e);

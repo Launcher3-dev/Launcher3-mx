@@ -9,7 +9,7 @@ import com.android.launcher3.Workspace;
  *
  * @see PinchToOverviewListener
  * @see PinchAnimationManager
- *
+ * <p>
  * add by codemx.cn  20181026
  */
 public class PinchThresholdManager {

@@ -50,7 +50,7 @@ public class SpringLoadedState extends LauncherState {
 
         if (grid.isVerticalBarLayout()) {
             float scale = grid.workspaceSpringLoadShrinkFactor;
-            return new float[] {scale, 0, 0};
+            return new float[]{scale, 0, 0};
         }
 
         float scale = grid.workspaceSpringLoadShrinkFactor;
@@ -69,7 +69,7 @@ public class SpringLoadedState extends LauncherState {
         float myCenter = ws.getTop() + halfHeight;
         float cellTopFromCenter = halfHeight - ws.getChildAt(0).getTop();
         float actualCellTop = myCenter - cellTopFromCenter * scale;
-        return new float[] { scale, 0, (desiredCellTop - actualCellTop) / scale};
+        return new float[]{scale, 0, (desiredCellTop - actualCellTop) / scale};
     }
 
     @Override

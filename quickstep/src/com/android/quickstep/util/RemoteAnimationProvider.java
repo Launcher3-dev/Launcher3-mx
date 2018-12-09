@@ -36,7 +36,7 @@ public interface RemoteAnimationProvider {
 
             @Override
             public void onCreateAnimation(RemoteAnimationTargetCompat[] targetCompats,
-                    AnimationResult result) {
+                                          AnimationResult result) {
                 result.setAnimation(createWindowAnimation(targetCompats));
             }
         };
@@ -52,7 +52,7 @@ public interface RemoteAnimationProvider {
      *                         targets.
      */
     static void prepareTargetsForFirstFrame(RemoteAnimationTargetCompat[] targets,
-            TransactionCompat t, int boostModeTargets) {
+                                            TransactionCompat t, int boostModeTargets) {
         for (RemoteAnimationTargetCompat target : targets) {
             int layer = target.mode == boostModeTargets
                     ? Integer.MAX_VALUE

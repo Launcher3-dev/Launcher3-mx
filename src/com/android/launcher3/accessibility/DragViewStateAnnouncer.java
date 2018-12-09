@@ -16,12 +16,12 @@
 
 package com.android.launcher3.accessibility;
 
-import static com.android.launcher3.compat.AccessibilityManagerCompat.isAccessibilityEnabled;
-
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.android.launcher3.Launcher;
+
+import static com.android.launcher3.compat.AccessibilityManagerCompat.isAccessibilityEnabled;
 
 /**
  * Periodically sends accessibility events to announce ongoing state changed. Based on the

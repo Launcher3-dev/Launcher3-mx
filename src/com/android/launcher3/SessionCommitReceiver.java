@@ -30,7 +30,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Process;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;

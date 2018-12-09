@@ -21,7 +21,8 @@ package com.android.launcher3.config;
  */
 public final class FeatureFlags extends BaseFlags {
 
-    private FeatureFlags() {}
+    private FeatureFlags() {
+    }
 
     // Features to control Launcher3Go behavior
     public static final boolean GO_DISABLE_WIDGETS = true;

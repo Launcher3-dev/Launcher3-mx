@@ -40,6 +40,7 @@ import static org.mockito.Mockito.verify;
 public class SwipeDetectorTest {
 
     private static final String TAG = SwipeDetectorTest.class.getSimpleName();
+
     public static void L(String s, Object... parts) {
         Log.d(TAG, (parts.length == 0) ? s : String.format(s, parts));
     }

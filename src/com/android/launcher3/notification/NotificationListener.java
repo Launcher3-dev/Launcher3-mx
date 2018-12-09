@@ -16,8 +16,6 @@
 
 package com.android.launcher3.notification;
 
-import static com.android.launcher3.SettingsActivity.NOTIFICATION_BADGING;
-
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -45,6 +43,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.android.launcher3.SettingsActivity.NOTIFICATION_BADGING;
+
 /**
  * A {@link NotificationListenerService} that sends updates to its
  * {@link NotificationsChangedListener} when notifications are posted or canceled,
@@ -69,12 +69,18 @@ public class NotificationListener extends NotificationListenerService {
     private final Handler mWorkerHandler;
     private final Handler mUiHandler;
     private final Ranking mTempRanking = new Ranking();
-    /** Maps groupKey's to the corresponding group of notifications. */
+    /**
+     * Maps groupKey's to the corresponding group of notifications.
+     */
     private final Map<String, NotificationGroup> mNotificationGroupMap = new HashMap<>();
-    /** Maps keys to their corresponding current group key */
+    /**
+     * Maps keys to their corresponding current group key
+     */
     private final Map<String, String> mNotificationGroupKeyMap = new HashMap<>();
 
-    /** The last notification key that was dismissed from launcher UI */
+    /**
+     * The last notification key that was dismissed from launcher UI
+     */
     private String mLastKeyDismissedByLauncher;
 
     private SettingsObserver mNotificationBadgingObserver;
@@ -158,7 +164,8 @@ public class NotificationListener extends NotificationListenerService {
         sIsCreated = false;
     }
 
-    public static @Nullable NotificationListener getInstanceIfConnected() {
+    public static @Nullable
+    NotificationListener getInstanceIfConnected() {
         return sIsConnected ? sNotificationListenerInstance : null;
     }
 
@@ -226,7 +233,7 @@ public class NotificationListener extends NotificationListenerService {
             return;
         }
         mWorkerHandler.obtainMessage(MSG_NOTIFICATION_POSTED, new NotificationPostedMsg(sbn))
-            .sendToTarget();
+                .sendToTarget();
         if (sStatusBarNotificationsChangedListener != null) {
             sStatusBarNotificationsChangedListener.onNotificationPosted(sbn);
         }
@@ -255,10 +262,10 @@ public class NotificationListener extends NotificationListenerService {
             return;
         }
         Pair<PackageUserKey, NotificationKeyData> packageUserKeyAndNotificationKey
-            = new Pair<>(PackageUserKey.fromNotification(sbn),
-            NotificationKeyData.fromNotification(sbn));
+                = new Pair<>(PackageUserKey.fromNotification(sbn),
+                NotificationKeyData.fromNotification(sbn));
         mWorkerHandler.obtainMessage(MSG_NOTIFICATION_REMOVED, packageUserKeyAndNotificationKey)
-            .sendToTarget();
+                .sendToTarget();
         if (sStatusBarNotificationsChangedListener != null) {
             sStatusBarNotificationsChangedListener.onNotificationRemoved(sbn);
         }
@@ -327,7 +334,9 @@ public class NotificationListener extends NotificationListenerService {
         }
     }
 
-    /** This makes a potentially expensive binder call and should be run on a background thread. */
+    /**
+     * This makes a potentially expensive binder call and should be run on a background thread.
+     */
     public List<StatusBarNotification> getNotificationsForKeys(List<NotificationKeyData> keys) {
         StatusBarNotification[] notifications = NotificationListener.this
                 .getActiveNotifications(NotificationKeyData.extractKeysOnly(keys)
@@ -386,14 +395,17 @@ public class NotificationListener extends NotificationListenerService {
 
     public interface NotificationsChangedListener {
         void onNotificationPosted(PackageUserKey postedPackageUserKey,
-                NotificationKeyData notificationKey, boolean shouldBeFilteredOut);
+                                  NotificationKeyData notificationKey, boolean shouldBeFilteredOut);
+
         void onNotificationRemoved(PackageUserKey removedPackageUserKey,
-                NotificationKeyData notificationKey);
+                                   NotificationKeyData notificationKey);
+
         void onNotificationFullRefresh(List<StatusBarNotification> activeNotifications);
     }
 
     public interface StatusBarNotificationsChangedListener {
         void onNotificationPosted(StatusBarNotification sbn);
+
         void onNotificationRemoved(StatusBarNotification sbn);
     }
 }

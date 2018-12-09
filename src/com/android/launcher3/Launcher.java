@@ -83,7 +83,7 @@ import com.android.launcher3.logging.FileLog;
 import com.android.launcher3.logging.UserEventDispatcher;
 import com.android.launcher3.logging.UserEventDispatcher.UserEventDelegate;
 import com.android.launcher3.menu.CircleMenuView;
-import com.android.launcher3.menu.MenuLayout;
+import com.android.launcher3.menu.view.MenuLayout;
 import com.android.launcher3.model.ModelWriter;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.popup.PopupContainerWithArrow;
@@ -1604,10 +1604,15 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         if (finishAutoCancelActionMode()) {
             return;
         }
+
         if (mLauncherCallbacks != null && mLauncherCallbacks.handleBackPressed()) {
             return;
         }
 
+        if (mMenuLayout != null && !mMenuLayout.isMenuInNoneState()) {
+            mMenuLayout.onBackPressed();
+            return;
+        }
         if (mDragController.isDragging()) {
             mDragController.cancelDrag();
             return;
@@ -2264,11 +2269,18 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     @Override
     public void bindAllWidgets(final ArrayList<WidgetListRowEntry> allWidgets) {
-        mPopupDataProvider.setAllWidgets(allWidgets);
-        AbstractFloatingView topView = AbstractFloatingView.getTopOpenView(this);
-        if (topView != null) {
-            topView.onWidgetsBound();
+
+        if (mMenuLayout != null && allWidgets != null) {
+            mMenuLayout.setWidgets(allWidgets);
+            return;
         }
+
+        // 二级菜单
+//        mPopupDataProvider.setAllWidgets(allWidgets);
+//        AbstractFloatingView topView = AbstractFloatingView.getTopOpenView(this);
+//        if (topView != null) {
+//            topView.onWidgetsBound();
+//        }
     }
 
     /**
@@ -2427,6 +2439,83 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     // --- add by codemx.cn --- 2018/09/06 --- start
+
+    /**
+     * 进入拖拽模式
+     */
+    public void enterSpringLoadedDragMode() {
+        if (LOGD)
+            Log.d(TAG, String.format("enterSpringLoadedDragMode [sState=%s", mStateManager.getState().containerType));
+        if (isStateSpringLoaded() || isStateEditing()) {
+            return;
+        }
+
+        LauncherState toState;
+        if (mStateManager.getState() == LauncherState.OVERVIEW) {
+            toState = LauncherState.SPRING_LOADED;
+        } else {
+            toState = LauncherState.EDITING;
+        }
+
+        if (mStateManager.getState() == LauncherState.NORMAL) {
+//            mWorkspace.startAnimationToWorkspace(toState, true /* animated */,
+//                    null /* onCompleteRunnable */);
+        }
+
+//        setState(toState);
+    }
+
+    private Runnable mExitSpringLoadedModeRunnable;
+
+    /**
+     * 退出拖拽模式
+     *
+     * @param successfulDrop     成功拖拽放置
+     * @param delay              延时
+     * @param onCompleteRunnable 完成接口
+     */
+    public void exitSpringLoadedDragModeDelayed(final boolean successfulDrop,
+                                                int delay,
+                                                final Runnable onCompleteRunnable) {
+        if (!isStateSpringLoaded()) return;
+
+        if (mExitSpringLoadedModeRunnable != null) {
+            mHandler.removeCallbacks(mExitSpringLoadedModeRunnable);
+        }
+        mExitSpringLoadedModeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (successfulDrop) {
+                    if (isStateSpringLoaded()) {
+//                        setState(LauncherState.OVERVIEW);
+                    }
+                } else {
+                    exitSpringLoadedDragMode();
+                }
+                mExitSpringLoadedModeRunnable = null;
+            }
+        };
+        mHandler.postDelayed(mExitSpringLoadedModeRunnable, delay);
+    }
+
+    public boolean isStateSpringLoaded() {
+        return mStateManager.getState() == LauncherState.SPRING_LOADED;
+    }
+
+    public boolean isStateEditing() {
+        return mStateManager.getState() == LauncherState.EDITING;
+    }
+
+    public void exitSpringLoadedDragMode() {
+        if (mStateManager.getState() == LauncherState.SPRING_LOADED) {
+//            setState(LauncherState.OVERVIEW);
+        }
+
+//        if (sState == State.EDITING) {
+//            showWorkspace(true);
+//        }
+    }
+
     public void changeBackgroundAlpha(float alpha) {
         View currentPage = null;
         if (mWorkspace != null) {

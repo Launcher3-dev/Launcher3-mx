@@ -80,7 +80,7 @@ public class LauncherInitListener extends InternalStateHandler implements Activi
 
     @Override
     public void registerAndStartActivity(Intent intent, RemoteAnimationProvider animProvider,
-            Context context, Handler handler, long duration) {
+                                         Context context, Handler handler, long duration) {
         mRemoteAnimationProvider = animProvider;
 
         register();

@@ -90,7 +90,7 @@ public class LossyScreenMigrationTask extends GridSizeMigrationTask {
                 tempValues.clear();
                 update.addToContentValues(tempValues);
                 mDb.update(Favorites.TABLE_NAME, tempValues, "_id = ?",
-                        new String[] {Long.toString(update.id)});
+                        new String[]{Long.toString(update.id)});
             }
         }
 

@@ -16,9 +16,6 @@
 
 package com.android.launcher3;
 
-import static com.android.launcher3.states.RotationHelper.ALLOW_ROTATION_PREFERENCE_KEY;
-import static com.android.launcher3.states.RotationHelper.getAllowRotationDefaultValue;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -50,15 +47,22 @@ import com.android.launcher3.views.ButtonPreference;
 
 import java.util.Objects;
 
+import static com.android.launcher3.states.RotationHelper.ALLOW_ROTATION_PREFERENCE_KEY;
+import static com.android.launcher3.states.RotationHelper.getAllowRotationDefaultValue;
+
 /**
  * MxSettings activity for Launcher. Currently implements the following setting: Allow rotation
  */
 public class SettingsActivity extends Activity {
 
     private static final String ICON_BADGING_PREFERENCE_KEY = "pref_icon_badging";
-    /** Hidden field MxSettings.Secure.NOTIFICATION_BADGING */
+    /**
+     * Hidden field MxSettings.Secure.NOTIFICATION_BADGING
+     */
     public static final String NOTIFICATION_BADGING = "notification_badging";
-    /** Hidden field MxSettings.Secure.ENABLED_NOTIFICATION_LISTENERS */
+    /**
+     * Hidden field MxSettings.Secure.ENABLED_NOTIFICATION_LISTENERS
+     */
     private static final String NOTIFICATION_ENABLED_LISTENERS = "enabled_notification_listeners";
 
     private static final String EXTRA_FRAGMENT_ARG_KEY = ":settings:fragment_args_key";
@@ -230,7 +234,7 @@ public class SettingsActivity extends Activity {
         private final FragmentManager mFragmentManager;
 
         public IconBadgingObserver(ButtonPreference badgingPref, ContentResolver resolver,
-                FragmentManager fragmentManager) {
+                                   FragmentManager fragmentManager) {
             super(resolver);
             mBadgingPref = badgingPref;
             mResolver = resolver;

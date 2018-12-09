@@ -20,9 +20,9 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.android.launcher3" >
+    package="com.android.launcher3">
 
-    <uses-permission android:name="android.permission.CONTROL_REMOTE_APP_TRANSITION_ANIMATIONS" />
+    <uses-permission android:name="android.permission.CONTROL_REMOTE_APP_TRANSITION_ANIMATIONS"/>
     <application
         android:backupAgent="com.android.launcher3.LauncherBackupAgent"
         android:fullBackupOnly="true"
@@ -33,19 +33,20 @@
         android:theme="@style/LauncherTheme"
         android:largeHeap="@bool/config_largeHeap"
         android:restoreAnyVersion="true"
-        android:supportsRtl="true" >
+        android:supportsRtl="true">
 
         <service
             android:name="com.android.quickstep.TouchInteractionService"
-            android:permission="android.permission.STATUS_BAR_SERVICE" >
+            android:permission="android.permission.STATUS_BAR_SERVICE">
             <intent-filter>
-                <action android:name="android.intent.action.QUICKSTEP_SERVICE" />
+                <action android:name="android.intent.action.QUICKSTEP_SERVICE"/>
             </intent-filter>
         </service>
 
         <!-- STOPSHIP: Change exported to false once all the integration is complete.
         It is set to true so that the activity can be started from command line -->
-        <activity android:name="com.android.quickstep.RecentsActivity"
+        <activity
+            android:name="com.android.quickstep.RecentsActivity"
             android:exported="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
@@ -56,7 +57,7 @@
             android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenSize|screenLayout|smallestScreenSize"
             android:resizeableActivity="true"
             android:resumeWhilePausing="true"
-            android:taskAffinity="" />
+            android:taskAffinity=""/>
 
         <!-- Content provider to settings search -->
         <provider
@@ -67,14 +68,14 @@
             android:permission="android.permission.READ_SEARCH_INDEXABLES"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.content.action.SEARCH_INDEXABLES_PROVIDER" />
+                <action android:name="android.content.action.SEARCH_INDEXABLES_PROVIDER"/>
             </intent-filter>
         </provider>
 
 
         <service
             android:name="com.android.launcher3.uioverrides.dynamicui.WallpaperManagerCompatVL$ColorExtractionService"
-            tools:node="remove" />
+            tools:node="remove"/>
 
     </application>
 

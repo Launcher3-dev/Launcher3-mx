@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="649227358658669779">"Launcher3"</string>
     <string name="folder_name" msgid="7371454440695724752"></string>
@@ -65,8 +65,8 @@
     <string name="folder_hint_text" msgid="6617836969016293992">"अनामित फ़ोल्डर"</string>
     <string name="disabled_app_label" msgid="6673129024321402780">"<xliff:g id="APP_NAME">%1$s</xliff:g> अक्षम है"</string>
     <plurals name="badged_app_label" formatted="false" msgid="7948068486082879291">
-      <item quantity="one"><xliff:g id="APP_NAME_2">%1$s</xliff:g> की <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> सूचनाएं हैं</item>
-      <item quantity="other"><xliff:g id="APP_NAME_2">%1$s</xliff:g> की <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> सूचनाएं हैं</item>
+        <item quantity="one"><xliff:g id="APP_NAME_2">%1$s</xliff:g> की <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> सूचनाएं हैं</item>
+        <item quantity="other"><xliff:g id="APP_NAME_2">%1$s</xliff:g> की <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> सूचनाएं हैं</item>
     </plurals>
     <string name="default_scroll_format" msgid="7475544710230993317">"पेज %2$d में से %1$d"</string>
     <string name="workspace_scroll_format" msgid="8458889198184077399">"होम स्क्रीन %2$d में से %1$d"</string>
@@ -109,9 +109,9 @@
     <string name="app_waiting_download_title" msgid="7053938513995617849">"<xliff:g id="NAME">%1$s</xliff:g> के इंस्टॉल होने की प्रतीक्षा की जा रही है"</string>
     <string name="widgets_bottom_sheet_title" msgid="2904559530954183366">"<xliff:g id="NAME">%1$s</xliff:g> विजेट"</string>
     <!-- no translation found for widgets_list (796804551140113767) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widgets_list_closed (6141506579418771922) -->
-    <skip />
+    <skip/>
     <string name="action_add_to_workspace" msgid="8902165848117513641">"होम स्‍क्रीन में जोड़ें"</string>
     <string name="action_move_here" msgid="2170188780612570250">"आइटम यहां ले जाएं"</string>
     <string name="item_added_to_workspace" msgid="4211073925752213539">"होम स्क्रीन में आइटम जोड़ा गया"</string>

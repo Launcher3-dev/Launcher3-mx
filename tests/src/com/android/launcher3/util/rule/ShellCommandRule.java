@@ -49,7 +49,7 @@ public class ShellCommandRule implements TestRule {
 
         // Read the input stream fully.
         FileInputStream fis = new ParcelFileDescriptor.AutoCloseInputStream(pfd);
-        while (fis.read() != -1);
+        while (fis.read() != -1) ;
         fis.close();
     }
 

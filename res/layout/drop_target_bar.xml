@@ -14,13 +14,13 @@
      limitations under the License.
 -->
 <com.android.launcher3.DropTargetBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dynamic_grid_drop_target_size"
-    android:layout_gravity="center_horizontal|top"
-    android:focusable="false"
-    android:alpha="0"
-    android:theme="@style/HomeScreenElementTheme"
-    android:visibility="invisible">
+                                     android:layout_width="match_parent"
+                                     android:layout_height="@dimen/dynamic_grid_drop_target_size"
+                                     android:layout_gravity="center_horizontal|top"
+                                     android:focusable="false"
+                                     android:alpha="0"
+                                     android:theme="@style/HomeScreenElementTheme"
+                                     android:visibility="invisible">
 
     <!-- Delete target -->
     <com.android.launcher3.DeleteDropTarget
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/remove_drop_target_label" />
+        android:text="@string/remove_drop_target_label"/>
 
     <!-- Uninstall target -->
     <com.android.launcher3.SecondaryDropTarget
@@ -40,6 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/uninstall_drop_target_label" />
+        android:text="@string/uninstall_drop_target_label"/>
 
 </com.android.launcher3.DropTargetBar>

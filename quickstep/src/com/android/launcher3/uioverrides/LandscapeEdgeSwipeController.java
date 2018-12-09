@@ -1,9 +1,5 @@
 package com.android.launcher3.uioverrides;
 
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.quickstep.TouchInteractionService.EDGE_NAV_BAR;
-
 import android.view.MotionEvent;
 
 import com.android.launcher3.AbstractFloatingView;
@@ -15,6 +11,10 @@ import com.android.launcher3.touch.SwipeDetector;
 import com.android.launcher3.userevent.nano.LauncherLogProto;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action.Direction;
 import com.android.quickstep.RecentsModel;
+
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.quickstep.TouchInteractionService.EDGE_NAV_BAR;
 
 /**
  * Touch controller for handling edge swipes in landscape/seascape UI

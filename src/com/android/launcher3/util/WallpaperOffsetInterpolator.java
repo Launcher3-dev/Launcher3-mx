@@ -58,7 +58,7 @@ public class WallpaperOffsetInterpolator extends BroadcastReceiver {
 
     /**
      * Computes the wallpaper offset as an int ratio (out[0] / out[1])
-     *
+     * <p>
      * TODO: do different behavior if it's  a live wallpaper?
      */
     private void wallpaperOffsetForScroll(int scroll, int numScrollingPages, final int[] out) {
@@ -67,14 +67,14 @@ public class WallpaperOffsetInterpolator extends BroadcastReceiver {
         // To match the default wallpaper behavior in the system, we default to either the left
         // or right edge on initialization
         if (mLockedToDefaultPage || numScrollingPages <= 1) {
-            out[0] =  mIsRtl ? 1 : 0;
+            out[0] = mIsRtl ? 1 : 0;
             return;
         }
 
         // Distribute the wallpaper parallax over a minimum of MIN_PARALLAX_PAGE_SPAN workspace
         // screens, not including the custom screen, and empty screens (if > MIN_PARALLAX_PAGE_SPAN)
         int numPagesForWallpaperParallax = mWallpaperIsLiveWallpaper ? numScrollingPages :
-                        Math.max(MIN_PARALLAX_PAGE_SPAN, numScrollingPages);
+                Math.max(MIN_PARALLAX_PAGE_SPAN, numScrollingPages);
 
         // Offset by the custom screen
         int leftPageIndex;

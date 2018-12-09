@@ -133,7 +133,7 @@ public class GridSizeMigrationTaskTest {
                 assertEquals(1, c.getCount());
                 c.moveToNext();
                 assertEquals(id, c.getLong(0));
-                total ++;
+                total++;
             }
             c.close();
 
@@ -151,17 +151,17 @@ public class GridSizeMigrationTaskTest {
     @Test
     public void testWorkspace_empty_row_column_removed() throws Exception {
         long[][][] ids = createGrid(new int[][][]{{
-                {  0,  0, -1,  1},
-                {  3,  1, -1,  4},
-                { -1, -1, -1, -1},
-                {  5,  2, -1,  6},
+                {0, 0, -1, 1},
+                {3, 1, -1, 4},
+                {-1, -1, -1, -1},
+                {5, 2, -1, 6},
         }});
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
                 new Point(4, 4), new Point(3, 3)).migrateWorkspace();
 
         // Column 2 and row 2 got removed.
-        verifyWorkspace(new long[][][] {{
+        verifyWorkspace(new long[][][]{{
                 {ids[0][0][0], ids[0][0][1], ids[0][0][3]},
                 {ids[0][1][0], ids[0][1][1], ids[0][1][3]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][3]},
@@ -171,17 +171,17 @@ public class GridSizeMigrationTaskTest {
     @Test
     public void testWorkspace_new_screen_created() throws Exception {
         long[][][] ids = createGrid(new int[][][]{{
-                {  0,  0,  0,  1},
-                {  3,  1,  0,  4},
-                { -1, -1, -1, -1},
-                {  5,  2, -1,  6},
+                {0, 0, 0, 1},
+                {3, 1, 0, 4},
+                {-1, -1, -1, -1},
+                {5, 2, -1, 6},
         }});
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
                 new Point(4, 4), new Point(3, 3)).migrateWorkspace();
 
         // Items in the second column get moved to new screen
-        verifyWorkspace(new long[][][] {{
+        verifyWorkspace(new long[][][]{{
                 {ids[0][0][0], ids[0][0][1], ids[0][0][3]},
                 {ids[0][1][0], ids[0][1][1], ids[0][1][3]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][3]},
@@ -193,13 +193,13 @@ public class GridSizeMigrationTaskTest {
     @Test
     public void testWorkspace_items_merged_in_next_screen() throws Exception {
         long[][][] ids = createGrid(new int[][][]{{
-                {  0,  0,  0,  1},
-                {  3,  1,  0,  4},
-                { -1, -1, -1, -1},
-                {  5,  2, -1,  6},
-        },{
-                {  0,  0, -1,  1},
-                {  3,  1, -1,  4},
+                {0, 0, 0, 1},
+                {3, 1, 0, 4},
+                {-1, -1, -1, -1},
+                {5, 2, -1, 6},
+        }, {
+                {0, 0, -1, 1},
+                {3, 1, -1, 4},
         }});
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
@@ -207,7 +207,7 @@ public class GridSizeMigrationTaskTest {
 
         // Items in the second column of the first screen should get placed on the 3rd
         // row of the second screen
-        verifyWorkspace(new long[][][] {{
+        verifyWorkspace(new long[][][]{{
                 {ids[0][0][0], ids[0][0][1], ids[0][0][3]},
                 {ids[0][1][0], ids[0][1][1], ids[0][1][3]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][3]},
@@ -223,27 +223,27 @@ public class GridSizeMigrationTaskTest {
         // First screen has 2 items that need to be moved, but second screen has only one
         // empty space after migration (top-left corner)
         long[][][] ids = createGrid(new int[][][]{{
-                {  0,  0,  0,  1},
-                {  3,  1,  0,  4},
-                { -1, -1, -1, -1},
-                {  5,  2, -1,  6},
-        },{
-                { -1,  0, -1,  1},
-                {  3,  1, -1,  4},
-                { -1, -1, -1, -1},
-                {  5,  2, -1,  6},
+                {0, 0, 0, 1},
+                {3, 1, 0, 4},
+                {-1, -1, -1, -1},
+                {5, 2, -1, 6},
+        }, {
+                {-1, 0, -1, 1},
+                {3, 1, -1, 4},
+                {-1, -1, -1, -1},
+                {5, 2, -1, 6},
         }});
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
                 new Point(4, 4), new Point(3, 3)).migrateWorkspace();
 
         // Items in the second column of the first screen should get placed on a new screen.
-        verifyWorkspace(new long[][][] {{
+        verifyWorkspace(new long[][][]{{
                 {ids[0][0][0], ids[0][0][1], ids[0][0][3]},
                 {ids[0][1][0], ids[0][1][1], ids[0][1][3]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][3]},
         }, {
-                {          -1, ids[1][0][1], ids[1][0][3]},
+                {-1, ids[1][0][1], ids[1][0][3]},
                 {ids[1][1][0], ids[1][1][1], ids[1][1][3]},
                 {ids[1][3][0], ids[1][3][1], ids[1][3][3]},
         }, {
@@ -256,18 +256,18 @@ public class GridSizeMigrationTaskTest {
         // The first screen has one item on the 4th column which needs moving, as the first row
         // will be kept empty.
         long[][][] ids = createGrid(new int[][][]{{
-                { -1, -1, -1, -1},
-                {  3,  1,  7,  0},
-                {  8,  7,  7, -1},
-                {  5,  2,  7, -1},
+                {-1, -1, -1, -1},
+                {3, 1, 7, 0},
+                {8, 7, 7, -1},
+                {5, 2, 7, -1},
         }}, 0);
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
                 new Point(4, 4), new Point(3, 4)).migrateWorkspace();
 
         // Items in the second column of the first screen should get placed on a new screen.
-        verifyWorkspace(new long[][][] {{
-                {          -1,           -1,           -1},
+        verifyWorkspace(new long[][][]{{
+                {-1, -1, -1},
                 {ids[0][1][0], ids[0][1][1], ids[0][1][2]},
                 {ids[0][2][0], ids[0][2][1], ids[0][2][2]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][2]},
@@ -280,18 +280,18 @@ public class GridSizeMigrationTaskTest {
     public void testWorkspace_items_moved_to_empty_first_row() throws Exception {
         // Items will get moved to the next screen to keep the first screen empty.
         long[][][] ids = createGrid(new int[][][]{{
-                { -1, -1, -1, -1},
-                {  0,  1,  0,  0},
-                {  8,  7,  7, -1},
-                {  5,  6,  7, -1},
+                {-1, -1, -1, -1},
+                {0, 1, 0, 0},
+                {8, 7, 7, -1},
+                {5, 6, 7, -1},
         }}, 0);
 
         new GridSizeMigrationTask(mContext, mIdp, mValidPackages,
                 new Point(4, 4), new Point(3, 3)).migrateWorkspace();
 
         // Items in the second column of the first screen should get placed on a new screen.
-        verifyWorkspace(new long[][][] {{
-                {          -1,           -1,           -1},
+        verifyWorkspace(new long[][][]{{
+                {-1, -1, -1},
                 {ids[0][2][0], ids[0][2][1], ids[0][2][2]},
                 {ids[0][3][0], ids[0][3][1], ids[0][3][2]},
         }, {
@@ -306,9 +306,11 @@ public class GridSizeMigrationTaskTest {
 
     /**
      * Initializes the DB with dummy elements to represent the provided grid structure.
+     *
      * @param typeArray A 3d array of item types. {@see #addItem(int, long, long, int, int)} for
      *                  type definitions. The first dimension represents the screens and the next
      *                  two represent the workspace grid.
+     *
      * @return the same grid representation where each entry is the corresponding item id.
      */
     private long[][][] createGrid(int[][][] typeArray, long startScreen) throws Exception {
@@ -347,6 +349,7 @@ public class GridSizeMigrationTaskTest {
 
     /**
      * Verifies that the workspace items are arranged in the provided order.
+     *
      * @param ids A 3d array where the first dimension represents the screen, and the rest two
      *            represent the workspace grid.
      */
@@ -390,6 +393,7 @@ public class GridSizeMigrationTaskTest {
 
     /**
      * Adds a dummy item in the DB.
+     *
      * @param type {@link #APPLICATION} or {@link #SHORTCUT} or >= 2 for
      *             folder (where the type represents the number of items in the folder).
      */

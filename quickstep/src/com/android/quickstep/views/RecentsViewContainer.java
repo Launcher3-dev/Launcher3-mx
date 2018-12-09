@@ -16,9 +16,6 @@
 
 package com.android.quickstep.views;
 
-import static com.android.launcher3.userevent.nano.LauncherLogProto.Action.Touch.TAP;
-import static com.android.launcher3.userevent.nano.LauncherLogProto.ControlType.CLEAR_ALL_BUTTON;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -30,6 +27,9 @@ import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.R;
 
 import java.util.ArrayList;
+
+import static com.android.launcher3.userevent.nano.LauncherLogProto.Action.Touch.TAP;
+import static com.android.launcher3.userevent.nano.LauncherLogProto.ControlType.CLEAR_ALL_BUTTON;
 
 public class RecentsViewContainer extends InsettableFrameLayout {
     public static final FloatProperty<RecentsViewContainer> CONTENT_ALPHA =

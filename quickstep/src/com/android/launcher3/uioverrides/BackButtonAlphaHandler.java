@@ -43,7 +43,7 @@ public class BackButtonAlphaHandler implements LauncherStateManager.StateHandler
 
     @Override
     public void setStateWithAnimation(LauncherState toState,
-            AnimatorSetBuilder builder, LauncherStateManager.AnimationConfig config) {
+                                      AnimatorSetBuilder builder, LauncherStateManager.AnimationConfig config) {
         if (!config.playNonAtomicComponent()) {
             return;
         }

@@ -16,8 +16,6 @@
 
 package com.android.launcher3.uioverrides;
 
-import static android.app.WallpaperManager.FLAG_SYSTEM;
-
 import android.annotation.TargetApi;
 import android.app.WallpaperColors;
 import android.app.WallpaperManager;
@@ -31,6 +29,8 @@ import com.android.systemui.shared.system.TonalCompat;
 import com.android.systemui.shared.system.TonalCompat.ExtractionInfo;
 
 import java.util.ArrayList;
+
+import static android.app.WallpaperManager.FLAG_SYSTEM;
 
 @TargetApi(Build.VERSION_CODES.P)
 public class WallpaperColorInfo implements OnColorsChangedListener {

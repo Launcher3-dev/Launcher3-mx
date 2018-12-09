@@ -59,6 +59,7 @@ public class FolderIconPreviewVerifier {
     /**
      * @param page The page the item is on.
      * @param rank The rank of the item.
+     *
      * @return True iff the icon is in the 2x2 upper left quadrant of the Folder.
      */
     public boolean isItemInPreview(int page, int rank) {

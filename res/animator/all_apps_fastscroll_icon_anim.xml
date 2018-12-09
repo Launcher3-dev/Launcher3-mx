@@ -22,12 +22,12 @@
                 android:duration="225"
                 android:propertyName="scaleX"
                 android:valueTo="1.15"
-                android:valueType="floatType" />
+                android:valueType="floatType"/>
             <objectAnimator
                 android:duration="225"
                 android:propertyName="scaleY"
                 android:valueTo="1.15"
-                android:valueType="floatType" />
+                android:valueType="floatType"/>
         </set>
     </item>
 
@@ -37,12 +37,12 @@
                 android:duration="275"
                 android:propertyName="scaleX"
                 android:valueTo="1"
-                android:valueType="floatType" />
+                android:valueType="floatType"/>
             <objectAnimator
                 android:duration="275"
                 android:propertyName="scaleY"
                 android:valueTo="1"
-                android:valueType="floatType" />
+                android:valueType="floatType"/>
         </set>
     </item>
 

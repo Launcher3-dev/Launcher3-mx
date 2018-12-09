@@ -30,12 +30,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiSelector;
 
 import com.android.launcher3.LauncherAppWidgetHost;
-import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.LauncherAppWidgetProviderInfo;
 import com.android.launcher3.LauncherModel;
 import com.android.launcher3.LauncherSettings;
-import com.android.launcher3.widget.PendingAppWidgetHostView;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.PackageInstallerCompat;
@@ -44,7 +42,9 @@ import com.android.launcher3.util.ContentWriter;
 import com.android.launcher3.util.LooperExecutor;
 import com.android.launcher3.util.rule.LauncherActivityRule;
 import com.android.launcher3.util.rule.ShellCommandRule;
+import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
+import com.android.launcher3.widget.PendingAppWidgetHostView;
 import com.android.launcher3.widget.WidgetHostViewLoader;
 
 import org.junit.After;
@@ -64,15 +64,17 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for bind widget flow.
- *
+ * <p>
  * Note running these tests will clear the workspace on the device.
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class BindWidgetTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
-    @Rule public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
 
     private ContentResolver mResolver;
     private AppWidgetManagerCompat mWidgetManager;
@@ -247,8 +249,9 @@ public class BindWidgetTest extends AbstractLauncherUiTest {
     /**
      * Adds {@param item} on the homescreen on the 0th screen at 0,0, and verifies that the
      * widget class is displayed on the homescreen.
+     *
      * @param widgetClass the View class which is displayed on the homescreen
-     * @param desc the content description of the view or null.
+     * @param desc        the content description of the view or null.
      */
     private void setupAndVerifyContents(
             LauncherAppWidgetInfo item, Class<?> widgetClass, String desc) {
@@ -288,6 +291,7 @@ public class BindWidgetTest extends AbstractLauncherUiTest {
 
     /**
      * Creates a LauncherAppWidgetInfo corresponding to {@param info}
+     *
      * @param bindWidget if true the info is bound and a valid widgetId is assigned to
      *                   the LauncherAppWidgetInfo
      */
@@ -338,7 +342,7 @@ public class BindWidgetTest extends AbstractLauncherUiTest {
                         .updateAndGetActiveSessionCache().keySet();
             }
         });
-        while(true) {
+        while (true) {
             try {
                 mTargetContext.getPackageManager().getPackageInfo(
                         pkg, PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -348,7 +352,7 @@ public class BindWidgetTest extends AbstractLauncherUiTest {
                 }
             }
             pkg = invalidPackage + count;
-            count ++;
+            count++;
         }
         LauncherAppWidgetInfo item = new LauncherAppWidgetInfo(10,
                 new ComponentName(pkg, "com.test.widgetprovider"));
@@ -369,7 +373,8 @@ public class BindWidgetTest extends AbstractLauncherUiTest {
         new LooperExecutor(LauncherModel.getWorkerLooper())
                 .submit(new Runnable() {
                     @Override
-                    public void run() { }
+                    public void run() {
+                    }
                 }).get(DEFAULT_WORKER_TIMEOUT_SECS, TimeUnit.SECONDS);
     }
 }

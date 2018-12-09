@@ -21,7 +21,7 @@ import android.graphics.Rect;
 /**
  * A {@link RevealOutlineAnimation} that provides an outline that interpolates between two radii
  * and two {@link Rect}s.
- *
+ * <p>
  * An example usage of this provider is an outline that starts out as a circle and ends
  * as a rounded rectangle.
  */
@@ -33,7 +33,7 @@ public class RoundedRectRevealOutlineProvider extends RevealOutlineAnimation {
     private final Rect mEndRect;
 
     public RoundedRectRevealOutlineProvider(float startRadius, float endRadius, Rect startRect,
-            Rect endRect) {
+                                            Rect endRect) {
         mStartRadius = startRadius;
         mEndRadius = endRadius;
         mStartRect = startRect;

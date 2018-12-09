@@ -24,7 +24,7 @@
         android:id="@+id/snapshot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/task_thumbnail_top_margin" />
+        android:layout_marginTop="@dimen/task_thumbnail_top_margin"/>
 
     <com.android.quickstep.views.IconView
         android:id="@+id/icon"
@@ -32,5 +32,5 @@
         android:layout_height="@dimen/task_thumbnail_icon_size"
         android:importantForAccessibility="no"
         android:focusable="false"
-        android:layout_gravity="top|center_horizontal" />
+        android:layout_gravity="top|center_horizontal"/>
 </com.android.quickstep.views.TaskView>

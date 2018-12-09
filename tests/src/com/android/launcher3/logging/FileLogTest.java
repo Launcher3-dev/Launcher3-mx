@@ -32,7 +32,7 @@ public class FileLogTest {
         do {
             mTempDir = new File(InstrumentationRegistry.getTargetContext().getCacheDir(),
                     "log-test-" + (count++));
-        } while(!mTempDir.mkdir());
+        } while (!mTempDir.mkdir());
 
         FileLog.setDir(mTempDir);
     }

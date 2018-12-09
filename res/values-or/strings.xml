@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="649227358658669779">"ଲଞ୍ଚର୍3"</string>
     <string name="folder_name" msgid="7371454440695724752"></string>
@@ -65,8 +65,8 @@
     <string name="folder_hint_text" msgid="6617836969016293992">"ବେନାମୀ ଫୋଲ୍ଡର୍‌"</string>
     <string name="disabled_app_label" msgid="6673129024321402780">"<xliff:g id="APP_NAME">%1$s</xliff:g> ଅକ୍ଷମ କରାଗଲା"</string>
     <plurals name="badged_app_label" formatted="false" msgid="7948068486082879291">
-      <item quantity="other"><xliff:g id="APP_NAME_2">%1$s</xliff:g>, ରେ <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> ବିଜ୍ଞପ୍ତିଗୁଡ଼ିକ ଅଛି</item>
-      <item quantity="one"><xliff:g id="APP_NAME_0">%1$s</xliff:g>, ରେ <xliff:g id="NOTIFICATION_COUNT_1">%2$d</xliff:g> ବିଜ୍ଞପ୍ତି ଅଛି</item>
+        <item quantity="other"><xliff:g id="APP_NAME_2">%1$s</xliff:g>, ରେ <xliff:g id="NOTIFICATION_COUNT_3">%2$d</xliff:g> ବିଜ୍ଞପ୍ତିଗୁଡ଼ିକ ଅଛି</item>
+        <item quantity="one"><xliff:g id="APP_NAME_0">%1$s</xliff:g>, ରେ <xliff:g id="NOTIFICATION_COUNT_1">%2$d</xliff:g> ବିଜ୍ଞପ୍ତି ଅଛି</item>
     </plurals>
     <string name="default_scroll_format" msgid="7475544710230993317">"ମୋଟ %2$dରୁ %1$d ନମ୍ବର ପୃଷ୍ଠା"</string>
     <string name="workspace_scroll_format" msgid="8458889198184077399">"%2$dରୁ %1$d ହୋମ୍‌ ସ୍କ୍ରୀନ୍"</string>
@@ -109,9 +109,9 @@
     <string name="app_waiting_download_title" msgid="7053938513995617849">"<xliff:g id="NAME">%1$s</xliff:g> ଇନଷ୍ଟଲ୍‌ ହେବାକୁ ଅପେକ୍ଷା କରିଛି"</string>
     <string name="widgets_bottom_sheet_title" msgid="2904559530954183366">"<xliff:g id="NAME">%1$s</xliff:g> ୱିଜେଟ୍‌"</string>
     <!-- no translation found for widgets_list (796804551140113767) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widgets_list_closed (6141506579418771922) -->
-    <skip />
+    <skip/>
     <string name="action_add_to_workspace" msgid="8902165848117513641">"ହୋମ୍‌ ସ୍କ୍ରୀନରେ ଯୋଡ଼ନ୍ତୁ"</string>
     <string name="action_move_here" msgid="2170188780612570250">"ଆଇଟମ୍‌କୁ ଏଠାକୁ ଘୁଞ୍ଚାନ୍ତୁ"</string>
     <string name="item_added_to_workspace" msgid="4211073925752213539">"ହୋମ୍‌ ସ୍କ୍ରୀନରେ ଆଇଟମ୍‌ ଯୋଡ଼ାଗଲା"</string>

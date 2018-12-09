@@ -35,17 +35,17 @@ class FolderPreviewItemAnim {
     float finalTransY;
 
     /**
-     * @param params layout params to animate
-     * @param index0 original index of the item to be animated
-     * @param items0 original number of items in the preview
-     * @param index1 new index of the item to be animated
-     * @param items1 new number of items in the preview
-     * @param duration duration in ms of the animation
+     * @param params             layout params to animate
+     * @param index0             original index of the item to be animated
+     * @param items0             original number of items in the preview
+     * @param index1             new index of the item to be animated
+     * @param items1             new number of items in the preview
+     * @param duration           duration in ms of the animation
      * @param onCompleteRunnable runnable to execute upon animation completion
      */
     FolderPreviewItemAnim(final PreviewItemManager previewItemManager,
-            final PreviewItemDrawingParams params, int index0, int items0, int index1, int items1,
-            int duration, final Runnable onCompleteRunnable) {
+                          final PreviewItemDrawingParams params, int index0, int items0, int index1, int items1,
+                          int duration, final Runnable onCompleteRunnable) {
         previewItemManager.computePreviewItemDrawingParams(index1, items1, sTmpParams);
 
         finalScale = sTmpParams.scale;
@@ -59,7 +59,7 @@ class FolderPreviewItemAnim {
         final float transY0 = sTmpParams.transY;
 
         mValueAnimator = LauncherAnimUtils.ofFloat(0f, 1.0f);
-        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public void onAnimationUpdate(ValueAnimator animation) {
                 float progress = animation.getAnimatedFraction();
 

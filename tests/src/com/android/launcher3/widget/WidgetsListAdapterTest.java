@@ -52,10 +52,14 @@ import static org.mockito.Mockito.verify;
 @RunWith(AndroidJUnit4.class)
 public class WidgetsListAdapterTest {
 
-    @Mock private LayoutInflater mMockLayoutInflater;
-    @Mock private WidgetPreviewLoader mMockWidgetCache;
-    @Mock private RecyclerView.AdapterDataObserver mListener;
-    @Mock private IconCache mIconCache;
+    @Mock
+    private LayoutInflater mMockLayoutInflater;
+    @Mock
+    private WidgetPreviewLoader mMockWidgetCache;
+    @Mock
+    private RecyclerView.AdapterDataObserver mListener;
+    @Mock
+    private IconCache mIconCache;
 
     private WidgetsListAdapter mAdapter;
     private InvariantDeviceProfile mTestProfile;
@@ -120,7 +124,9 @@ public class WidgetsListAdapterTest {
 
     /**
      * Helper method to generate the sample widget model map that can be used for the tests
+     *
      * @param num the number of WidgetItem the map should contain
+     *
      * @return
      */
     private ArrayList<WidgetListRowEntry> generateSampleMap(int num) {

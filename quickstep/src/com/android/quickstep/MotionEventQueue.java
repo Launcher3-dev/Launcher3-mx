@@ -15,12 +15,6 @@
  */
 package com.android.quickstep;
 
-import static android.view.MotionEvent.ACTION_CANCEL;
-import static android.view.MotionEvent.ACTION_MASK;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-import static com.android.quickstep.TouchConsumer.INTERACTION_QUICK_SCRUB;
-
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
@@ -30,6 +24,12 @@ import android.view.MotionEvent;
 import com.android.systemui.shared.system.ChoreographerCompat;
 
 import java.util.ArrayList;
+
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_MASK;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+import static com.android.quickstep.TouchConsumer.INTERACTION_QUICK_SCRUB;
 
 /**
  * Helper class for batching input events
@@ -62,7 +62,7 @@ public class MotionEventQueue {
     private final Object mExecutionLock = new Object();
 
     // We use two arrays and swap the current index when one array is being consumed
-    private final EventArray[] mArrays = new EventArray[] {new EventArray(), new EventArray()};
+    private final EventArray[] mArrays = new EventArray[]{new EventArray(), new EventArray()};
     private int mCurrentIndex = 0;
 
     private final Runnable mMainFrameCallback = this::frameCallbackForMainChoreographer;
@@ -95,7 +95,7 @@ public class MotionEventQueue {
         }
     }
 
-    private void  setInterimChoreographerLocked(Choreographer choreographer) {
+    private void setInterimChoreographerLocked(Choreographer choreographer) {
         mInterimChoreographer = choreographer;
         if (choreographer == null) {
             mCurrentChoreographer = mMainChoreographer;

@@ -101,7 +101,8 @@ public abstract class ItemInfoWithIcon extends ItemInfo {
      */
     public int runtimeStatusFlags = 0;
 
-    protected ItemInfoWithIcon() { }
+    protected ItemInfoWithIcon() {
+    }
 
     protected ItemInfoWithIcon(ItemInfoWithIcon info) {
         super(info);

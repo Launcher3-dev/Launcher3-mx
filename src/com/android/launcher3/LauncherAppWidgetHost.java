@@ -16,8 +16,6 @@
 
 package com.android.launcher3;
 
-import static android.app.Activity.RESULT_CANCELED;
-
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -26,7 +24,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.widget.Toast;
@@ -36,6 +33,8 @@ import com.android.launcher3.widget.DeferredAppWidgetHostView;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_CANCELED;
 
 
 /**
@@ -64,7 +63,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
 
     @Override
     protected LauncherAppWidgetHostView onCreateView(Context context, int appWidgetId,
-            AppWidgetProviderInfo appWidget) {
+                                                     AppWidgetProviderInfo appWidget) {
         LauncherAppWidgetHostView view = new LauncherAppWidgetHostView(context);
         mViews.put(appWidgetId, view);
         return view;
@@ -181,7 +180,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
     }
 
     public AppWidgetHostView createView(Context context, int appWidgetId,
-            LauncherAppWidgetProviderInfo appWidget) {
+                                        LauncherAppWidgetProviderInfo appWidget) {
         if (appWidget.isCustomWidget()) {
             LauncherAppWidgetHostView lahv = new LauncherAppWidgetHostView(context);
             LayoutInflater inflater = (LayoutInflater)
@@ -211,7 +210,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
                 }
                 view.setAppWidget(appWidgetId, appWidget);
                 view.switchToErrorView();
-                return  view;
+                return view;
             }
         }
     }
@@ -242,7 +241,7 @@ public class LauncherAppWidgetHost extends AppWidgetHost {
     }
 
     public void startBindFlow(BaseActivity activity,
-            int appWidgetId, AppWidgetProviderInfo info, int requestCode) {
+                              int appWidgetId, AppWidgetProviderInfo info, int requestCode) {
 
         if (FeatureFlags.GO_DISABLE_WIDGETS) {
             sendActionCancelled(activity, requestCode);

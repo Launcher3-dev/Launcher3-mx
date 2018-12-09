@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="recent_task_option_split_screen" msgid="5353188922202653570">"Layar terpisah"</string>
     <string name="recent_task_option_pin" msgid="7929860679018978258">"Pasang pin"</string>

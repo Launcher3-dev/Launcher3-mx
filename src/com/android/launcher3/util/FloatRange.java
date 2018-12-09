@@ -22,7 +22,8 @@ public class FloatRange {
 
     public float start, end;
 
-    public FloatRange() { }
+    public FloatRange() {
+    }
 
     public FloatRange(float s, float e) {
         set(s, e);

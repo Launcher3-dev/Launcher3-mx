@@ -412,7 +412,7 @@ public class TransitionEffect {
     /**
      * 柱面切换效果，不是立方切换效果
      *
-     * @param in             向内或者向外
+     * @param in           向内或者向外
      * @param screenScroll 滑动进度
      */
     private void screenScrollByTransitionEffectCylinder(boolean in, int screenScroll) {
@@ -479,7 +479,7 @@ public class TransitionEffect {
                 v.setVisibility(VISIBLE);
             }
             if (mFadeInAdjacentScreens) {
-                setCellLayoutFadeAdjacent(v,scrollProgress);
+                setCellLayoutFadeAdjacent(v, scrollProgress);
             }
         }
     }

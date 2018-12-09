@@ -30,7 +30,9 @@ public class BadgeInfo {
 
     public static final int MAX_COUNT = 999;
 
-    /** Used to link this BadgeInfo to icons on the workspace and all apps */
+    /**
+     * Used to link this BadgeInfo to icons on the workspace and all apps
+     */
     private PackageUserKey mPackageUserKey;
 
     /**

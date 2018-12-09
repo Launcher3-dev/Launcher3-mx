@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Helper class to control the playback of an {@link AnimatorSet}, with custom interpolators
  * and durations.
- *
+ * <p>
  * Note: The implementation does not support start delays on child animations or
  * sequential playbacks.
  */
@@ -46,7 +46,7 @@ public abstract class AnimatorPlaybackController implements ValueAnimator.Animat
      * to float (animation-fraction * total duration) to int conversion.
      */
     public static AnimatorPlaybackController wrap(AnimatorSet anim, long duration,
-            Runnable onCancelRunnable) {
+                                                  Runnable onCancelRunnable) {
 
         /**
          * TODO: use {@link AnimatorSet#setCurrentPlayTime(long)} once b/68382377 is fixed.
@@ -66,7 +66,7 @@ public abstract class AnimatorPlaybackController implements ValueAnimator.Animat
     protected Runnable mOnCancelRunnable;
 
     protected AnimatorPlaybackController(AnimatorSet anim, long duration,
-            Runnable onCancelRunnable) {
+                                         Runnable onCancelRunnable) {
         mAnim = anim;
         mDuration = duration;
         mOnCancelRunnable = onCancelRunnable;
@@ -215,7 +215,7 @@ public abstract class AnimatorPlaybackController implements ValueAnimator.Animat
         private final ValueAnimator[] mChildAnimations;
 
         private AnimatorPlaybackControllerVL(AnimatorSet anim, long duration,
-                Runnable onCancelRunnable) {
+                                             Runnable onCancelRunnable) {
             super(anim, duration, onCancelRunnable);
 
             // Build animation list

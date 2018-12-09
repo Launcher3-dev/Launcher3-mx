@@ -29,8 +29,10 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ShortcutsToHomeTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
-    @Rule public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
 
     @Test
     public void testDragIcon_portrait() throws Throwable {
@@ -48,7 +50,7 @@ public class ShortcutsToHomeTest extends AbstractLauncherUiTest {
         clearHomescreen();
         mActivityMonitor.startLauncher();
 
-        LauncherActivityInfo settingsApp  = getSettingsApp();
+        LauncherActivityInfo settingsApp = getSettingsApp();
 
         // Open all apps and wait for load complete.
         final UiObject2 appsContainer = openAllApps();

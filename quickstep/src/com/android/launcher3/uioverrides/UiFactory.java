@@ -16,17 +16,6 @@
 
 package com.android.launcher3.uioverrides;
 
-import static android.view.View.VISIBLE;
-import static com.android.launcher3.AbstractFloatingView.TYPE_ALL;
-import static com.android.launcher3.AbstractFloatingView.TYPE_HIDE_BACK_BUTTON;
-import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
-import static com.android.launcher3.LauncherState.ALL_APPS;
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.launcher3.allapps.DiscoveryBounce.HOME_BOUNCE_SEEN;
-import static com.android.launcher3.allapps.DiscoveryBounce.SHELF_BOUNCE_SEEN;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -46,7 +35,6 @@ import com.android.launcher3.anim.AnimatorPlaybackController;
 import com.android.launcher3.util.TouchController;
 import com.android.quickstep.OverviewInteractionState;
 import com.android.quickstep.RecentsModel;
-import com.android.quickstep.util.RemoteAnimationTargetSet;
 import com.android.quickstep.util.RemoteFadeOutAnimationListener;
 import com.android.quickstep.views.RecentsView;
 import com.android.systemui.shared.system.ActivityCompat;
@@ -56,25 +44,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.zip.Deflater;
 
+import static android.view.View.VISIBLE;
+import static com.android.launcher3.AbstractFloatingView.TYPE_ALL;
+import static com.android.launcher3.AbstractFloatingView.TYPE_HIDE_BACK_BUTTON;
+import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
+import static com.android.launcher3.LauncherState.ALL_APPS;
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.allapps.DiscoveryBounce.HOME_BOUNCE_SEEN;
+import static com.android.launcher3.allapps.DiscoveryBounce.SHELF_BOUNCE_SEEN;
+
 public class UiFactory {
 
     public static TouchController[] createTouchControllers(Launcher launcher) {
         boolean swipeUpEnabled = OverviewInteractionState.getInstance(launcher)
                 .isSwipeUpGestureEnabled();
         if (!swipeUpEnabled) {
-            return new TouchController[] {
+            return new TouchController[]{
                     launcher.getDragController(),
                     new OverviewToAllAppsTouchController(launcher),
                     new LauncherTaskViewController(launcher)};
         }
         if (launcher.getDeviceProfile().isVerticalBarLayout()) {
-            return new TouchController[] {
+            return new TouchController[]{
                     launcher.getDragController(),
                     new OverviewToAllAppsTouchController(launcher),
                     new LandscapeEdgeSwipeController(launcher),
                     new LauncherTaskViewController(launcher)};
         } else {
-            return new TouchController[] {
+            return new TouchController[]{
                     launcher.getDragController(),
                     new PortraitStatesTouchController(launcher),
                     new LauncherTaskViewController(launcher)};
@@ -86,7 +84,7 @@ public class UiFactory {
     }
 
     public static StateHandler[] getStateHandler(Launcher launcher) {
-        return new StateHandler[] {launcher.getAllAppsController(), launcher.getWorkspace(),
+        return new StateHandler[]{launcher.getAllAppsController(), launcher.getWorkspace(),
                 new RecentsViewStateController(launcher), new BackButtonAlphaHandler(launcher)};
     }
 
@@ -187,7 +185,7 @@ public class UiFactory {
     }
 
     public static void useFadeOutAnimationForLauncherStart(Launcher launcher,
-            CancellationSignal cancellationSignal) {
+                                                           CancellationSignal cancellationSignal) {
         LauncherAppTransitionManagerImpl appTransitionManager =
                 (LauncherAppTransitionManagerImpl) launcher.getAppTransitionManager();
         appTransitionManager.setRemoteAnimationProvider((targets) -> {

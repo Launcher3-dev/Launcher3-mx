@@ -190,7 +190,7 @@ public class LauncherIcons implements AutoCloseable {
      * The bitmap is also visually normalized with other icons.
      */
     public BitmapInfo createBadgedIconBitmap(Drawable icon, UserHandle user, int iconAppTargetSdk,
-            boolean isInstantApp) {
+                                             boolean isInstantApp) {
         float[] scale = new float[1];
         icon = normalizeAndWrapToAdaptiveIcon(icon, iconAppTargetSdk, null, scale);
         Bitmap bitmap = createIconBitmap(icon, scale[0]);
@@ -238,7 +238,7 @@ public class LauncherIcons implements AutoCloseable {
     }
 
     private Drawable normalizeAndWrapToAdaptiveIcon(Drawable icon, int iconAppTargetSdk,
-            RectF outIconBounds, float[] outScale) {
+                                                    RectF outIconBounds, float[] outScale) {
         float scale = 1f;
         if (Utilities.ATLEAST_OREO && iconAppTargetSdk >= Build.VERSION_CODES.O) {
             boolean[] outShape = new boolean[1];
@@ -324,8 +324,8 @@ public class LauncherIcons implements AutoCloseable {
                 Bitmap.Config.ARGB_8888);
         mCanvas.setBitmap(bitmap);
 
-        final int left = (textureWidth-width) / 2;
-        final int top = (textureHeight-height) / 2;
+        final int left = (textureWidth - width) / 2;
+        final int top = (textureHeight - height) / 2;
 
         mOldBounds.set(icon.getBounds());
         if (Utilities.ATLEAST_OREO && icon instanceof AdaptiveIconDrawable) {
@@ -333,7 +333,7 @@ public class LauncherIcons implements AutoCloseable {
             int size = Math.max(width, height);
             icon.setBounds(offset, offset, offset + size, offset + size);
         } else {
-            icon.setBounds(left, top, left+width, top+height);
+            icon.setBounds(left, top, left + width, top + height);
         }
         mCanvas.save();
         mCanvas.scale(scale, scale, textureWidth / 2, textureHeight / 2);
@@ -354,7 +354,7 @@ public class LauncherIcons implements AutoCloseable {
     }
 
     public BitmapInfo createShortcutIcon(ShortcutInfoCompat shortcutInfo,
-            boolean badged, @Nullable Provider<Bitmap> fallbackIconProvider) {
+                                         boolean badged, @Nullable Provider<Bitmap> fallbackIconProvider) {
         Drawable unbadgedDrawable = DeepShortcutManager.getInstance(mContext)
                 .getShortcutIconDrawable(shortcutInfo, mFillResIconDpi);
         IconCache cache = LauncherAppState.getInstance(mContext).getIconCache();

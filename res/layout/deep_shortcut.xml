@@ -19,7 +19,7 @@
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/bg_popup_item_width"
     android:layout_height="@dimen/bg_popup_item_height"
-    android:theme="@style/PopupItem" >
+    android:theme="@style/PopupItem">
 
     <com.android.launcher3.shortcuts.DeepShortcutTextView
         style="@style/BaseIcon"
@@ -36,14 +36,14 @@
         android:fontFamily="sans-serif"
         launcher:layoutHorizontal="true"
         launcher:iconDisplay="shortcut_popup"
-        launcher:iconSizeOverride="@dimen/deep_shortcut_icon_size" />
+        launcher:iconSizeOverride="@dimen/deep_shortcut_icon_size"/>
 
     <View
         android:id="@+id/icon"
         android:layout_width="@dimen/deep_shortcut_icon_size"
         android:layout_height="@dimen/deep_shortcut_icon_size"
         android:layout_marginStart="@dimen/popup_padding_start"
-        android:layout_gravity="start|center_vertical" />
+        android:layout_gravity="start|center_vertical"/>
 
     <View
         android:id="@+id/divider"
@@ -51,6 +51,6 @@
         android:layout_height="@dimen/popup_item_divider_height"
         android:layout_gravity="end|bottom"
         android:visibility="gone"
-        android:background="?attr/popupColorTertiary" />
+        android:background="?attr/popupColorTertiary"/>
 
 </com.android.launcher3.shortcuts.DeepShortcutView>

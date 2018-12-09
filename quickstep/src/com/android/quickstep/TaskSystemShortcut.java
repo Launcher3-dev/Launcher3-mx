@@ -16,8 +16,6 @@
 
 package com.android.quickstep;
 
-import static com.android.launcher3.userevent.nano.LauncherLogProto.Action.Touch.TAP;
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,6 +52,8 @@ import com.android.systemui.shared.system.WindowManagerWrapper;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static com.android.launcher3.userevent.nano.LauncherLogProto.Action.Touch.TAP;
 
 /**
  * Represents a system shortcut that can be shown for a recent task.
@@ -118,7 +118,7 @@ public class TaskSystemShortcut<T extends SystemShortcut> extends SystemShortcut
             if (activity.getDeviceProfile().isMultiWindowMode) {
                 return null;
             }
-            final Task task  = taskView.getTask();
+            final Task task = taskView.getTask();
             final int taskId = task.key.id;
             if (!task.isDockable) {
                 return null;
@@ -131,7 +131,7 @@ public class TaskSystemShortcut<T extends SystemShortcut> extends SystemShortcut
                         new View.OnLayoutChangeListener() {
                             @Override
                             public void onLayoutChange(View v, int l, int t, int r, int b,
-                                    int oldL, int oldT, int oldR, int oldB) {
+                                                       int oldL, int oldT, int oldR, int oldB) {
                                 taskView.getRootView().removeOnLayoutChangeListener(this);
                                 recentsView.removeIgnoreResetTask(taskView);
 
@@ -195,12 +195,12 @@ public class TaskSystemShortcut<T extends SystemShortcut> extends SystemShortcut
                             Color.BLACK);
                     AppTransitionAnimationSpecsFuture future =
                             new AppTransitionAnimationSpecsFuture(mHandler) {
-                        @Override
-                        public List<AppTransitionAnimationSpecCompat> composeSpecs() {
-                            return Collections.singletonList(new AppTransitionAnimationSpecCompat(
-                                    taskId, thumbnail, taskBounds));
-                        }
-                    };
+                                @Override
+                                public List<AppTransitionAnimationSpecCompat> composeSpecs() {
+                                    return Collections.singletonList(new AppTransitionAnimationSpecCompat(
+                                            taskId, thumbnail, taskBounds));
+                                }
+                            };
                     WindowManagerWrapper.getInstance().overridePendingAppTransitionMultiThumbFuture(
                             future, animStartedListener, mHandler, true /* scaleUp */);
                 }
@@ -259,7 +259,7 @@ public class TaskSystemShortcut<T extends SystemShortcut> extends SystemShortcut
         protected View.OnClickListener getOnClickListenerForTask(
                 BaseDraggingActivity activity, Task task, ItemInfo itemInfo) {
             if (InstantAppResolver.newInstance(activity).isInstantApp(activity,
-                        task.getTopComponent().getPackageName())) {
+                    task.getTopComponent().getPackageName())) {
                 return mSystemShortcut.createOnClickListener(activity, itemInfo);
             }
             return null;

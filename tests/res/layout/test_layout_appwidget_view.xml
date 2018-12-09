@@ -10,5 +10,5 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:background="#FF0000"
-        android:id="@android:id/icon" />
+        android:id="@android:id/icon"/>
 </FrameLayout>

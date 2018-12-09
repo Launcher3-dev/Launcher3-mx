@@ -52,8 +52,10 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class AddConfigWidgetTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
-    @Rule public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
 
     private LauncherAppWidgetProviderInfo mWidgetInfo;
     private AppWidgetManager mAppWidgetManager;

@@ -46,7 +46,7 @@ public class BottomUserEducationView extends AbstractSlideInView implements Inse
     }
 
     public BottomUserEducationView(Context context, AttributeSet attrs,
-            int defStyleAttr) {
+                                   int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContent = this;
     }

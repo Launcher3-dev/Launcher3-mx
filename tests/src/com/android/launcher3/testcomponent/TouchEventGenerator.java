@@ -70,6 +70,7 @@ public class TouchEventGenerator {
          */
         void onTouchEvent(MotionEvent event);
     }
+
     private final Listener mListener;
 
     public TouchEventGenerator(Listener listener) {

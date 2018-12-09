@@ -227,8 +227,15 @@
 
     <!-- Menu -->
     <dimen name="dynamic_grid_menu_bottom_margin">180dp</dimen>
+    <dimen name="menu_item_width">98dp</dimen>
+    <!--显示菜单的时候调节距离-->
+    <dimen name="menu_container_up">10dp</dimen>
+    <!--用来调节菜单中图标大小的差值-->
+    <dimen name="menu_item_scale">11dp</dimen>
+    <!--调整菜单中图标和文字的距离-->
+    <dimen name="menu_item_compound_drawable_padding">6dp</dimen>
 
-<!--Uninstall-->
+    <!--Uninstall-->
     <dimen name="unread_minWidth">10dp</dimen>
     <dimen name="hotseat_unread_margin_top">16dp</dimen>
     <dimen name="hotseat_unread_margin_right">8dp</dimen>

@@ -104,9 +104,11 @@ public class DeepShortcutView extends FrameLayout {
         mPillRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
     }
 
-    /** package private **/
+    /**
+     * package private
+     **/
     public void applyShortcutInfo(ShortcutInfo info, ShortcutInfoCompat detail,
-            PopupContainerWithArrow container) {
+                                  PopupContainerWithArrow container) {
         mInfo = info;
         mDetail = detail;
         mBubbleText.applyFromShortcutInfo(info);

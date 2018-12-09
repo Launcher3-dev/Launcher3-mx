@@ -234,7 +234,9 @@ public class ShortcutInfo extends ItemInfoWithIcon {
         disabledMessage = shortcutInfo.getDisabledMessage();
     }
 
-    /** Returns the ShortcutInfo id associated with the deep shortcut. */
+    /**
+     * Returns the ShortcutInfo id associated with the deep shortcut.
+     */
     public String getDeepShortcutId() {
         return itemType == Favorites.ITEM_TYPE_DEEP_SHORTCUT ?
                 getIntent().getStringExtra(ShortcutInfoCompat.EXTRA_SHORTCUT_ID) : null;

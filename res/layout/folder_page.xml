@@ -21,4 +21,4 @@
     android:layout_height="wrap_content"
     android:hapticFeedbackEnabled="false"
     android:importantForAccessibility="no"
-    launcher:containerType="folder" />
+    launcher:containerType="folder"/>

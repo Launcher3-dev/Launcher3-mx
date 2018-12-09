@@ -58,7 +58,6 @@ import com.android.launcher3.anim.Interpolators;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.compat.ShortcutConfigActivityInfo;
 import com.android.launcher3.config.FeatureFlags;
-import com.android.launcher3.graphics.IconNormalizer;
 import com.android.launcher3.graphics.LauncherIcons;
 import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.shortcuts.ShortcutInfoCompat;
@@ -79,12 +78,14 @@ public class DragView extends View {
     public static final int COLOR_CHANGE_DURATION = 120;
     public static final int VIEW_ZOOM_DURATION = 150;
 
-    @Thunk static float sDragAlpha = 1f;
+    @Thunk
+    static float sDragAlpha = 1f;
 
     private boolean mDrawBitmap = true;
     private Bitmap mBitmap;
     private Bitmap mCrossFadeBitmap;
-    @Thunk Paint mPaint;
+    @Thunk
+    Paint mPaint;
     private final int mBlurSizeOutline;
     private final int mRegistrationX;
     private final int mRegistrationY;
@@ -96,9 +97,11 @@ public class DragView extends View {
     private Rect mDragRegion = null;
     private final Launcher mLauncher;
     private final DragLayer mDragLayer;
-    @Thunk final DragController mDragController;
+    @Thunk
+    final DragController mDragController;
     private boolean mHasDrawn = false;
-    @Thunk float mCrossFadeProgress = 0f;
+    @Thunk
+    float mCrossFadeProgress = 0f;
     private boolean mAnimationCancelled = false;
 
     ValueAnimator mAnim;
@@ -106,7 +109,8 @@ public class DragView extends View {
     // size.  This is ignored for non-icons.
     private float mIntrinsicIconScale = 1f;
 
-    @Thunk float[] mCurrentFilter;
+    @Thunk
+    float[] mCurrentFilter;
     private ValueAnimator mFilterAnimator;
 
     private int mLastTouchX;
@@ -126,8 +130,9 @@ public class DragView extends View {
      * <p>
      * The registration point is the point inside our view that the touch events should
      * be centered upon.
-     * @param launcher The Launcher instance
-     * @param bitmap The view that we're dragging around.  We scale it up when we draw it.
+     *
+     * @param launcher      The Launcher instance
+     * @param bitmap        The view that we're dragging around.  We scale it up when we draw it.
      * @param registrationX The x coordinate of the registration point.
      * @param registrationY The y coordinate of the registration point.
      */
@@ -280,7 +285,8 @@ public class DragView extends View {
                         }
                     });
                 }
-            }});
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -317,6 +323,7 @@ public class DragView extends View {
 
     /**
      * Returns the full drawable for {@param info}.
+     *
      * @param outObj this is set to the internal data associated with {@param info},
      *               eg {@link LauncherActivityInfo} or {@link ShortcutInfoCompat}.
      */
@@ -346,7 +353,7 @@ public class DragView extends View {
                         appState.getInvariantDeviceProfile().fillResIconDpi);
             }
         } else if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_FOLDER) {
-            FolderAdaptiveIcon icon =  FolderAdaptiveIcon.createFolderAdaptiveIcon(
+            FolderAdaptiveIcon icon = FolderAdaptiveIcon.createFolderAdaptiveIcon(
                     mLauncher, info.id, new Point(mBitmap.getWidth(), mBitmap.getHeight()));
             if (icon == null) {
                 return null;
@@ -397,7 +404,9 @@ public class DragView extends View {
         setMeasuredDimension(mBitmap.getWidth(), mBitmap.getHeight());
     }
 
-    /** Sets the scale of the view over the normal workspace icon size. */
+    /**
+     * Sets the scale of the view over the normal workspace icon size.
+     */
     public void setIntrinsicIconScaleFactor(float scale) {
         mIntrinsicIconScale = scale;
     }

@@ -62,7 +62,8 @@ public class AddWorkspaceItemsTaskTest extends BaseModelUpdateTaskTestCase {
         return new AddWorkspaceItemsTask(list) {
 
             @Override
-            protected void updateScreens(Context context, ArrayList<Long> workspaceScreens) { }
+            protected void updateScreens(Context context, ArrayList<Long> workspaceScreens) {
+            }
         };
     }
 

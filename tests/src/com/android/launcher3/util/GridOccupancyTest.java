@@ -24,7 +24,7 @@ public class GridOccupancyTest {
                 0, 0, 1, 1, 0,
                 0, 0, 0, 0, 0,
                 1, 1, 0, 0, 0
-                );
+        );
 
         int[] vacant = new int[2];
         assertTrue(grid.findVacantCell(vacant, 2, 2));

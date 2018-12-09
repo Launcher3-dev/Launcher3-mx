@@ -210,7 +210,7 @@ public class LauncherStateManager {
      */
     private void goToState(LauncherState state, boolean animated, long delay,
                            final Runnable onCompleteRunnable) {
-        XLog.e(XLog.getTag(),XLog.TAG_GU_STATE +"   state.containerType=  "+ state.containerType + " ,  animated=  " + animated + " ,  delay=   " + delay);
+        XLog.e(XLog.getTag(), XLog.TAG_GU_STATE + "   state.containerType=  " + state.containerType + " ,  animated=  " + animated + " ,  delay=   " + delay);
         if (mLauncher.isInState(state)) {
             if (mConfig.mCurrentAnimation == null) {
                 // Run any queued runnable

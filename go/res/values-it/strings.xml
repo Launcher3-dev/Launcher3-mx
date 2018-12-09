@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"Tocca e tieni premuto per scegliere la scorciatoia"</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"Tocca due volte e tieni premuto per scegliere una scorciatoia o per usare azioni personalizzate."</string>

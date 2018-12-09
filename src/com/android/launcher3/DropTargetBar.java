@@ -16,11 +16,6 @@
 
 package com.android.launcher3;
 
-import static com.android.launcher3.ButtonDropTarget.TOOLTIP_DEFAULT;
-import static com.android.launcher3.ButtonDropTarget.TOOLTIP_LEFT;
-import static com.android.launcher3.ButtonDropTarget.TOOLTIP_RIGHT;
-import static com.android.launcher3.anim.AlphaUpdateListener.updateVisibility;
-
 import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.graphics.Rect;
@@ -35,6 +30,11 @@ import com.android.launcher3.anim.Interpolators;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragController.DragListener;
 import com.android.launcher3.dragndrop.DragOptions;
+
+import static com.android.launcher3.ButtonDropTarget.TOOLTIP_DEFAULT;
+import static com.android.launcher3.ButtonDropTarget.TOOLTIP_LEFT;
+import static com.android.launcher3.ButtonDropTarget.TOOLTIP_RIGHT;
+import static com.android.launcher3.anim.AlphaUpdateListener.updateVisibility;
 
 /*
  * The top bar containing various drop targets: Delete/App Info/Uninstall.

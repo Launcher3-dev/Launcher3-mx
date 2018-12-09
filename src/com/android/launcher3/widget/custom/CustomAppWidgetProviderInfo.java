@@ -57,7 +57,8 @@ public class CustomAppWidgetProviderInfo extends LauncherAppWidgetProviderInfo
     }
 
     @Override
-    public void initSpans(Context context) { }
+    public void initSpans(Context context) {
+    }
 
     @Override
     public String getLabel(PackageManager packageManager) {

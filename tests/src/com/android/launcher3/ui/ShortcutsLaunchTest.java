@@ -29,8 +29,10 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ShortcutsLaunchTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
-    @Rule public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
 
     @Test
     public void testAppLauncher_portrait() throws Exception {

@@ -29,7 +29,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * Utility class to sending state handling logic to Launcher from within the same process.
- *
+ * <p>
  * Extending {@link Binder} ensures that the platform maintains a single instance of each object
  * which allows this object to safely navigate the system process.
  */
@@ -41,6 +41,7 @@ public abstract class InternalStateHandler extends Binder {
 
     /**
      * Initializes the handler when the launcher is ready.
+     *
      * @return true if the handler wants to stay alive.
      */
     protected abstract boolean init(Launcher launcher, boolean alreadyOnHome);

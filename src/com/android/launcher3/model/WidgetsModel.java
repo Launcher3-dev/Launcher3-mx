@@ -1,4 +1,3 @@
-
 package com.android.launcher3.model;
 
 import android.appwidget.AppWidgetProviderInfo;
@@ -112,7 +111,7 @@ public class WidgetsModel {
     }
 
     private synchronized void setWidgetsAndShortcuts(ArrayList<WidgetItem> rawWidgetsShortcuts,
-            LauncherAppState app, @Nullable PackageUserKey packageUser) {
+                                                     LauncherAppState app, @Nullable PackageUserKey packageUser) {
         if (DEBUG) {
             Log.d(TAG, "addWidgetsAndShortcuts, widgetsShortcuts#=" + rawWidgetsShortcuts.size());
         }
@@ -189,7 +188,7 @@ public class WidgetsModel {
             if (pInfo == null) {
                 pInfo = new PackageItemInfo(packageName);
                 pInfo.user = item.user;
-                tmpPackageItemInfos.put(packageName,  pInfo);
+                tmpPackageItemInfos.put(packageName, pInfo);
             } else if (!myUser.equals(pInfo.user)) {
                 // Keep updating the user, until we get the primary user.
                 pInfo.user = item.user;

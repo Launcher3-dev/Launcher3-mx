@@ -38,7 +38,8 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textAppearance="?android:textAppearanceMedium"
             android:clickable="true"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"/>
+
         <ImageView
             android:layout_width="48dp"
             android:id="@+id/btn_qsb_setup"
@@ -49,6 +50,6 @@
             android:tint="?android:attr/textColorSecondary"
             android:contentDescription="@string/gadget_setup_text"
             android:padding="8dp"
-            android:background="?android:attr/selectableItemBackground" />
+            android:background="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 </FrameLayout>

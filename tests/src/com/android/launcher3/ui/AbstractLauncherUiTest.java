@@ -126,6 +126,7 @@ public abstract class AbstractLauncherUiTest {
 
     /**
      * Scrolls the {@param container} until it finds an object matching {@param condition}.
+     *
      * @return the matching object.
      */
     protected UiObject2 scrollAndFind(UiObject2 container, BySelector condition) {
@@ -180,7 +181,7 @@ public abstract class AbstractLauncherUiTest {
     }
 
     private void movePointer(Point from, Point to) {
-        while(!from.equals(to)) {
+        while (!from.equals(to)) {
             from.x = getNextMoveValue(to.x, from.x);
             from.y = getNextMoveValue(to.y, from.y);
             sendPointer(MotionEvent.ACTION_MOVE, from);
@@ -241,19 +242,20 @@ public abstract class AbstractLauncherUiTest {
 
     /**
      * Finds a widget provider which can fit on the home screen.
+     *
      * @param hasConfigureScreen if true, a provider with a config screen is returned.
      */
     protected LauncherAppWidgetProviderInfo findWidgetProvider(final boolean hasConfigureScreen) {
         LauncherAppWidgetProviderInfo info =
                 getOnUiThread(new Callable<LauncherAppWidgetProviderInfo>() {
-            @Override
-            public LauncherAppWidgetProviderInfo call() throws Exception {
-                ComponentName cn = new ComponentName(getInstrumentation().getContext(),
-                        hasConfigureScreen ? AppWidgetWithConfig.class : AppWidgetNoConfig.class);
-                return AppWidgetManagerCompat.getInstance(mTargetContext)
-                        .findProvider(cn, Process.myUserHandle());
-            }
-        });
+                    @Override
+                    public LauncherAppWidgetProviderInfo call() throws Exception {
+                        ComponentName cn = new ComponentName(getInstrumentation().getContext(),
+                                hasConfigureScreen ? AppWidgetWithConfig.class : AppWidgetNoConfig.class);
+                        return AppWidgetManagerCompat.getInstance(mTargetContext)
+                                .findProvider(cn, Process.myUserHandle());
+                    }
+                });
         if (info == null) {
             throw new IllegalArgumentException("No valid widget provider");
         }

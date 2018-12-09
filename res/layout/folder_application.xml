@@ -19,4 +19,4 @@
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
     style="@style/BaseIcon"
     android:includeFontPadding="false"
-    launcher:iconDisplay="folder" />
+    launcher:iconDisplay="folder"/>

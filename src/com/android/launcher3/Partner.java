@@ -33,7 +33,9 @@ public class Partner {
 
     static final String TAG = "Launcher.Partner";
 
-    /** Marker action used to discover partner */
+    /**
+     * Marker action used to discover partner
+     */
     private static final String
             ACTION_PARTNER_CUSTOMIZATION = "com.android.launcher3.action.PARTNER_CUSTOMIZATION";
 
@@ -46,7 +48,9 @@ public class Partner {
 
     public static final String RES_REQUIRE_FIRST_RUN_FLOW = "requires_first_run_flow";
 
-    /** These resources are used to override the device profile  */
+    /**
+     * These resources are used to override the device profile
+     */
     public static final String RES_GRID_NUM_ROWS = "grid_num_rows";
     public static final String RES_GRID_NUM_COLUMNS = "grid_num_columns";
     public static final String RES_GRID_ICON_SIZE_DP = "grid_icon_size_dp";

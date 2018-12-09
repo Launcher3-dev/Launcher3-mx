@@ -30,7 +30,7 @@ public class ClippedFolderIconLayoutRule {
     }
 
     public PreviewItemDrawingParams computePreviewItemDrawingParams(int index, int curNumItems,
-            PreviewItemDrawingParams params) {
+                                                                    PreviewItemDrawingParams params) {
         float totalScale = scaleForItem(curNumItems);
         float transX;
         float transY;
@@ -66,9 +66,9 @@ public class ClippedFolderIconLayoutRule {
     /**
      * Builds a grid based on the positioning of the items when there are
      * {@link #MAX_NUM_ITEMS_IN_PREVIEW} in the preview.
-     *
+     * <p>
      * Positions in the grid: 0 1  // 0 is row 0, col 1
-     *                        2 3  // 3 is row 1, col 1
+     * 2 3  // 3 is row 1, col 1
      */
     private void getGridPosition(int row, int col, float[] result) {
         // We use position 0 and 3 to calculate the x and y distances between items.
@@ -123,7 +123,7 @@ public class ClippedFolderIconLayoutRule {
         // of the icon, and to be based from the top / left of the preview area. The y component
         // is inverted to match the coordinate system.
         result[0] = mAvailableSpace / 2 + (float) (radius * Math.cos(theta) / 2) - halfIconSize;
-        result[1] = mAvailableSpace / 2 + (float) (- radius * Math.sin(theta) / 2) - halfIconSize;
+        result[1] = mAvailableSpace / 2 + (float) (-radius * Math.sin(theta) / 2) - halfIconSize;
 
     }
 

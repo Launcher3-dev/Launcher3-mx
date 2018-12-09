@@ -15,11 +15,6 @@
  */
 package com.android.launcher3.model;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertTrue;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,6 +34,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotSame;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Tests for {@link DbDowngradeHelper}
@@ -116,7 +116,8 @@ public class DbDowngradeHelperTest {
 
         helper = new DatabaseHelper(mContext, null, DB_FILE) {
             @Override
-            public void onOpen(SQLiteDatabase db) { }
+            public void onOpen(SQLiteDatabase db) {
+            }
         };
         assertEquals(LauncherProvider.SCHEMA_VERSION, helper.getWritableDatabase().getVersion());
 
@@ -148,7 +149,8 @@ public class DbDowngradeHelperTest {
 
         DatabaseHelper dbHelper = new DatabaseHelper(mContext, null, DB_FILE) {
             @Override
-            public void onOpen(SQLiteDatabase db) { }
+            public void onOpen(SQLiteDatabase db) {
+            }
         };
         // Insert dummy data
         for (int i = 0; i < 10; i++) {

@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * Helper class to automatically build view hardware layers for the duration of an animation.\
- *
+ * <p>
  * add by codemx.cn  20181026
  */
 public class AnimationLayerSet extends AnimatorListenerAdapter {

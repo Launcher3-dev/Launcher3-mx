@@ -8,7 +8,9 @@ import com.android.launcher3.shortcuts.DeepShortcutManager;
 
 import java.util.Arrays;
 
-/** Creates a hash key based on package name and user. */
+/**
+ * Creates a hash key based on package name and user.
+ */
 public class PackageUserKey {
 
     public String mPackageName;
@@ -30,11 +32,12 @@ public class PackageUserKey {
     private void update(String packageName, UserHandle user) {
         mPackageName = packageName;
         mUser = user;
-        mHashCode = Arrays.hashCode(new Object[] {packageName, user});
+        mHashCode = Arrays.hashCode(new Object[]{packageName, user});
     }
 
     /**
      * This should only be called to avoid new object creations in a loop.
+     *
      * @return Whether this PackageUserKey was successfully updated - it shouldn't be used if not.
      */
     public boolean updateFromItemInfo(ItemInfo info) {

@@ -87,7 +87,7 @@ public class LauncherDbUtils {
     }
 
     private static void renameScreen(SQLiteDatabase db, long oldScreen, long newScreen) {
-        String[] whereParams = new String[] { Long.toString(oldScreen) };
+        String[] whereParams = new String[]{Long.toString(oldScreen)};
 
         ContentValues values = new ContentValues();
         values.put(WorkspaceScreens._ID, newScreen);

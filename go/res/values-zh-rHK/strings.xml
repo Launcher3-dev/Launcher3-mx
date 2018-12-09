@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"按住捷徑即可選取捷徑。"</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"扲兩下然後扲住就可以揀選捷徑，或者用自訂嘅操作。"</string>

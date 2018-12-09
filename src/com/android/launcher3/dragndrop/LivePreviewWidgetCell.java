@@ -51,12 +51,13 @@ public class LivePreviewWidgetCell extends WidgetCell {
 
     /**
      * Generates a bitmap by inflating {@param views}.
-     * @see com.android.launcher3.WidgetPreviewLoader#generateWidgetPreview
      *
+     * @see com.android.launcher3.WidgetPreviewLoader#generateWidgetPreview
+     * <p>
      * TODO: Consider moving this to the background thread.
      */
     public static Bitmap generateFromRemoteViews(BaseActivity activity, RemoteViews views,
-            LauncherAppWidgetProviderInfo info, int previewSize, int[] preScaledWidthOut) {
+                                                 LauncherAppWidgetProviderInfo info, int previewSize, int[] preScaledWidthOut) {
 
         DeviceProfile dp = activity.getDeviceProfile();
         int viewWidth = dp.cellWidthPx * info.spanX;

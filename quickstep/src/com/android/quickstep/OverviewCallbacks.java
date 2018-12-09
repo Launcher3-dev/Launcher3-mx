@@ -37,9 +37,12 @@ public class OverviewCallbacks {
         return sInstance;
     }
 
-    public void onInitOverviewTransition() { }
+    public void onInitOverviewTransition() {
+    }
 
-    public void onResetOverview() { }
+    public void onResetOverview() {
+    }
 
-    public void closeAllWindows() { }
+    public void closeAllWindows() {
+    }
 }

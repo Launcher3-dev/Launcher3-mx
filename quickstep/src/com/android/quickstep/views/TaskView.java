@@ -16,10 +16,6 @@
 
 package com.android.quickstep.views;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
-import static com.android.quickstep.views.TaskThumbnailView.DIM_ALPHA_MULTIPLIER;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -56,6 +52,9 @@ import com.android.systemui.shared.system.ActivityManagerWrapper;
 
 import java.util.function.Consumer;
 
+import static android.widget.Toast.LENGTH_SHORT;
+import static com.android.quickstep.views.TaskThumbnailView.DIM_ALPHA_MULTIPLIER;
+
 /**
  * A task in the Recents view.
  */
@@ -63,7 +62,9 @@ public class TaskView extends FrameLayout implements TaskCallbacks, PageCallback
 
     private static final String TAG = TaskView.class.getSimpleName();
 
-    /** A curve of x from 0 to 1, where 0 is the center of the screen and 1 is the edge. */
+    /**
+     * A curve of x from 0 to 1, where 0 is the center of the screen and 1 is the edge.
+     */
     private static final TimeInterpolator CURVE_INTERPOLATOR
             = x -> (float) -Math.cos(x * Math.PI) / 2f + .5f;
 
@@ -164,7 +165,7 @@ public class TaskView extends FrameLayout implements TaskCallbacks, PageCallback
     }
 
     public void launchTask(boolean animate, Consumer<Boolean> resultCallback,
-            Handler resultCallbackHandler) {
+                           Handler resultCallbackHandler) {
         if (mTask != null) {
             final ActivityOptions opts;
             if (animate) {

@@ -130,9 +130,13 @@ public class FolderInfo extends ItemInfo {
 
     public interface FolderListener {
         public void onAdd(ShortcutInfo item, int rank);
+
         public void onRemove(ShortcutInfo item);
+
         public void onTitleChanged(CharSequence title);
+
         public void onItemsChanged(boolean animate);
+
         public void prepareAutoUpdate();
     }
 
@@ -141,9 +145,9 @@ public class FolderInfo extends ItemInfo {
     }
 
     /**
-     * @param option flag to set or clear
+     * @param option    flag to set or clear
      * @param isEnabled whether to set or clear the flag
-     * @param writer if not null, save changes to the db.
+     * @param writer    if not null, save changes to the db.
      */
     public void setOption(int option, boolean isEnabled, ModelWriter writer) {
         int oldOptions = options;

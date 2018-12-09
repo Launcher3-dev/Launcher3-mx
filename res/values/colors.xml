@@ -38,4 +38,9 @@
 
     <color name="all_apps_bg_hand_fill">#E5E5E5</color>
     <color name="all_apps_bg_hand_fill_dark">#9AA0A6</color>
+
+    <color name="badge_color">#1DE9B6</color> <!-- Teal A400 -->
+    <color name="folder_badge_color">#1DE9B6</color> <!-- Teal A400 -->
+
+    <color name="workspace_icon_text_color">#FFFFFF</color>
 </resources>

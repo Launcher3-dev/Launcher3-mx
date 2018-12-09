@@ -117,7 +117,7 @@ public class SpringRelativeLayout extends RelativeLayout {
     }
 
     protected void finishWithShiftAndVelocity(float shift, float velocity,
-            DynamicAnimation.OnAnimationEndListener listener) {
+                                              DynamicAnimation.OnAnimationEndListener listener) {
         setDampedScrollShift(shift);
         mSpring.addEndListener(listener);
         finishScrollWithVelocity(velocity);
@@ -129,7 +129,8 @@ public class SpringRelativeLayout extends RelativeLayout {
 
     private class SpringEdgeEffectFactory extends EdgeEffectFactory {
 
-        @NonNull @Override
+        @NonNull
+        @Override
         protected EdgeEffect createEdgeEffect(RecyclerView view, int direction) {
             switch (direction) {
                 case DIRECTION_TOP:

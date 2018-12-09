@@ -91,7 +91,7 @@ public class FolderAdaptiveIcon extends AdaptiveIconDrawable {
      * Initializes various bitmaps on the UI thread and returns the final drawable.
      */
     private static FolderAdaptiveIcon createDrawableOnUiThread(FolderIcon icon,
-            Bitmap badgeBitmap, Point dragViewSize) {
+                                                               Bitmap badgeBitmap, Point dragViewSize) {
         Preconditions.assertUIThread();
         float margin = icon.getResources().getDimension(R.dimen.blur_size_medium_outline) / 2;
 
@@ -156,7 +156,8 @@ public class FolderAdaptiveIcon extends AdaptiveIconDrawable {
         }
 
         @Override
-        public void setAlpha(int i) { }
+        public void setAlpha(int i) {
+        }
 
         @Override
         public void setColorFilter(ColorFilter colorFilter) {

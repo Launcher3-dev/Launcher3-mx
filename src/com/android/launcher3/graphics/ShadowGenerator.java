@@ -38,10 +38,10 @@ public class ShadowGenerator {
 
     // Percent of actual icon size
     private static final float HALF_DISTANCE = 0.5f;
-    public static final float BLUR_FACTOR = 0.5f/48;
+    public static final float BLUR_FACTOR = 0.5f / 48;
 
     // Percent of actual icon size
-    public static final float KEY_SHADOW_DISTANCE = 1f/48;
+    public static final float KEY_SHADOW_DISTANCE = 1f / 48;
     private static final int KEY_SHADOW_ALPHA = 61;
 
     private static final int AMBIENT_SHADOW_ALPHA = 30;
@@ -64,7 +64,7 @@ public class ShadowGenerator {
     }
 
     public synchronized void recreateIcon(Bitmap icon, BlurMaskFilter blurMaskFilter,
-            int ambientAlpha, int keyAlpha, Canvas out) {
+                                          int ambientAlpha, int keyAlpha, Canvas out) {
         int[] offset = new int[2];
         mBlurPaint.setMaskFilter(blurMaskFilter);
         Bitmap shadow = icon.extractAlpha(mBlurPaint, offset);

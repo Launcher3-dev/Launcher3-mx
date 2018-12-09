@@ -69,7 +69,9 @@ public class RecyclerViewFastScroller extends View {
     private final int mMaxWidth;
     private final int mThumbPadding;
 
-    /** Keeps the last known scrolling delta/velocity along y-axis. */
+    /**
+     * Keeps the last known scrolling delta/velocity along y-axis.
+     */
     private int mDy = 0;
     private final float mDeltaThreshold;
 

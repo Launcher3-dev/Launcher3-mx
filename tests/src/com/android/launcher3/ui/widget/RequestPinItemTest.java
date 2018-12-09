@@ -60,11 +60,14 @@ import static org.junit.Assert.assertTrue;
  */
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class RequestPinItemTest  extends AbstractLauncherUiTest {
+public class RequestPinItemTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
-    @Rule public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
-    @Rule public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public ShellCommandRule mGrantWidgetRule = ShellCommandRule.grandWidgetBind();
+    @Rule
+    public ShellCommandRule mDefaultLauncherRule = ShellCommandRule.setDefaultLauncher();
 
     private String mCallbackAction;
     private String mShortcutId;
@@ -94,7 +97,7 @@ public class RequestPinItemTest  extends AbstractLauncherUiTest {
     @Test
     public void testPinWidgetNoConfig_customPreview() throws Throwable {
         // Command to set custom preview
-        Intent command =  RequestPinItemActivity.getCommandIntent(
+        Intent command = RequestPinItemActivity.getCommandIntent(
                 RequestPinItemActivity.class, "setRemoteViewColor").putExtra(
                 RequestPinItemActivity.EXTRA_PARAM + "0", Color.RED);
 
@@ -140,7 +143,7 @@ public class RequestPinItemTest  extends AbstractLauncherUiTest {
     }
 
     private void runTest(String activityMethod, boolean isWidget, ItemOperator itemMatcher,
-            Intent... commandIntents) throws Throwable {
+                         Intent... commandIntents) throws Throwable {
         if (!Utilities.ATLEAST_OREO) {
             return;
         }

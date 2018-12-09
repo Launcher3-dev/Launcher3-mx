@@ -16,8 +16,6 @@
 
 package com.android.launcher3;
 
-import static com.android.launcher3.anim.Interpolators.ACCEL;
-
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -35,6 +33,8 @@ import android.util.Property;
 import android.util.SparseArray;
 
 import com.android.launcher3.graphics.BitmapInfo;
+
+import static com.android.launcher3.anim.Interpolators.ACCEL;
 
 public class FastBitmapDrawable extends Drawable {
 

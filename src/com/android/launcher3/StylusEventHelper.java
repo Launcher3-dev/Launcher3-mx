@@ -18,6 +18,7 @@ public class StylusEventHelper {
          * Called when the stylus button is pressed.
          *
          * @param event The MotionEvent that the button press occurred for.
+         *
          * @return Whether the event was handled.
          */
         public boolean onPressed(MotionEvent event);
@@ -27,6 +28,7 @@ public class StylusEventHelper {
          * the event is canceled or the stylus is lifted off the screen.
          *
          * @param event The MotionEvent the button release occurred for.
+         *
          * @return Whether the event was handled.
          */
         public boolean onReleased(MotionEvent event);
@@ -43,7 +45,7 @@ public class StylusEventHelper {
      * the helper to correctly identify stylus events.
      *
      * @param listener The listener to call for stylus events.
-     * @param view Optional view associated with the touch events.
+     * @param view     Optional view associated with the touch events.
      */
     public StylusEventHelper(StylusButtonListener listener, View view) {
         mListener = listener;
@@ -99,11 +101,12 @@ public class StylusEventHelper {
      * pressed.
      *
      * @param event The event to check.
+     *
      * @return Whether a stylus button press occurred.
      */
     private static boolean isStylusButtonPressed(MotionEvent event) {
         return event.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS
                 && ((event.getButtonState() & MotionEvent.BUTTON_SECONDARY)
-                        == MotionEvent.BUTTON_SECONDARY);
+                == MotionEvent.BUTTON_SECONDARY);
     }
 }

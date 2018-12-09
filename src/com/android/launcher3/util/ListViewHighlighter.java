@@ -54,7 +54,7 @@ public class ListViewHighlighter implements OnScrollListener, RecyclerListener,
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom,
-            int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                               int oldLeft, int oldTop, int oldRight, int oldBottom) {
         mListView.post(this::tryHighlight);
     }
 
@@ -69,11 +69,12 @@ public class ListViewHighlighter implements OnScrollListener, RecyclerListener,
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) { }
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+    }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
+                         int visibleItemCount, int totalItemCount) {
         highlightIfVisible(firstVisibleItem, firstVisibleItem + visibleItemCount);
     }
 

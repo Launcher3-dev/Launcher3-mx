@@ -17,187 +17,187 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- no translation found for application_name (5181331383435256801) -->
-    <skip />
+    <skip/>
     <!-- no translation found for home (7658288663002113681) -->
-    <skip />
+    <skip/>
     <!-- no translation found for uid_name (7820867637514617527) -->
-    <skip />
+    <skip/>
     <string name="folder_name" msgid="7371454440695724752"></string>
     <!-- no translation found for activity_not_found (8071924732094499514) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widgets_tab_label (2921133187116603919) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widget_adder (3201040140710381657) -->
-    <skip />
+    <skip/>
     <!-- no translation found for toggle_weight_watcher (5645299835184636119) -->
-    <skip />
+    <skip/>
     <!-- no translation found for long_press_widget_to_add (7699152356777458215) -->
-    <skip />
+    <skip/>
     <!-- no translation found for market (2619650989819296998) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widget_dims_format (2370757736025621599) -->
-    <skip />
+    <skip/>
     <!-- no translation found for external_drop_widget_error (3165821058322217155) -->
-    <skip />
+    <skip/>
     <!-- no translation found for external_drop_widget_pick_title (3486317258037690630) -->
-    <skip />
+    <skip/>
     <!-- no translation found for rename_folder_label (3727762225964550653) -->
-    <skip />
+    <skip/>
     <!-- no translation found for rename_folder_title (3771389277707820891) -->
-    <skip />
+    <skip/>
     <!-- no translation found for rename_action (5559600076028658757) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cancel_action (7009134900002915310) -->
-    <skip />
+    <skip/>
     <!-- no translation found for menu_item_add_item (1264911265836810421) -->
-    <skip />
+    <skip/>
     <!-- no translation found for group_applications (3797214114206693605) -->
-    <skip />
+    <skip/>
     <!-- no translation found for group_shortcuts (6012256992764410535) -->
-    <skip />
+    <skip/>
     <!-- no translation found for group_widgets (1569030723286851002) -->
-    <skip />
+    <skip/>
     <!-- no translation found for completely_out_of_space (6106288382070760318) -->
-    <skip />
+    <skip/>
     <!-- no translation found for out_of_space (4691004494942118364) -->
-    <skip />
+    <skip/>
     <!-- no translation found for hotseat_out_of_space (7448809638125333693) -->
-    <skip />
+    <skip/>
     <!-- no translation found for invalid_hotseat_item (5779907847267573691) -->
-    <skip />
+    <skip/>
     <!-- no translation found for shortcut_installed (1701742129426969556) -->
-    <skip />
+    <skip/>
     <!-- no translation found for shortcut_uninstalled (8176767991305701821) -->
-    <skip />
+    <skip/>
     <!-- no translation found for shortcut_duplicate (9167217446062498127) -->
-    <skip />
+    <skip/>
     <!-- no translation found for title_select_shortcut (6680642571148153868) -->
-    <skip />
+    <skip/>
     <!-- no translation found for title_select_application (3280812711670683644) -->
-    <skip />
+    <skip/>
     <!-- no translation found for all_apps_button_label (9110807029020582876) -->
-    <skip />
+    <skip/>
     <!-- no translation found for all_apps_home_button_label (252062713717058851) -->
-    <skip />
+    <skip/>
     <!-- no translation found for delete_zone_label_workspace (4009607676751398685) -->
-    <skip />
+    <skip/>
     <!-- no translation found for delete_zone_label_all_apps (8083826390278958980) -->
-    <skip />
+    <skip/>
     <!-- no translation found for delete_target_label (1822697352535677073) -->
-    <skip />
+    <skip/>
     <!-- no translation found for delete_target_uninstall_label (5100785476250872595) -->
-    <skip />
+    <skip/>
     <!-- no translation found for info_target_label (8053346143994679532) -->
-    <skip />
+    <skip/>
     <!-- no translation found for accessibility_search_button (1628520399424565142) -->
-    <skip />
+    <skip/>
     <!-- no translation found for accessibility_voice_search_button (4637324840434406584) -->
-    <skip />
+    <skip/>
     <!-- no translation found for accessibility_all_apps_button (2603132375383800483) -->
-    <skip />
+    <skip/>
     <!-- no translation found for accessibility_delete_button (6466114477993744621) -->
-    <skip />
+    <skip/>
     <!-- no translation found for delete_zone_label_all_apps_system_app (449755632749610895) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_menu_delete_app (7435191475867183689) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_menu_app_info (8593722221450362342) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_app_selection_text (374688303047985416) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_widget_selection_text (1833458597831541241) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_folder_selection_text (7999992513806132118) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cab_shortcut_selection_text (2103811025667946450) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permlab_install_shortcut (5632423390354674437) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permdesc_install_shortcut (923466509822011139) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permlab_uninstall_shortcut (864595034498083837) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permdesc_uninstall_shortcut (5134129545001836849) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permlab_read_settings (1941457408239617576) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permdesc_read_settings (5833423719057558387) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permlab_write_settings (3574213698004620587) -->
-    <skip />
+    <skip/>
     <!-- no translation found for permdesc_write_settings (5440712911516509985) -->
-    <skip />
+    <skip/>
     <!-- no translation found for gadget_error_text (6081085226050792095) -->
-    <skip />
+    <skip/>
     <!-- no translation found for uninstall_system_app_text (4172046090762920660) -->
-    <skip />
+    <skip/>
     <!-- no translation found for dream_name (1530253749244328964) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_hint_text (6617836969016293992) -->
-    <skip />
+    <skip/>
     <!-- no translation found for workspace_description_format (2950174241104043327) -->
-    <skip />
+    <skip/>
     <!-- no translation found for default_scroll_format (7475544710230993317) -->
-    <skip />
+    <skip/>
     <!-- no translation found for workspace_scroll_format (8458889198184077399) -->
-    <skip />
+    <skip/>
     <!-- no translation found for apps_customize_apps_scroll_format (370005296147130238) -->
-    <skip />
+    <skip/>
     <!-- no translation found for apps_customize_widgets_scroll_format (3106209519974971521) -->
-    <skip />
+    <skip/>
     <!-- no translation found for first_run_cling_title (2459738000155917941) -->
-    <skip />
+    <skip/>
     <!-- no translation found for first_run_cling_description (6447072552696253358) -->
-    <skip />
+    <skip/>
     <!-- no translation found for first_run_cling_create_screens_hint (6950729526680114157) -->
-    <skip />
+    <skip/>
     <!-- no translation found for migration_cling_title (9181776667882933767) -->
-    <skip />
+    <skip/>
     <!-- no translation found for migration_cling_description (2752413805582227644) -->
-    <skip />
+    <skip/>
     <!-- no translation found for migration_cling_copy_apps (946331230090919440) -->
-    <skip />
+    <skip/>
     <!-- no translation found for migration_cling_use_default (2626475813981258626) -->
-    <skip />
+    <skip/>
     <!-- no translation found for workspace_cling_title (5626202359865825661) -->
-    <skip />
+    <skip/>
     <!-- no translation found for workspace_cling_move_item (528201129978005352) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_cling_title (3894908818693254164) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_cling_create_folder (6158215559475836131) -->
-    <skip />
+    <skip/>
     <!-- no translation found for cling_dismiss (8962359497601507581) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_opened (94695026776264709) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_tap_to_close (1884479294466410023) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_tap_to_rename (9191075570492871147) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_closed (4100806530910930934) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_renamed (1794088362165669656) -->
-    <skip />
+    <skip/>
     <!-- no translation found for folder_name_format (6629239338071103179) -->
-    <skip />
+    <skip/>
     <!-- no translation found for widget_button_text (2880537293434387943) -->
-    <skip />
+    <skip/>
     <!-- no translation found for wallpaper_button_text (8404103075899945851) -->
-    <skip />
+    <skip/>
     <!-- no translation found for settings_button_text (8119458837558863227) -->
-    <skip />
+    <skip/>
     <!-- no translation found for package_state_enqueued (6227252464303085641) -->
-    <skip />
+    <skip/>
     <!-- no translation found for package_state_downloading (4088770468458724721) -->
-    <skip />
+    <skip/>
     <!-- no translation found for package_state_installing (7588193972189849870) -->
-    <skip />
+    <skip/>
     <!-- no translation found for package_state_unknown (7592128424511031410) -->
-    <skip />
+    <skip/>
     <!-- no translation found for package_state_error (7672093962724223588) -->
-    <skip />
+    <skip/>
 </resources>

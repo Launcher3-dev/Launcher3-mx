@@ -188,7 +188,7 @@ public class ItemInfo {
     protected String dumpProperties() {
         return "id=" + id
                 + " type=" + LauncherSettings.Favorites.itemTypeToString(itemType)
-                + " container=" + LauncherSettings.Favorites.containerToString((int)container)
+                + " container=" + LauncherSettings.Favorites.containerToString((int) container)
                 + " screen=" + screenId
                 + " cell(" + cellX + "," + cellY + ")"
                 + " span(" + spanX + "," + spanY + ")"

@@ -56,7 +56,7 @@ public class WidgetsRecyclerView extends BaseRecyclerView implements OnItemTouch
     }
 
     public WidgetsRecyclerView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                               int defStyleRes) {
         this(context, attrs, defStyleAttr);
     }
 
@@ -93,7 +93,7 @@ public class WidgetsRecyclerView extends BaseRecyclerView implements OnItemTouch
         LinearLayoutManager layoutManager = ((LinearLayoutManager) getLayoutManager());
         layoutManager.scrollToPositionWithOffset(0, (int) -(availableScrollHeight * touchFraction));
 
-        int posInt = (int) ((touchFraction == 1)? pos -1 : pos);
+        int posInt = (int) ((touchFraction == 1) ? pos - 1 : pos);
         return mAdapter.getSectionName(posInt);
     }
 
@@ -134,7 +134,7 @@ public class WidgetsRecyclerView extends BaseRecyclerView implements OnItemTouch
 
     /**
      * Returns the available scroll height:
-     *   AvailableScrollHeight = Total height of the all items - last page height
+     * AvailableScrollHeight = Total height of the all items - last page height
      */
     @Override
     protected int getAvailableScrollHeight() {
@@ -172,5 +172,6 @@ public class WidgetsRecyclerView extends BaseRecyclerView implements OnItemTouch
     }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) { }
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+    }
 }

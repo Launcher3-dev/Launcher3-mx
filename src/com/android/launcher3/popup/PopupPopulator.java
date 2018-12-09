@@ -47,7 +47,8 @@ import java.util.List;
 public class PopupPopulator {
 
     public static final int MAX_SHORTCUTS = 4;
-    @VisibleForTesting static final int NUM_DYNAMIC = 2;
+    @VisibleForTesting
+    static final int NUM_DYNAMIC = 2;
     public static final int MAX_SHORTCUTS_IF_NOTIFICATIONS = 2;
 
     /**
@@ -73,6 +74,7 @@ public class PopupPopulator {
      * include NUM_DYNAMIC dynamic shortcuts, if at least that many are present.
      *
      * @param shortcutIdToRemoveFirst An id that should be filtered out first, if any.
+     *
      * @return a subset of shortcuts, in sorted order, with size <= MAX_SHORTCUTS.
      */
     public static List<ShortcutInfoCompat> sortAndFilterShortcuts(
@@ -122,9 +124,9 @@ public class PopupPopulator {
     }
 
     public static Runnable createUpdateRunnable(final Launcher launcher, final ItemInfo originalInfo,
-            final Handler uiHandler, final PopupContainerWithArrow container,
-            final List<String> shortcutIds, final List<DeepShortcutView> shortcutViews,
-            final List<NotificationKeyData> notificationKeys) {
+                                                final Handler uiHandler, final PopupContainerWithArrow container,
+                                                final List<String> shortcutIds, final List<DeepShortcutView> shortcutViews,
+                                                final List<NotificationKeyData> notificationKeys) {
         final ComponentName activity = originalInfo.getTargetComponent();
         final UserHandle user = originalInfo.user;
         return () -> {

@@ -15,10 +15,6 @@
  */
 package com.android.launcher3;
 
-import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
-import static com.android.launcher3.Utilities.postAsyncCallback;
-import static com.android.systemui.shared.recents.utilities.Utilities.postAtFrontOfQueueAsynchronously;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -30,6 +26,10 @@ import android.support.annotation.UiThread;
 
 import com.android.systemui.shared.system.RemoteAnimationRunnerCompat;
 import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
+
+import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
+import static com.android.launcher3.Utilities.postAsyncCallback;
+import static com.android.systemui.shared.recents.utilities.Utilities.postAtFrontOfQueueAsynchronously;
 
 @TargetApi(Build.VERSION_CODES.P)
 public abstract class LauncherAnimationRunner implements RemoteAnimationRunnerCompat {

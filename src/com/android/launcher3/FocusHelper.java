@@ -134,7 +134,7 @@ public class FocusHelper {
                         pagedView.snapToPage(pageIndex - 1);
                         child = newParent.getChildAt(
                                 ((newIconIndex == FocusLogic.PREVIOUS_PAGE_LEFT_COLUMN)
-                                    ^ newParent.invertLayoutHorizontally()) ? 0 : matrix.length - 1,
+                                        ^ newParent.invertLayoutHorizontally()) ? 0 : matrix.length - 1,
                                 row);
                     }
                     break;
@@ -473,7 +473,8 @@ public class FocusHelper {
     /**
      * Private helper method to get the CellLayoutChildren given a CellLayout index.
      */
-    @Thunk static ShortcutAndWidgetContainer getCellLayoutChildrenForIndex(
+    @Thunk
+    static ShortcutAndWidgetContainer getCellLayoutChildrenForIndex(
             ViewGroup container, int i) {
         CellLayout parent = (CellLayout) container.getChildAt(i);
         return parent.getShortcutsAndWidgets();
@@ -482,7 +483,8 @@ public class FocusHelper {
     /**
      * Helper method to be used for playing sound effects.
      */
-    @Thunk static void playSoundEffect(int keyCode, View v) {
+    @Thunk
+    static void playSoundEffect(int keyCode, View v) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 v.playSoundEffect(SoundEffectConstants.NAVIGATION_LEFT);
@@ -506,7 +508,7 @@ public class FocusHelper {
     }
 
     private static View handlePreviousPageLastItem(Workspace workspace, CellLayout hotseatLayout,
-            int pageIndex, boolean isRtl) {
+                                                   int pageIndex, boolean isRtl) {
         if (pageIndex - 1 < 0) {
             return null;
         }
@@ -514,14 +516,14 @@ public class FocusHelper {
         View newIcon = getFirstFocusableIconInReverseReadingOrder(workspaceLayout, isRtl);
         if (newIcon == null) {
             // Check the hotseat if no focusable item was found on the workspace.
-            newIcon = getFirstFocusableIconInReverseReadingOrder(hotseatLayout,isRtl);
+            newIcon = getFirstFocusableIconInReverseReadingOrder(hotseatLayout, isRtl);
             workspace.snapToPage(pageIndex - 1);
         }
         return newIcon;
     }
 
     private static View handleNextPageFirstItem(Workspace workspace, CellLayout hotseatLayout,
-            int pageIndex, boolean isRtl) {
+                                                int pageIndex, boolean isRtl) {
         if (pageIndex + 1 >= workspace.getPageCount()) {
             return null;
         }
@@ -550,7 +552,7 @@ public class FocusHelper {
     }
 
     private static View getFirstFocusableIconInReverseReadingOrder(CellLayout cellLayout,
-            boolean isRtl) {
+                                                                   boolean isRtl) {
         View icon;
         int countX = cellLayout.getCountX();
         for (int y = cellLayout.getCountY() - 1; y >= 0; y--) {

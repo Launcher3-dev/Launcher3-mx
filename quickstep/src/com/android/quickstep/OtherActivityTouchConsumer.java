@@ -15,17 +15,6 @@
  */
 package com.android.quickstep;
 
-import static android.view.MotionEvent.ACTION_CANCEL;
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_POINTER_UP;
-import static android.view.MotionEvent.ACTION_UP;
-import static android.view.MotionEvent.INVALID_POINTER_ID;
-
-import static com.android.systemui.shared.system.ActivityManagerWrapper
-        .CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-
 import android.annotation.TargetApi;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.Context;
@@ -62,6 +51,15 @@ import com.android.systemui.shared.system.WindowManagerWrapper;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_POINTER_UP;
+import static android.view.MotionEvent.ACTION_UP;
+import static android.view.MotionEvent.INVALID_POINTER_ID;
+import static com.android.systemui.shared.system.ActivityManagerWrapper.CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
+
 /**
  * Touch consumer for handling events originating from an activity other than Launcher
  */
@@ -96,10 +94,10 @@ public class OtherActivityTouchConsumer extends ContextWrapper implements TouchC
     private boolean mIsGoingToHome;
 
     public OtherActivityTouchConsumer(Context base, RunningTaskInfo runningTaskInfo,
-            RecentsModel recentsModel, Intent homeIntent, ActivityControlHelper activityControl,
-            MainThreadExecutor mainThreadExecutor, Choreographer backgroundThreadChoreographer,
-            @HitTarget int downHitTarget, OverviewCallbacks overviewCallbacks,
-            VelocityTracker velocityTracker) {
+                                      RecentsModel recentsModel, Intent homeIntent, ActivityControlHelper activityControl,
+                                      MainThreadExecutor mainThreadExecutor, Choreographer backgroundThreadChoreographer,
+                                      @HitTarget int downHitTarget, OverviewCallbacks overviewCallbacks,
+                                      VelocityTracker velocityTracker) {
         super(base);
 
         mRunningTask = runningTaskInfo;
@@ -277,7 +275,7 @@ public class OtherActivityTouchConsumer extends ContextWrapper implements TouchC
 
             float velocity = isNavBarOnRight() ? mVelocityTracker.getXVelocity(mActivePointerId)
                     : isNavBarOnLeft() ? -mVelocityTracker.getXVelocity(mActivePointerId)
-                            : mVelocityTracker.getYVelocity(mActivePointerId);
+                    : mVelocityTracker.getYVelocity(mActivePointerId);
             mInteractionHandler.onGestureEnded(velocity);
         } else {
             // Since we start touch tracking on DOWN, we may reach this state without actually
@@ -370,10 +368,10 @@ public class OtherActivityTouchConsumer extends ContextWrapper implements TouchC
     @Override
     public void preProcessMotionEvent(MotionEvent ev) {
         if (mVelocityTracker != null) {
-           mVelocityTracker.addMovement(ev);
-           if (ev.getActionMasked() == ACTION_POINTER_UP) {
-               mVelocityTracker.clear();
-           }
+            mVelocityTracker.addMovement(ev);
+            if (ev.getActionMasked() == ACTION_POINTER_UP) {
+                mVelocityTracker.clear();
+            }
         }
     }
 

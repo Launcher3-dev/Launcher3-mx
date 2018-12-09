@@ -62,7 +62,8 @@ public abstract class ViewScrim<T extends View> {
 
     public abstract void draw(Canvas canvas, int width, int height);
 
-    protected void onProgressChanged() { }
+    protected void onProgressChanged() {
+    }
 
     public void invalidate() {
         ViewParent parent = mView.getParent();

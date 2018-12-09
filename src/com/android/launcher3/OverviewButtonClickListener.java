@@ -11,7 +11,11 @@ import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 public abstract class OverviewButtonClickListener implements View.OnClickListener,
         View.OnLongClickListener {
 
-    private int mControlType; /** ControlType enum as defined in {@link Action.Touch} */
+    private int mControlType;
+
+    /**
+     * ControlType enum as defined in {@link Action.Touch}
+     */
 
     public OverviewButtonClickListener(int controlType) {
         mControlType = controlType;

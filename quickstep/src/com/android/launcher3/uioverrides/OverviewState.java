@@ -15,10 +15,6 @@
  */
 package com.android.launcher3.uioverrides;
 
-import static com.android.launcher3.LauncherAnimUtils.OVERVIEW_TRANSITION_MS;
-import static com.android.launcher3.anim.Interpolators.DEACCEL_2;
-import static com.android.launcher3.states.RotationHelper.REQUEST_ROTATE;
-
 import android.view.View;
 
 import com.android.launcher3.AbstractFloatingView;
@@ -29,6 +25,10 @@ import com.android.launcher3.Workspace;
 import com.android.launcher3.allapps.DiscoveryBounce;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.quickstep.views.RecentsView;
+
+import static com.android.launcher3.LauncherAnimUtils.OVERVIEW_TRANSITION_MS;
+import static com.android.launcher3.anim.Interpolators.DEACCEL_2;
+import static com.android.launcher3.states.RotationHelper.REQUEST_ROTATE;
 
 /**
  * Definition for overview state
@@ -61,7 +61,7 @@ public class OverviewState extends LauncherState {
 
     @Override
     public float[] getOverviewScaleAndTranslationYFactor(Launcher launcher) {
-        return new float[] {1f, 0f};
+        return new float[]{1f, 0f};
     }
 
     @Override

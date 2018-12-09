@@ -17,12 +17,13 @@
 package com.android.launcher3.compat;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.ArrayMap;
+
 import com.android.launcher3.util.LongArrayMap;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

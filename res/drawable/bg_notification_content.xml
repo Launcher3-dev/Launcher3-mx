@@ -14,15 +14,17 @@
      limitations under the License.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="?attr/popupColorTertiary" />
+    <item android:drawable="?attr/popupColorTertiary"/>
 
-    <item android:height="3dp" android:top="0dp">
+    <item
+        android:height="3dp"
+        android:top="0dp">
         <shape>
             <gradient
                 android:angle="270"
                 android:endColor="@android:color/transparent"
                 android:startColor="#33000000"
-                android:type="linear" />
+                android:type="linear"/>
         </shape>
     </item>
 </layer-list>

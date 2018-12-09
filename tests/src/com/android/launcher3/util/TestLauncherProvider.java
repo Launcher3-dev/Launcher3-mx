@@ -29,7 +29,8 @@ public class TestLauncherProvider extends LauncherProvider {
     }
 
     @Override
-    protected void notifyListeners() { }
+    protected void notifyListeners() {
+    }
 
     private static class MyDatabaseHelper extends DatabaseHelper {
         public MyDatabaseHelper(Context context) {
@@ -43,9 +44,11 @@ public class TestLauncherProvider extends LauncherProvider {
         }
 
         @Override
-        protected void onEmptyDbCreated() { }
+        protected void onEmptyDbCreated() {
+        }
 
         @Override
-        protected void handleOneTimeDataUpgrade(SQLiteDatabase db) { }
+        protected void handleOneTimeDataUpgrade(SQLiteDatabase db) {
+        }
     }
 }

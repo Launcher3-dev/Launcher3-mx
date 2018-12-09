@@ -842,7 +842,7 @@ public class LoaderTask implements Runnable {
      * Load all the apps bind, include apps in the folder that bind.
      */
     private void loadAllAppsBind() {
-        XLog.e(XLog.getTag(),XLog.TAG_GU);
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         List<ItemInfo> list = mBgDataModel.workspaceItems;
         for (ItemInfo info : list) {
             if (info instanceof ItemInfoWithIcon) {

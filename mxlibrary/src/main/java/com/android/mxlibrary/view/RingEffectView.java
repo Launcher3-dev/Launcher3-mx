@@ -47,7 +47,7 @@ public class RingEffectView extends View {
 
     @Override
     public void setAlpha(@FloatRange(from = 0.0, to = 1.0) float alpha) {
-        mPaint.setAlpha((int)(255 * alpha));
+        mPaint.setAlpha((int) (255 * alpha));
         invalidate();
     }
 
@@ -68,7 +68,7 @@ public class RingEffectView extends View {
         final float sw = mPaint.getStrokeWidth() * 0.5f;
         final float radius = mRadius - sw;
 
-        for (int i = 1; i <= stepCount; i++ ) {
+        for (int i = 1; i <= stepCount; i++) {
             final float stepAngel = mStartAngle + mAngle + STEP_DEGREE * i;
             final float x = (float) Math.cos(Math.toRadians(stepAngel)) * radius;
             final float y = (float) Math.sin(Math.toRadians(stepAngel)) * radius;

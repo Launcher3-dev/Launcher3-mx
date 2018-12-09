@@ -72,7 +72,7 @@ public class LoaderCursorTest {
     @Before
     public void setup() {
         mIDP = new InvariantDeviceProfile();
-        mCursor = new MatrixCursor(new String[] {
+        mCursor = new MatrixCursor(new String[]{
                 ICON, ICON_PACKAGE, ICON_RESOURCE, TITLE,
                 _ID, CONTAINER, ITEM_TYPE, PROFILE_ID,
                 SCREEN, CELLX, CELLY, RESTORED, INTENT
@@ -168,6 +168,7 @@ public class LoaderCursorTest {
                 newItemInfo(0, 0, 1, 1, CONTAINER_DESKTOP, 3L), workspaceScreens));
 
     }
+
     @Test
     public void checkItemPlacement_outsideBounds() {
         ArrayList<Long> workspaceScreens = new ArrayList<>(Arrays.asList(1L, 2L));
@@ -225,7 +226,7 @@ public class LoaderCursorTest {
     }
 
     private ItemInfo newItemInfo(int cellX, int cellY, int spanX, int spanY,
-            long container, long screenId) {
+                                 long container, long screenId) {
         ItemInfo info = new ItemInfo();
         info.cellX = cellX;
         info.cellY = cellY;

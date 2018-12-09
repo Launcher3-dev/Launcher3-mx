@@ -15,12 +15,6 @@
  */
 package com.android.launcher3.uioverrides;
 
-import static com.android.launcher3.LauncherState.ALL_APPS;
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_VERTICAL_PROGRESS;
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.view.MotionEvent;
@@ -43,6 +37,12 @@ import com.android.quickstep.RecentsModel;
 import com.android.quickstep.TouchInteractionService;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
+
+import static com.android.launcher3.LauncherState.ALL_APPS;
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_VERTICAL_PROGRESS;
+import static com.android.launcher3.anim.Interpolators.LINEAR;
 
 /**
  * Touch controller for handling various state transitions in portrait UI.
@@ -175,15 +175,15 @@ public class PortraitStatesTouchController extends AbstractStateChangeTouchContr
 
     @Override
     protected void updateSwipeCompleteAnimation(ValueAnimator animator, long expectedDuration,
-            LauncherState targetState, float velocity, boolean isFling) {
+                                                LauncherState targetState, float velocity, boolean isFling) {
         super.updateSwipeCompleteAnimation(animator, expectedDuration, targetState,
                 velocity, isFling);
         handleFirstSwipeToOverview(animator, expectedDuration, targetState, velocity, isFling);
     }
 
     private void handleFirstSwipeToOverview(final ValueAnimator animator,
-            final long expectedDuration, final LauncherState targetState, final float velocity,
-            final boolean isFling) {
+                                            final long expectedDuration, final LauncherState targetState, final float velocity,
+                                            final boolean isFling) {
         if (mFromState == NORMAL && mToState == OVERVIEW && targetState == OVERVIEW) {
             mFinishFastOnSecondTouch = true;
             if (isFling && expectedDuration != 0) {

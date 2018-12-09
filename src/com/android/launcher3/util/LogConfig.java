@@ -3,9 +3,9 @@ package com.android.launcher3.util;
 /**
  * This is a utility class that keeps track of all the tag that can be enabled to debug
  * a behavior in runtime.
- *
+ * <p>
  * To use any of the strings defined in this class, execute the following command.
- *
+ * <p>
  * $ adb shell setprop log.tag.TAGNAME VERBOSE
  */
 

@@ -28,6 +28,8 @@ public class PackageItemInfo extends ItemInfoWithIcon {
      */
     public String packageName;
 
+    public int childCount;
+
     public PackageItemInfo(String packageName) {
         this.packageName = packageName;
     }

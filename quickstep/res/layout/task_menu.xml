@@ -25,12 +25,13 @@
     android:divider="@drawable/all_apps_divider"
     android:showDividers="middle"
     android:animateLayoutChanges="true">
-        <TextView
-            android:id="@+id/task_icon_and_name"
-            android:layout_width="match_parent"
-            android:layout_height="112dp"
-            android:textSize="14sp"
-            android:paddingTop="18dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/task_icon_and_name"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:textSize="14sp"
+        android:paddingTop="18dp"
+        android:drawablePadding="8dp"
+        android:gravity="center_horizontal"/>
 </com.android.quickstep.views.TaskMenuView>

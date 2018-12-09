@@ -1,11 +1,5 @@
 package com.android.launcher3.model;
 
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -47,6 +41,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executor;
+
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Base class for writing tests for Model update tasks.
@@ -131,7 +131,7 @@ public class BaseModelUpdateTaskTestCase {
                      new BufferedReader(new InputStreamReader(res.openRawResource(id)))) {
             String line;
             HashMap<String, Class> classMap = new HashMap<>();
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.startsWith("#") || line.isEmpty()) {
                     continue;

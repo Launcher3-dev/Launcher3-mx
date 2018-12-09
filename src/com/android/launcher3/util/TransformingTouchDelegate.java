@@ -24,7 +24,7 @@ import android.view.View;
 /**
  * This class differs from the framework {@link TouchDelegate} in that it transforms the
  * coordinates of the motion event to the provided bounds.
- *
+ * <p>
  * You can also modify the bounds post construction. Since the bounds are available during layout,
  * this avoids new object creation during every layout.
  */
@@ -72,6 +72,7 @@ public class TransformingTouchDelegate extends TouchDelegate {
      * specified in the constructor.
      *
      * @param event The touch event to forward
+     *
      * @return True if the event was forwarded to the delegate, false otherwise.
      */
     public boolean onTouchEvent(MotionEvent event) {

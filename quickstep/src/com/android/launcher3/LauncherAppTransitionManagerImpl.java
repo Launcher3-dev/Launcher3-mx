@@ -16,26 +16,6 @@
 
 package com.android.launcher3;
 
-import static com.android.launcher3.BaseActivity.INVISIBLE_ALL;
-import static com.android.launcher3.BaseActivity.INVISIBLE_BY_APP_TRANSITIONS;
-import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
-import static com.android.launcher3.LauncherState.ALL_APPS;
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.launcher3.Utilities.postAsyncCallback;
-import static com.android.launcher3.allapps.AllAppsTransitionController.ALL_APPS_PROGRESS;
-import static com.android.launcher3.anim.Interpolators.AGGRESSIVE_EASE;
-import static com.android.launcher3.anim.Interpolators.DEACCEL_1_7;
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_TRANSITIONS;
-import static com.android.quickstep.TaskUtils.findTaskViewToLaunch;
-import static com.android.quickstep.TaskUtils.getRecentsWindowAnimator;
-import static com.android.quickstep.TaskUtils.taskIsATargetWithMode;
-import static com.android.systemui.shared.recents.utilities.Utilities.getNextFrameNumber;
-import static com.android.systemui.shared.recents.utilities.Utilities.getSurface;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -82,6 +62,26 @@ import com.android.systemui.shared.system.RemoteAnimationRunnerCompat;
 import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
 import com.android.systemui.shared.system.TransactionCompat;
 import com.android.systemui.shared.system.WindowManagerWrapper;
+
+import static com.android.launcher3.BaseActivity.INVISIBLE_ALL;
+import static com.android.launcher3.BaseActivity.INVISIBLE_BY_APP_TRANSITIONS;
+import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
+import static com.android.launcher3.LauncherState.ALL_APPS;
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.Utilities.postAsyncCallback;
+import static com.android.launcher3.allapps.AllAppsTransitionController.ALL_APPS_PROGRESS;
+import static com.android.launcher3.anim.Interpolators.AGGRESSIVE_EASE;
+import static com.android.launcher3.anim.Interpolators.DEACCEL_1_7;
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_TRANSITIONS;
+import static com.android.quickstep.TaskUtils.findTaskViewToLaunch;
+import static com.android.quickstep.TaskUtils.getRecentsWindowAnimator;
+import static com.android.quickstep.TaskUtils.taskIsATargetWithMode;
+import static com.android.systemui.shared.recents.utilities.Utilities.getNextFrameNumber;
+import static com.android.systemui.shared.recents.utilities.Utilities.getSurface;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
 
 /**
  * Manages the opening and closing app transitions from Launcher.
@@ -165,7 +165,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
 
     /**
      * @return ActivityOptions with remote animations that controls how the window of the opening
-     *         targets are displayed.
+     * targets are displayed.
      */
     @Override
     public ActivityOptions getActivityLaunchOptions(Launcher launcher, View v) {
@@ -175,7 +175,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
 
                 @Override
                 public void onCreateAnimation(RemoteAnimationTargetCompat[] targetCompats,
-                        AnimationResult result) {
+                                              AnimationResult result) {
                     AnimatorSet anim = new AnimatorSet();
 
                     boolean launcherClosing =
@@ -239,7 +239,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
     }
 
     public void setRemoteAnimationProvider(final RemoteAnimationProvider animationProvider,
-            CancellationSignal cancellationSignal) {
+                                           CancellationSignal cancellationSignal) {
         mRemoteAnimationProvider = animationProvider;
         cancellationSignal.setOnCancelListener(() -> {
             if (animationProvider == mRemoteAnimationProvider) {
@@ -252,7 +252,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
      * Composes the animations for a launch from the recents list if possible.
      */
     private boolean composeRecentsLaunchAnimator(View v,
-            RemoteAnimationTargetCompat[] targets, AnimatorSet target) {
+                                                 RemoteAnimationTargetCompat[] targets, AnimatorSet target) {
         // Ensure recents is actually visible
         if (!mLauncher.getStateManager().getState().overviewUi) {
             return false;
@@ -328,11 +328,11 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
         Runnable endListener;
 
         float[] alphas = isAppOpening
-                ? new float[] {1, 0}
-                : new float[] {0, 1};
+                ? new float[]{1, 0}
+                : new float[]{0, 1};
         float[] trans = isAppOpening
-                ? new float[] {0, mContentTransY}
-                : new float[] {-mContentTransY, 0};
+                ? new float[]{0, mContentTransY}
+                : new float[]{-mContentTransY, 0};
 
         if (mLauncher.isInState(ALL_APPS)) {
             // All Apps in portrait mode is full screen, so we only animate AllAppsContainerView.
@@ -418,7 +418,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
     private AnimatorSet getIconAnimator(View v, Rect windowTargetBounds) {
         final boolean isBubbleTextView = v instanceof BubbleTextView;
         mFloatingView = new View(mLauncher);
-        if (isBubbleTextView && v.getTag() instanceof ItemInfoWithIcon ) {
+        if (isBubbleTextView && v.getTag() instanceof ItemInfoWithIcon) {
             // Create a copy of the app icon
             mFloatingView.setBackground(
                     DrawableFactory.get(mLauncher).newIcon((ItemInfoWithIcon) v.getTag()));
@@ -542,7 +542,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
      * @return Animator that controls the window of the opening targets.
      */
     private ValueAnimator getOpeningWindowAnimators(View v, RemoteAnimationTargetCompat[] targets,
-            Rect windowTargetBounds) {
+                                                    Rect windowTargetBounds) {
         Rect bounds = new Rect();
         if (v.getParent() instanceof DeepShortcutView) {
             // Deep shortcut views have their icon drawn in a separate view.
@@ -654,13 +654,13 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
 
     /**
      * @return Runner that plays when user goes to Launcher
-     *         ie. pressing home, swiping up from nav bar.
+     * ie. pressing home, swiping up from nav bar.
      */
     private RemoteAnimationRunnerCompat getWallpaperOpenRunner() {
         return new LauncherAnimationRunner(mHandler, false /* startAtFrontOfQueue */) {
             @Override
             public void onCreateAnimation(RemoteAnimationTargetCompat[] targetCompats,
-                    AnimationResult result) {
+                                          AnimationResult result) {
                 if (!mLauncher.hasBeenResumed()) {
                     // If launcher is not resumed, wait until new async-frame after resume
                     mLauncher.setOnResumeCallback(() ->
@@ -762,7 +762,8 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
         } else {
             AnimatorSet workspaceAnimator = new AnimatorSet();
 
-            mDragLayer.setTranslationY(-mWorkspaceTransY);;
+            mDragLayer.setTranslationY(-mWorkspaceTransY);
+            ;
             workspaceAnimator.play(ObjectAnimator.ofFloat(mDragLayer, View.TRANSLATION_Y,
                     -mWorkspaceTransY, 0));
 

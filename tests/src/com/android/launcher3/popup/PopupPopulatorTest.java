@@ -82,7 +82,7 @@ public class PopupPopulatorTest {
     }
 
     private void filterShortcutsAndAssertNumStaticAndDynamic(List<ShortcutInfoCompat> shortcuts,
-            int expectedStatic, int expectedDynamic, String shortcutIdToRemove) {
+                                                             int expectedStatic, int expectedDynamic, String shortcutIdToRemove) {
         Collections.shuffle(shortcuts);
         List<ShortcutInfoCompat> filteredShortcuts = PopupPopulator.sortAndFilterShortcuts(
                 shortcuts, shortcutIdToRemove);

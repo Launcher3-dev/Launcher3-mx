@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-    >
+        >
+
         <include layout="@layout/overview_clear_all_button"/>
 
         <com.android.quickstep.fallback.FallbackRecentsView
@@ -37,7 +38,7 @@
             android:outlineProvider="none"
             android:focusableInTouchMode="true"
             android:theme="@style/HomeScreenElementTheme"
-        >
+            >
 
         </com.android.quickstep.fallback.FallbackRecentsView>
     </com.android.quickstep.views.RecentsViewContainer>

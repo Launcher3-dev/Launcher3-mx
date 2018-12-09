@@ -72,7 +72,7 @@ public class ItemClickHandler {
 
         // --- add by comde.cn ---- 20181026 --- start
         // TODO 点击workspace的处理
-        if (v instanceof Workspace){
+        if (v instanceof Workspace) {
 
             return;
         }

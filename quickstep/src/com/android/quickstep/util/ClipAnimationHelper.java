@@ -15,11 +15,6 @@
  */
 package com.android.quickstep.util;
 
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.quickstep.QuickScrubController.QUICK_SCRUB_TRANSLATION_Y_FACTOR;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
-
 import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -48,6 +43,11 @@ import com.android.systemui.shared.system.TransactionCompat;
 import com.android.systemui.shared.system.WindowManagerWrapper;
 
 import java.util.function.BiConsumer;
+
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.quickstep.QuickScrubController.QUICK_SCRUB_TRANSLATION_Y_FACTOR;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
 
 /**
  * Utility class to handle window clip animation
@@ -91,7 +91,8 @@ public class ClipAnimationHelper {
     private boolean mIsFirstFrame = true;
 
     private BiConsumer<TransactionCompat, RemoteAnimationTargetCompat> mTaskTransformCallback =
-            (t, a) -> { };
+            (t, a) -> {
+            };
 
     private void updateSourceStack(RemoteAnimationTargetCompat target) {
         mSourceInsets.set(target.contentInsets);
@@ -144,12 +145,12 @@ public class ClipAnimationHelper {
         Utilities.scaleRectFAboutCenter(mTmpRectF, mTargetScale);
         float offsetYProgress = mOffsetYInterpolator.getInterpolation(progress);
         progress = mInterpolator.getInterpolation(progress);
-        currentRect =  mRectFEvaluator.evaluate(progress, mSourceRect, mTmpRectF);
+        currentRect = mRectFEvaluator.evaluate(progress, mSourceRect, mTmpRectF);
 
         synchronized (mTargetOffset) {
             // Stay lined up with the center of the target, since it moves for quick scrub.
             currentRect.offset(mTargetOffset.x * mOffsetScale * progress,
-                    mTargetOffset.y  * offsetYProgress);
+                    mTargetOffset.y * offsetYProgress);
         }
 
         mClipRect.left = (int) (mSourceWindowClipInsets.left * progress);
@@ -205,7 +206,7 @@ public class ClipAnimationHelper {
     }
 
     public void fromTaskThumbnailView(TaskThumbnailView ttv, RecentsView rv,
-            @Nullable RemoteAnimationTargetCompat target) {
+                                      @Nullable RemoteAnimationTargetCompat target) {
         BaseDraggingActivity activity = BaseDraggingActivity.fromContext(ttv.getContext());
         BaseDragLayer dl = activity.getDragLayer();
 
@@ -216,7 +217,7 @@ public class ClipAnimationHelper {
 
         if (target != null) {
             updateSourceStack(target);
-        } else  if (rv.shouldUseMultiWindowTaskSizeStrategy()) {
+        } else if (rv.shouldUseMultiWindowTaskSizeStrategy()) {
             updateStackBoundsToMultiWindowTaskSize(activity);
         } else {
             mSourceStackBounds.set(mHomeStackBounds);
@@ -275,7 +276,7 @@ public class ClipAnimationHelper {
     }
 
     public void drawForProgress(TaskThumbnailView ttv, Canvas canvas, float progress) {
-        RectF currentRect =  mRectFEvaluator.evaluate(progress, mSourceRect, mTargetRect);
+        RectF currentRect = mRectFEvaluator.evaluate(progress, mSourceRect, mTargetRect);
         canvas.translate(mSourceStackBounds.left - mHomeStackBounds.left,
                 mSourceStackBounds.top - mHomeStackBounds.top);
         mTmpMatrix.setRectToRect(mTargetRect, currentRect, ScaleToFit.FILL);

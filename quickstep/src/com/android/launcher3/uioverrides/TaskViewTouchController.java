@@ -15,9 +15,6 @@
  */
 package com.android.launcher3.uioverrides;
 
-import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
-import static com.android.launcher3.anim.Interpolators.scrollInterpolatorForVelocity;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -38,6 +35,9 @@ import com.android.launcher3.views.BaseDragLayer;
 import com.android.quickstep.OverviewInteractionState;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
+
+import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
+import static com.android.launcher3.anim.Interpolators.scrollInterpolatorForVelocity;
 
 /**
  * Touch controller for handling task view card swipes

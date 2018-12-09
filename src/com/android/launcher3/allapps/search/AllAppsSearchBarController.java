@@ -15,8 +15,6 @@
  */
 package com.android.launcher3.allapps.search;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -49,6 +47,7 @@ public class AllAppsSearchBarController
     public void setVisibility(int visibility) {
         mInput.setVisibility(visibility);
     }
+
     /**
      * Sets the references to the apps model and the search result callback.
      */

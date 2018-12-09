@@ -219,7 +219,7 @@ public class LoaderCursor extends CursorWrapper {
             if (!TextUtils.isEmpty(title)) {
                 info.title = Utilities.trim(title);
             }
-        } else if  (hasRestoreFlag(ShortcutInfo.FLAG_AUTOINSTALL_ICON)) {
+        } else if (hasRestoreFlag(ShortcutInfo.FLAG_AUTOINSTALL_ICON)) {
             if (TextUtils.isEmpty(info.title)) {
                 info.title = getTitle();
             }
@@ -291,8 +291,8 @@ public class LoaderCursor extends CursorWrapper {
      * Returns a {@link ContentWriter} which can be used to update the current item.
      */
     public ContentWriter updater() {
-       return new ContentWriter(mContext, new ContentWriter.CommitParams(
-               BaseColumns._ID + "= ?", new String[]{Long.toString(id)}));
+        return new ContentWriter(mContext, new ContentWriter.CommitParams(
+                BaseColumns._ID + "= ?", new String[]{Long.toString(id)}));
     }
 
     /**
@@ -305,6 +305,7 @@ public class LoaderCursor extends CursorWrapper {
 
     /**
      * Removes any items marked for removal.
+     *
      * @return true is any item was removed.
      */
     public boolean commitDeleted() {

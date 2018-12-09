@@ -20,7 +20,8 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:visibility="invisible"
->
+    >
+
     <include layout="@layout/overview_clear_all_button"/>
 
     <com.android.quickstep.views.LauncherRecentsView
@@ -33,7 +34,7 @@
         android:focusableInTouchMode="true"
         android:accessibilityPaneTitle="@string/accessibility_recent_apps"
         android:theme="@style/HomeScreenElementTheme"
-    >
+        >
 
     </com.android.quickstep.views.LauncherRecentsView>
 </com.android.quickstep.views.RecentsViewContainer>

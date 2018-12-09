@@ -24,7 +24,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class AllAppsAppLaunchTest extends AbstractLauncherUiTest {
 
-    @Rule public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
+    @Rule
+    public LauncherActivityRule mActivityMonitor = new LauncherActivityRule();
 
     @Test
     public void testAppLauncher_portrait() throws Exception {

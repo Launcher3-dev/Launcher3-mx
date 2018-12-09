@@ -60,10 +60,10 @@ public class PackageInstallStateChangedTaskTest extends BaseModelUpdateTaskTestC
         HashSet<Long> updates = new HashSet<>(Arrays.asList(idsUpdated));
         for (ItemInfo info : bgDataModel.itemsIdMap) {
             if (info instanceof ShortcutInfo) {
-                assertEquals(updates.contains(info.id) ? progress: 0,
+                assertEquals(updates.contains(info.id) ? progress : 0,
                         ((ShortcutInfo) info).getInstallProgress());
             } else {
-                assertEquals(updates.contains(info.id) ? progress: -1,
+                assertEquals(updates.contains(info.id) ? progress : -1,
                         ((LauncherAppWidgetInfo) info).installProgress);
             }
         }

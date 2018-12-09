@@ -43,7 +43,7 @@
         android:textAlignment="viewStart"
         launcher:iconDisplay="widget_section"
         launcher:iconSizeOverride="@dimen/widget_section_icon_size"
-        launcher:layoutHorizontal="true" />
+        launcher:layoutHorizontal="true"/>
 
-    <include layout="@layout/widgets_scroll_container" />
+    <include layout="@layout/widgets_scroll_container"/>
 </LinearLayout>

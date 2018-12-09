@@ -44,7 +44,7 @@ import com.android.launcher3.config.FeatureFlags;
 /**
  * A frame layout which contains a QSB. This internally uses fragment to bind the view, which
  * allows it to contain the logic for {@link Fragment#startActivityForResult(Intent, int)}.
- *
+ * <p>
  * Note: AppWidgetManagerCompat can be disabled using FeatureFlags. In QSB, we should use
  * AppWidgetManager directly, so that it keeps working in that case.
  */

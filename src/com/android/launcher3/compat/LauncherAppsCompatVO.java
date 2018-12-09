@@ -93,11 +93,11 @@ public class LauncherAppsCompatVO extends LauncherAppsCompatVL {
 
     /**
      * request.accept() will initiate the following flow:
-     *      -> go-to-system-process for actual processing (a)
-     *      -> callback-to-launcher on UI thread (b)
-     *      -> post callback on the worker thread (c)
-     *      -> Update model and unpin (in system) any shortcut not in out model. (d)
-     *
+     * -> go-to-system-process for actual processing (a)
+     * -> callback-to-launcher on UI thread (b)
+     * -> post callback on the worker thread (c)
+     * -> Update model and unpin (in system) any shortcut not in out model. (d)
+     * <p>
      * Note that (b) will take at-least one frame as it involves posting callback from binder
      * thread to UI thread.
      * If (d) happens before we add this shortcut to our model, we will end up unpinning

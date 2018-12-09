@@ -52,7 +52,7 @@ public class AllAppsBackgroundDrawable extends Drawable {
          *                and height of the image into account to center the image to the offset.
          */
         public TransformedImageDrawable(Context context, int resourceId, float xPct, float yPct,
-                int gravity) {
+                                        int gravity) {
             mImage = context.getDrawable(resourceId);
             mXPercent = xPct;
             mYPercent = yPct;

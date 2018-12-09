@@ -23,4 +23,4 @@
     android:clipChildren="false"
     android:elevation="@dimen/deep_shortcuts_elevation"
     android:importantForAccessibility="yes"
-    android:orientation="vertical" />
+    android:orientation="vertical"/>
