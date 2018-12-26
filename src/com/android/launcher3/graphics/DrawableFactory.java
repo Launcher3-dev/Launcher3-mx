@@ -37,7 +37,6 @@ import com.android.launcher3.ItemInfo;
 import com.android.launcher3.ItemInfoWithIcon;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
-import com.android.launcher3.allapps.AllAppsBackgroundDrawable;
 
 /**
  * Factory for creating new drawables.
