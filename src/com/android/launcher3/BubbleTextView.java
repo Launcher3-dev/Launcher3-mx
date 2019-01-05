@@ -766,8 +766,6 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
             info.iconBitmap.prepareToDraw();
 
             if (info instanceof ShortcutInfo) {
-                applyFromApplicationInfo((ShortcutInfo) info);
-            } else if (info instanceof ShortcutInfo) {
                 applyFromShortcutInfo((ShortcutInfo) info);
                 mActivity.invalidateParent(info);
             } else if (info instanceof PackageItemInfo) {
