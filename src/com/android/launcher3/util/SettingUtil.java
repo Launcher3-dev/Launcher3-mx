@@ -1,10 +1,13 @@
-package com.android.mxlibrary.util;
+package com.android.launcher3.util;
 
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+
+import com.android.launcher3.Launcher;
+import com.android.mxlibrary.util.DeviceInfoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
