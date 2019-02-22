@@ -2,6 +2,7 @@ package com.android.launcher3.setting;
 
 import android.content.Context;
 
+import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.effect.TransitionEffect;
 import com.android.launcher3.util.LauncherSpUtil;
 
@@ -18,7 +19,7 @@ public final class MxSettings {
     /**
      * PagedView can scroll circle-endless.
      */
-    public static boolean sIsPagedViewCircleScroll = true;
+    public static boolean sIsPagedViewCircleScroll = FeatureFlags.LAUNCHER3_CIRCLE_SCROLL;
     private Context mContext;
 
 

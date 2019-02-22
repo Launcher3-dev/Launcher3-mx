@@ -91,7 +91,7 @@ public class LoaderTask implements Runnable {
     private static final String TAG = "LoaderTask";
 
     private final LauncherAppState mApp;
-    private final AllAppsList mBgAllAppsList;
+    private final AllAppsList mAllAppsList;
     private final BgDataModel mBgDataModel;
 
     private FirstScreenBroadcast mFirstScreenBroadcast;
@@ -110,7 +110,7 @@ public class LoaderTask implements Runnable {
     public LoaderTask(LauncherAppState app, AllAppsList bgAllAppsList, BgDataModel dataModel,
                       LoaderResults results) {
         mApp = app;
-        mBgAllAppsList = bgAllAppsList;
+        mAllAppsList = bgAllAppsList;
         mBgDataModel = dataModel;
         mResults = results;
 
@@ -817,7 +817,7 @@ public class LoaderTask implements Runnable {
         final List<UserHandle> profiles = mUserManager.getUserProfiles();
 
         // Clear the list of apps
-        mBgAllAppsList.clear();
+        mAllAppsList.clear();
         for (UserHandle user : profiles) {
             // Query for the set of apps
             final List<LauncherActivityInfo> apps = mLauncherApps.getActivityList(null, user);
@@ -832,18 +832,18 @@ public class LoaderTask implements Runnable {
             for (int i = 0; i < apps.size(); i++) {
                 LauncherActivityInfo app = apps.get(i);
                 // This builds the icon bitmaps.
-                mBgAllAppsList.addAll(new ShortcutInfo(app, user, quietMode), app);
+                mAllAppsList.addAll(new ShortcutInfo(app, user, quietMode), app);
             }
         }
-        mBgAllAppsList.added = new ArrayList<>();
+        mAllAppsList.added = new ArrayList<>();
     }
 
     /**
      * Load all the apps bind, include apps in the folder that bind.
      */
     private void loadAllAppsBind() {
-        XLog.e(XLog.getTag(), XLog.TAG_GU);
         List<ItemInfo> list = mBgDataModel.workspaceItems;
+        XLog.e(XLog.getTag(), XLog.TAG_GU + list.size());
         for (ItemInfo info : list) {
             if (info instanceof ItemInfoWithIcon) {
                 mBgDataModel.workspaceShortcuts.put(info.getTargetComponent(), info);
@@ -863,19 +863,20 @@ public class LoaderTask implements Runnable {
      * filter all not bind apps
      */
     private void filterNoPositionAllApps() {
-        HashMap<ComponentName, ItemInfo> workspaceShortcuts = mBgDataModel.workspaceShortcuts;
-        XLog.e(XLog.getTag(), XLog.TAG_GU + "workspaceShortcuts:  " + workspaceShortcuts.size());
-        if (workspaceShortcuts.isEmpty()) {
+        ArrayList<ShortcutInfo> data = mAllAppsList.data;
+        if (data.isEmpty()) {
             return;
         }
-        ArrayList<ShortcutInfo> data = mBgAllAppsList.data;
-        if (data.isEmpty()) {
+        HashMap<ComponentName, ItemInfo> workspaceShortcuts = mBgDataModel.workspaceShortcuts;
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "workspaceShortcuts:  " + workspaceShortcuts.size());
+        if (workspaceShortcuts.isEmpty()) {// 数据库中没有数据，直接添加所有应用到绑定列表
+            mAllAppsList.noPosition.addAll(data);
             return;
         }
         XLog.e(XLog.getTag(), XLog.TAG_GU + "All apps count:  " + data.size());
         for (ShortcutInfo info : data) {
             if (!workspaceShortcuts.containsKey(info.componentName)) {
-                mBgAllAppsList.noPosition.add(info);
+                mAllAppsList.noPosition.add(info);
             }
         }
     }

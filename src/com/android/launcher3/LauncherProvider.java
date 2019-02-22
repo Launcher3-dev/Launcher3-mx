@@ -112,7 +112,6 @@ public class LauncherProvider extends ContentProvider {
             Log.d(TAG, "Launcher process started");
         }
         mListenerHandler = new Handler(mListenerWrapper);
-
         // The content provider exists for the entire duration of the launcher main process and
         // is the first component to get created.
         MainProcessInitializer.initialize(getContext().getApplicationContext());
