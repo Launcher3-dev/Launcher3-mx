@@ -15,8 +15,6 @@
  */
 package com.android.quickstep.util;
 
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -28,6 +26,8 @@ import com.android.launcher3.R;
 
 import java.lang.annotation.Retention;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 public class LayoutUtils {
 
     private static final int MULTI_WINDOW_STRATEGY_HALF_SCREEN = 1;
@@ -35,7 +35,8 @@ public class LayoutUtils {
 
     @Retention(SOURCE)
     @IntDef({MULTI_WINDOW_STRATEGY_HALF_SCREEN, MULTI_WINDOW_STRATEGY_DEVICE_PROFILE})
-    private @interface MultiWindowStrategy {}
+    private @interface MultiWindowStrategy {
+    }
 
     public static void calculateLauncherTaskSize(Context context, DeviceProfile dp, Rect outRect) {
         float extraSpace;
@@ -53,7 +54,7 @@ public class LayoutUtils {
 
     @AnyThread
     public static void calculateTaskSize(Context context, DeviceProfile dp,
-            float extraVerticalSpace, @MultiWindowStrategy int multiWindowStrategy, Rect outRect) {
+                                         float extraVerticalSpace, @MultiWindowStrategy int multiWindowStrategy, Rect outRect) {
         float taskWidth, taskHeight, paddingHorz;
         Resources res = context.getResources();
         Rect insets = dp.getInsets();

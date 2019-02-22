@@ -109,7 +109,7 @@ public class ShadowDrawable extends Drawable {
 
     @Override
     public void applyTheme(Resources.Theme t) {
-        TypedArray ta = t.obtainStyledAttributes(new int[] {R.attr.isWorkspaceDarkText});
+        TypedArray ta = t.obtainStyledAttributes(new int[]{R.attr.isWorkspaceDarkText});
         boolean isDark = ta.getBoolean(0, false);
         ta.recycle();
         if (mState.mIsDark != isDark) {
@@ -154,7 +154,7 @@ public class ShadowDrawable extends Drawable {
 
     @Override
     public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs,
-            Resources.Theme theme) throws XmlPullParserException, IOException {
+                        Resources.Theme theme) throws XmlPullParserException, IOException {
         super.inflate(r, parser, attrs, theme);
 
         final TypedArray a = theme == null

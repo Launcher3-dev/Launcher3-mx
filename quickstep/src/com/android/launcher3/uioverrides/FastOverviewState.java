@@ -60,7 +60,7 @@ public class FastOverviewState extends OverviewState {
         RecentsView recentsView = launcher.getOverviewPanel();
         recentsView.getTaskSize(sTempRect);
 
-        return new float[] {getOverviewScale(launcher.getDeviceProfile(), sTempRect, launcher),
+        return new float[]{getOverviewScale(launcher.getDeviceProfile(), sTempRect, launcher),
                 OVERVIEW_TRANSLATION_FACTOR};
     }
 

@@ -38,9 +38,9 @@ import java.util.Set;
  * Helper class to send broadcasts to package installers that have:
  * - Items on the first screen
  * - Items with an active install session
- *
+ * <p>
  * The packages are broken down by: folder items, workspace items, hotseat items, and widgets.
- *
+ * <p>
  * Package installers only receive data for items that they are installing.
  */
 public class FirstScreenBroadcast {
@@ -66,7 +66,7 @@ public class FirstScreenBroadcast {
 
     /**
      * @return Map where the key is the package name of the installer, and the value is a list
-     *         of packages with active sessions for that installer.
+     * of packages with active sessions for that installer.
      */
     private MultiHashMap<String, String> getPackagesForInstaller(
             HashMap<String, SessionInfo> sessionInfoForPackage) {
@@ -90,11 +90,11 @@ public class FirstScreenBroadcast {
 
     /**
      * @param installerPackageName Package name of the package installer.
-     * @param packages List of packages with active sessions for this package installer.
-     * @param firstScreenItems List of items on the first screen.
+     * @param packages             List of packages with active sessions for this package installer.
+     * @param firstScreenItems     List of items on the first screen.
      */
     private void sendBroadcastToInstaller(Context context, String installerPackageName,
-            List<String> packages, List<ItemInfo> firstScreenItems) {
+                                          List<String> packages, List<ItemInfo> firstScreenItems) {
         Set<String> folderItems = new HashSet<>();
         Set<String> workspaceItems = new HashSet<>();
         Set<String> hotseatItems = new HashSet<>();
@@ -150,7 +150,7 @@ public class FirstScreenBroadcast {
             if (widgetInfo.providerName != null) {
                 packageName = widgetInfo.providerName.getPackageName();
             }
-        } else if (info.getTargetComponent() != null){
+        } else if (info.getTargetComponent() != null) {
             packageName = info.getTargetComponent().getPackageName();
         }
         return packageName;

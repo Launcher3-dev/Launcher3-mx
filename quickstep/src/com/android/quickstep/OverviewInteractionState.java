@@ -15,11 +15,6 @@
  */
 package com.android.quickstep;
 
-import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_QUICK_SCRUB;
-import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_SWIPE_UP;
-import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_SHOW_OVERVIEW_BUTTON;
-import static com.android.systemui.shared.system.SettingsCompat.SWIPE_UP_SETTING_NAME;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -40,12 +35,17 @@ import com.android.systemui.shared.recents.ISystemUiProxy;
 
 import java.util.concurrent.ExecutionException;
 
+import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_QUICK_SCRUB;
+import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_DISABLE_SWIPE_UP;
+import static com.android.systemui.shared.system.NavigationBarCompat.FLAG_SHOW_OVERVIEW_BUTTON;
+import static com.android.systemui.shared.system.SettingsCompat.SWIPE_UP_SETTING_NAME;
+
 /**
  * Sets overview interaction flags, such as:
- *
- *   - FLAG_DISABLE_QUICK_SCRUB
- *   - FLAG_DISABLE_SWIPE_UP
- *   - FLAG_SHOW_OVERVIEW_BUTTON
+ * <p>
+ * - FLAG_DISABLE_QUICK_SCRUB
+ * - FLAG_DISABLE_SWIPE_UP
+ * - FLAG_SHOW_OVERVIEW_BUTTON
  *
  * @see com.android.systemui.shared.system.NavigationBarCompat.InteractionType and associated flags.
  */
@@ -70,7 +70,7 @@ public class OverviewInteractionState {
                 try {
                     return new MainThreadExecutor().submit(
                             () -> OverviewInteractionState.getInstance(context)).get();
-                } catch (InterruptedException|ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }
             }

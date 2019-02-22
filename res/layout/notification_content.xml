@@ -26,6 +26,7 @@
         android:layout_height="@dimen/notification_header_height"
         android:paddingEnd="@dimen/notification_padding_end"
         android:paddingStart="@dimen/notification_padding_start">
+
         <TextView
             android:id="@+id/notification_text"
             android:layout_width="wrap_content"
@@ -34,7 +35,8 @@
             android:gravity="center_vertical"
             android:text="@string/notifications_header"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/notification_header_text_size" />
+            android:textSize="@dimen/notification_header_text_size"/>
+
         <TextView
             android:id="@+id/notification_count"
             android:layout_width="@dimen/notification_icon_size"
@@ -43,7 +45,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/notification_header_count_text_size" />
+            android:textSize="@dimen/notification_header_count_text_size"/>
     </FrameLayout>
 
     <!-- Main view -->
@@ -52,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/notification_main_height"
         android:background="@drawable/bg_notification_content"
-        android:focusable="true" >
+        android:focusable="true">
 
         <LinearLayout
             android:id="@+id/text_and_background"
@@ -64,6 +66,7 @@
             android:paddingBottom="14dp"
             android:paddingEnd="@dimen/notification_main_text_padding_end"
             android:paddingStart="@dimen/notification_padding_start">
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
@@ -73,7 +76,7 @@
                 android:lines="1"
                 android:textAlignment="viewStart"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="@dimen/notification_main_title_size" />
+                android:textSize="@dimen/notification_main_title_size"/>
 
             <TextView
                 android:id="@+id/text"
@@ -83,7 +86,7 @@
                 android:fontFamily="sans-serif"
                 android:lines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="@dimen/notification_main_text_size" />
+                android:textSize="@dimen/notification_main_text_size"/>
         </LinearLayout>
 
         <View
@@ -92,7 +95,7 @@
             android:layout_height="@dimen/notification_icon_size"
             android:layout_gravity="center_vertical|end"
             android:layout_marginBottom="7dp"
-            android:layout_marginEnd="@dimen/notification_padding_end" />
+            android:layout_marginEnd="@dimen/notification_padding_end"/>
 
     </com.android.launcher3.notification.NotificationMainView>
 
@@ -102,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/popup_item_divider_height"
         android:layout_below="@id/main_view"
-        android:background="?attr/popupColorTertiary" />
+        android:background="?attr/popupColorTertiary"/>
 
     <!-- Footer -->
     <com.android.launcher3.notification.NotificationFooterLayout
@@ -128,7 +131,7 @@
             android:layout_height="@dimen/horizontal_ellipsis_size"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="@dimen/horizontal_ellipsis_offset"
-            android:background="@drawable/horizontal_ellipsis" />
+            android:background="@drawable/horizontal_ellipsis"/>
 
     </com.android.launcher3.notification.NotificationFooterLayout>
 </merge>

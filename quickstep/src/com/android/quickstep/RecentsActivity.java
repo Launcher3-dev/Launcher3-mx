@@ -15,15 +15,6 @@
  */
 package com.android.quickstep;
 
-import static android.content.pm.ActivityInfo.CONFIG_ORIENTATION;
-import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
-
-import static com.android.launcher3.LauncherAppTransitionManagerImpl.RECENTS_LAUNCH_DURATION;
-import static com.android.launcher3.LauncherAppTransitionManagerImpl.STATUS_BAR_TRANSITION_DURATION;
-import static com.android.quickstep.TaskUtils.getRecentsWindowAnimator;
-import static com.android.quickstep.TaskUtils.taskIsATargetWithMode;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -61,6 +52,14 @@ import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+
+import static android.content.pm.ActivityInfo.CONFIG_ORIENTATION;
+import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
+import static com.android.launcher3.LauncherAppTransitionManagerImpl.RECENTS_LAUNCH_DURATION;
+import static com.android.launcher3.LauncherAppTransitionManagerImpl.STATUS_BAR_TRANSITION_DURATION;
+import static com.android.quickstep.TaskUtils.getRecentsWindowAnimator;
+import static com.android.quickstep.TaskUtils.taskIsATargetWithMode;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
 
 /**
  * A simple activity to show the recently launched tasks
@@ -187,7 +186,7 @@ public class RecentsActivity extends BaseDraggingActivity {
 
             @Override
             public void onCreateAnimation(RemoteAnimationTargetCompat[] targetCompats,
-                    AnimationResult result) {
+                                          AnimationResult result) {
                 result.setAnimation(composeRecentsLaunchAnimator(taskView, targetCompats));
             }
         };
@@ -200,7 +199,7 @@ public class RecentsActivity extends BaseDraggingActivity {
      * Composes the animations for a launch from the recents list if possible.
      */
     private AnimatorSet composeRecentsLaunchAnimator(TaskView taskView,
-            RemoteAnimationTargetCompat[] targets) {
+                                                     RemoteAnimationTargetCompat[] targets) {
         AnimatorSet target = new AnimatorSet();
         boolean activityClosing = taskIsATargetWithMode(targets, getTaskId(), MODE_CLOSING);
         ClipAnimationHelper helper = new ClipAnimationHelper();
@@ -225,7 +224,8 @@ public class RecentsActivity extends BaseDraggingActivity {
     }
 
     @Override
-    public void invalidateParent(ItemInfo info) { }
+    public void invalidateParent(ItemInfo info) {
+    }
 
     @Override
     protected void onStart() {

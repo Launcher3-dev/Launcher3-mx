@@ -24,7 +24,7 @@ public class LauncherAppWidgetProviderInfo extends AppWidgetProviderInfo {
     public int minSpanY;
 
     public static LauncherAppWidgetProviderInfo fromProviderInfo(Context context,
-            AppWidgetProviderInfo info) {
+                                                                 AppWidgetProviderInfo info) {
         final LauncherAppWidgetProviderInfo launcherInfo;
         if (info instanceof LauncherAppWidgetProviderInfo) {
             launcherInfo = (LauncherAppWidgetProviderInfo) info;
@@ -44,7 +44,8 @@ public class LauncherAppWidgetProviderInfo extends AppWidgetProviderInfo {
         return launcherInfo;
     }
 
-    protected LauncherAppWidgetProviderInfo() {}
+    protected LauncherAppWidgetProviderInfo() {
+    }
 
     protected LauncherAppWidgetProviderInfo(Parcel in) {
         super(in);
@@ -72,7 +73,7 @@ public class LauncherAppWidgetProviderInfo extends AppWidgetProviderInfo {
         Rect widgetPadding = AppWidgetHostView.getDefaultPaddingForWidget(
                 context, provider, null);
         spanX = Math.max(1, (int) Math.ceil(
-                        (minWidth + widgetPadding.left + widgetPadding.right) / smallestCellWidth));
+                (minWidth + widgetPadding.left + widgetPadding.right) / smallestCellWidth));
         spanY = Math.max(1, (int) Math.ceil(
                 (minHeight + widgetPadding.top + widgetPadding.bottom) / smallestCellHeight));
 
@@ -102,4 +103,4 @@ public class LauncherAppWidgetProviderInfo extends AppWidgetProviderInfo {
             return 0;
         }
     }
- }
+}

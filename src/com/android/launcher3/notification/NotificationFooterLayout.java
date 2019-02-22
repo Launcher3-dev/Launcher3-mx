@@ -137,6 +137,7 @@ public class NotificationFooterLayout extends FrameLayout {
 
     /**
      * Creates an icon for the given NotificationInfo, and adds it to the icon row.
+     *
      * @return the icon view that was added
      */
     private View addNotificationIconForInfo(NotificationInfo info) {
@@ -150,7 +151,7 @@ public class NotificationFooterLayout extends FrameLayout {
     }
 
     public void animateFirstNotificationTo(Rect toBounds,
-            final IconAnimationEndListener callback) {
+                                           final IconAnimationEndListener callback) {
         AnimatorSet animation = LauncherAnimUtils.createAnimatorSet();
         final View firstNotification = mIconRow.getChildAt(mIconRow.getChildCount() - 1);
 

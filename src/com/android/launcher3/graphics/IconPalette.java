@@ -59,7 +59,7 @@ public class IconPalette {
      * color of an icon or text on the given background color.
      *
      * @return a color of the same hue with enough contrast against the background.
-     *
+     * <p>
      * This was copied from com.android.internal.util.NotificationColorUtil.
      */
     public static int resolveContrastColor(Context context, int color, int background) {
@@ -68,7 +68,7 @@ public class IconPalette {
         int contrastingColor = ensureTextContrast(resolvedColor, background);
 
         if (contrastingColor != resolvedColor) {
-            if (DEBUG){
+            if (DEBUG) {
                 Log.w(TAG, String.format(
                         "Enhanced contrast of notification for %s " +
                                 "%s (over background) by changing #%s to %s",
@@ -82,7 +82,7 @@ public class IconPalette {
 
     /**
      * Resolves {@param color} to an actual color if it is {@link Notification#COLOR_DEFAULT}
-     *
+     * <p>
      * This was copied from com.android.internal.util.NotificationColorUtil.
      */
     private static int resolveColor(Context context, int color) {
@@ -92,7 +92,9 @@ public class IconPalette {
         return color;
     }
 
-    /** For debugging. This was copied from com.android.internal.util.NotificationColorUtil. */
+    /**
+     * For debugging. This was copied from com.android.internal.util.NotificationColorUtil.
+     */
     private static String contrastChange(int colorOld, int colorNew, int bg) {
         return String.format("from %.2f:1 to %.2f:1",
                 ColorUtils.calculateContrast(colorOld, bg),
@@ -102,21 +104,23 @@ public class IconPalette {
     /**
      * Finds a text color with sufficient contrast over bg that has the same hue as the original
      * color.
-     *
+     * <p>
      * This was copied from com.android.internal.util.NotificationColorUtil.
      */
     private static int ensureTextContrast(int color, int bg) {
         return findContrastColor(color, bg, 4.5);
     }
+
     /**
      * Finds a suitable color such that there's enough contrast.
      *
-     * @param fg the color to start searching from.
-     * @param bg the color to ensure contrast against.
+     * @param fg       the color to start searching from.
+     * @param bg       the color to ensure contrast against.
      * @param minRatio the minimum contrast ratio required.
-     * @return a color with the same hue as {@param color}, potentially darkened to meet the
-     *          contrast ratio.
      *
+     * @return a color with the same hue as {@param color}, potentially darkened to meet the
+     * contrast ratio.
+     * <p>
      * This was copied from com.android.internal.util.NotificationColorUtil.
      */
     private static int findContrastColor(int fg, int bg, double minRatio) {
@@ -137,9 +141,11 @@ public class IconPalette {
             final double l = (low + high) / 2;
             fg = ColorUtils.LABToColor(l, a, b);
             if (ColorUtils.calculateContrast(fg, bg) > minRatio) {
-                if (isBgDark) high = l; else low = l;
+                if (isBgDark) high = l;
+                else low = l;
             } else {
-                if (isBgDark) low = l; else high = l;
+                if (isBgDark) low = l;
+                else high = l;
             }
         }
         return ColorUtils.LABToColor(low, a, b);

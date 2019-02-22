@@ -28,6 +28,7 @@ public class MultiStateCallback {
 
     /**
      * Adds the provided state flags to the global state and executes any callbacks as a result.
+     *
      * @param stateFlag
      */
     public void setState(int stateFlag) {

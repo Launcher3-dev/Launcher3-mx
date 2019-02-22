@@ -75,13 +75,15 @@ public class LoggerUtils {
                     str += " direction=" + getFieldName(action.dir, Action.Direction.class);
                 }
                 return str;
-            case Action.Type.COMMAND: return getFieldName(action.command, Action.Command.class);
-            default: return getFieldName(action.type, Action.Type.class);
+            case Action.Type.COMMAND:
+                return getFieldName(action.command, Action.Command.class);
+            default:
+                return getFieldName(action.type, Action.Type.class);
         }
     }
 
     public static String getTargetStr(Target t) {
-        if (t == null){
+        if (t == null) {
             return "";
         }
         String str = "";
@@ -98,7 +100,7 @@ public class LoggerUtils {
                         t.containerType == ContainerType.HOTSEAT) {
                     str += " id=" + t.pageIndex;
                 } else if (t.containerType == ContainerType.FOLDER) {
-                    str += " grid(" + t.gridX + "," + t.gridY+ ")";
+                    str += " grid(" + t.gridX + "," + t.gridY + ")";
                 }
                 break;
             default:
@@ -154,7 +156,7 @@ public class LoggerUtils {
         switch (info.itemType) {
             case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
                 t.itemType = (instantAppResolver != null && info instanceof ShortcutInfo
-                        && instantAppResolver.isInstantApp(((ShortcutInfo) info)) )
+                        && instantAppResolver.isInstantApp(((ShortcutInfo) info)))
                         ? ItemType.WEB_APP
                         : ItemType.APP_ICON;
                 t.predictedRank = -100; // Never assigned

@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"ଏକ ଶର୍ଟକଟ୍ ଚୟନ କରିବାକୁ ଦାବି ଧରନ୍ତୁ।"</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"ଡବଲ୍‌-ଟାପ୍‌ କରନ୍ତୁ ଏବଂ ଏକ ଶର୍ଟକଟ୍ ଚୟନ କରିବାକୁ ଧରି ରଖନ୍ତୁ କିମ୍ୱା କଷ୍ଟମ୍ ପ୍ରକ୍ରିୟା ବ୍ୟବହାର କରନ୍ତୁ।"</string>

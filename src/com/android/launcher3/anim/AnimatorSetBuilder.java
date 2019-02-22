@@ -44,7 +44,8 @@ public class AnimatorSetBuilder {
     /**
      * Associates a tag with all the animations added after this call.
      */
-    public void startTag(Object obj) { }
+    public void startTag(Object obj) {
+    }
 
     public void play(Animator anim) {
         mAnims.add(anim);

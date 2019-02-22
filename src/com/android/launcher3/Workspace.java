@@ -70,6 +70,8 @@ import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.folder.PreviewBackground;
 import com.android.launcher3.graphics.DragPreviewProvider;
 import com.android.launcher3.graphics.PreloadIconDrawable;
+import com.android.launcher3.menu.MenuEffectController;
+import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
 import com.android.launcher3.setting.MxSettings;
@@ -1140,17 +1142,17 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     private static final int WORKSPACE_MSG_BACK_EFFECT = 101;
     protected static final int SLOW_PAGE_SNAP_ANIMATION_DURATION = 950;
 
-//    public void previewTransitionEffect(MenuItem effect, MenuEffectController controller) {
-//        if (!mScroller.isFinished() || getChildCount() < 2) {
-//            return;
-//        }
-//        LauncherSetting.getInstance().setLauncherEffect(effect.getPosition());
-//        controller.getAdapter().setSelected(effect);
-//        mTransitionEffectHandler.removeMessages(WORKSPACE_MSG_PREVIEW_EFFECT);
-//        Message msg = mTransitionEffectHandler.obtainMessage();
-//        msg.what = WORKSPACE_MSG_PREVIEW_EFFECT;
-//        mTransitionEffectHandler.sendMessage(msg);
-//    }
+    public void previewTransitionEffect(MenuItem effect, MenuEffectController controller) {
+        if (!mScroller.isFinished() || getChildCount() < 2) {
+            return;
+        }
+        MxSettings.getInstance().setLauncherEffect(effect.getPosition());
+        controller.getAdapter().setSelected(effect);
+        mTransitionEffectHandler.removeMessages(WORKSPACE_MSG_PREVIEW_EFFECT);
+        Message msg = mTransitionEffectHandler.obtainMessage();
+        msg.what = WORKSPACE_MSG_PREVIEW_EFFECT;
+        mTransitionEffectHandler.sendMessage(msg);
+    }
 
     private TransitionEffectHandler mTransitionEffectHandler;
 
@@ -2275,6 +2277,33 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         mSpringLoadedDragController.cancel();
     }
+
+    // add by comdemx.cn ---- 20181209 ----- start
+    // 绑定Widget
+    public void bindWidget(PendingAddWidgetInfo info) {
+        final long container = LauncherSettings.Favorites.CONTAINER_DESKTOP;
+        CellLayout cl = (CellLayout) getChildAt(getNextPage());
+        if (cl == null || info == null) {
+            return;
+        }
+        int[] vacant = new int[2];
+        int[] span = new int[2];
+        long currentScreenId = getIdForScreen(cl);
+        if (currentScreenId == EXTRA_EMPTY_SCREEN_ID) {
+            currentScreenId = commitExtraEmptyScreen();
+        }
+        span[0] = info.spanX;
+        span[1] = info.spanY;
+        boolean find = cl.findCellForSpan(vacant, span[0], span[1]);
+        if (find) {
+            info.screenId = currentScreenId;
+            mLauncher.addPendingItem(info, container, info.screenId, vacant, span[0], span[1]);
+        } else {
+            Toast.makeText(mLauncher.getApplicationContext(), R.string.out_of_space, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // add by comdemx.cn ---- 20181209 ----- end
 
     private void enforceDragParity(String event, int update, int expectedValue) {
         enforceDragParity(this, event, update, expectedValue);

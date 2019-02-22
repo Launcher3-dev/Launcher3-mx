@@ -49,8 +49,10 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
     private static final boolean LOGD = false;
     private static final String TAG = "PopupDataProvider";
 
-    /** Note that these are in order of priority. */
-    private static final SystemShortcut[] SYSTEM_SHORTCUTS = new SystemShortcut[] {
+    /**
+     * Note that these are in order of priority.
+     */
+    private static final SystemShortcut[] SYSTEM_SHORTCUTS = new SystemShortcut[]{
             new SystemShortcut.AppInfo(),
             new SystemShortcut.Widgets(),
             new SystemShortcut.Install()
@@ -58,11 +60,17 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
 
     private final Launcher mLauncher;
 
-    /** Maps launcher activity components to their list of shortcut ids. */
+    /**
+     * Maps launcher activity components to their list of shortcut ids.
+     */
     private MultiHashMap<ComponentKey, String> mDeepShortcutMap = new MultiHashMap<>();
-    /** Maps packages to their BadgeInfo's . */
+    /**
+     * Maps packages to their BadgeInfo's .
+     */
     private Map<PackageUserKey, BadgeInfo> mPackageUserToBadgeInfos = new HashMap<>();
-    /** Maps packages to their Widgets */
+    /**
+     * Maps packages to their Widgets
+     */
     private ArrayList<WidgetListRowEntry> mAllWidgets = new ArrayList<>();
 
     public PopupDataProvider(Launcher launcher) {
@@ -71,7 +79,7 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
 
     @Override
     public void onNotificationPosted(PackageUserKey postedPackageUserKey,
-            NotificationKeyData notificationKey, boolean shouldBeFilteredOut) {
+                                     NotificationKeyData notificationKey, boolean shouldBeFilteredOut) {
         BadgeInfo badgeInfo = mPackageUserToBadgeInfos.get(postedPackageUserKey);
         boolean badgeShouldBeRefreshed;
         if (badgeInfo == null) {
@@ -98,7 +106,7 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
 
     @Override
     public void onNotificationRemoved(PackageUserKey removedPackageUserKey,
-            NotificationKeyData notificationKey) {
+                                      NotificationKeyData notificationKey) {
         BadgeInfo oldBadgeInfo = mPackageUserToBadgeInfos.get(removedPackageUserKey);
         if (oldBadgeInfo != null && oldBadgeInfo.removeNotificationKey(notificationKey)) {
             if (oldBadgeInfo.getNotificationKeys().size() == 0) {
@@ -178,20 +186,25 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
         return mPackageUserToBadgeInfos.get(PackageUserKey.fromItemInfo(info));
     }
 
-    public @NonNull List<NotificationKeyData> getNotificationKeysForItem(ItemInfo info) {
+    public @NonNull
+    List<NotificationKeyData> getNotificationKeysForItem(ItemInfo info) {
         BadgeInfo badgeInfo = getBadgeInfoForItem(info);
         return badgeInfo == null ? Collections.EMPTY_LIST : badgeInfo.getNotificationKeys();
     }
 
-    /** This makes a potentially expensive binder call and should be run on a background thread. */
-    public @NonNull List<StatusBarNotification> getStatusBarNotificationsForKeys(
+    /**
+     * This makes a potentially expensive binder call and should be run on a background thread.
+     */
+    public @NonNull
+    List<StatusBarNotification> getStatusBarNotificationsForKeys(
             List<NotificationKeyData> notificationKeys) {
         NotificationListener notificationListener = NotificationListener.getInstanceIfConnected();
         return notificationListener == null ? Collections.EMPTY_LIST
                 : notificationListener.getNotificationsForKeys(notificationKeys);
     }
 
-    public @NonNull List<SystemShortcut> getEnabledSystemShortcutsForItem(ItemInfo info) {
+    public @NonNull
+    List<SystemShortcut> getEnabledSystemShortcutsForItem(ItemInfo info) {
         List<SystemShortcut> systemShortcuts = new ArrayList<>();
         for (SystemShortcut systemShortcut : SYSTEM_SHORTCUTS) {
             if (systemShortcut.getOnClickListener(mLauncher, info) != null) {

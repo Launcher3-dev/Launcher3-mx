@@ -64,7 +64,7 @@ public class RecentsActivityTracker implements ActivityInitListener {
 
     @Override
     public void registerAndStartActivity(Intent intent, RemoteAnimationProvider animProvider,
-            Context context, Handler handler, long duration) {
+                                         Context context, Handler handler, long duration) {
         register();
 
         Bundle options = animProvider.toActivityOptions(handler, duration).toBundle();

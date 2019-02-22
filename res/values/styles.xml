@@ -101,9 +101,9 @@
         <item name="android:textColorSecondary">?android:attr/textColorSecondaryInverse</item>
     </style>
 
-    <style name="WidgetContainerTheme.Dark" />
+    <style name="WidgetContainerTheme.Dark"/>
 
-    <style name="FastScrollerPopup" >
+    <style name="FastScrollerPopup">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:minWidth">@dimen/fastscroll_popup_width</item>
         <item name="android:layout_height">@dimen/fastscroll_popup_height</item>
@@ -164,7 +164,7 @@
         <item name="android:shadowRadius">4.0</item>
     </style>
 
-    <style name="DropTargetButton" parent="DropTargetButtonBase" />
+    <style name="DropTargetButton" parent="DropTargetButtonBase"/>
 
     <style name="TextTitle">
         <item name="android:fontFamily">sans-serif</item>
@@ -175,6 +175,7 @@
         <item name="android:colorControlHighlight">#BDBDBD</item>
         <item name="android:colorForeground">@color/all_apps_bg_hand_fill</item>
     </style>
+
     <style name="AllAppsEmptySearchBackground.Dark">
         <item name="android:colorPrimary">#9AA0A6</item>
         <item name="android:colorControlHighlight">#DFE1E5</item>

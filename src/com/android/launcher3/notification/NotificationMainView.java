@@ -16,8 +16,6 @@
 
 package com.android.launcher3.notification;
 
-import static com.android.launcher3.anim.Interpolators.scrollInterpolatorForVelocity;
-
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
@@ -43,6 +41,8 @@ import com.android.launcher3.touch.SwipeDetector;
 import com.android.launcher3.userevent.nano.LauncherLogProto;
 import com.android.launcher3.util.Themes;
 
+import static com.android.launcher3.anim.Interpolators.scrollInterpolatorForVelocity;
+
 /**
  * A {@link android.widget.FrameLayout} that contains a single notification,
  * e.g. icon + title + text.
@@ -52,16 +52,16 @@ public class NotificationMainView extends FrameLayout implements SwipeDetector.L
 
     private static FloatProperty<NotificationMainView> CONTENT_TRANSLATION =
             new FloatProperty<NotificationMainView>("contentTranslation") {
-        @Override
-        public void setValue(NotificationMainView view, float v) {
-            view.setContentTranslation(v);
-        }
+                @Override
+                public void setValue(NotificationMainView view, float v) {
+                    view.setContentTranslation(v);
+                }
 
-        @Override
-        public Float get(NotificationMainView view) {
-            return view.mTextAndBackground.getTranslationX();
-        }
-    };
+                @Override
+                public Float get(NotificationMainView view) {
+                    return view.mTextAndBackground.getTranslationX();
+                }
+            };
 
     // This is used only to track the notification view, so that it can be properly logged.
     public static final ItemInfo NOTIFICATION_ITEM_INFO = new ItemInfo();
@@ -171,7 +171,8 @@ public class NotificationMainView extends FrameLayout implements SwipeDetector.L
 
     // SwipeDetector.Listener's
     @Override
-    public void onDragStart(boolean start) { }
+    public void onDragStart(boolean start) {
+    }
 
 
     @Override
@@ -193,7 +194,7 @@ public class NotificationMainView extends FrameLayout implements SwipeDetector.L
             endTranslation = 0;
         } else if (fling) {
             willExit = true;
-            endTranslation = velocity < 0 ? - getWidth() : getWidth();
+            endTranslation = velocity < 0 ? -getWidth() : getWidth();
         } else if (Math.abs(startTranslation) > getWidth() / 2) {
             willExit = true;
             endTranslation = (startTranslation < 0 ? -getWidth() : getWidth());

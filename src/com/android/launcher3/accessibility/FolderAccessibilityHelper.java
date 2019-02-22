@@ -39,6 +39,7 @@ public class FolderAccessibilityHelper extends DragAndDropAccessibilityDelegate 
         int index = mParent.indexOfChild(layout);
         mStartPosition = index * layout.getCountX() * layout.getCountY();
     }
+
     @Override
     protected int intersectsValidDropTarget(int id) {
         return Math.min(id, mParent.getAllocatedContentSize() - mStartPosition - 1);

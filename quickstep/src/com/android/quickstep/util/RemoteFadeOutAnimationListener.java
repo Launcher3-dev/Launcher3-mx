@@ -15,14 +15,14 @@
  */
 package com.android.quickstep.util;
 
-import static com.android.quickstep.util.RemoteAnimationProvider.prepareTargetsForFirstFrame;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 
 import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
 import com.android.systemui.shared.system.TransactionCompat;
+
+import static com.android.quickstep.util.RemoteAnimationProvider.prepareTargetsForFirstFrame;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
 
 /**
  * Animation listener which fades out the closing targets

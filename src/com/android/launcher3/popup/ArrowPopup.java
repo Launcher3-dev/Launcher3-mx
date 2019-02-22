@@ -125,10 +125,12 @@ public abstract class ArrowPopup extends AbstractFloatingView {
     /**
      * Called when all view inflation and reordering in complete.
      */
-    protected void onInflationComplete(boolean isReversed) { }
+    protected void onInflationComplete(boolean isReversed) {
+    }
 
     /**
      * Shows the popup at the desired location, optionally reversing the children.
+     *
      * @param viewsToFlip number of views from the top to to flip in case of reverse order
      */
     protected void reorderAndShow(int viewsToFlip) {
@@ -204,13 +206,13 @@ public abstract class ArrowPopup extends AbstractFloatingView {
 
     /**
      * Orients this container above or below the given icon, aligning with the left or right.
-     *
+     * <p>
      * These are the preferred orientations, in order (RTL prefers right-aligned over left):
      * - Above and left-aligned
      * - Above and right-aligned
      * - Below and left-aligned
      * - Below and right-aligned
-     *
+     * <p>
      * So we always align left if there is enough horizontal space
      * and align above if there is enough vertical space.
      */
@@ -428,11 +430,12 @@ public abstract class ArrowPopup extends AbstractFloatingView {
     /**
      * Called when creating the close transition allowing subclass can add additional animations.
      */
-    protected void onCreateCloseAnimation(AnimatorSet anim) { }
+    protected void onCreateCloseAnimation(AnimatorSet anim) {
+    }
 
     private RoundedRectRevealOutlineProvider createOpenCloseOutlineProvider() {
         int arrowCenterX = getResources().getDimensionPixelSize(mIsLeftAligned ^ mIsRtl ?
-                R.dimen.popup_arrow_horizontal_center_start:
+                R.dimen.popup_arrow_horizontal_center_start :
                 R.dimen.popup_arrow_horizontal_center_end);
         if (!mIsLeftAligned) {
             arrowCenterX = getMeasuredWidth() - arrowCenterX;

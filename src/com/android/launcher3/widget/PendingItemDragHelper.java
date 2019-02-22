@@ -61,14 +61,14 @@ public class PendingItemDragHelper extends DragPreviewProvider {
     /**
      * Starts the drag for the pending item associated with the view.
      *
-     * @param previewBounds The bounds where the image was displayed,
-     *                      {@link WidgetImageView#getBitmapBounds()}
+     * @param previewBounds      The bounds where the image was displayed,
+     *                           {@link WidgetImageView#getBitmapBounds()}
      * @param previewBitmapWidth The actual width of the bitmap displayed in the view.
-     * @param previewViewWidth The width of {@link WidgetImageView} displaying the preview
-     * @param screenPos Position of {@link WidgetImageView} on the screen
+     * @param previewViewWidth   The width of {@link WidgetImageView} displaying the preview
+     * @param screenPos          Position of {@link WidgetImageView} on the screen
      */
     public void startDrag(Rect previewBounds, int previewBitmapWidth, int previewViewWidth,
-            Point screenPos, DragSource source, DragOptions options) {
+                          Point screenPos, DragSource source, DragOptions options) {
         final Launcher launcher = Launcher.getLauncher(mView.getContext());
         LauncherAppState app = LauncherAppState.getInstance(launcher);
 

@@ -15,8 +15,6 @@
  */
 package com.android.launcher3.widget;
 
-import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
@@ -38,6 +36,8 @@ import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 import com.android.launcher3.util.SystemUiController;
 import com.android.launcher3.util.Themes;
 import com.android.launcher3.views.AbstractSlideInView;
+
+import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
 
 /**
  * Base class for various widgets popup
@@ -110,7 +110,8 @@ abstract class BaseWidgetSheet extends AbstractSlideInView
     //
 
     @Override
-    public void onDropCompleted(View target, DragObject d, boolean success) { }
+    public void onDropCompleted(View target, DragObject d, boolean success) {
+    }
 
 
     protected void onCloseComplete() {

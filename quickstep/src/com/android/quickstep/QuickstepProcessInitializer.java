@@ -23,7 +23,8 @@ import com.android.systemui.shared.system.ThreadedRendererCompat;
 @SuppressWarnings("unused")
 public class QuickstepProcessInitializer extends MainProcessInitializer {
 
-    public QuickstepProcessInitializer(Context context) { }
+    public QuickstepProcessInitializer(Context context) {
+    }
 
     @Override
     protected void init(Context context) {

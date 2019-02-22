@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.android.launcher3.menu.MenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<com.android.launcher3.menu.view.MenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:layout="http://schemas.android.com/apk/res-auto"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="#ff00ff"
+                                            android:orientation="vertical">
 
-</com.android.launcher3.menu.MenuLayout>
+
+    <com.android.launcher3.menu.view.HorizontalPageScrollView
+        android:id="@+id/mx_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        layout:center_layout="true"
+        layout:free_scroll="false"
+        layout:menu_numColumns="4"/>
+
+    <com.android.launcher3.menu.view.HorizontalPageScrollView
+        android:id="@+id/menu_widget_effect"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        layout:center_layout="false"
+        layout:free_scroll="false"
+        layout:menu_numColumns="4"/>
+
+    <com.android.launcher3.menu.view.HorizontalPageScrollView
+        android:id="@+id/menu_widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        layout:center_layout="false"
+        layout:free_scroll="false"
+        layout:menu_numColumns="4"/>
+
+</com.android.launcher3.menu.view.MenuLayout>

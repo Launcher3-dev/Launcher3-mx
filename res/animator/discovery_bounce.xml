@@ -17,7 +17,7 @@
 */
 -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:ordering="sequentially">
+     android:ordering="sequentially">
     <objectAnimator
         android:duration="166"
         android:interpolator="@interpolator/disco_bounce"
@@ -25,11 +25,11 @@
         android:startOffset="750"
         android:valueFrom="1f"
         android:valueTo="0.9438f"
-        android:valueType="floatType" />
+        android:valueType="floatType"/>
     <objectAnimator
         android:duration="500"
         android:interpolator="@interpolator/disco_bounce"
         android:propertyName="progress"
         android:valueTo="1f"
-        android:valueType="floatType" />
+        android:valueType="floatType"/>
 </set>

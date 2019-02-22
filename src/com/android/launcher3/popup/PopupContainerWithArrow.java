@@ -75,7 +75,7 @@ import static com.android.launcher3.userevent.nano.LauncherLogProto.Target;
 
 /**
  * A container for shortcuts to deep links and notifications associated with an app.
- *
+ * <p>
  * 长按图标弹出的扩展框
  */
 @TargetApi(Build.VERSION_CODES.N)
@@ -167,6 +167,7 @@ public class PopupContainerWithArrow extends ArrowPopup implements DragSource,
 
     /**
      * Shows the notifications and deep shortcuts associated with {@param icon}.
+     *
      * @return the container if shown or null.
      */
     public static PopupContainerWithArrow showForIcon(BubbleTextView icon) {
@@ -218,7 +219,7 @@ public class PopupContainerWithArrow extends ArrowPopup implements DragSource,
 
     @TargetApi(Build.VERSION_CODES.P)
     private void populateAndShow(final BubbleTextView originalIcon, final List<String> shortcutIds,
-            final List<NotificationKeyData> notificationKeys, List<SystemShortcut> systemShortcuts) {
+                                 final List<NotificationKeyData> notificationKeys, List<SystemShortcut> systemShortcuts) {
         mNumNotifications = notificationKeys.size();
         mOriginalIcon = originalIcon;
 
@@ -401,7 +402,7 @@ public class PopupContainerWithArrow extends ArrowPopup implements DragSource,
 
     /**
      * Determines when the deferred drag should be started.
-     *
+     * <p>
      * Current behavior:
      * - Start the drag if the touch passes a certain distance from the original touch down.
      */
@@ -482,7 +483,8 @@ public class PopupContainerWithArrow extends ArrowPopup implements DragSource,
     }
 
     @Override
-    public void onDropCompleted(View target, DragObject d, boolean success) {  }
+    public void onDropCompleted(View target, DragObject d, boolean success) {
+    }
 
     @Override
     public void onDragStart(DropTarget.DragObject dragObject, DragOptions options) {

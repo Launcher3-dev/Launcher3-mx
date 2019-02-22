@@ -18,7 +18,6 @@ package com.android.launcher3.util;
 
 import android.content.ComponentName;
 import android.os.UserHandle;
-import android.util.SparseLongArray;
 
 import com.android.launcher3.FolderInfo;
 import com.android.launcher3.ItemInfo;
@@ -71,7 +70,7 @@ public abstract class ItemInfoMatcher {
      * Returns a new matcher with returns true if either this or {@param matcher} returns true.
      */
     public ItemInfoMatcher or(final ItemInfoMatcher matcher) {
-       final ItemInfoMatcher that = this;
+        final ItemInfoMatcher that = this;
         return new ItemInfoMatcher() {
             @Override
             public boolean matches(ItemInfo info, ComponentName cn) {

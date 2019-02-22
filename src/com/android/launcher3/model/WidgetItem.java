@@ -30,7 +30,7 @@ public class WidgetItem extends ComponentKey implements Comparable<WidgetItem> {
     public final int spanX, spanY;
 
     public WidgetItem(LauncherAppWidgetProviderInfo info, PackageManager pm,
-            InvariantDeviceProfile idp) {
+                      InvariantDeviceProfile idp) {
         super(info.provider, info.getProfile());
 
         label = Utilities.trim(info.getLabel(pm));

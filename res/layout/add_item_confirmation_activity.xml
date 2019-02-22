@@ -17,9 +17,10 @@
 */
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -38,7 +39,7 @@
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:paddingTop="4dp"
-                android:text="@string/add_item_request_drag_hint" />
+                android:text="@string/add_item_request_drag_hint"/>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -55,9 +56,9 @@
                     android:background="?android:attr/colorPrimaryDark"
                     android:focusable="true"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
-                    <include layout="@layout/widget_cell_content"  />
+                    <include layout="@layout/widget_cell_content"/>
 
                 </com.android.launcher3.dragndrop.LivePreviewWidgetCell>
             </FrameLayout>
@@ -72,18 +73,20 @@
         android:paddingBottom="4dp"
         android:paddingEnd="12dp"
         android:paddingStart="12dp"
-        android:paddingTop="4dp" >
+        android:paddingTop="4dp">
+
         <Button
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onCancelClick"
-            android:text="@android:string/cancel" />
+            android:text="@android:string/cancel"/>
+
         <Button
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onPlaceAutomaticallyClick"
-            android:text="@string/place_automatically" />
+            android:text="@string/place_automatically"/>
     </LinearLayout>
 </LinearLayout>

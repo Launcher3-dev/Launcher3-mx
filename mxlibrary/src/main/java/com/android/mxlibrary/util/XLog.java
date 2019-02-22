@@ -20,32 +20,32 @@ public class XLog {
     }
 
     public static void i(String tag, String log) {
-        if (sEnablePrint){
-            Log.i(tag,log);
+        if (sEnablePrint) {
+            Log.i(tag, log);
         }
     }
 
     public static void e(String tag, String log) {
-        if (sEnablePrint){
-            Log.e(tag,log);
+        if (sEnablePrint) {
+            Log.e(tag, log);
         }
     }
 
     public static void d(String tag, String log) {
-        if (sEnablePrint){
-            Log.d(tag,log);
+        if (sEnablePrint) {
+            Log.d(tag, log);
         }
     }
 
     public static void w(String tag, String log) {
-        if (sEnablePrint){
-            Log.w(tag,log);
+        if (sEnablePrint) {
+            Log.w(tag, log);
         }
     }
 
     public static void v(String tag, String log) {
-        if (sEnablePrint){
-            Log.v(tag,log);
+        if (sEnablePrint) {
+            Log.v(tag, log);
         }
     }
 

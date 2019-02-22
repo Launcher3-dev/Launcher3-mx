@@ -29,7 +29,7 @@ public class WallpaperColorsCompat {
     private final int mColorHints;
 
     public WallpaperColorsCompat(int primaryColor, int secondaryColor, int tertiaryColor,
-            int colorHints) {
+                                 int colorHints) {
         mPrimaryColor = primaryColor;
         mSecondaryColor = secondaryColor;
         mTertiaryColor = tertiaryColor;

@@ -28,16 +28,15 @@ import android.os.StrictMode;
 import android.os.UserHandle;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.Surface;
 import android.view.View;
 import android.widget.Toast;
 
 import com.android.launcher3.LauncherSettings.Favorites;
 import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.LauncherAppsCompat;
+import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.uioverrides.DisplayRotationListener;
 import com.android.launcher3.uioverrides.WallpaperColorInfo;
-import com.android.launcher3.shortcuts.DeepShortcutManager;
 import com.android.launcher3.views.BaseDragLayer;
 
 /**
@@ -187,7 +186,7 @@ public abstract class BaseDraggingActivity extends BaseActivity
             }
             getUserEventDispatcher().logAppLaunch(v, intent);
             return true;
-        } catch (ActivityNotFoundException|SecurityException e) {
+        } catch (ActivityNotFoundException | SecurityException e) {
             Toast.makeText(this, R.string.activity_not_found, Toast.LENGTH_SHORT).show();
             Log.e(TAG, "Unable to launch. tag=" + item + " intent=" + intent, e);
         }

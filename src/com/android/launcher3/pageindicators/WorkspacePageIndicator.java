@@ -28,7 +28,7 @@ import com.android.launcher3.uioverrides.WallpaperColorInfo;
 
 /**
  * A PageIndicator that briefly shows a fraction of a line when moving between pages
- *
+ * <p>
  * The fraction is 1 / number of pages and the position is based on the progress of the page scroll.
  */
 public class WorkspacePageIndicator extends View implements Insettable, PageIndicator {
@@ -172,7 +172,8 @@ public class WorkspacePageIndicator extends View implements Insettable, PageIndi
     }
 
     @Override
-    public void setActiveMarker(int activePage) { }
+    public void setActiveMarker(int activePage) {
+    }
 
     @Override
     public void setMarkersCount(int numMarkers) {
@@ -214,7 +215,7 @@ public class WorkspacePageIndicator extends View implements Insettable, PageIndi
     /**
      * Starts the given animator and stores it in the provided index in {@link #mAnimators} until
      * the animation ends.
-     *
+     * <p>
      * If an animator is already at the index (i.e. it is already playing), it is canceled and
      * replaced with the new animator.
      */

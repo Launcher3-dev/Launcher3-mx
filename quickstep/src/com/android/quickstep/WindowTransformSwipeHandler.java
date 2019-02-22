@@ -15,15 +15,6 @@
  */
 package com.android.quickstep;
 
-import static com.android.launcher3.BaseActivity.INVISIBLE_BY_STATE_HANDLER;
-import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
-import static com.android.launcher3.Utilities.postAsyncCallback;
-import static com.android.launcher3.anim.Interpolators.DEACCEL;
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.quickstep.QuickScrubController.QUICK_SCRUB_FROM_APP_START_DURATION;
-import static com.android.quickstep.TouchConsumer.INTERACTION_NORMAL;
-import static com.android.quickstep.TouchConsumer.INTERACTION_QUICK_SCRUB;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -84,6 +75,15 @@ import com.android.systemui.shared.system.WindowManagerWrapper;
 
 import java.util.StringJoiner;
 
+import static com.android.launcher3.BaseActivity.INVISIBLE_BY_STATE_HANDLER;
+import static com.android.launcher3.Utilities.SINGLE_FRAME_MS;
+import static com.android.launcher3.Utilities.postAsyncCallback;
+import static com.android.launcher3.anim.Interpolators.DEACCEL;
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.quickstep.QuickScrubController.QUICK_SCRUB_FROM_APP_START_DURATION;
+import static com.android.quickstep.TouchConsumer.INTERACTION_NORMAL;
+import static com.android.quickstep.TouchConsumer.INTERACTION_QUICK_SCRUB;
+
 @TargetApi(Build.VERSION_CODES.O)
 public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
     private static final String TAG = WindowTransformSwipeHandler.class.getSimpleName();
@@ -119,7 +119,7 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
 
     private static final int LAUNCHER_UI_STATES =
             STATE_LAUNCHER_PRESENT | STATE_LAUNCHER_DRAWN | STATE_ACTIVITY_MULTIPLIER_COMPLETE
-            | STATE_LAUNCHER_STARTED;
+                    | STATE_LAUNCHER_STARTED;
 
     private static final int LONG_SWIPE_ENTER_STATE =
             STATE_ACTIVITY_MULTIPLIER_COMPLETE | STATE_LAUNCHER_STARTED
@@ -130,7 +130,7 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
                     | STATE_APP_CONTROLLER_RECEIVED | STATE_SCREENSHOT_CAPTURED;
 
     // For debugging, keep in sync with above states
-    private static final String[] STATES = new String[] {
+    private static final String[] STATES = new String[]{
             "STATE_LAUNCHER_PRESENT",
             "STATE_LAUNCHER_STARTED",
             "STATE_LAUNCHER_DRAWN",
@@ -193,7 +193,8 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
     private LayoutListener mLayoutListener;
     private RecentsView mRecentsView;
     private QuickScrubController mQuickScrubController;
-    private AnimationFactory mAnimationFactory = (t, i) -> { };
+    private AnimationFactory mAnimationFactory = (t, i) -> {
+    };
 
     private Runnable mLauncherDrawnCallback;
 
@@ -204,7 +205,8 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
     private float mCurrentQuickScrubProgress;
     private boolean mQuickScrubBlocked;
 
-    private @InteractionType int mInteractionType = INTERACTION_NORMAL;
+    private @InteractionType
+    int mInteractionType = INTERACTION_NORMAL;
 
     private InputConsumerController mInputConsumer =
             InputConsumerController.getRecentsAnimationInputConsumer();
@@ -220,7 +222,7 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
     private LongSwipeHelper mLongSwipeController;
 
     WindowTransformSwipeHandler(int id, RunningTaskInfo runningTaskInfo, Context context,
-            long touchTimeMs, ActivityControlHelper<T> controller) {
+                                long touchTimeMs, ActivityControlHelper<T> controller) {
         this.id = id;
         mContext = context;
         mRunningTaskInfo = runningTaskInfo;
@@ -283,11 +285,11 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
         mStateCallback.addCallback(STATE_LAUNCHER_PRESENT | STATE_HANDLER_INVALIDATED,
                 this::invalidateHandlerWithLauncher);
         mStateCallback.addCallback(STATE_LAUNCHER_PRESENT | STATE_HANDLER_INVALIDATED
-                | STATE_SCALED_CONTROLLER_APP,
+                        | STATE_SCALED_CONTROLLER_APP,
                 this::notifyTransitionCancelled);
 
         mStateCallback.addCallback(STATE_LAUNCHER_STARTED | STATE_QUICK_SCRUB_START
-                        | STATE_APP_CONTROLLER_RECEIVED, this::onQuickScrubStart);
+                | STATE_APP_CONTROLLER_RECEIVED, this::onQuickScrubStart);
         mStateCallback.addCallback(STATE_LAUNCHER_STARTED | STATE_QUICK_SCRUB_START
                 | STATE_SCALED_CONTROLLER_RECENTS, this::onFinishedTransitionToQuickScrub);
         mStateCallback.addCallback(STATE_LAUNCHER_STARTED | STATE_CURRENT_TASK_FINISHED
@@ -567,7 +569,7 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
     }
 
     public void onRecentsAnimationStart(RecentsAnimationControllerCompat controller,
-            RemoteAnimationTargetSet targets, Rect homeContentInsets, Rect minimizedHomeBounds) {
+                                        RemoteAnimationTargetSet targets, Rect homeContentInsets, Rect minimizedHomeBounds) {
         LauncherAppState appState = LauncherAppState.getInstanceNoCreate();
         InvariantDeviceProfile idp = appState == null ?
                 new InvariantDeviceProfile(mContext) : appState.getInvariantDeviceProfile();
@@ -669,7 +671,7 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
                 duration = Math.min(MAX_SWIPE_DURATION, 2 * baseDuration);
             }
             startShift = Utilities.boundToRange(mCurrentShift.value - endVelocity * SINGLE_FRAME_MS
-                            / (mTransitionDragLength * 1000), 0, 1);
+                    / (mTransitionDragLength * 1000), 0, 1);
         }
 
         animateToProgress(startShift, endShift, duration, DEACCEL);
@@ -691,9 +693,11 @@ public class WindowTransformSwipeHandler<T extends BaseDraggingActivity> {
                 0);
     }
 
-    /** Animates to the given progress, where 0 is the current app and 1 is overview. */
+    /**
+     * Animates to the given progress, where 0 is the current app and 1 is overview.
+     */
     private void animateToProgress(float start, float end, long duration,
-            Interpolator interpolator) {
+                                   Interpolator interpolator) {
         mIsGoingToHome = Float.compare(end, 1) == 0;
         ObjectAnimator anim = mCurrentShift.animateToValue(start, end).setDuration(duration);
         anim.setInterpolator(interpolator);

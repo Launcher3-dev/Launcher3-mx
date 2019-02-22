@@ -13,7 +13,8 @@ public final class PermissionUtil {
         if (isNeedRequestPermission()
                 && (!hasPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
                 || !hasPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return true;
         } else {
             return true;

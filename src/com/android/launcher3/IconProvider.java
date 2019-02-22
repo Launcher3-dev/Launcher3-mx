@@ -18,7 +18,8 @@ public class IconProvider {
         return provider;
     }
 
-    public IconProvider() { }
+    public IconProvider() {
+    }
 
     public void updateSystemStateString(Context context) {
         final String locale;

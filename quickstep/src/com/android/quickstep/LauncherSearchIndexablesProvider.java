@@ -74,22 +74,22 @@ public class LauncherSearchIndexablesProvider extends SearchIndexablesProvider {
             try (XmlResourceParser parser = getContext().getResources()
                     .getXml(R.xml.indexable_launcher_prefs)) {
                 final int depth = parser.getDepth();
-                final int[] attrs = new int[] { android.R.attr.key };
+                final int[] attrs = new int[]{android.R.attr.key};
                 int type;
                 while (((type = parser.next()) != XmlPullParser.END_TAG ||
                         parser.getDepth() > depth) && type != XmlPullParser.END_DOCUMENT) {
                     if (type == XmlPullParser.START_TAG) {
                         TypedArray a = getContext().obtainStyledAttributes(
                                 Xml.asAttributeSet(parser), attrs);
-                        cursor.addRow(new String[] {a.getString(0)});
+                        cursor.addRow(new String[]{a.getString(0)});
                         a.recycle();
                     }
                 }
-            } catch (IOException |XmlPullParserException e) {
+            } catch (IOException | XmlPullParserException e) {
                 throw new RuntimeException(e);
             }
         } else if (!IconShapeOverride.isSupported(getContext())) {
-            cursor.addRow(new String[] {IconShapeOverride.KEY_PREFERENCE});
+            cursor.addRow(new String[]{IconShapeOverride.KEY_PREFERENCE});
         }
         return cursor;
     }

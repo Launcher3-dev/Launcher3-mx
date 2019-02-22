@@ -16,12 +16,6 @@
 
 package com.android.quickstep;
 
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.launcher3.anim.Interpolators.TOUCH_RESPONSE_INTERPOLATOR;
-import static com.android.systemui.shared.recents.utilities.Utilities.getNextFrameNumber;
-import static com.android.systemui.shared.recents.utilities.Utilities.getSurface;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
-
 import android.animation.ValueAnimator;
 import android.content.ComponentName;
 import android.content.Context;
@@ -49,6 +43,12 @@ import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
 
 import java.util.List;
 
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.launcher3.anim.Interpolators.TOUCH_RESPONSE_INTERPOLATOR;
+import static com.android.systemui.shared.recents.utilities.Utilities.getNextFrameNumber;
+import static com.android.systemui.shared.recents.utilities.Utilities.getSurface;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
+
 /**
  * Contains helpful methods for retrieving data from {@link Task}s.
  */
@@ -65,13 +65,13 @@ public class TaskUtils {
         PackageManager packageManager = context.getPackageManager();
         UserHandle user = UserHandle.of(task.key.userId);
         ApplicationInfo applicationInfo = launcherAppsCompat.getApplicationInfo(
-            task.getTopComponent().getPackageName(), 0, user);
+                task.getTopComponent().getPackageName(), 0, user);
         if (applicationInfo == null) {
             Log.e(TAG, "Failed to get title for task " + task);
             return "";
         }
         return userManagerCompat.getBadgedLabelForUser(
-            applicationInfo.loadLabel(packageManager), user);
+                applicationInfo.loadLabel(packageManager), user);
     }
 
     public static ComponentKey getComponentKeyForTask(Task.TaskKey taskKey) {
@@ -81,7 +81,7 @@ public class TaskUtils {
 
     /**
      * Try to find a TaskView that corresponds with the component of the launched view.
-     *
+     * <p>
      * If this method returns a non-null TaskView, it will be used in composeRecentsLaunchAnimation.
      * Otherwise, we will assume we are using a normal app transition, but it's possible that the
      * opening remote target (which we don't get until onAnimationStart) will resolve to a TaskView.
@@ -143,7 +143,7 @@ public class TaskUtils {
      * animation.
      */
     public static ValueAnimator getRecentsWindowAnimator(TaskView v, boolean skipViewChanges,
-            RemoteAnimationTargetCompat[] targets, final ClipAnimationHelper inOutHelper) {
+                                                         RemoteAnimationTargetCompat[] targets, final ClipAnimationHelper inOutHelper) {
         final ValueAnimator appAnimator = ValueAnimator.ofFloat(0, 1);
         appAnimator.setInterpolator(TOUCH_RESPONSE_INTERPOLATOR);
         appAnimator.addUpdateListener(new MultiValueUpdateListener() {
@@ -202,7 +202,7 @@ public class TaskUtils {
     }
 
     public static boolean taskIsATargetWithMode(RemoteAnimationTargetCompat[] targets,
-            int taskId, int mode) {
+                                                int taskId, int mode) {
         for (RemoteAnimationTargetCompat target : targets) {
             if (target.mode == mode && target.taskId == taskId) {
                 return true;

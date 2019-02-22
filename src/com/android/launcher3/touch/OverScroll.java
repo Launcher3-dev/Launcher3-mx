@@ -27,6 +27,7 @@ public class OverScroll {
      * as the user pulls further and further from the bounds
      *
      * @param f The percentage of how much the user has overscrolled.
+     *
      * @return A transformed percentage based on the influence curve.
      */
     private static float overScrollInfluenceCurve(float f) {
@@ -36,7 +37,8 @@ public class OverScroll {
 
     /**
      * @param amount The original amount overscrolled.
-     * @param max The maximum amount that the View can overscroll.
+     * @param max    The maximum amount that the View can overscroll.
+     *
      * @return The dampened overscroll amount.
      */
     public static int dampedScroll(float amount, int max) {

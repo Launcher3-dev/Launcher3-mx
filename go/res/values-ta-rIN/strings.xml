@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"குறுக்குவழியைச் சேர்க்க, தொட்டு பிடித்திருக்கவும்."</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"குறுக்குவழியை சேர்க்க, இருமுறை தட்டிப் பிடித்திருக்கவும் அல்லது தனிப்பயன் செயல்களைப் பயன்படுத்தவும்."</string>

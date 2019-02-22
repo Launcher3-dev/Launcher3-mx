@@ -16,10 +16,6 @@
 
 package com.android.launcher3.dragndrop;
 
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.states.RotationHelper.REQUEST_LOCK;
-import static com.android.launcher3.states.RotationHelper.REQUEST_NONE;
-
 import android.content.ClipDescription;
 import android.content.Intent;
 import android.graphics.Point;
@@ -40,6 +36,10 @@ import com.android.launcher3.states.InternalStateHandler;
 import com.android.launcher3.widget.PendingItemDragHelper;
 
 import java.util.UUID;
+
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.states.RotationHelper.REQUEST_LOCK;
+import static com.android.launcher3.states.RotationHelper.REQUEST_NONE;
 
 /**
  * {@link DragSource} for handling drop from a different window.
@@ -106,7 +106,7 @@ public abstract class BaseItemDragListener extends InternalStateHandler implemen
     }
 
     protected boolean onDragStart(DragEvent event) {
-        ClipDescription desc =  event.getClipDescription();
+        ClipDescription desc = event.getClipDescription();
         if (desc == null || !desc.hasMimeType(getMimeType())) {
             Log.e(TAG, "Someone started a dragAndDrop before us.");
             return false;
@@ -123,7 +123,7 @@ public abstract class BaseItemDragListener extends InternalStateHandler implemen
         // across windows, using drag position here give a good estimate for relative position
         // to source window.
         createDragHelper().startDrag(new Rect(mPreviewRect),
-                mPreviewBitmapWidth, mPreviewViewWidth, downPos,  this, options);
+                mPreviewBitmapWidth, mPreviewViewWidth, downPos, this, options);
         mDragStartTime = SystemClock.uptimeMillis();
         return true;
     }

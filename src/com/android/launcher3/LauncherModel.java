@@ -87,30 +87,39 @@ public class LauncherModel extends BroadcastReceiver
     static final String TAG = "Launcher.Model";
 
     private final MainThreadExecutor mUiExecutor = new MainThreadExecutor();
-    @Thunk final LauncherAppState mApp;
-    @Thunk final Object mLock = new Object();
+    @Thunk
+    final LauncherAppState mApp;
+    @Thunk
+    final Object mLock = new Object();
     @Thunk
     LoaderTask mLoaderTask;
-    @Thunk boolean mIsLoaderTaskRunning;
+    @Thunk
+    boolean mIsLoaderTaskRunning;
 
-    @Thunk static final HandlerThread sWorkerThread = new HandlerThread("launcher-loader");
+    @Thunk
+    static final HandlerThread sWorkerThread = new HandlerThread("launcher-loader");
+
     static {
         sWorkerThread.start();
     }
-    @Thunk static final Handler sWorker = new Handler(sWorkerThread.getLooper());
+
+    @Thunk
+    static final Handler sWorker = new Handler(sWorkerThread.getLooper());
 
     // Indicates whether the current model data is valid or not.
     // We start off with everything not loaded. After that, we assume that
     // our monitoring of the package manager provides all updates and we never
     // need to do a requery. This is only ever touched from the loader thread.
     private boolean mModelLoaded;
+
     public boolean isModelLoaded() {
         synchronized (mLock) {
             return mModelLoaded && mLoaderTask == null;
         }
     }
 
-    @Thunk WeakReference<Callbacks> mCallbacks;
+    @Thunk
+    WeakReference<Callbacks> mCallbacks;
 
     // < only access in worker thread >
     private final AllAppsList mBgAllAppsList;
@@ -139,25 +148,43 @@ public class LauncherModel extends BroadcastReceiver
         public void rebindModel();
 
         public int getCurrentWorkspaceScreen();
+
         public void clearPendingBinds();
+
         public void startBinding();
+
         public void bindItems(List<ItemInfo> shortcuts, boolean forceAnimateIcons);
+
         public void bindScreens(ArrayList<Long> orderedScreenIds);
+
         public void finishFirstPageBind(ViewOnDrawExecutor executor);
+
         public void finishBindingItems();
+
         public void bindAppsAddedOrUpdated(ArrayList<ShortcutInfo> apps);
+
         public void bindAppsAdded(ArrayList<Long> newScreens,
                                   ArrayList<ItemInfo> addNotAnimated,
                                   ArrayList<ItemInfo> addAnimated);
+
         public void bindPromiseAppProgressUpdated(PromiseAppInfo app);
+
         public void bindShortcutsChanged(ArrayList<ShortcutInfo> updated, UserHandle user);
+
         public void bindWidgetsRestored(ArrayList<LauncherAppWidgetInfo> widgets);
+
         public void bindRestoreItemsChange(HashSet<ItemInfo> updates);
+
         public void bindWorkspaceComponentsRemoved(ItemInfoMatcher matcher);
+
         public void bindAppInfosRemoved(ArrayList<ShortcutInfo> appInfos);
+
         public void bindAllWidgets(ArrayList<WidgetListRowEntry> widgets);
+
         public void onPageBoundSynchronously(int page);
+
         public void executeOnNextDraw(ViewOnDrawExecutor executor);
+
         public void bindDeepShortcutMap(MultiHashMap<ComponentKey, String> deepShortcutMap);
     }
 
@@ -166,8 +193,10 @@ public class LauncherModel extends BroadcastReceiver
         mBgAllAppsList = new AllAppsList(iconCache, appFilter);
     }
 
-    /** Runs the specified runnable immediately if called from the worker thread, otherwise it is
-     * posted on the worker thread handler. */
+    /**
+     * Runs the specified runnable immediately if called from the worker thread, otherwise it is
+     * posted on the worker thread handler.
+     */
     private static void runOnWorkerThread(Runnable r) {
         if (sWorkerThread.getThreadId() == Process.myTid()) {
             r.run();
@@ -200,9 +229,10 @@ public class LauncherModel extends BroadcastReceiver
 
     /**
      * Adds the no position items to workspace.
+     *
      * @param itemList
      */
-    public void addAndBindNoPositionWorkspaceItems(List<ItemInfo> itemList){
+    public void addAndBindNoPositionWorkspaceItems(List<ItemInfo> itemList) {
         enqueueModelUpdateTask(new AddWorkspaceItemsNoPositionTask(itemList));
     }
 
@@ -344,14 +374,14 @@ public class LauncherModel extends BroadcastReceiver
 
     @Override
     public void onPackagesAvailable(String[] packageNames, UserHandle user,
-            boolean replacing) {
+                                    boolean replacing) {
         enqueueModelUpdateTask(
                 new PackageUpdatedTask(PackageUpdatedTask.OP_UPDATE, user, packageNames));
     }
 
     @Override
     public void onPackagesUnavailable(String[] packageNames, UserHandle user,
-            boolean replacing) {
+                                      boolean replacing) {
         if (!replacing) {
             enqueueModelUpdateTask(new PackageUpdatedTask(
                     PackageUpdatedTask.OP_UNAVAILABLE, user, packageNames));
@@ -372,12 +402,12 @@ public class LauncherModel extends BroadcastReceiver
 
     @Override
     public void onShortcutsChanged(String packageName, List<ShortcutInfoCompat> shortcuts,
-            UserHandle user) {
+                                   UserHandle user) {
         enqueueModelUpdateTask(new ShortcutsChangedTask(packageName, shortcuts, user, true));
     }
 
     public void updatePinnedShortcuts(String packageName, List<ShortcutInfoCompat> shortcuts,
-            UserHandle user) {
+                                      UserHandle user) {
         enqueueModelUpdateTask(new ShortcutsChangedTask(packageName, shortcuts, user, false));
     }
 
@@ -445,6 +475,7 @@ public class LauncherModel extends BroadcastReceiver
 
     /**
      * Starts the loader. Tries to bind {@params synchronousBindPage} synchronously if possible.
+     *
      * @return true if the page could be bound synchronously.
      */
     public boolean startLoader(int synchronousBindPage) {
@@ -604,7 +635,7 @@ public class LauncherModel extends BroadcastReceiver
          * Called before the task is posted to initialize the internal state.
          */
         void init(LauncherAppState app, LauncherModel model,
-                BgDataModel dataModel, AllAppsList allAppsList, Executor uiExecutor);
+                  BgDataModel dataModel, AllAppsList allAppsList, Executor uiExecutor);
 
     }
 

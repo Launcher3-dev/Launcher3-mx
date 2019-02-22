@@ -46,7 +46,7 @@ public class Interpolators {
     public static final Interpolator FAST_OUT_SLOW_IN = new PathInterpolator(0.4f, 0f, 0.2f, 1f);
 
     public static final Interpolator AGGRESSIVE_EASE = new PathInterpolator(0.2f, 0f, 0f, 1f);
-    public static final Interpolator AGGRESSIVE_EASE_IN_OUT = new PathInterpolator(0.6f,0, 0.4f, 1);
+    public static final Interpolator AGGRESSIVE_EASE_IN_OUT = new PathInterpolator(0.6f, 0, 0.4f, 1);
 
     public static final Interpolator EXAGGERATED_EASE;
 
@@ -98,7 +98,7 @@ public class Interpolators {
         @Override
         public float getInterpolation(float t) {
             t -= 1.0f;
-            return t*t*t*t*t + 1;
+            return t * t * t * t * t + 1;
         }
     };
 
@@ -106,7 +106,7 @@ public class Interpolators {
         @Override
         public float getInterpolation(float t) {
             t -= 1.0f;
-            return t*t*t + 1;
+            return t * t * t + 1;
         }
     };
 
@@ -121,7 +121,7 @@ public class Interpolators {
      * That is, we set the interpolation to 0 until lowerBound and reach 1 by upperBound.
      */
     public static Interpolator clampToProgress(Interpolator interpolator, float lowerBound,
-            float upperBound) {
+                                               float upperBound) {
         if (upperBound <= lowerBound) {
             throw new IllegalArgumentException("lowerBound must be less than upperBound");
         }

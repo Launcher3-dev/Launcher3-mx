@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -153,9 +152,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     public static float mDensity;
     // add by codemx.cn ---- 2018/09/04 -- end
 
-    // Convenience/caching
-    private static final Matrix sTmpInvMatrix = new Matrix();
-    private static final float[] sTmpPoint = new float[2];
     private static final Rect sTmpRect = new Rect();
 
     protected final Rect mInsets = new Rect();
@@ -1077,26 +1073,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         dampedOverScroll(amount);
     }
 
-
-    protected void enableFreeScroll(boolean settleOnPageInFreeScroll) {
-        setEnableFreeScroll(true);
-        mSettleOnPageInFreeScroll = settleOnPageInFreeScroll;
-    }
-
-    private void setEnableFreeScroll(boolean freeScroll) {
-        boolean wasFreeScroll = mFreeScroll;
-        mFreeScroll = freeScroll;
-
-        if (mFreeScroll) {
-            setCurrentPage(getNextPage());
-        } else if (wasFreeScroll) {
-            snapToPage(getNextPage());
-        }
-
-        setEnableOverscroll(!freeScroll);
-    }
-
-    protected void setEnableOverscroll(boolean enable) {
+    protected void setEnableOverScroll(boolean enable) {
         mAllowOverScroll = enable;
     }
 

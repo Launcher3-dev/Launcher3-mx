@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"ಸ್ಪರ್ಶಿಸಿ ಮತ್ತು ಶಾರ್ಟ್‌ಕಟ್ ಆರಿಸಲು ಹೋಲ್ಡ್ ಮಾಡಿ."</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"ಡಬಲ್ ಟ್ಯಾಪ್ ಮಾಡಿ ಮತ್ತು ಶಾರ್ಟ್‌ಕಟ್ ಆರಿಸಿಕೊಳ್ಳಲು ಹೋಲ್ಡ್ ಮಾಡಿ ಅಥವಾ ಕಸ್ಟಮ್ ಕ್ರಿಯೆಗಳನ್ನು ಬಳಸಿ."</string>

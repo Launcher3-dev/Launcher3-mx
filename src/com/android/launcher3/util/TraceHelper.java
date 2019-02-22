@@ -15,9 +15,6 @@
  */
 package com.android.launcher3.util;
 
-import static android.util.Log.VERBOSE;
-import static android.util.Log.isLoggable;
-
 import android.os.SystemClock;
 import android.os.Trace;
 import android.util.ArrayMap;
@@ -26,9 +23,12 @@ import android.util.MutableLong;
 
 import com.android.launcher3.config.FeatureFlags;
 
+import static android.util.Log.VERBOSE;
+import static android.util.Log.isLoggable;
+
 /**
  * A wrapper around {@link Trace} to allow easier proguarding for production builds.
- *
+ * <p>
  * To enable any tracing log, execute the following command:
  * $ adb shell setprop log.tag.TAGNAME VERBOSE
  */

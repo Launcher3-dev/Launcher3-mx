@@ -15,15 +15,6 @@
  */
 package com.android.quickstep;
 
-import static android.view.MotionEvent.ACTION_CANCEL;
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_POINTER_DOWN;
-import static android.view.MotionEvent.ACTION_POINTER_UP;
-import static android.view.MotionEvent.ACTION_UP;
-import static com.android.systemui.shared.system.ActivityManagerWrapper.CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
-import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_NONE;
-
 import android.annotation.TargetApi;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Service;
@@ -50,6 +41,15 @@ import com.android.systemui.shared.recents.IOverviewProxy;
 import com.android.systemui.shared.recents.ISystemUiProxy;
 import com.android.systemui.shared.system.ActivityManagerWrapper;
 import com.android.systemui.shared.system.NavigationBarCompat.HitTarget;
+
+import static android.view.MotionEvent.ACTION_CANCEL;
+import static android.view.MotionEvent.ACTION_DOWN;
+import static android.view.MotionEvent.ACTION_MOVE;
+import static android.view.MotionEvent.ACTION_POINTER_DOWN;
+import static android.view.MotionEvent.ACTION_POINTER_UP;
+import static android.view.MotionEvent.ACTION_UP;
+import static com.android.systemui.shared.system.ActivityManagerWrapper.CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
+import static com.android.systemui.shared.system.NavigationBarCompat.HIT_TARGET_NONE;
 
 /**
  * Service connected by system-UI for handling touch interaction.
@@ -89,7 +89,7 @@ public class TouchInteractionService extends Service {
             mEventQueue.queue(ev);
 
             String name = sMotionEventNames.get(ev.getActionMasked());
-            if (name != null){
+            if (name != null) {
                 TraceHelper.partitionSection("SysUiBinder", name);
             }
         }
@@ -154,7 +154,8 @@ public class TouchInteractionService extends Service {
         }
     };
 
-    private final TouchConsumer mNoOpTouchConsumer = (ev) -> {};
+    private final TouchConsumer mNoOpTouchConsumer = (ev) -> {
+    };
 
     private static boolean sConnected = false;
 
@@ -235,10 +236,10 @@ public class TouchInteractionService extends Service {
                 tracker = VelocityTracker.obtain();
             }
             return new OtherActivityTouchConsumer(this, runningTaskInfo, mRecentsModel,
-                            mOverviewCommandHelper.overviewIntent,
-                            mOverviewCommandHelper.getActivityControlHelper(), mMainThreadExecutor,
-                            mBackgroundThreadChoreographer, downHitTarget, mOverviewCallbacks,
-                            tracker);
+                    mOverviewCommandHelper.overviewIntent,
+                    mOverviewCommandHelper.getActivityControlHelper(), mMainThreadExecutor,
+                    mBackgroundThreadChoreographer, downHitTarget, mOverviewCallbacks,
+                    tracker);
         }
     }
 

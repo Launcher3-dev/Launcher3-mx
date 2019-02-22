@@ -16,9 +16,6 @@
 
 package com.android.launcher3.badge;
 
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
-import static android.graphics.Paint.FILTER_BITMAP_FLAG;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,8 +26,12 @@ import android.util.Log;
 
 import com.android.launcher3.graphics.ShadowGenerator;
 
+import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static android.graphics.Paint.FILTER_BITMAP_FLAG;
+
 /**
  * Contains parameters necessary to draw a badge for an icon (e.g. the size of the badge).
+ *
  * @see BadgeInfo for the data to draw
  */
 public class BadgeRenderer {
@@ -69,9 +70,10 @@ public class BadgeRenderer {
     /**
      * Draw a circle in the top right corner of the given bounds, and draw
      * {@link BadgeInfo#getNotificationCount()} on top of the circle.
-     * @param color The color (based on the icon) to use for the badge.
-     * @param iconBounds The bounds of the icon being badged.
-     * @param badgeScale The progress of the animation, from 0 to 1.
+     *
+     * @param color          The color (based on the icon) to use for the badge.
+     * @param iconBounds     The bounds of the icon being badged.
+     * @param badgeScale     The progress of the animation, from 0 to 1.
      * @param spaceForOffset How much space is available to offset the badge up and to the right.
      */
     public void draw(

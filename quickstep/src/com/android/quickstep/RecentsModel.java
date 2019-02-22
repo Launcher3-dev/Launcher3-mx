@@ -15,8 +15,6 @@
  */
 package com.android.quickstep;
 
-import static com.android.quickstep.TaskUtils.checkCurrentOrManagedUserId;
-
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
@@ -53,6 +51,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
+import static com.android.quickstep.TaskUtils.checkCurrentOrManagedUserId;
+
 /**
  * Singleton class to load and manage recents model.
  */
@@ -69,7 +69,7 @@ public class RecentsModel extends TaskStackChangeListener {
                 try {
                     return new MainThreadExecutor().submit(
                             () -> RecentsModel.getInstance(context)).get();
-                } catch (InterruptedException|ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -108,8 +108,8 @@ public class RecentsModel extends TaskStackChangeListener {
 
             @Override
             protected IconLoader createNewIconLoader(Context context,
-                    TaskKeyLruCache<Drawable> iconCache,
-                    LruCache<ComponentName, ActivityInfo> activityInfoCache) {
+                                                     TaskKeyLruCache<Drawable> iconCache,
+                                                     LruCache<ComponentName, ActivityInfo> activityInfoCache) {
                 return new NormalizedIconLoader(context, iconCache, activityInfoCache);
             }
         };
@@ -127,9 +127,11 @@ public class RecentsModel extends TaskStackChangeListener {
 
     /**
      * Preloads the task plan
-     * @param taskId The running task id or -1
+     *
+     * @param taskId   The running task id or -1
      * @param callback The callback to receive the task plan once its complete or null. This is
-     *                always called on the UI thread.
+     *                 always called on the UI thread.
+     *
      * @return the request id associated with this call.
      */
     public int loadTasks(int taskId, Consumer<RecentsTaskLoadPlan> callback) {

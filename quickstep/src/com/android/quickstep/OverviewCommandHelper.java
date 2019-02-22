@@ -15,20 +15,6 @@
  */
 package com.android.quickstep;
 
-import static android.content.Intent.ACTION_PACKAGE_ADDED;
-import static android.content.Intent.ACTION_PACKAGE_CHANGED;
-import static android.content.Intent.ACTION_PACKAGE_REMOVED;
-
-import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
-import static com.android.launcher3.anim.Interpolators.TOUCH_RESPONSE_INTERPOLATOR;
-import static com.android.quickstep.TouchConsumer.INTERACTION_NORMAL;
-import static com.android.systemui.shared.system.ActivityManagerWrapper
-        .CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
-import static com.android.systemui.shared.system.PackageManagerWrapper
-        .ACTION_PREFERRED_ACTIVITY_CHANGED;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
-import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
@@ -60,8 +46,8 @@ import com.android.quickstep.ActivityControlHelper.AnimationFactory;
 import com.android.quickstep.ActivityControlHelper.FallbackActivityControllerHelper;
 import com.android.quickstep.ActivityControlHelper.LauncherActivityControllerHelper;
 import com.android.quickstep.util.ClipAnimationHelper;
-import com.android.quickstep.util.TransformedRect;
 import com.android.quickstep.util.RemoteAnimationTargetSet;
+import com.android.quickstep.util.TransformedRect;
 import com.android.quickstep.views.RecentsView;
 import com.android.systemui.shared.system.ActivityManagerWrapper;
 import com.android.systemui.shared.system.LatencyTrackerCompat;
@@ -70,6 +56,17 @@ import com.android.systemui.shared.system.RemoteAnimationTargetCompat;
 import com.android.systemui.shared.system.TransactionCompat;
 
 import java.util.ArrayList;
+
+import static android.content.Intent.ACTION_PACKAGE_ADDED;
+import static android.content.Intent.ACTION_PACKAGE_CHANGED;
+import static android.content.Intent.ACTION_PACKAGE_REMOVED;
+import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
+import static com.android.launcher3.anim.Interpolators.TOUCH_RESPONSE_INTERPOLATOR;
+import static com.android.quickstep.TouchConsumer.INTERACTION_NORMAL;
+import static com.android.systemui.shared.system.ActivityManagerWrapper.CLOSE_SYSTEM_WINDOWS_REASON_RECENTS;
+import static com.android.systemui.shared.system.PackageManagerWrapper.ACTION_PREFERRED_ACTIVITY_CHANGED;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_CLOSING;
+import static com.android.systemui.shared.system.RemoteAnimationTargetCompat.MODE_OPENING;
 
 /**
  * Helper class to handle various atomic commands for switching between Overview.
@@ -281,7 +278,7 @@ public class OverviewCommandHelper {
                                 .setDuration(RECENTS_LAUNCH_DURATION);
                         anim.setInterpolator(FAST_OUT_SLOW_IN);
                         anim.start();
-                });
+                    });
             factory.onRemoteAnimationReceived(null);
             if (wasVisible) {
                 factory.createActivityController(RECENTS_LAUNCH_DURATION, INTERACTION_NORMAL);

@@ -20,7 +20,7 @@ import com.android.launcher3.util.TouchController;
  *
  * @see PinchThresholdManager
  * @see PinchAnimationManager
- *
+ * <p>
  * add by codemx.cn  20181026
  */
 public class PinchToOverviewListener extends ScaleGestureDetector.SimpleOnScaleGestureListener

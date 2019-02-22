@@ -30,7 +30,8 @@ public class ColorExtractor {
 
     /**
      * This picks a dominant color, looking for high-saturation, high-value, repeated hues.
-     * @param bitmap The bitmap to scan
+     *
+     * @param bitmap  The bitmap to scan
      * @param samples The approximate max number of samples to use.
      */
     public static int findDominantColorByHue(Bitmap bitmap, int samples) {

@@ -30,6 +30,7 @@ abstract class BaseFlags {
     }
 
     public static final boolean IS_DOGFOOD_BUILD = false;
+    // 必须和AndroidManifest.xml中的LauncherProvide配置的authorities一样
     public static final String AUTHORITY = "com.android.mxlauncher3.settings".intern();
 
     // When enabled allows to use any point on the fast scrollbar to start dragging.
@@ -54,5 +55,8 @@ abstract class BaseFlags {
 
     // 是否禁用双指捏掐到预览模式
     public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = false;
+
+    // 是否循环滑动
+    public static final boolean LAUNCHER3_CIRCLE_SCROLL = false;
 
 }

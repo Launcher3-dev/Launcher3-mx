@@ -41,13 +41,15 @@ public class PackageInstallerCompatVL extends PackageInstallerCompat {
 
     private static final boolean DEBUG = false;
 
-    @Thunk final SparseArray<String> mActiveSessions = new SparseArray<>();
+    @Thunk
+    final SparseArray<String> mActiveSessions = new SparseArray<>();
 
-    @Thunk final PackageInstaller mInstaller;
+    @Thunk
+    final PackageInstaller mInstaller;
     private final IconCache mCache;
     private final Handler mWorker;
     private final Context mAppContext;
-    private final HashMap<String,Boolean> mSessionVerifiedMap = new HashMap<>();
+    private final HashMap<String, Boolean> mSessionVerifiedMap = new HashMap<>();
 
     PackageInstallerCompatVL(Context context) {
         mAppContext = context.getApplicationContext();
@@ -71,7 +73,8 @@ public class PackageInstallerCompatVL extends PackageInstallerCompat {
         return activePackages;
     }
 
-    @Thunk void addSessionInfoToCache(SessionInfo info, UserHandle user) {
+    @Thunk
+    void addSessionInfoToCache(SessionInfo info, UserHandle user) {
         String packageName = info.getAppPackageName();
         if (packageName != null) {
             mCache.cachePackageInstallInfo(packageName, user, info.getAppIcon(),
@@ -84,7 +87,8 @@ public class PackageInstallerCompatVL extends PackageInstallerCompat {
         mInstaller.unregisterSessionCallback(mCallback);
     }
 
-    @Thunk void sendUpdate(PackageInstallInfo info) {
+    @Thunk
+    void sendUpdate(PackageInstallInfo info) {
         LauncherAppState app = LauncherAppState.getInstanceNoCreate();
         if (app != null) {
             app.getModel().setPackageState(info);
@@ -123,7 +127,8 @@ public class PackageInstallerCompatVL extends PackageInstallerCompat {
         }
 
         @Override
-        public void onActiveChanged(int sessionId, boolean active) { }
+        public void onActiveChanged(int sessionId, boolean active) {
+        }
 
         @Override
         public void onBadgingChanged(int sessionId) {

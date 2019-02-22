@@ -50,7 +50,7 @@ public class PinItemDragListener extends BaseItemDragListener {
     private final CancellationSignal mCancelSignal;
 
     public PinItemDragListener(PinItemRequest request, Rect previewRect,
-            int previewBitmapWidth, int previewViewWidth) {
+                               int previewBitmapWidth, int previewViewWidth) {
         super(previewRect, previewBitmapWidth, previewViewWidth);
         mRequest = request;
         mCancelSignal = new CancellationSignal();
@@ -105,7 +105,7 @@ public class PinItemDragListener extends BaseItemDragListener {
 
     @Override
     public void fillInLogContainerData(View v, ItemInfo info, LauncherLogProto.Target target,
-            LauncherLogProto.Target targetParent) {
+                                       LauncherLogProto.Target targetParent) {
         targetParent.containerType = LauncherLogProto.ContainerType.PINITEM;
     }
 

@@ -15,13 +15,13 @@
 -->
 
 <resources>
-<!-- All Apps -->
+    <!-- All Apps -->
     <dimen name="all_apps_background_canvas_width">850dp</dimen>
     <dimen name="all_apps_background_canvas_height">525dp</dimen>
 
-<!-- Widget tray -->
+    <!-- Widget tray -->
     <dimen name="widget_section_indent">56dp</dimen>
 
-<!-- DragController -->
+    <!-- DragController -->
     <dimen name="drag_flingToDeleteMinVelocity">-1000dp</dimen>
 </resources>

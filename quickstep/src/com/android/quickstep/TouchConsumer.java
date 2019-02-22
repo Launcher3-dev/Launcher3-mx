@@ -34,33 +34,43 @@ public interface TouchConsumer extends Consumer<MotionEvent> {
             INTERACTION_QUICK_SCRUB
     })
     @Retention(RetentionPolicy.SOURCE)
-    @interface InteractionType {}
+    @interface InteractionType {
+    }
+
     int INTERACTION_NORMAL = 0;
     int INTERACTION_QUICK_SCRUB = 1;
 
-    default void reset() { }
+    default void reset() {
+    }
 
-    default void updateTouchTracking(@InteractionType int interactionType) { }
+    default void updateTouchTracking(@InteractionType int interactionType) {
+    }
 
-    default void onQuickScrubEnd() { }
+    default void onQuickScrubEnd() {
+    }
 
-    default void onQuickScrubProgress(float progress) { }
+    default void onQuickScrubProgress(float progress) {
+    }
 
-    default void onQuickStep(MotionEvent ev) { }
+    default void onQuickStep(MotionEvent ev) {
+    }
 
-    default void onCommand(int command) { }
+    default void onCommand(int command) {
+    }
 
     /**
      * Called on the binder thread to allow the consumer to process the motion event before it is
      * posted on a handler thread.
      */
-    default void preProcessMotionEvent(MotionEvent ev) { }
+    default void preProcessMotionEvent(MotionEvent ev) {
+    }
 
     default Choreographer getIntrimChoreographer(MotionEventQueue queue) {
         return null;
     }
 
-    default void deferInit() { }
+    default void deferInit() {
+    }
 
     default boolean deferNextEventToMainThread() {
         return false;
@@ -70,5 +80,6 @@ public interface TouchConsumer extends Consumer<MotionEvent> {
         return false;
     }
 
-    default void onShowOverviewFromAltTab() {}
+    default void onShowOverviewFromAltTab() {
+    }
 }

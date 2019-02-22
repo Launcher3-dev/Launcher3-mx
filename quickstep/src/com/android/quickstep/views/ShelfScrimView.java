@@ -15,12 +15,6 @@
  */
 package com.android.quickstep.views;
 
-import static android.support.v4.graphics.ColorUtils.compositeColors;
-import static android.support.v4.graphics.ColorUtils.setAlphaComponent;
-
-import static com.android.launcher3.LauncherState.OVERVIEW;
-import static com.android.launcher3.anim.Interpolators.ACCEL_2;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -35,12 +29,17 @@ import com.android.launcher3.R;
 import com.android.launcher3.uioverrides.OverviewState;
 import com.android.launcher3.util.Themes;
 
+import static android.support.v4.graphics.ColorUtils.compositeColors;
+import static android.support.v4.graphics.ColorUtils.setAlphaComponent;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+import static com.android.launcher3.anim.Interpolators.ACCEL_2;
+
 /**
  * Scrim used for all-apps and shelf in Overview
  * In transposed layout, it behaves as a simple color scrim.
  * In portrait layout, it draws a rounded rect such that
- *    From normal state to overview state, the shelf just fades in and does not move
- *    From overview state to all-apps state the shelf moves up and fades in to cover the screen
+ * From normal state to overview state, the shelf just fades in and does not move
+ * From overview state to all-apps state the shelf moves up and fades in to cover the screen
  */
 public class ShelfScrimView extends ScrimView {
 

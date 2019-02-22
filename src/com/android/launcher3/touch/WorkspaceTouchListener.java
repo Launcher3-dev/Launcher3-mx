@@ -42,7 +42,7 @@ import static com.android.launcher3.LauncherState.NORMAL;
 
 /**
  * Helper class to handle touch on empty space in workspace and show options popup on long press
- *
+ * <p>
  * TODO:处理workspace空白处触摸事件以及长按显示弹窗
  */
 public class WorkspaceTouchListener implements OnTouchListener, Runnable {
@@ -73,7 +73,7 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
         int action = ev.getActionMasked();
-        XLog.e(XLog.getTag(),XLog.TAG_GU + action);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + action);
         if (action == ACTION_DOWN) {
             // Check if we can handle long press.
             boolean handleLongPress = canHandleLongPress();

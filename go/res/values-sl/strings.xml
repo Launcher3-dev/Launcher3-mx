@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"Pridržite bližnjico, da jo izberete."</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"Dvakrat se dotaknite bližnjice in jo pridržite, da jo izberete, ali pa uporabite dejanja po meri."</string>

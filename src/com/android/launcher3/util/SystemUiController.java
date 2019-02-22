@@ -16,7 +16,6 @@
 
 package com.android.launcher3.util;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 

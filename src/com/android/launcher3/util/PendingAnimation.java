@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 
 /**
  * Utility class to keep track of a running animation.
- *
+ * <p>
  * This class allows attaching end callbacks to an animation is intended to be used with
  * {@link com.android.launcher3.anim.AnimatorPlaybackController}, since in that case
  * AnimationListeners are not properly dispatched.

@@ -138,14 +138,15 @@ public final class Utilities {
      * Given a coordinate relative to the descendant, find the coordinate in a parent view's
      * coordinates.
      *
-     * @param descendant The descendant to which the passed coordinate is relative.
-     * @param ancestor The root view to make the coordinates relative to.
-     * @param coord The coordinate that we want mapped.
+     * @param descendant        The descendant to which the passed coordinate is relative.
+     * @param ancestor          The root view to make the coordinates relative to.
+     * @param coord             The coordinate that we want mapped.
      * @param includeRootScroll Whether or not to account for the scroll of the descendant:
-     *          sometimes this is relevant as in a child's coordinates within the descendant.
+     *                          sometimes this is relevant as in a child's coordinates within the descendant.
+     *
      * @return The factor by which this descendant is scaled relative to this DragLayer. Caution
-     *         this scale factor is assumed to be equal in X and Y, and so if at any point this
-     *         assumption fails, we will need to return a pair of scale factors.
+     * this scale factor is assumed to be equal in X and Y, and so if at any point this
+     * assumption fails, we will need to return a pair of scale factors.
      */
     public static float getDescendantCoordRelativeToAncestor(
             View descendant, View ancestor, int[] coord, boolean includeRootScroll) {
@@ -154,7 +155,7 @@ public final class Utilities {
 
         float scale = 1.0f;
         View v = descendant;
-        while(v != ancestor && v != null) {
+        while (v != ancestor && v != null) {
             // For TextViews, scroll has a meaning which relates to the text position
             // which is very strange... ignore the scroll.
             if (v != descendant || includeRootScroll) {
@@ -181,7 +182,7 @@ public final class Utilities {
     public static void mapCoordInSelfToDescendant(View descendant, View root, int[] coord) {
         sMatrix.reset();
         View v = descendant;
-        while(v != root) {
+        while (v != root) {
             sMatrix.postTranslate(-v.getScrollX(), -v.getScrollY());
             sMatrix.postConcat(v.getMatrix());
             sMatrix.postTranslate(v.getLeft(), v.getTop());
@@ -216,7 +217,7 @@ public final class Utilities {
         sLoc0[1] += (v0.getMeasuredHeight() * v0.getScaleY()) / 2;
         sLoc1[0] += (v1.getMeasuredWidth() * v1.getScaleX()) / 2;
         sLoc1[1] += (v1.getMeasuredHeight() * v1.getScaleY()) / 2;
-        return new int[] {sLoc1[0] - sLoc0[0], sLoc1[1] - sLoc0[1]};
+        return new int[]{sLoc1[0] - sLoc0[0], sLoc1[1] - sLoc0[1]};
     }
 
     public static void scaleRectFAboutCenter(RectF r, float scale) {
@@ -225,7 +226,7 @@ public final class Utilities {
             float cy = r.centerY();
             r.offset(-cx, -cy);
             r.left = r.left * scale;
-            r.top = r.top * scale ;
+            r.top = r.top * scale;
             r.right = r.right * scale;
             r.bottom = r.bottom * scale;
             r.offset(cx, cy);
@@ -411,14 +412,16 @@ public final class Utilities {
         return false;
     }
 
-    public static float dpiFromPx(int size, DisplayMetrics metrics){
+    public static float dpiFromPx(int size, DisplayMetrics metrics) {
         float densityRatio = (float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT;
         return (size / densityRatio);
     }
+
     public static int pxFromDp(float size, DisplayMetrics metrics) {
         return (int) Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 size, metrics));
     }
+
     public static int pxFromSp(float size, DisplayMetrics metrics) {
         return (int) Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 size, metrics));
@@ -465,7 +468,8 @@ public final class Utilities {
     /**
      * Wraps a message with a TTS span, so that a different message is spoken than
      * what is getting displayed.
-     * @param msg original message
+     *
+     * @param msg    original message
      * @param ttsMsg message to be spoken
      */
     public static CharSequence wrapForTts(CharSequence msg, String ttsMsg) {
@@ -507,7 +511,8 @@ public final class Utilities {
                 WallpaperManager wm = context.getSystemService(WallpaperManager.class);
                 return (Boolean) wm.getClass().getDeclaredMethod("isSetWallpaperAllowed")
                         .invoke(wm);
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         }
         return true;
     }
@@ -544,7 +549,9 @@ public final class Utilities {
         return true;
     }
 
-    /** Returns whether the collection is null or empty. */
+    /**
+     * Returns whether the collection is null or empty.
+     */
     public static boolean isEmpty(Collection c) {
         return c == null || c.isEmpty();
     }
@@ -568,7 +575,7 @@ public final class Utilities {
 
         try {
             return clazz.newInstance();
-        } catch (InstantiationException|IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

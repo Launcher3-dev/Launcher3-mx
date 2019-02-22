@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Wrapper around {@link Log} to allow writing to a file.
  * This class can safely be called from main thread.
- *
+ * <p>
  * Note: This should only be used for logging errors which have a persistent effect on user's data,
  * but whose effect may not be visible immediately.
  */
@@ -101,6 +101,7 @@ public final class FileLog {
 
     /**
      * Blocks until all the pending logs are written to the disk
+     *
      * @param out if not null, all the persisted logs are copied to the writer.
      */
     public static void flushAll(PrintWriter out) throws InterruptedException {

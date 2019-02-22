@@ -20,6 +20,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,6 +29,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.ColorUtils;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.Property;
@@ -51,13 +53,17 @@ import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.graphics.IconPalette;
 import com.android.launcher3.graphics.PreloadIconDrawable;
 import com.android.launcher3.imp.ImpUninstallIconShowListener;
+import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.model.PackageItemInfo;
+import com.android.launcher3.model.WidgetItem;
 import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.uninstall.UninstallOrDeleteUtil;
 import com.android.launcher3.util.DrawEditIcons;
+import com.android.launcher3.widget.WidgetListRowEntry;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 /**
  * TextView that draws a bubble behind the text. We cannot use a LineBackgroundSpan
@@ -200,6 +206,11 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
         mForceHideBadge = false;
     }
 
+    public void applyFromMenuItem(MenuItem item) {
+        applyIconAndLabel(item);
+        super.setTag(item);
+    }
+
     public void applyFromShortcutInfo(ShortcutInfo info) {
         applyFromShortcutInfo(info, false);
     }
@@ -239,6 +250,39 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
         verifyHighRes();
     }
 
+    public void applyFromPackageItemInfo(PackageItemInfo info, boolean isShowSize) {
+        applyIconAndLabel(info.iconBitmap, info, info.childCount, isShowSize);
+        // We don't need to check the info since it's not a ShortcutInfo
+        super.setTag(info);
+    }
+
+    private void applyIconAndLabel(WidgetListRowEntry entry, int position) {
+        PackageItemInfo info = entry.pkgItem;
+        ArrayList<WidgetItem> widgets = entry.widgets;
+        CharSequence title = String.format(getContext().getString(R.string.widget_span_format), widgets.get(position).spanX, widgets.get(position).spanY) + info.title;
+        applyIconAndLabel(info.iconBitmap, info, title);
+    }
+
+    public void applyFromPackageItemInfo(WidgetListRowEntry entry, int position) {
+        applyIconAndLabel(entry, position);
+        // We don't need to check the info since it's not a ShortcutInfo
+        super.setTag(entry.pkgItem);
+    }
+
+    private void applyIconAndLabel(Bitmap icon, ItemInfo info, int childWidgetSize, boolean isShowSize) {
+        CharSequence title;
+        if (info instanceof PackageItemInfo) {
+            if (childWidgetSize > 1) {
+                title = info.title + String.format(getContext().getString(R.string.widget_count_format), childWidgetSize);
+            } else {
+                title = "";
+            }
+        } else {
+            title = info.title;
+        }
+        applyIconAndLabel(icon, info, title);
+    }
+
     private void applyIconAndLabel(ItemInfoWithIcon info) {
         FastBitmapDrawable iconDrawable = DrawableFactory.get(getContext()).newIcon(info);
         mBadgeColor = IconPalette.getMutedColor(info.iconColor, 0.54f);
@@ -250,6 +294,31 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
                     ? getContext().getString(R.string.disabled_app_label, info.contentDescription)
                     : info.contentDescription);
         }
+    }
+
+    private void applyIconAndLabel(Bitmap icon, ItemInfo info, CharSequence title) {
+        FastBitmapDrawable iconDrawable = DrawableFactory.get(getContext()).newIcon(icon, info);
+        iconDrawable.setIsDisabled(info != null && info.isDisabled());
+
+        setIcon(iconDrawable);
+        if (!TextUtils.isEmpty(title)) {
+            setText(title);
+        }
+        if (info != null && info.contentDescription != null) {
+            setContentDescription(info.isDisabled()
+                    ? getContext().getString(R.string.disabled_app_label, info.contentDescription)
+                    : info.contentDescription);
+        }
+    }
+
+    private void applyIconAndLabel(MenuItem item) {
+        mIcon = getContext().getDrawable(item.getIcon());
+        if (mIcon != null) {
+            mIcon.setBounds(0, 0, mIconSize, mIconSize);
+            setCompoundDrawablePadding(getContext().getResources().getDimensionPixelOffset(R.dimen.menu_item_compound_drawable_padding));
+            applyCompoundDrawables(mIcon);
+        }
+        setText(item.getTitle());
     }
 
     /**
@@ -697,8 +766,6 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
             info.iconBitmap.prepareToDraw();
 
             if (info instanceof ShortcutInfo) {
-                applyFromApplicationInfo((ShortcutInfo) info);
-            } else if (info instanceof ShortcutInfo) {
                 applyFromShortcutInfo((ShortcutInfo) info);
                 mActivity.invalidateParent(info);
             } else if (info instanceof PackageItemInfo) {

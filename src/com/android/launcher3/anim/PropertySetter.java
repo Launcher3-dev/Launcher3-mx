@@ -37,12 +37,12 @@ public class PropertySetter {
     }
 
     public <T> void setFloat(T target, Property<T, Float> property, float value,
-            TimeInterpolator interpolator) {
+                             TimeInterpolator interpolator) {
         property.set(target, value);
     }
 
     public <T> void setInt(T target, Property<T, Integer> property, int value,
-            TimeInterpolator interpolator) {
+                           TimeInterpolator interpolator) {
         property.set(target, value);
     }
 
@@ -69,7 +69,7 @@ public class PropertySetter {
 
         @Override
         public <T> void setFloat(T target, Property<T, Float> property, float value,
-                TimeInterpolator interpolator) {
+                                 TimeInterpolator interpolator) {
             if (property.get(target) == value) {
                 return;
             }
@@ -80,7 +80,7 @@ public class PropertySetter {
 
         @Override
         public <T> void setInt(T target, Property<T, Integer> property, int value,
-                TimeInterpolator interpolator) {
+                               TimeInterpolator interpolator) {
             if (property.get(target) == value) {
                 return;
             }

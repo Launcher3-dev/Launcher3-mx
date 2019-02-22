@@ -15,10 +15,6 @@
  */
 package com.android.launcher3.uioverrides;
 
-import static com.android.launcher3.LauncherState.ALL_APPS;
-import static com.android.launcher3.LauncherState.NORMAL;
-import static com.android.launcher3.LauncherState.OVERVIEW;
-
 import android.view.MotionEvent;
 
 import com.android.launcher3.AbstractFloatingView;
@@ -28,9 +24,13 @@ import com.android.launcher3.userevent.nano.LauncherLogProto;
 import com.android.quickstep.TouchInteractionService;
 import com.android.quickstep.views.RecentsView;
 
+import static com.android.launcher3.LauncherState.ALL_APPS;
+import static com.android.launcher3.LauncherState.NORMAL;
+import static com.android.launcher3.LauncherState.OVERVIEW;
+
 /**
  * Touch controller from going from OVERVIEW to ALL_APPS.
- *
+ * <p>
  * This is used in landscape mode. It is also used in portrait mode for the fallback recents.
  */
 public class OverviewToAllAppsTouchController extends PortraitStatesTouchController {

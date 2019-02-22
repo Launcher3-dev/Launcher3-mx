@@ -25,30 +25,30 @@ import com.android.launcher3.Utilities;
 
 public class BitmapRenderer {
 
-     public static final boolean USE_HARDWARE_BITMAP = Utilities.ATLEAST_P;
+    public static final boolean USE_HARDWARE_BITMAP = Utilities.ATLEAST_P;
 
-     public static Bitmap createSoftwareBitmap(int width, int height, Renderer renderer) {
-          Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-          renderer.draw(new Canvas(result));
-          return result;
-     }
+    public static Bitmap createSoftwareBitmap(int width, int height, Renderer renderer) {
+        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        renderer.draw(new Canvas(result));
+        return result;
+    }
 
-     @TargetApi(Build.VERSION_CODES.P)
-     public static Bitmap createHardwareBitmap(int width, int height, Renderer renderer) {
-          if (!USE_HARDWARE_BITMAP) {
-               return createSoftwareBitmap(width, height, renderer);
-          }
+    @TargetApi(Build.VERSION_CODES.P)
+    public static Bitmap createHardwareBitmap(int width, int height, Renderer renderer) {
+        if (!USE_HARDWARE_BITMAP) {
+            return createSoftwareBitmap(width, height, renderer);
+        }
 
-          Picture picture = new Picture();
-          renderer.draw(picture.beginRecording(width, height));
-          picture.endRecording();
-          return Bitmap.createBitmap(picture);
-     }
+        Picture picture = new Picture();
+        renderer.draw(picture.beginRecording(width, height));
+        picture.endRecording();
+        return Bitmap.createBitmap(picture);
+    }
 
-     /**
-      * Interface representing a bitmap draw operation.
-      */
-     public interface Renderer {
-          void draw(Canvas out);
-     }
+    /**
+     * Interface representing a bitmap draw operation.
+     */
+    public interface Renderer {
+        void draw(Canvas out);
+    }
 }

@@ -64,7 +64,8 @@ public class WidgetPreviewLoader {
      * Note: synchronized block used for this variable is expensive and the block should always
      * be posted to a background thread.
      */
-    @Thunk final Set<Bitmap> mUnusedBitmaps =
+    @Thunk
+    final Set<Bitmap> mUnusedBitmaps =
             Collections.newSetFromMap(new WeakHashMap<Bitmap, Boolean>());
 
     private final Context mContext;
@@ -74,7 +75,8 @@ public class WidgetPreviewLoader {
     private final CacheDb mDb;
 
     private final MainThreadExecutor mMainThreadExecutor = new MainThreadExecutor();
-    @Thunk final Handler mWorkerHandler;
+    @Thunk
+    final Handler mWorkerHandler;
 
     public WidgetPreviewLoader(Context context, IconCache iconCache) {
         mContext = context;
@@ -92,7 +94,7 @@ public class WidgetPreviewLoader {
      * @return a request id which can be used to cancel the request.
      */
     public CancellationSignal getPreview(WidgetItem item, int previewWidth,
-            int previewHeight, WidgetCell caller) {
+                                         int previewHeight, WidgetCell caller) {
         String size = previewWidth + "x" + previewHeight;
         WidgetCacheKey key = new WidgetCacheKey(item.componentName, item.user, size);
 
@@ -139,7 +141,8 @@ public class WidgetPreviewLoader {
         }
     }
 
-    @Thunk void writeToDb(WidgetCacheKey key, long[] versions, Bitmap preview) {
+    @Thunk
+    void writeToDb(WidgetCacheKey key, long[] versions, Bitmap preview) {
         ContentValues values = new ContentValues();
         values.put(CacheDb.COLUMN_COMPONENT, key.componentName.flattenToShortString());
         values.put(CacheDb.COLUMN_USER, mUserManager.getSerialNumberForUser(key.user));
@@ -156,7 +159,7 @@ public class WidgetPreviewLoader {
     }
 
     private void removePackage(String packageName, UserHandle user, long userSerial) {
-        synchronized(mPackageVersions) {
+        synchronized (mPackageVersions) {
             mPackageVersions.remove(packageName);
         }
 
@@ -167,15 +170,15 @@ public class WidgetPreviewLoader {
 
     /**
      * Updates the persistent DB:
-     *   1. Any preview generated for an old package version is removed
-     *   2. Any preview for an absent package is removed
+     * 1. Any preview generated for an old package version is removed
+     * 2. Any preview for an absent package is removed
      * This ensures that we remove entries for packages which changed while the launcher was dead.
      *
      * @param packageUser if provided, specifies that list only contains previews for the
      *                    given package/user, otherwise the list contains all previews
      */
     public void removeObsoletePreviews(ArrayList<? extends ComponentKey> list,
-            @Nullable PackageUserKey packageUser) {
+                                       @Nullable PackageUserKey packageUser) {
         Preconditions.assertWorkerThread();
 
         LongSparseArray<HashSet<String>> validPackages = new LongSparseArray<>();
@@ -248,7 +251,8 @@ public class WidgetPreviewLoader {
     /**
      * Reads the preview bitmap from the DB or null if the preview is not in the DB.
      */
-    @Thunk Bitmap readFromDb(WidgetCacheKey key, Bitmap recycle, PreviewLoadTask loadTask) {
+    @Thunk
+    Bitmap readFromDb(WidgetCacheKey key, Bitmap recycle, PreviewLoadTask loadTask) {
         Cursor cursor = null;
         try {
             cursor = mDb.query(
@@ -287,7 +291,7 @@ public class WidgetPreviewLoader {
     }
 
     private Bitmap generatePreview(BaseActivity launcher, WidgetItem item, Bitmap recycle,
-            int previewWidth, int previewHeight) {
+                                   int previewWidth, int previewHeight) {
         if (item.widgetInfo != null) {
             return generateWidgetPreview(launcher, item.widgetInfo,
                     previewWidth, recycle, null);
@@ -302,14 +306,15 @@ public class WidgetPreviewLoader {
      * and add badge at the bottom right corner.
      *
      * @param launcher
-     * @param info                        information about the widget
-     * @param maxPreviewWidth             width of the preview on either workspace or tray
-     * @param preview                     bitmap that can be recycled
-     * @param preScaledWidthOut           return the width of the returned bitmap
+     * @param info              information about the widget
+     * @param maxPreviewWidth   width of the preview on either workspace or tray
+     * @param preview           bitmap that can be recycled
+     * @param preScaledWidthOut return the width of the returned bitmap
+     *
      * @return
      */
     public Bitmap generateWidgetPreview(BaseActivity launcher, LauncherAppWidgetProviderInfo info,
-            int maxPreviewWidth, Bitmap preview, int[] preScaledWidthOut) {
+                                        int maxPreviewWidth, Bitmap preview, int[] preScaledWidthOut) {
         // Load the preview image if possible
         if (maxPreviewWidth < 0) maxPreviewWidth = Integer.MAX_VALUE;
 
@@ -359,8 +364,8 @@ public class WidgetPreviewLoader {
             scale = maxPreviewWidth / (float) (previewWidth);
         }
         if (scale != 1f) {
-            previewWidth = Math.max((int)(scale * previewWidth), 1);
-            previewHeight = Math.max((int)(scale * previewHeight), 1);
+            previewWidth = Math.max((int) (scale * previewWidth), 1);
+            previewHeight = Math.max((int) (scale * previewHeight), 1);
         }
 
         // If a bitmap is passed in, we use it; otherwise, we create a bitmap of the right size
@@ -424,7 +429,8 @@ public class WidgetPreviewLoader {
                     icon.setBounds(hoffset, yoffset, hoffset + iconSize, yoffset + iconSize);
                     icon.draw(c);
                 }
-            } catch (Resources.NotFoundException e) { }
+            } catch (Resources.NotFoundException e) {
+            }
             c.setBitmap(null);
         }
         return preview;
@@ -446,7 +452,7 @@ public class WidgetPreviewLoader {
     }
 
     private Bitmap generateShortcutPreview(BaseActivity launcher, ShortcutConfigActivityInfo info,
-            int maxWidth, int maxHeight, Bitmap preview) {
+                                           int maxWidth, int maxHeight, Bitmap preview) {
         int iconSize = launcher.getDeviceProfile().iconSizePx;
         int padding = launcher.getResources()
                 .getDimensionPixelSize(R.dimen.widget_preview_shortcut_padding);
@@ -504,7 +510,8 @@ public class WidgetPreviewLoader {
     /**
      * @return an array of containing versionCode and lastUpdatedTime for the package.
      */
-    @Thunk long[] getPackageVersion(String packageName) {
+    @Thunk
+    long[] getPackageVersion(String packageName) {
         synchronized (mPackageVersions) {
             long[] versions = mPackageVersions.get(packageName);
             if (versions == null) {
@@ -525,17 +532,20 @@ public class WidgetPreviewLoader {
 
     public class PreviewLoadTask extends AsyncTask<Void, Void, Bitmap>
             implements CancellationSignal.OnCancelListener {
-        @Thunk final WidgetCacheKey mKey;
+        @Thunk
+        final WidgetCacheKey mKey;
         private final WidgetItem mInfo;
         private final int mPreviewHeight;
         private final int mPreviewWidth;
         private final WidgetCell mCaller;
         private final BaseActivity mActivity;
-        @Thunk long[] mVersions;
-        @Thunk Bitmap mBitmapToRecycle;
+        @Thunk
+        long[] mVersions;
+        @Thunk
+        Bitmap mBitmapToRecycle;
 
         PreviewLoadTask(WidgetCacheKey key, WidgetItem info, int previewWidth,
-                int previewHeight, WidgetCell caller) {
+                        int previewHeight, WidgetCell caller) {
             mKey = key;
             mInfo = info;
             mPreviewHeight = previewHeight;
@@ -666,7 +676,8 @@ public class WidgetPreviewLoader {
 
     private static final class WidgetCacheKey extends ComponentKey {
 
-        @Thunk final String size;
+        @Thunk
+        final String size;
 
         public WidgetCacheKey(ComponentName componentName, UserHandle user, String size) {
             super(componentName, user);

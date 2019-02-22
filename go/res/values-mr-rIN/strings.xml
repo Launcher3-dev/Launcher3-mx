@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"शॉर्टकट निवडण्यासाठी स्पर्श करा आणि धरून ठेवा."</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"शॉर्टकट निवडण्यासाठी किंवा कस्टम क्रिया वापरण्यासाठी दोनदा टॅप करा आणि धरून ठेवा."</string>

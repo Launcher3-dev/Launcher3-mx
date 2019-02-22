@@ -16,4 +16,4 @@
 <com.android.launcher3.graphics.ShadowDrawable
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@drawable/ic_uninstall_no_shadow"
-    android:elevation="@dimen/drop_target_shadow_elevation" />
+    android:elevation="@dimen/drop_target_shadow_elevation"/>

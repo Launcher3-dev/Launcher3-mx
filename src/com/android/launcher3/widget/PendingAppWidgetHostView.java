@@ -17,7 +17,6 @@
 package com.android.launcher3.widget;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -37,15 +36,12 @@ import com.android.launcher3.FastBitmapDrawable;
 import com.android.launcher3.IconCache;
 import com.android.launcher3.IconCache.ItemInfoUpdateReceiver;
 import com.android.launcher3.ItemInfoWithIcon;
-import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAppWidgetInfo;
 import com.android.launcher3.R;
-import com.android.launcher3.Utilities;
 import com.android.launcher3.graphics.DrawableFactory;
 import com.android.launcher3.model.PackageItemInfo;
 import com.android.launcher3.touch.ItemClickHandler;
 import com.android.launcher3.util.Themes;
-import com.android.launcher3.widget.LauncherAppWidgetHostView;
 
 public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
         implements OnClickListener, ItemInfoUpdateReceiver {
@@ -68,7 +64,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
     private Layout mSetupTextLayout;
 
     public PendingAppWidgetHostView(Context context, LauncherAppWidgetInfo info,
-            IconCache cache, boolean disabledForSafeMode) {
+                                    IconCache cache, boolean disabledForSafeMode) {
         super(new ContextThemeWrapper(context, R.style.WidgetContainerTheme));
 
         mInfo = info;
@@ -97,7 +93,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
 
     @Override
     public void updateAppWidgetSize(Bundle newOptions, int minWidth, int minHeight, int maxWidth,
-            int maxHeight) {
+                                    int maxHeight) {
         // No-op
     }
 
@@ -165,7 +161,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
         Color.colorToHSV(dominantColor, hsv);
         hsv[1] = Math.min(hsv[1], MIN_SATUNATION);
         hsv[2] = 1;
-        mSettingIconDrawable.setColorFilter(Color.HSVToColor(hsv),  PorterDuff.Mode.SRC_IN);
+        mSettingIconDrawable.setColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN);
     }
 
     @Override
@@ -190,12 +186,12 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
 
     /**
      * A pending widget is ready for setup after the provider is installed and
-     *   1) Widget id is not valid: the widget id is not yet bound to the provider, probably
-     *                              because the launcher doesn't have appropriate permissions.
-     *                              Note that we would still have an allocated id as that does not
-     *                              require any permissions and can be done during view inflation.
-     *   2) UI is not ready: the id is valid and the bound. But the widget has a configure activity
-     *                       which needs to be called once.
+     * 1) Widget id is not valid: the widget id is not yet bound to the provider, probably
+     * because the launcher doesn't have appropriate permissions.
+     * Note that we would still have an allocated id as that does not
+     * require any permissions and can be done during view inflation.
+     * 2) UI is not ready: the id is valid and the bound. But the widget has a configure activity
+     * which needs to be called once.
      */
     public boolean isReadyForClickSetup() {
         return !mInfo.hasRestoreFlag(LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY)
@@ -223,7 +219,7 @@ public class PendingAppWidgetHostView extends LauncherAppWidgetHostView
             mRect.set(0, 0, size, size);
             mRect.offsetTo((getWidth() - mRect.width()) / 2, (getHeight() - mRect.height()) / 2);
             mCenterDrawable.setBounds(mRect);
-        } else  {
+        } else {
             float iconSize = Math.max(0, Math.min(availableWidth, availableHeight));
 
             // Use twice the setting size factor, as the setting is drawn at a corner and the

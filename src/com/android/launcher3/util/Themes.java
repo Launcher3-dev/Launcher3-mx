@@ -75,10 +75,10 @@ public class Themes {
      * G' = g * G
      * B' = b * B
      * A' = a * A
-     *
+     * <p>
      * The matrix will, for instance, turn white into r g b a, and black will remain black.
      *
-     * @param color The color r g b a
+     * @param color  The color r g b a
      * @param target The ColorMatrix to scale
      */
     public static void setColorScaleOnMatrix(int color, ColorMatrix target) {
@@ -88,14 +88,14 @@ public class Themes {
 
     /**
      * Changes a color matrix such that, when applied to srcColor, it produces dstColor.
-     *
+     * <p>
      * Note that values on the last column of target ColorMatrix can be negative, and may result in
      * negative values when applied on a color. Such negative values will be automatically shifted
      * up to 0 by the framework.
      *
      * @param srcColor The color to start from
      * @param dstColor The color to create by applying target on srcColor
-     * @param target The ColorMatrix to transform the color
+     * @param target   The ColorMatrix to transform the color
      */
     public static void setColorChangeOnMatrix(int srcColor, int dstColor, ColorMatrix target) {
         target.reset();

@@ -15,7 +15,7 @@ public class OverViewSpringLoadedState extends LauncherState {
     /**
      * Launcher 状态构造函数
      *
-     * @param id                 状态id
+     * @param id 状态id
      */
     public OverViewSpringLoadedState(int id) {
         super(id, LauncherLogProto.ContainerType.OVERVIEW_SPRING_LOADED, OVERVIEW_TRANSITION_MS, FLAG_OVERVIEW_UI);

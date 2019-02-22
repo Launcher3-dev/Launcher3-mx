@@ -76,12 +76,12 @@ public class PreviewItemManager {
      *                animates the first item to its position in the preview.
      */
     public FolderPreviewItemAnim createFirstItemAnimation(final boolean reverse,
-            final Runnable onCompleteRunnable) {
+                                                          final Runnable onCompleteRunnable) {
         return reverse
                 ? new FolderPreviewItemAnim(this, mFirstPageParams.get(0), 0, 2, -1, -1,
-                        FINAL_ITEM_ANIMATION_DURATION, onCompleteRunnable)
+                FINAL_ITEM_ANIMATION_DURATION, onCompleteRunnable)
                 : new FolderPreviewItemAnim(this, mFirstPageParams.get(0), -1, -1, 0, 2,
-                        INITIAL_ITEM_ANIMATION_DURATION, onCompleteRunnable);
+                INITIAL_ITEM_ANIMATION_DURATION, onCompleteRunnable);
     }
 
     Drawable prepareCreateAnimation(final View destView) {
@@ -115,7 +115,7 @@ public class PreviewItemManager {
     }
 
     PreviewItemDrawingParams computePreviewItemDrawingParams(int index, int curNumItems,
-            PreviewItemDrawingParams params) {
+                                                             PreviewItemDrawingParams params) {
         // We use an index of -1 to represent an icon on the workspace for the destroy and
         // create animations
         if (index == -1) {
@@ -135,7 +135,7 @@ public class PreviewItemManager {
     }
 
     public void drawParams(Canvas canvas, ArrayList<PreviewItemDrawingParams> params,
-            float transX) {
+                           float transX) {
         canvas.translate(transX, 0);
         // The first item should be drawn last (ie. on top of later items)
         for (int i = params.size() - 1; i >= 0; i--) {
@@ -290,16 +290,16 @@ public class PreviewItemManager {
 
     /**
      * Handles the case where items in the preview are either:
-     *  - Moving into the preview
-     *  - Moving into a new position
-     *  - Moving out of the preview
+     * - Moving into the preview
+     * - Moving into a new position
+     * - Moving out of the preview
      *
      * @param oldParams The list of items in the old preview.
      * @param newParams The list of items in the new preview.
-     * @param dropped The item that was dropped onto the FolderIcon.
+     * @param dropped   The item that was dropped onto the FolderIcon.
      */
     public void onDrop(List<BubbleTextView> oldParams, List<BubbleTextView> newParams,
-            ShortcutInfo dropped) {
+                       ShortcutInfo dropped) {
         int numItems = newParams.size();
         final ArrayList<PreviewItemDrawingParams> params = mFirstPageParams;
         buildParamsForPage(0, params, false);
@@ -347,7 +347,7 @@ public class PreviewItemManager {
     }
 
     private void updateTransitionParam(final PreviewItemDrawingParams p, BubbleTextView btv,
-            int prevIndex, int newIndex, int numItems) {
+                                       int prevIndex, int newIndex, int numItems) {
         p.drawable = btv.getCompoundDrawables()[1];
         if (!mIcon.mFolder.isOpen()) {
             // Set the callback to FolderIcon as it is responsible to drawing the icon. The

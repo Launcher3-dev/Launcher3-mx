@@ -1,16 +1,6 @@
 package com.android.launcher3;
 
-import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
-import static android.appwidget.AppWidgetProviderInfo.WIDGET_FEATURE_RECONFIGURABLE;
-
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_SYSTEM_MASK;
-import static com.android.launcher3.ItemInfoWithIcon.FLAG_SYSTEM_NO;
-import static com.android.launcher3.LauncherSettings.Favorites.CONTAINER_DESKTOP;
-import static com.android.launcher3.accessibility.LauncherAccessibilityDelegate.RECONFIGURE;
-import static com.android.launcher3.accessibility.LauncherAccessibilityDelegate.UNINSTALL;
-
 import android.appwidget.AppWidgetHostView;
-import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Context;
@@ -38,10 +28,18 @@ import com.android.launcher3.util.Themes;
 
 import java.net.URISyntaxException;
 
+import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
+import static android.appwidget.AppWidgetProviderInfo.WIDGET_FEATURE_RECONFIGURABLE;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_SYSTEM_MASK;
+import static com.android.launcher3.ItemInfoWithIcon.FLAG_SYSTEM_NO;
+import static com.android.launcher3.LauncherSettings.Favorites.CONTAINER_DESKTOP;
+import static com.android.launcher3.accessibility.LauncherAccessibilityDelegate.RECONFIGURE;
+import static com.android.launcher3.accessibility.LauncherAccessibilityDelegate.UNINSTALL;
+
 /**
  * Drop target which provides a secondary option for an item.
- *    For app targets: shows as uninstall
- *    For configurable widgets: shows as setup
+ * For app targets: shows as uninstall
+ * For configurable widgets: shows as setup
  */
 public class SecondaryDropTarget extends ButtonDropTarget implements OnAlarmListener {
 
@@ -53,6 +51,7 @@ public class SecondaryDropTarget extends ButtonDropTarget implements OnAlarmList
     private final Alarm mCacheExpireAlarm;
 
     protected int mCurrentAccessibilityAction = -1;
+
     public SecondaryDropTarget(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -209,7 +208,7 @@ public class SecondaryDropTarget extends ButtonDropTarget implements OnAlarmList
         if (widgetInfo == null || widgetInfo.configure == null) {
             return INVALID_APPWIDGET_ID;
         }
-        if ( (LauncherAppWidgetProviderInfo.fromProviderInfo(getContext(), widgetInfo)
+        if ((LauncherAppWidgetProviderInfo.fromProviderInfo(getContext(), widgetInfo)
                 .getWidgetFeatures() & WIDGET_FEATURE_RECONFIGURABLE) == 0) {
             return INVALID_APPWIDGET_ID;
         }
@@ -273,13 +272,13 @@ public class SecondaryDropTarget extends ButtonDropTarget implements OnAlarmList
 
         @Override
         public void onDropCompleted(View target, DragObject d,
-                boolean success) {
+                                    boolean success) {
             mDragObject = d;
         }
 
         @Override
         public void fillInLogContainerData(View v, ItemInfo info, Target target,
-                Target targetParent) {
+                                           Target targetParent) {
             mOriginal.fillInLogContainerData(v, info, target, targetParent);
         }
 

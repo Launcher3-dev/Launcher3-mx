@@ -16,8 +16,6 @@
 
 package com.android.quickstep.views;
 
-import static com.android.systemui.shared.system.WindowManagerWrapper.WINDOWING_MODE_FULLSCREEN;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -29,7 +27,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Shader;
-import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.util.FloatProperty;
 import android.util.Property;
@@ -46,6 +43,8 @@ import com.android.quickstep.TaskOverlayFactory;
 import com.android.quickstep.TaskOverlayFactory.TaskOverlay;
 import com.android.systemui.shared.recents.model.Task;
 import com.android.systemui.shared.recents.model.ThumbnailData;
+
+import static com.android.systemui.shared.system.WindowManagerWrapper.WINDOWING_MODE_FULLSCREEN;
 
 /**
  * A task in the Recents view.
@@ -141,7 +140,7 @@ public class TaskThumbnailView extends View {
 
     /**
      * Sets the alpha of the dim layer on top of this view.
-     *
+     * <p>
      * If dimAlpha is 0, no dimming is applied; if dimAlpha is 1, the thumbnail will be black.
      */
     public void setDimAlpha(float dimAlpha) {
@@ -180,7 +179,7 @@ public class TaskThumbnailView extends View {
     }
 
     public void drawOnCanvas(Canvas canvas, float x, float y, float width, float height,
-            float cornerRadius) {
+                             float cornerRadius) {
         // Draw the background in all cases, except when the thumbnail data is opaque
         final boolean drawBackgroundOnly = mTask == null || mTask.isLocked || mBitmapShader == null
                 || mThumbnailData == null;
@@ -219,7 +218,7 @@ public class TaskThumbnailView extends View {
         mClipBottom = -1;
         if (mBitmapShader != null && mThumbnailData != null) {
             float scale = mThumbnailData.scale;
-            Rect thumbnailInsets  = mThumbnailData.insets;
+            Rect thumbnailInsets = mThumbnailData.insets;
             final float thumbnailWidth = mThumbnailData.thumbnail.getWidth() -
                     (thumbnailInsets.left + thumbnailInsets.right) * scale;
             final float thumbnailHeight = mThumbnailData.thumbnail.getHeight() -

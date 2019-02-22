@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 
 /**
  * Helper class to re-query app status when SD-card becomes available.
- *
+ * <p>
  * During first load, just after reboot, some apps on sdcard might not be available immediately due
  * to some race conditions in the system. We wait for ACTION_BOOT_COMPLETED and process such
  * apps again.
@@ -45,7 +45,7 @@ public class SdCardAvailableReceiver extends BroadcastReceiver {
     private final MultiHashMap<UserHandle, String> mPackages;
 
     public SdCardAvailableReceiver(LauncherAppState app,
-            MultiHashMap<UserHandle, String> packages) {
+                                   MultiHashMap<UserHandle, String> packages) {
         mModel = app.getModel();
         mContext = app.getContext();
         mPackages = packages;

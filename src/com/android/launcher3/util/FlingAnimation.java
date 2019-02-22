@@ -1,7 +1,5 @@
 package com.android.launcher3.util;
 
-import static com.android.launcher3.LauncherState.NORMAL;
-
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
@@ -15,6 +13,8 @@ import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragView;
+
+import static com.android.launcher3.LauncherState.NORMAL;
 
 public class FlingAnimation implements AnimatorUpdateListener, Runnable {
 
@@ -108,10 +108,10 @@ public class FlingAnimation implements AnimatorUpdateListener, Runnable {
 
     /**
      * The fling animation is based on the following system
-     *   - Apply a constant force in the y direction to causing the fling to decelerate.
-     *   - The animation runs for the time taken by the object to go out of the screen.
-     *   - Calculate a constant acceleration in x direction such that the object reaches
-     *     {@link #mIconRect} in the given time.
+     * - Apply a constant force in the y direction to causing the fling to decelerate.
+     * - The animation runs for the time taken by the object to go out of the screen.
+     * - Calculate a constant acceleration in x direction such that the object reaches
+     * {@link #mIconRect} in the given time.
      */
     protected int initFlingUpDuration() {
         float sY = -mFrom.bottom;
@@ -136,10 +136,10 @@ public class FlingAnimation implements AnimatorUpdateListener, Runnable {
 
     /**
      * The fling animation is based on the following system
-     *   - Apply a constant force in the x direction to causing the fling to decelerate.
-     *   - The animation runs for the time taken by the object to go out of the screen.
-     *   - Calculate a constant acceleration in y direction such that the object reaches
-     *     {@link #mIconRect} in the given time.
+     * - Apply a constant force in the x direction to causing the fling to decelerate.
+     * - The animation runs for the time taken by the object to go out of the screen.
+     * - Calculate a constant acceleration in y direction such that the object reaches
+     * {@link #mIconRect} in the given time.
      */
     protected int initFlingLeftDuration() {
         float sX = -mFrom.right;

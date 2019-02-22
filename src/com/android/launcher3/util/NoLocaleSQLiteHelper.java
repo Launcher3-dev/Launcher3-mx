@@ -16,10 +16,6 @@
 
 package com.android.launcher3.util;
 
-import static android.database.sqlite.SQLiteDatabase.NO_LOCALIZED_COLLATORS;
-
-import static com.android.launcher3.Utilities.ATLEAST_P;
-
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.DatabaseErrorHandler;
@@ -27,6 +23,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteDatabase.OpenParams;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import static android.database.sqlite.SQLiteDatabase.NO_LOCALIZED_COLLATORS;
+import static com.android.launcher3.Utilities.ATLEAST_P;
 
 /**
  * Extension of {@link SQLiteOpenHelper} which avoids creating default locale table by

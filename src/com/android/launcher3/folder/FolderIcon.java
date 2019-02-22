@@ -72,10 +72,13 @@ import static com.android.launcher3.folder.PreviewItemManager.INITIAL_ITEM_ANIMA
  * An icon that can appear on in the workspace representing an {@link Folder}.
  */
 public class FolderIcon extends FrameLayout implements FolderListener {
-    @Thunk Launcher mLauncher;
-    @Thunk Folder mFolder;
+    @Thunk
+    Launcher mLauncher;
+    @Thunk
+    Folder mFolder;
     private FolderInfo mInfo;
-    @Thunk static boolean sStaticValuesDirty = true;
+    @Thunk
+    static boolean sStaticValuesDirty = true;
 
     private CheckLongPressHelper mLongPressHelper;
     private StylusEventHelper mStylusEventHelper;
@@ -88,7 +91,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     // Delay when drag enters until the folder opens, in miliseconds.
     private static final int ON_OPEN_DELAY = 800;
 
-    @Thunk BubbleTextView mFolderName;
+    @Thunk
+    BubbleTextView mFolderName;
 
     PreviewBackground mBackground = new PreviewBackground();
     private boolean mBackgroundIsVisible = true;
@@ -144,7 +148,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     public static FolderIcon fromXml(int resId, Launcher launcher, ViewGroup group,
-            FolderInfo folderInfo) {
+                                     FolderInfo folderInfo) {
         @SuppressWarnings("all") // suppress dead code warning
         final boolean error = INITIAL_ITEM_ANIMATION_DURATION >= DROP_IN_ANIMATION_DURATION;
         if (error) {
@@ -250,8 +254,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     public void performCreateAnimation(final ShortcutInfo destInfo, final View destView,
-            final ShortcutInfo srcInfo, final DragView srcView, Rect dstRect,
-            float scaleRelativeToDragLayer) {
+                                       final ShortcutInfo srcInfo, final DragView srcView, Rect dstRect,
+                                       float scaleRelativeToDragLayer) {
         prepareCreateAnimation(destView);
         addItem(destInfo);
         // This will animate the first item from it's position as an icon into its
@@ -276,8 +280,8 @@ public class FolderIcon extends FrameLayout implements FolderListener {
     }
 
     private void onDrop(final ShortcutInfo item, DragView animateView, Rect finalRect,
-            float scaleRelativeToDragLayer, int index,
-            boolean itemReturnedOnFailedDrop) {
+                        float scaleRelativeToDragLayer, int index,
+                        boolean itemReturnedOnFailedDrop) {
         item.cellX = -1;
         item.cellY = -1;
 
@@ -371,7 +375,7 @@ public class FolderIcon extends FrameLayout implements FolderListener {
         if (d.dragInfo instanceof ShortcutInfo) {
             // Came from all apps -- make a copy
             item = (ShortcutInfo) d.dragInfo;
-        } else if (d.dragSource instanceof BaseItemDragListener){
+        } else if (d.dragSource instanceof BaseItemDragListener) {
             // Came from a different window -- make a copy
             item = new ShortcutInfo((ShortcutInfo) d.dragInfo);
         } else {

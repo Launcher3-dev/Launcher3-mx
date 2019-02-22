@@ -48,9 +48,11 @@ public class TaskOverlayFactory {
 
     public static class TaskOverlay {
 
-        public void setTaskInfo(Task task, ThumbnailData thumbnail, Matrix matrix) { }
+        public void setTaskInfo(Task task, ThumbnailData thumbnail, Matrix matrix) {
+        }
 
-        public void reset() { }
+        public void reset() {
+        }
 
     }
 }

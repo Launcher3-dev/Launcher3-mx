@@ -253,7 +253,7 @@ public class ImportDataTask {
                             values.put(Favorites.ICON_PACKAGE, c.getString(iconPackageIndex));
                             values.put(Favorites.ICON_RESOURCE, c.getString(iconResourceIndex));
                         }
-                        values.put(Favorites.ICON,  c.getBlob(iconIndex));
+                        values.put(Favorites.ICON, c.getBlob(iconIndex));
                         values.put(Favorites.INTENT, intent.toUri(0));
                         values.put(Favorites.RANK, c.getInt(rankIndex));
 
@@ -327,12 +327,14 @@ public class ImportDataTask {
 
     private static String getPackage(Intent intent) {
         return intent.getComponent() != null ? intent.getComponent().getPackageName()
-            : intent.getPackage();
+                : intent.getPackage();
     }
 
     /**
      * Performs data import if possible.
+     *
      * @return true on successful data import, false if it was not available
+     *
      * @throws Exception if the import failed
      */
     public static boolean performImportIfPossible(Context context) throws Exception {

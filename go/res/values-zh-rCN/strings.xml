@@ -17,7 +17,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
+<resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="long_press_widget_to_add" msgid="4001616142797446267">"触摸并按住快捷方式即可选择快捷方式。"</string>
     <string name="long_accessible_way_to_add" msgid="2725225828389948328">"点按两次并按住快捷方式即可选择快捷方式，您也可以使用自定义操作。"</string>

@@ -20,9 +20,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.Pair;
 
+import com.android.launcher3.uioverrides.dynamicui.ColorExtractionAlgorithm;
 import com.android.launcher3.uioverrides.dynamicui.WallpaperColorsCompat;
 import com.android.launcher3.uioverrides.dynamicui.WallpaperManagerCompat;
-import com.android.launcher3.uioverrides.dynamicui.ColorExtractionAlgorithm;
 
 import java.util.ArrayList;
 

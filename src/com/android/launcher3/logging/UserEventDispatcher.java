@@ -16,16 +16,6 @@
 
 package com.android.launcher3.logging;
 
-import static com.android.launcher3.logging.LoggerUtils.newAction;
-import static com.android.launcher3.logging.LoggerUtils.newCommandAction;
-import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
-import static com.android.launcher3.logging.LoggerUtils.newControlTarget;
-import static com.android.launcher3.logging.LoggerUtils.newDropTarget;
-import static com.android.launcher3.logging.LoggerUtils.newItemTarget;
-import static com.android.launcher3.logging.LoggerUtils.newLauncherEvent;
-import static com.android.launcher3.logging.LoggerUtils.newTarget;
-import static com.android.launcher3.logging.LoggerUtils.newTouchAction;
-
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -55,10 +45,20 @@ import com.android.launcher3.util.LogConfig;
 import java.util.Locale;
 import java.util.UUID;
 
+import static com.android.launcher3.logging.LoggerUtils.newAction;
+import static com.android.launcher3.logging.LoggerUtils.newCommandAction;
+import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
+import static com.android.launcher3.logging.LoggerUtils.newControlTarget;
+import static com.android.launcher3.logging.LoggerUtils.newDropTarget;
+import static com.android.launcher3.logging.LoggerUtils.newItemTarget;
+import static com.android.launcher3.logging.LoggerUtils.newLauncherEvent;
+import static com.android.launcher3.logging.LoggerUtils.newTarget;
+import static com.android.launcher3.logging.LoggerUtils.newTouchAction;
+
 /**
  * Manages the creation of {@link LauncherEvent}.
  * To debug this class, execute following command before side loading a new apk.
- *
+ * <p>
  * $ adb shell setprop log.tag.UserEvent VERBOSE
  */
 public class UserEventDispatcher {
@@ -71,7 +71,7 @@ public class UserEventDispatcher {
     private static final String UUID_STORAGE = "uuid";
 
     public static UserEventDispatcher newInstance(Context context, DeviceProfile dp,
-            UserEventDelegate delegate) {
+                                                  UserEventDelegate delegate) {
         SharedPreferences sharedPrefs = Utilities.getDevicePrefs(context);
         String uuidStr = sharedPrefs.getString(UUID_STORAGE, null);
         if (uuidStr == null) {
@@ -155,6 +155,7 @@ public class UserEventDispatcher {
 
     /**
      * Fills in the container data on the given event if the given view is not null.
+     *
      * @return whether container data was added.
      */
     protected boolean fillInLogContainerData(LauncherEvent event, @Nullable View v) {
@@ -182,10 +183,11 @@ public class UserEventDispatcher {
         mAppOrTaskLaunch = true;
     }
 
-    public void logActionTip(int actionType, int viewType) { }
+    public void logActionTip(int actionType, int viewType) {
+    }
 
     public void logTaskLaunchOrDismiss(int action, int direction, int taskIndex,
-            ComponentKey componentKey) {
+                                       ComponentKey componentKey) {
         LauncherEvent event = newLauncherEvent(newTouchAction(action), // TAP or SWIPE or FLING
                 newTarget(Target.Type.ITEM));
         if (action == Action.Touch.SWIPE || action == Action.Touch.FLING) {
@@ -226,7 +228,7 @@ public class UserEventDispatcher {
 
     public void logActionCommand(int command, int srcContainerType, int dstContainerType) {
         logActionCommand(command, newContainerTarget(srcContainerType),
-                dstContainerType >=0 ? newContainerTarget(dstContainerType) : null);
+                dstContainerType >= 0 ? newContainerTarget(dstContainerType) : null);
     }
 
     public void logActionCommand(int command, Target srcTarget, Target dstTarget) {
@@ -275,7 +277,7 @@ public class UserEventDispatcher {
     }
 
     public void logActionOnControl(int action, int controlType, int parentContainer,
-                                   int grandParentContainer){
+                                   int grandParentContainer) {
         LauncherEvent event = newLauncherEvent(newTouchAction(action),
                 newControlTarget(controlType),
                 newContainerTarget(parentContainer),
@@ -288,7 +290,7 @@ public class UserEventDispatcher {
         final LauncherEvent event = (controlInContainer == null && parentContainerType < 0)
                 ? newLauncherEvent(newTouchAction(action), newTarget(Target.Type.CONTROL))
                 : newLauncherEvent(newTouchAction(action), newTarget(Target.Type.CONTROL),
-                        newTarget(Target.Type.CONTAINER));
+                newTarget(Target.Type.CONTAINER));
         event.srcTarget[0].controlType = controlType;
         if (controlInContainer != null) {
             fillInLogContainerData(event, controlInContainer);
@@ -380,7 +382,7 @@ public class UserEventDispatcher {
     }
 
     /* Currently we are only interested in whether this event happens or not and don't
-    * care about which screen moves to where. */
+     * care about which screen moves to where. */
     public void logOverviewReorder() {
         LauncherEvent event = newLauncherEvent(newTouchAction(Action.Touch.DRAGDROP),
                 newContainerTarget(ContainerType.WORKSPACE),
@@ -392,7 +394,7 @@ public class UserEventDispatcher {
         LauncherEvent event = newLauncherEvent(newTouchAction(Action.Touch.DRAGDROP),
                 newItemTarget(dragObj.originalDragInfo, mInstantAppResolver),
                 newTarget(Target.Type.CONTAINER));
-        event.destTarget = new Target[] {
+        event.destTarget = new Target[]{
                 newItemTarget(dragObj.originalDragInfo, mInstantAppResolver),
                 newDropTarget(dropTargetAsView)
         };
@@ -411,6 +413,7 @@ public class UserEventDispatcher {
 
     /**
      * Currently logs following containers: workspace, allapps, widget tray.
+     *
      * @param reason
      */
     public final void resetElapsedContainerMillis(String reason) {

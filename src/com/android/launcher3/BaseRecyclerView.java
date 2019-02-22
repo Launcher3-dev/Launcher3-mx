@@ -29,11 +29,11 @@ import com.android.launcher3.views.RecyclerViewFastScroller;
 /**
  * A base {@link RecyclerView}, which does the following:
  * <ul>
- *   <li> NOT intercept a touch unless the scrolling velocity is below a predefined threshold.
- *   <li> Enable fast scroller.
+ * <li> NOT intercept a touch unless the scrolling velocity is below a predefined threshold.
+ * <li> Enable fast scroller.
  * </ul>
  */
-public abstract class BaseRecyclerView extends RecyclerView  {
+public abstract class BaseRecyclerView extends RecyclerView {
 
     protected RecyclerViewFastScroller mScrollbar;
 
@@ -79,13 +79,13 @@ public abstract class BaseRecyclerView extends RecyclerView  {
 
     /**
      * Returns the available scroll height:
-     *   AvailableScrollHeight = Total height of the all items - last page height
+     * AvailableScrollHeight = Total height of the all items - last page height
      */
     protected abstract int getAvailableScrollHeight();
 
     /**
      * Returns the available scroll bar height:
-     *   AvailableScrollBarHeight = Total height of the visible view - thumb height
+     * AvailableScrollBarHeight = Total height of the visible view - thumb height
      */
     protected int getAvailableScrollBarHeight() {
         int availableScrollBarHeight = getScrollbarTrackHeight() - mScrollbar.getThumbHeight();
@@ -100,7 +100,7 @@ public abstract class BaseRecyclerView extends RecyclerView  {
      * @param scrollY the current scroll y
      */
     protected void synchronizeScrollBarThumbOffsetToViewScroll(int scrollY,
-            int availableScrollHeight) {
+                                                               int availableScrollHeight) {
         // Only show the scrollbar if there is height to be scrolled
         if (availableScrollHeight <= 0) {
             mScrollbar.setThumbOffsetY(-1);
@@ -119,6 +119,7 @@ public abstract class BaseRecyclerView extends RecyclerView  {
 
     /**
      * Returns whether the view itself will handle the touch event or not.
+     *
      * @param ev MotionEvent in {@param eventSource}
      */
     public boolean shouldContainerScroll(MotionEvent ev, View eventSource) {
@@ -169,5 +170,6 @@ public abstract class BaseRecyclerView extends RecyclerView  {
     /**
      * <p>Override in each subclass of this base class.
      */
-    public void onFastScrollCompleted() {}
+    public void onFastScrollCompleted() {
+    }
 }

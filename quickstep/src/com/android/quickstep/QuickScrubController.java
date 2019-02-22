@@ -16,8 +16,6 @@
 
 package com.android.quickstep;
 
-import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
-
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.animation.Interpolator;
@@ -31,9 +29,11 @@ import com.android.launcher3.userevent.nano.LauncherLogProto.Action.Touch;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
 
+import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
+
 /**
  * Responds to quick scrub callbacks to page through and launch recent tasks.
- *
+ * <p>
  * The behavior is to evenly divide the progress into sections, each of which scrolls one page.
  * The first and last section set an alarm to auto-advance backwards or forwards, respectively.
  */
@@ -48,7 +48,7 @@ public class QuickScrubController implements OnAlarmListener {
     /**
      * Snap to a new page when crossing these thresholds. The first and last auto-advance.
      */
-    private static final float[] QUICK_SCRUB_THRESHOLDS = new float[] {
+    private static final float[] QUICK_SCRUB_THRESHOLDS = new float[]{
             0.05f, 0.20f, 0.35f, 0.50f, 0.65f, 0.80f, 0.95f
     };
 
@@ -221,13 +221,13 @@ public class QuickScrubController implements OnAlarmListener {
     }
 
     private void goToPageWithHaptic(int pageToGoTo, int overrideDuration, boolean forceHaptic,
-            Interpolator interpolator) {
+                                    Interpolator interpolator) {
         pageToGoTo = Utilities.boundToRange(pageToGoTo, 0, mRecentsView.getPageCount() - 1);
         boolean snappingToPage = pageToGoTo != mRecentsView.getNextPage();
         if (snappingToPage) {
             int duration = overrideDuration > -1 ? overrideDuration
                     : Math.abs(pageToGoTo - mRecentsView.getNextPage())
-                            * QUICKSCRUB_SNAP_DURATION_PER_PAGE;
+                    * QUICKSCRUB_SNAP_DURATION_PER_PAGE;
             mRecentsView.snapToPage(pageToGoTo, duration, interpolator);
         }
         if (snappingToPage || forceHaptic) {

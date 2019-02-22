@@ -26,7 +26,9 @@ import android.provider.BaseColumns;
  * MxSettings related utilities.
  */
 public class LauncherSettings {
-    /** Columns required on table staht will be subject to backup and restore. */
+    /**
+     * Columns required on table staht will be subject to backup and restore.
+     */
     static interface ChangeLogColumns extends BaseColumns {
         /**
          * The time of the last update to this row.
@@ -88,7 +90,7 @@ public class LauncherSettings {
 
     /**
      * Workspace Screens.
-     *
+     * <p>
      * Tracks the order of workspace screens.
      */
     public static final class WorkspaceScreens implements ChangeLogColumns {
@@ -147,21 +149,31 @@ public class LauncherSettings {
 
         static final String containerToString(int container) {
             switch (container) {
-                case CONTAINER_DESKTOP: return "desktop";
-                case CONTAINER_HOTSEAT: return "hotseat";
-                default: return String.valueOf(container);
+                case CONTAINER_DESKTOP:
+                    return "desktop";
+                case CONTAINER_HOTSEAT:
+                    return "hotseat";
+                default:
+                    return String.valueOf(container);
             }
         }
 
         static final String itemTypeToString(int type) {
-            switch(type) {
-                case ITEM_TYPE_APPLICATION: return "APP";
-                case ITEM_TYPE_SHORTCUT: return "SHORTCUT";
-                case ITEM_TYPE_FOLDER: return "FOLDER";
-                case ITEM_TYPE_APPWIDGET: return "WIDGET";
-                case ITEM_TYPE_CUSTOM_APPWIDGET: return "CUSTOMWIDGET";
-                case ITEM_TYPE_DEEP_SHORTCUT: return "DEEPSHORTCUT";
-                default: return String.valueOf(type);
+            switch (type) {
+                case ITEM_TYPE_APPLICATION:
+                    return "APP";
+                case ITEM_TYPE_SHORTCUT:
+                    return "SHORTCUT";
+                case ITEM_TYPE_FOLDER:
+                    return "FOLDER";
+                case ITEM_TYPE_APPWIDGET:
+                    return "WIDGET";
+                case ITEM_TYPE_CUSTOM_APPWIDGET:
+                    return "CUSTOMWIDGET";
+                case ITEM_TYPE_DEEP_SHORTCUT:
+                    return "DEEPSHORTCUT";
+                default:
+                    return String.valueOf(type);
             }
         }
 
@@ -199,7 +211,7 @@ public class LauncherSettings {
 
         /**
          * The profile id of the item in the cell.
-         * <P>
+         * <p>
          * Type: INTEGER
          * </P>
          */

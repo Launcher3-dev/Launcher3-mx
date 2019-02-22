@@ -27,8 +27,10 @@ public interface SettingsObserver {
      * Registers the content observer to call {@link #onSettingChanged(boolean)} when any of the
      * passed settings change. The value passed to onSettingChanged() is based on the key setting.
      */
-    void register(String keySetting, String ... dependentSettings);
+    void register(String keySetting, String... dependentSettings);
+
     void unregister();
+
     void onSettingChanged(boolean keySettingEnabled);
 
 
@@ -42,7 +44,7 @@ public interface SettingsObserver {
         }
 
         @Override
-        public void register(String keySetting, String ... dependentSettings) {
+        public void register(String keySetting, String... dependentSettings) {
             mKeySetting = keySetting;
             mResolver.registerContentObserver(
                     Settings.Secure.getUriFor(mKeySetting), false, this);
@@ -75,7 +77,7 @@ public interface SettingsObserver {
         }
 
         @Override
-        public void register(String keySetting, String ... dependentSettings) {
+        public void register(String keySetting, String... dependentSettings) {
             mKeySetting = keySetting;
             mResolver.registerContentObserver(
                     Settings.System.getUriFor(mKeySetting), false, this);

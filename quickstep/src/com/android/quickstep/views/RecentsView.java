@@ -16,14 +16,6 @@
 
 package com.android.quickstep.views;
 
-import static com.android.launcher3.BaseActivity.INVISIBLE_BY_STATE_HANDLER;
-import static com.android.launcher3.anim.Interpolators.ACCEL;
-import static com.android.launcher3.anim.Interpolators.ACCEL_2;
-import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
-import static com.android.launcher3.anim.Interpolators.LINEAR;
-import static com.android.launcher3.util.SystemUiController.UI_STATE_OVERVIEW;
-import static com.android.quickstep.TaskUtils.checkCurrentOrManagedUserId;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -89,6 +81,14 @@ import com.android.systemui.shared.system.TaskStackChangeListener;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+
+import static com.android.launcher3.BaseActivity.INVISIBLE_BY_STATE_HANDLER;
+import static com.android.launcher3.anim.Interpolators.ACCEL;
+import static com.android.launcher3.anim.Interpolators.ACCEL_2;
+import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
+import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.launcher3.util.SystemUiController.UI_STATE_OVERVIEW;
+import static com.android.quickstep.TaskUtils.checkCurrentOrManagedUserId;
 
 /**
  * A list of recent tasks.
@@ -238,11 +238,11 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
 
     private BaseActivity.MultiWindowModeChangedListener mMultiWindowModeChangedListener =
             (inMultiWindowMode) -> {
-        if (!inMultiWindowMode && mOverviewStateEnabled) {
-            // TODO: Re-enable layout transitions for addition of the unpinned task
-            reloadIfNeeded();
-        }
-    };
+                if (!inMultiWindowMode && mOverviewStateEnabled) {
+                    // TODO: Re-enable layout transitions for addition of the unpinned task
+                    reloadIfNeeded();
+                }
+            };
 
     public RecentsView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -478,7 +478,8 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
         onTaskStackUpdated();
     }
 
-    protected void onTaskStackUpdated() { }
+    protected void onTaskStackUpdated() {
+    }
 
     public void resetTaskVisuals() {
         for (int i = getChildCount() - 1; i >= 0; i--) {
@@ -759,7 +760,10 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
         /**
          * Updates the page UI based on scroll params.
          */
-        default void onPageScroll(ScrollState scrollState) {};
+        default void onPageScroll(ScrollState scrollState) {
+        }
+
+        ;
     }
 
     public static class ScrollState {
@@ -798,7 +802,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
     }
 
     public PendingAnimation createTaskDismissAnimation(TaskView taskView, boolean animateTaskView,
-            boolean shouldRemoveTask, long duration) {
+                                                       boolean shouldRemoveTask, long duration) {
         if (FeatureFlags.IS_DOGFOOD_BUILD && mPendingAnimation != null) {
             throw new IllegalStateException("Another pending animation is still running");
         }
@@ -817,7 +821,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
         getPageScrolls(newScroll, false, (v) -> v.getVisibility() != GONE && v != taskView);
 
         int scrollDiffPerPage = 0;
-        int leftmostPage = mIsRtl ? count -1 : 0;
+        int leftmostPage = mIsRtl ? count - 1 : 0;
         int rightmostPage = mIsRtl ? 0 : count - 1;
         if (count > 1) {
             int secondRightmostPage = mIsRtl ? 1 : count - 2;
@@ -874,23 +878,23 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
 
         mPendingAnimation = pendingAnimation;
         mPendingAnimation.addEndListener((onEndListener) -> {
-           if (onEndListener.isSuccess) {
-               if (shouldRemoveTask) {
-                   removeTask(taskView.getTask(), draggedIndex, onEndListener, true);
-               }
-               int pageToSnapTo = mCurrentPage;
-               if (draggedIndex < pageToSnapTo) {
-                   pageToSnapTo -= 1;
-               }
-               removeView(taskView);
-               if (getChildCount() == 0) {
-                   onAllTasksRemoved();
-               } else if (!mIsClearAllButtonFullyRevealed) {
-                   snapToPageImmediately(pageToSnapTo);
-               }
-           }
-           resetTaskVisuals();
-           mPendingAnimation = null;
+            if (onEndListener.isSuccess) {
+                if (shouldRemoveTask) {
+                    removeTask(taskView.getTask(), draggedIndex, onEndListener, true);
+                }
+                int pageToSnapTo = mCurrentPage;
+                if (draggedIndex < pageToSnapTo) {
+                    pageToSnapTo -= 1;
+                }
+                removeView(taskView);
+                if (getChildCount() == 0) {
+                    onAllTasksRemoved();
+                } else if (!mIsClearAllButtonFullyRevealed) {
+                    snapToPageImmediately(pageToSnapTo);
+                }
+            }
+            resetTaskVisuals();
+            mPendingAnimation = null;
         });
         return pendingAnimation;
     }
@@ -923,7 +927,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
     }
 
     private static void addAnim(ObjectAnimator anim, long duration,
-            TimeInterpolator interpolator, AnimatorSet set) {
+                                TimeInterpolator interpolator, AnimatorSet set) {
         anim.setDuration(duration).setInterpolator(interpolator);
         set.play(anim);
     }
@@ -988,7 +992,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
 
     @Override
     protected void onFocusChanged(boolean gainFocus, int direction,
-            @Nullable Rect previouslyFocusedRect) {
+                                  @Nullable Rect previouslyFocusedRect) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
         if (gainFocus && getChildCount() > 0) {
             switch (direction) {
@@ -1025,7 +1029,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
     }
 
     private float[] getAdjacentScaleAndTranslation(TaskView currTask,
-            float currTaskToScale, float currTaskToTranslationY) {
+                                                   float currTaskToScale, float currTaskToTranslationY) {
         float displacement = currTask.getWidth() * (currTaskToScale - currTask.getCurveScale());
         sTempFloatArray[0] = currTaskToScale;
         sTempFloatArray[1] = mIsRtl ? -displacement : displacement;
@@ -1117,7 +1121,7 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
 
     /**
      * Animate adjacent tasks off screen while scaling up.
-     *
+     * <p>
      * If launching one of the adjacent tasks, parallax the center task and other adjacent task
      * to the right.
      */
@@ -1170,10 +1174,10 @@ public abstract class RecentsView<T extends BaseActivity> extends PagedView impl
         AnimatorSet anim = new AnimatorSet();
         anim.play(ObjectAnimator.ofFloat(child, TaskView.ZOOM_SCALE, toScaleAndTranslation[0]));
         anim.play(ObjectAnimator.ofPropertyValuesHolder(child,
-                        new PropertyListBuilder()
-                                .translationX(toScaleAndTranslation[1])
-                                .translationY(toScaleAndTranslation[2])
-                                .build()));
+                new PropertyListBuilder()
+                        .translationX(toScaleAndTranslation[1])
+                        .translationY(toScaleAndTranslation[2])
+                        .build()));
         return anim;
     }
 

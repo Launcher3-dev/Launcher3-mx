@@ -30,12 +30,10 @@ import com.android.launcher3.R;
 import com.android.launcher3.WidgetPreviewLoader;
 import com.android.launcher3.model.WidgetItem;
 import com.android.launcher3.util.LabelComparator;
-import com.android.launcher3.util.PackageUserKey;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,8 +61,8 @@ public class WidgetsListAdapter extends Adapter<WidgetsRowViewHolder> {
     private boolean mApplyBitmapDeferred;
 
     public WidgetsListAdapter(Context context, LayoutInflater layoutInflater,
-            WidgetPreviewLoader widgetPreviewLoader, IconCache iconCache,
-            OnClickListener iconClickListener, OnLongClickListener iconLongClickListener) {
+                              WidgetPreviewLoader widgetPreviewLoader, IconCache iconCache,
+                              OnClickListener iconClickListener, OnLongClickListener iconLongClickListener) {
         mLayoutInflater = layoutInflater;
         mWidgetPreviewLoader = widgetPreviewLoader;
         mIconClickListener = iconClickListener;
@@ -129,7 +127,7 @@ public class WidgetsListAdapter extends Adapter<WidgetsRowViewHolder> {
         int childCount = row.getChildCount();
 
         if (expectedChildCount > childCount) {
-            for (int i = childCount ; i < expectedChildCount; i++) {
+            for (int i = childCount; i < expectedChildCount; i++) {
                 if ((i & 1) == 1) {
                     // Add a divider for odd index
                     mLayoutInflater.inflate(R.layout.widget_list_divider, row);
@@ -145,7 +143,7 @@ public class WidgetsListAdapter extends Adapter<WidgetsRowViewHolder> {
                 }
             }
         } else if (expectedChildCount < childCount) {
-            for (int i = expectedChildCount ; i < childCount; i++) {
+            for (int i = expectedChildCount; i < childCount; i++) {
                 row.getChildAt(i).setVisibility(View.GONE);
             }
         }
@@ -154,15 +152,15 @@ public class WidgetsListAdapter extends Adapter<WidgetsRowViewHolder> {
         holder.title.applyFromPackageItemInfo(entry.pkgItem);
 
         // Bind the view in the widget horizontal tray region.
-        for (int i=0; i < infoList.size(); i++) {
-            WidgetCell widget = (WidgetCell) row.getChildAt(2*i);
+        for (int i = 0; i < infoList.size(); i++) {
+            WidgetCell widget = (WidgetCell) row.getChildAt(2 * i);
             widget.applyFromCellItem(infoList.get(i), mWidgetPreviewLoader);
             widget.setApplyBitmapDeferred(mApplyBitmapDeferred);
             widget.ensurePreview();
             widget.setVisibility(View.VISIBLE);
 
             if (i > 0) {
-                row.getChildAt(2*i - 1).setVisibility(View.VISIBLE);
+                row.getChildAt(2 * i - 1).setVisibility(View.VISIBLE);
             }
         }
     }
@@ -186,7 +184,7 @@ public class WidgetsListAdapter extends Adapter<WidgetsRowViewHolder> {
     @Override
     public void onViewRecycled(WidgetsRowViewHolder holder) {
         int total = holder.cellContainer.getChildCount();
-        for (int i = 0; i < total; i+=2) {
+        for (int i = 0; i < total; i += 2) {
             WidgetCell widget = (WidgetCell) holder.cellContainer.getChildAt(i);
             widget.clear();
         }

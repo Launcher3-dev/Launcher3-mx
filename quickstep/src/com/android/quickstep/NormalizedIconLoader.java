@@ -45,7 +45,7 @@ public class NormalizedIconLoader extends IconLoader {
     private LauncherIcons mLauncherIcons;
 
     public NormalizedIconLoader(Context context, TaskKeyLruCache<Drawable> iconCache,
-            LruCache<ComponentName, ActivityInfo> activityInfoCache) {
+                                LruCache<ComponentName, ActivityInfo> activityInfoCache) {
         super(context, iconCache, activityInfoCache);
         mDrawableFactory = DrawableFactory.get(context);
     }
@@ -71,7 +71,7 @@ public class NormalizedIconLoader extends IconLoader {
     }
 
     private synchronized BitmapInfo getBitmapInfo(Drawable drawable, int userId,
-            int primaryColor, boolean isInstantApp) {
+                                                  int primaryColor, boolean isInstantApp) {
         if (mLauncherIcons == null) {
             mLauncherIcons = LauncherIcons.obtain(mContext);
         }
@@ -84,7 +84,7 @@ public class NormalizedIconLoader extends IconLoader {
 
     @Override
     protected Drawable getBadgedActivityIcon(ActivityInfo activityInfo, int userId,
-            TaskDescription desc) {
+                                             TaskDescription desc) {
         BitmapInfo bitmapInfo = getBitmapInfo(
                 activityInfo.loadUnbadgedIcon(mContext.getPackageManager()),
                 userId,

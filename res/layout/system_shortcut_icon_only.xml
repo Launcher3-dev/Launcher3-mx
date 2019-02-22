@@ -22,4 +22,4 @@
     android:tint="?android:attr/textColorHint"
     android:tintMode="src_in"
     android:padding="@dimen/system_shortcut_header_icon_padding"
-    android:theme="@style/PopupItem" />
+    android:theme="@style/PopupItem"/>

@@ -85,7 +85,7 @@ public class AppWidgetsRestoredReceiver extends BroadcastReceiver {
                 state = LauncherAppWidgetInfo.FLAG_PROVIDER_NOT_READY;
             }
 
-            String[] widgetIdParams = new String[] { Integer.toString(oldWidgetIds[i]) };
+            String[] widgetIdParams = new String[]{Integer.toString(oldWidgetIds[i])};
             int result = new ContentWriter(context, new ContentWriter.CommitParams(
                     "appWidgetId=? and (restored & 1) = 1", widgetIdParams))
                     .put(LauncherSettings.Favorites.APPWIDGET_ID, newWidgetIds[i])
@@ -94,7 +94,7 @@ public class AppWidgetsRestoredReceiver extends BroadcastReceiver {
 
             if (result == 0) {
                 Cursor cursor = cr.query(Favorites.CONTENT_URI,
-                        new String[] {Favorites.APPWIDGET_ID},
+                        new String[]{Favorites.APPWIDGET_ID},
                         "appWidgetId=?", widgetIdParams, null);
                 try {
                     if (!cursor.moveToFirst()) {

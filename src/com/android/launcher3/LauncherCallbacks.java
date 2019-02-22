@@ -21,7 +21,6 @@ import android.os.Bundle;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 /**
  * LauncherCallbacks is an interface used to extend the Launcher activity. It includes many hooks
@@ -37,20 +36,34 @@ public interface LauncherCallbacks {
      * the code in the corresponding Launcher method is executed.
      */
     void onCreate(Bundle savedInstanceState);
+
     void onResume();
+
     void onStart();
+
     void onStop();
+
     void onPause();
+
     void onDestroy();
+
     void onSaveInstanceState(Bundle outState);
+
     void onActivityResult(int requestCode, int resultCode, Intent data);
+
     void onRequestPermissionsResult(int requestCode, String[] permissions,
-            int[] grantResults);
+                                    int[] grantResults);
+
     void onAttachedToWindow();
+
     void onDetachedFromWindow();
+
     void dump(String prefix, FileDescriptor fd, PrintWriter w, String[] args);
+
     void onHomeIntent(boolean internalStateHandled);
+
     boolean handleBackPressed();
+
     void onTrimMemory(int level);
 
     /*

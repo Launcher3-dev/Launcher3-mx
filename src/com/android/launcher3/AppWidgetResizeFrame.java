@@ -109,7 +109,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
         super.onFinishInflate();
 
         ViewGroup content = (ViewGroup) getChildAt(0);
-        for (int i = 0; i < HANDLE_COUNT; i ++) {
+        for (int i = 0; i < HANDLE_COUNT; i++) {
             mDragHandles[i] = content.getChildAt(i);
         }
     }
@@ -130,7 +130,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
     }
 
     private void setupForWidget(LauncherAppWidgetHostView widgetView, CellLayout cellLayout,
-            DragLayer dragLayer) {
+                                DragLayer dragLayer) {
         mCellLayout = cellLayout;
         mWidgetView = widgetView;
         LauncherAppWidgetProviderInfo info = (LauncherAppWidgetProviderInfo)
@@ -175,7 +175,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
 
         if (anyBordersActive) {
             mDragHandles[INDEX_LEFT].setAlpha(mLeftBorderActive ? 1.0f : DIMMED_HANDLE_ALPHA);
-            mDragHandles[INDEX_RIGHT].setAlpha(mRightBorderActive ? 1.0f :DIMMED_HANDLE_ALPHA);
+            mDragHandles[INDEX_RIGHT].setAlpha(mRightBorderActive ? 1.0f : DIMMED_HANDLE_ALPHA);
             mDragHandles[INDEX_TOP].setAlpha(mTopBorderActive ? 1.0f : DIMMED_HANDLE_ALPHA);
             mDragHandles[INDEX_BOTTOM].setAlpha(mBottomBorderActive ? 1.0f : DIMMED_HANDLE_ALPHA);
         }
@@ -202,7 +202,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
     }
 
     /**
-     *  Based on the deltas, we resize the frame.
+     * Based on the deltas, we resize the frame.
      */
     public void visualizeResizeForDelta(int deltaX, int deltaY) {
         mDeltaX = mDeltaXRange.clamp(deltaX);
@@ -245,7 +245,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
     }
 
     /**
-     *  Based on the current deltas, we determine if and how to resize the widget.
+     * Based on the current deltas, we determine if and how to resize the widget.
      */
     private void resizeWidgetIfNeeded(boolean onDismiss) {
         float xThreshold = mCellLayout.getCellWidth();
@@ -300,7 +300,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
 
         if (mCellLayout.createAreaForResize(cellX, cellY, spanX, spanY, mWidgetView,
                 mDirectionVector, onDismiss)) {
-            if (mStateAnnouncer != null && (lp.cellHSpan != spanX || lp.cellVSpan != spanY) ) {
+            if (mStateAnnouncer != null && (lp.cellHSpan != spanX || lp.cellVSpan != spanY)) {
                 mStateAnnouncer.announce(
                         mLauncher.getString(R.string.widget_resized, spanX, spanY));
             }
@@ -320,7 +320,7 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
     }
 
     static void updateWidgetSizeRanges(AppWidgetHostView widgetView, Launcher launcher,
-            int spanX, int spanY) {
+                                       int spanX, int spanY) {
         getWidgetSizeRanges(launcher, spanX, spanY, sTmpRect);
         widgetView.updateAppWidgetSize(null, sTmpRect.left, sTmpRect.top,
                 sTmpRect.right, sTmpRect.bottom);
@@ -565,15 +565,17 @@ public class AppWidgetResizeFrame extends AbstractFloatingView implements View.O
         /**
          * Applies delta similar to {@link #applyDelta(boolean, boolean, int, IntRange)},
          * with extra conditions.
+         *
          * @param minSize minimum size after with the moving edge should not be shifted any further.
          *                For eg, if delta = -3 when moving the endEdge brings the size to less than
          *                minSize, only delta = -2 will applied
-         * @param maxEnd The maximum value to the end edge (start edge is always restricted to 0)
+         * @param maxEnd  The maximum value to the end edge (start edge is always restricted to 0)
+         *
          * @return the amount of increase when endEdge was moves and the amount of decrease when
          * the start edge was moved.
          */
         public int applyDeltaAndBound(boolean moveStart, boolean moveEnd, int delta,
-                int minSize, int maxEnd, IntRange out) {
+                                      int minSize, int maxEnd, IntRange out) {
             applyDelta(moveStart, moveEnd, delta, out);
             if (out.start < 0) {
                 out.start = 0;

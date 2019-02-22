@@ -39,16 +39,16 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
     public static final Property<MenuTransitionController, Float> CIRCLE_MENU_VIEW_PROGRESS =
             new Property<MenuTransitionController, Float>(Float.class, "allAppsProgress") {
 
-        @Override
-        public Float get(MenuTransitionController controller) {
-            return controller.mProgress;
-        }
+                @Override
+                public Float get(MenuTransitionController controller) {
+                    return controller.mProgress;
+                }
 
-        @Override
-        public void set(MenuTransitionController controller, Float progress) {
-            controller.setProgress(progress);
-        }
-    };
+                @Override
+                public void set(MenuTransitionController controller, Float progress) {
+                    controller.setProgress(progress);
+                }
+            };
 
     private CircleMenuView mCircleMenuView;
 
@@ -148,7 +148,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
      */
     @Override
     public void setStateWithAnimation(LauncherState toState,
-            AnimatorSetBuilder builder, AnimationConfig config) {
+                                      AnimatorSetBuilder builder, AnimationConfig config) {
         float targetProgress = toState.getVerticalProgress(mLauncher);
         if (Float.compare(mProgress, targetProgress) == 0) {
             setAlphas(toState, config.getPropertySetter(builder));
@@ -178,8 +178,6 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
 
     private void setAlphas(LauncherState toState, PropertySetter setter) {
         int visibleElements = toState.getVisibleElements(mLauncher);
-
-
 
 
     }
