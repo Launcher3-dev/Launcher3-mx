@@ -18,14 +18,17 @@ package com.android.launcher3;
 
 import android.app.ActivityOptions;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Process;
 import android.os.StrictMode;
 import android.os.UserHandle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.android.launcher3.LauncherSettings.Favorites;
 import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.LauncherAppsCompat;
 import com.android.launcher3.shortcuts.DeepShortcutManager;
+import com.android.launcher3.theme.ThemeService;
 import com.android.launcher3.uioverrides.DisplayRotationListener;
 import com.android.launcher3.uioverrides.WallpaperColorInfo;
 import com.android.launcher3.views.BaseDragLayer;
@@ -64,6 +68,14 @@ public abstract class BaseDraggingActivity extends BaseActivity
 
     private DisplayRotationListener mRotationListener;
 
+    // 切换主题、壁纸的广播
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +90,11 @@ public abstract class BaseDraggingActivity extends BaseActivity
             mThemeRes = themeRes;
             setTheme(themeRes);
         }
+
+        IntentFilter themeIntent = new IntentFilter();
+        themeIntent.addAction(ThemeService.ACTION_THEME);
+        themeIntent.addAction(ThemeService.ACTION_WALLPAPER);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, themeIntent);
     }
 
     @Override
@@ -238,6 +255,7 @@ public abstract class BaseDraggingActivity extends BaseActivity
 
     @Override
     protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
         super.onDestroy();
         WallpaperColorInfo.getInstance(this).removeOnChangeListener(this);
         mRotationListener.disable();

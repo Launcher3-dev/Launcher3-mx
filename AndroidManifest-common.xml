@@ -96,6 +96,12 @@
             </intent-filter>
         </service>
 
+        <service android:name=".theme.ThemeService">
+            <intent-filter>
+                <action android:name="com.android.mxlauncher.theme.ThemeService"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="android.nfc.disable_beam_default"
             android:value="true"/>
