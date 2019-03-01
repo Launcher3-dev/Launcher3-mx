@@ -72,6 +72,9 @@ public class WallpaperBean implements Parcelable {
         this.wallpaperPublishDate = wallpaperPublishDate;
     }
 
+    public WallpaperBean() {
+    }
+
     protected WallpaperBean(Parcel in) {
         wallpaperId = in.readString();
         wallpaperName = in.readString();

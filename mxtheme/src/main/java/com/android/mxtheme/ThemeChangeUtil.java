@@ -21,6 +21,16 @@ import com.android.mxtheme.bean.WallpaperBean;
 public class ThemeChangeUtil {
 
     private IThemeInterface mIThemeInterface;
+    private ThemeServiceDeathRecipient mThemeServiceDeathRecipient;
+
+    // 监听远程服务是否挂掉了
+    private class ThemeServiceDeathRecipient implements IBinder.DeathRecipient {
+
+        @Override
+        public void binderDied() {
+            // 远程服务挂掉处理（检测主题是否切换完成，没有切换完成需要重新处理）
+        }
+    }
 
     private ServiceConnection mThemeConnection = new ServiceConnection() {
 
@@ -32,13 +42,22 @@ public class ThemeChangeUtil {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mIThemeInterface = IThemeInterface.Stub.asInterface(service);
+            try {
+                service.linkToDeath(mThemeServiceDeathRecipient, 0);
+            } catch (RemoteException e) {// 要链接的服务已经挂掉
+                e.printStackTrace();
+            }
         }
     };
+
+    public ThemeChangeUtil() {
+        this.mThemeServiceDeathRecipient = new ThemeServiceDeathRecipient();
+    }
 
     /**
      * 开始服务
      */
-    private void startService(Context context) {
+    public void startService(Context context) {
         Intent service = new Intent();
         service.setAction("cn.bgxt.Service.CUSTOM_TYPE_SERVICE");
         service.setClassName("com.android.launcher3", "com.android.launcher3.theme.ThemeService");
@@ -48,7 +67,7 @@ public class ThemeChangeUtil {
     /**
      * 停止服务
      */
-    private void endService(Context context) {
+    public void endService(Context context) {
         context.unbindService(mThemeConnection);
     }
 

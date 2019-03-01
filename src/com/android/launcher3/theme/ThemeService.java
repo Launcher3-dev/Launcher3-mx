@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import com.android.mxlibrary.util.XLog;
 import com.android.mxtheme.bean.IThemeInterface;
 import com.android.mxtheme.bean.ThemeBean;
 import com.android.mxtheme.bean.WallpaperBean;
 
 /**
+ * 切换主题或者壁纸的服务，通过本地广播通知Launcher更换主题或者壁纸。
+ *
  * Created by CodeMX
  * DATE 2019/2/22
  * TIME 10:43
@@ -53,11 +56,13 @@ public class ThemeService extends Service {
 
         @Override
         public boolean setTheme(ThemeBean themeBean) throws RemoteException {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + themeBean.toString());
             return false;
         }
 
         @Override
         public boolean setWallpaper(WallpaperBean wallpaperBean) throws RemoteException {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + wallpaperBean.toString());
             return false;
         }
     }
