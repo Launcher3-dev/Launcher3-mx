@@ -1,0 +1,11 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.gradle/
+.idea/
+build/
+gradle/
+gradlew
+gradlew.bat
+local.properties
+mxlibrary/mxlibrary.iml
+mxtheme/mxtheme.iml
