@@ -98,7 +98,7 @@
 
         <service android:name=".theme.ThemeService">
             <intent-filter>
-                <action android:name="com.android.mxlauncher.theme.ThemeService"/>
+                <action android:name="com.android.mxlauncher3.theme.ThemeService"/>
             </intent-filter>
         </service>
 

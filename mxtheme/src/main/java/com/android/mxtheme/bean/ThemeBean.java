@@ -72,6 +72,9 @@ public class ThemeBean implements Parcelable {
         this.themePublishDate = themePublishDate;
     }
 
+    public ThemeBean() {
+    }
+
     protected ThemeBean(Parcel in) {
         themeId = in.readString();
         themeName = in.readString();

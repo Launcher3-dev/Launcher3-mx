@@ -74,16 +74,21 @@ public abstract class BaseDraggingActivity extends BaseActivity
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getBundleExtra("theme");
-            if (bundle != null) {
-                Object themeBean = bundle.get("theme");
-                if (themeBean instanceof ThemeBean) {
-                    // TODO 更换主题
-                }
-                Object wallpaperBean = bundle.get("wallpaper");
-                if (wallpaperBean instanceof WallpaperBean) {
-                    // TODO 设置壁纸
-                }
+            int type = intent.getIntExtra("type", -1);
+
+            switch (type) {
+                case ThemeService.TYPE_SET_THEME:
+                    Bundle bundleTheme = intent.getBundleExtra("theme");
+                    ThemeBean themeBean = bundleTheme.getParcelable("theme");
+                    // TODO　设置主题
+                    break;
+                case ThemeService.TYPE_SET_WALLPAPER:
+                    Bundle bundleWallpaper = intent.getBundleExtra("wallpaper");
+                    WallpaperBean wallpaperBean = bundleWallpaper.getParcelable("wallpaper");
+                    // TODO　设置壁纸
+                    break;
+                default:
+                    break;
             }
         }
     };
@@ -104,8 +109,8 @@ public abstract class BaseDraggingActivity extends BaseActivity
         }
 
         IntentFilter themeIntent = new IntentFilter();
-        themeIntent.addAction(ThemeService.ACTION_THEME);
-        themeIntent.addAction(ThemeService.ACTION_WALLPAPER);
+        themeIntent.addAction(ThemeService.ACTION_SET_THEME);
+        themeIntent.addAction(ThemeService.ACTION_SET_WALLPAPER);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, themeIntent);
     }
 
