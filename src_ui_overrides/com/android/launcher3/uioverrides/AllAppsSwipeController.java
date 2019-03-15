@@ -15,6 +15,7 @@ import static com.android.launcher3.LauncherState.OVERVIEW;
 
 /**
  * TouchController to switch between NORMAL and ALL_APPS state.
+ * 所有应用和正常桌面状态切换控制器
  */
 public class AllAppsSwipeController extends AbstractStateChangeTouchController {
 
