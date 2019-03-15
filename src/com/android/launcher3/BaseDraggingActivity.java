@@ -92,8 +92,8 @@ public abstract class BaseDraggingActivity extends BaseActivity
         }
 
         IntentFilter themeIntent = new IntentFilter();
-        themeIntent.addAction(ThemeService.ACTION_THEME);
-        themeIntent.addAction(ThemeService.ACTION_WALLPAPER);
+        themeIntent.addAction(ThemeService.ACTION_SET_THEME);
+        themeIntent.addAction(ThemeService.ACTION_SET_WALLPAPER);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, themeIntent);
     }
 

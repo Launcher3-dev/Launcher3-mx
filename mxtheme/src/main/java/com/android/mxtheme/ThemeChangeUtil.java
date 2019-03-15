@@ -9,7 +9,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.android.mxlibrary.util.XLog;
-import com.android.mxtheme.bean.IThemeInterface;
 import com.android.mxtheme.bean.ThemeBean;
 import com.android.mxtheme.bean.WallpaperBean;
 
@@ -20,8 +19,31 @@ import com.android.mxtheme.bean.WallpaperBean;
  */
 public class ThemeChangeUtil {
 
-    private IThemeInterface mIThemeInterface;
+    private IThemeService mIThemeService;
     private ThemeServiceDeathRecipient mThemeServiceDeathRecipient;
+
+    private IRemoteCallback mIRemoteCallback = new IRemoteCallback.Stub() {
+        @Override
+        public void onThemeSuccess(ThemeBean bean) throws RemoteException {
+
+        }
+
+        @Override
+        public void onThemeFail(String errMsg, ThemeBean bean) throws RemoteException {
+
+        }
+
+        @Override
+        public void onWallpaperSuccess(WallpaperBean bean) throws RemoteException {
+
+        }
+
+        @Override
+        public void onWallpaperFail(String errMsg, WallpaperBean bean) throws RemoteException {
+
+        }
+    };
+
 
     // 监听远程服务是否挂掉了
     private class ThemeServiceDeathRecipient implements IBinder.DeathRecipient {
@@ -36,13 +58,23 @@ public class ThemeChangeUtil {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mIThemeInterface = null;
+            if (mIThemeService != null) {
+                try {
+                    mIThemeService.unRegister(mIRemoteCallback);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                mIThemeService = null;
+            }
         }
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mIThemeInterface = IThemeInterface.Stub.asInterface(service);
+            mIThemeService = IThemeService.Stub.asInterface(service);
             try {
+                if (mIThemeService != null) {
+                    mIThemeService.register(mIRemoteCallback);
+                }
                 service.linkToDeath(mThemeServiceDeathRecipient, 0);
             } catch (RemoteException e) {// 要链接的服务已经挂掉
                 e.printStackTrace();
@@ -50,41 +82,42 @@ public class ThemeChangeUtil {
         }
     };
 
-    public ThemeChangeUtil() {
+    ThemeChangeUtil() {
         this.mThemeServiceDeathRecipient = new ThemeServiceDeathRecipient();
     }
 
     /**
      * 开始服务
      */
-    public void startService(Context context) {
+    void startService(Context context) {
         Intent service = new Intent();
         service.setAction("cn.bgxt.Service.CUSTOM_TYPE_SERVICE");
-        service.setClassName("com.android.launcher3", "com.android.launcher3.theme.ThemeService");
+        service.setClassName("com.android.launcher3",
+                "com.android.launcher3.theme.ThemeService");
         context.bindService(service, mThemeConnection, Service.BIND_AUTO_CREATE);
     }
 
     /**
      * 停止服务
      */
-    public void endService(Context context) {
+    void endService(Context context) {
         context.unbindService(mThemeConnection);
     }
 
-    public void changeTheme(ThemeBean themeBean) {
-        if (mIThemeInterface != null) {
+    void changeTheme(ThemeBean themeBean) {
+        if (mIThemeService != null) {
             try {
-                mIThemeInterface.setTheme(themeBean);
+                mIThemeService.setTheme(themeBean);
             } catch (RemoteException e) {
                 XLog.e(XLog.getTag(), XLog.TAG_GU + "change theme failed!!!");
             }
         }
     }
 
-    public void changeWallpaper(WallpaperBean wallpaperBean) {
-        if (mIThemeInterface != null) {
+    void changeWallpaper(WallpaperBean wallpaperBean) {
+        if (mIThemeService != null) {
             try {
-                mIThemeInterface.setWallpaper(wallpaperBean);
+                mIThemeService.setWallpaper(wallpaperBean);
             } catch (RemoteException e) {
                 XLog.e(XLog.getTag(), XLog.TAG_GU + "change wallpaper failed !!!");
             }
