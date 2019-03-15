@@ -38,6 +38,8 @@ public class ThemeService extends Service {
     public static final int STATUS_SET_THEME_FAIL = -101;
     public static final int STATUS_SET_WALLPAPER_SUCCESS = 1000;
     public static final int STATUS_SET_WALLPAPER_FAIL = -1001;
+    public static final int TYPE_SET_THEME = 0;
+    public static final int TYPE_SET_WALLPAPER = 1;
 
     private ThemeBinder mThemeBinder;
     private LocalBroadcastManager mLocalBroadcastManager;
@@ -120,6 +122,7 @@ public class ThemeService extends Service {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("theme", themeBean);
                 intent.putExtra("theme", bundle);
+                intent.putExtra("type", TYPE_SET_THEME);
                 mLocalBroadcastManager.sendBroadcastSync(intent);
             } else {
                 XLog.e(XLog.getTag(), XLog.TAG_GU + "themeBean is null");
@@ -135,6 +138,7 @@ public class ThemeService extends Service {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("wallpaper", wallpaperBean);
                 intent.putExtra("wallpaper", bundle);
+                intent.putExtra("type", TYPE_SET_WALLPAPER);
                 mLocalBroadcastManager.sendBroadcastSync(intent);
             } else {
                 XLog.e(XLog.getTag(), XLog.TAG_GU + "wallpaperBean is null");
