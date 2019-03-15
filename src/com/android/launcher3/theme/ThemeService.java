@@ -74,7 +74,13 @@ public class ThemeService extends Service {
 
         @Override
         public boolean setWallpaper(WallpaperBean wallpaperBean) throws RemoteException {
-
+            if (wallpaperBean != null) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("wallpaper", wallpaperBean);
+                intent.putExtra("wallpaper", bundle);
+                mLocalBroadcastManager.sendBroadcastSync(intent);
+            }
             return true;
         }
     }
