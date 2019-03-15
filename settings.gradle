@@ -1,1 +1,1 @@
-include ':mxlibrary', ':mxtheme'
+include ':mxtheme', ':mxlibrary'
