@@ -30,7 +30,7 @@ abstract class BaseFlags {
     }
 
     public static final boolean IS_DOGFOOD_BUILD = false;
-    // 必须和AndroidManifest.xml中的LauncherProvide配置的authorities一样
+    // BaseFlags中的AUTHORITY必须和AndroidManifest.xml文件中的LauncherProvide配置的authorities一样
     public static final String AUTHORITY = "com.android.mxlauncher3.settings".intern();
 
     // When enabled allows to use any point on the fast scrollbar to start dragging.

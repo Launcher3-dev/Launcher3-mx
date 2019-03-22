@@ -34,7 +34,6 @@ import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.util.ConfigMonitor;
 import com.android.launcher3.util.Preconditions;
 import com.android.launcher3.util.SettingsObserver;
-import com.android.mxlibrary.util.XLog;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -196,10 +195,10 @@ public class LauncherAppState {
                 }
                 provider = (LauncherProvider) client.getLocalContentProvider();
             } else {
-                XLog.e(XLog.getTag(), XLog.TAG_GU + " can't get ContentProviderClient--- ");
+                Log.e("TAG", " can't get ContentProviderClient--- ");
             }
         } catch (Exception e) {
-            XLog.e(XLog.getTag(), XLog.TAG_GU + e.getMessage());
+            Log.e("TAG", e.getMessage());
         }
         return provider;
         // modify by codemx.cn --20190322--------end

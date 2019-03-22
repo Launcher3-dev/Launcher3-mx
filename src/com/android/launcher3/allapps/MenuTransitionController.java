@@ -148,7 +148,8 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
      */
     @Override
     public void setStateWithAnimation(LauncherState toState,
-                                      AnimatorSetBuilder builder, AnimationConfig config) {
+                                      AnimatorSetBuilder builder,
+                                      AnimationConfig config) {
         float targetProgress = toState.getVerticalProgress(mLauncher);
         if (Float.compare(mProgress, targetProgress) == 0) {
             setAlphas(toState, config.getPropertySetter(builder));

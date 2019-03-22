@@ -42,6 +42,8 @@ import com.android.launcher3.theme.ThemeService;
 import com.android.launcher3.uioverrides.DisplayRotationListener;
 import com.android.launcher3.uioverrides.WallpaperColorInfo;
 import com.android.launcher3.views.BaseDragLayer;
+import com.android.mxtheme.bean.ThemeBean;
+import com.android.mxtheme.bean.WallpaperBean;
 
 /**
  * Extension of BaseActivity allowing support for drag-n-drop
@@ -72,7 +74,22 @@ public abstract class BaseDraggingActivity extends BaseActivity
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            int type = intent.getIntExtra("type", -1);
 
+            switch (type) {
+                case ThemeService.TYPE_SET_THEME:
+                    Bundle bundleTheme = intent.getBundleExtra("theme");
+                    ThemeBean themeBean = bundleTheme.getParcelable("theme");
+                    // TODO　设置主题
+                    break;
+                case ThemeService.TYPE_SET_WALLPAPER:
+                    Bundle bundleWallpaper = intent.getBundleExtra("wallpaper");
+                    WallpaperBean wallpaperBean = bundleWallpaper.getParcelable("wallpaper");
+                    // TODO　设置壁纸
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
@@ -92,8 +109,8 @@ public abstract class BaseDraggingActivity extends BaseActivity
         }
 
         IntentFilter themeIntent = new IntentFilter();
-        themeIntent.addAction(ThemeService.ACTION_THEME);
-        themeIntent.addAction(ThemeService.ACTION_WALLPAPER);
+        themeIntent.addAction(ThemeService.ACTION_SET_THEME);
+        themeIntent.addAction(ThemeService.ACTION_SET_WALLPAPER);
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, themeIntent);
     }
 

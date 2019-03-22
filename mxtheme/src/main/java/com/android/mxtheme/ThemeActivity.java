@@ -11,7 +11,7 @@ import com.android.mxtheme.bean.ThemeBean;
 import com.android.mxtheme.bean.WallpaperBean;
 
 /**
- * Created by Administrator
+ * Created by CodeMX
  * DATE 2019/2/22
  * TIME 9:22
  */

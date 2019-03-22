@@ -31,7 +31,6 @@ import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Action;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.views.OptionsPopupView;
-import com.android.mxlibrary.util.XLog;
 
 import static android.view.MotionEvent.ACTION_CANCEL;
 import static android.view.MotionEvent.ACTION_DOWN;
@@ -73,7 +72,6 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
         int action = ev.getActionMasked();
-        XLog.e(XLog.getTag(), XLog.TAG_GU + action);
         if (action == ACTION_DOWN) {
             // Check if we can handle long press.
             boolean handleLongPress = canHandleLongPress();

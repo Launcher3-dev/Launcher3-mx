@@ -87,7 +87,7 @@ public abstract class BaseDragLayer<T extends BaseDraggingActivity> extends Inse
     }
 
     /**
-     * 根据触摸事件查找激活的控制器
+     * 根据触摸事件查找需要激活的控制器
      *
      * @param ev 触摸事件
      *
@@ -110,6 +110,7 @@ public abstract class BaseDragLayer<T extends BaseDraggingActivity> extends Inse
             }
         }
 
+        // 双指捏掐控制器
         if (mPinchListener != null && mPinchListener.onControllerInterceptTouchEvent(ev)) {
             // Stop listening for scrolling etc. (onTouchEvent() handles the rest of the pinch.)
             mActiveController = mPinchListener;
