@@ -21,6 +21,7 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 
@@ -33,6 +34,7 @@ import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.util.ConfigMonitor;
 import com.android.launcher3.util.Preconditions;
 import com.android.launcher3.util.SettingsObserver;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -181,9 +183,25 @@ public class LauncherAppState {
     }
 
     private static LauncherProvider getLocalProvider(Context context) {
-        try (ContentProviderClient cl = context.getContentResolver()
-                .acquireContentProviderClient(LauncherProvider.AUTHORITY)) {
-            return (LauncherProvider) cl.getLocalContentProvider();
+        // modify by codemx.cn --20190322--------start
+        LauncherProvider provider = null;
+        try {
+            ContentProviderClient client = context.getContentResolver()
+                    .acquireContentProviderClient(LauncherProvider.AUTHORITY);
+            if (client != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//>24
+                    client.close();
+                } else {
+                    client.release();
+                }
+                provider = (LauncherProvider) client.getLocalContentProvider();
+            } else {
+                XLog.e(XLog.getTag(), XLog.TAG_GU + " can't get ContentProviderClient--- ");
+            }
+        } catch (Exception e) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + e.getMessage());
         }
+        return provider;
+        // modify by codemx.cn --20190322--------end
     }
 }
