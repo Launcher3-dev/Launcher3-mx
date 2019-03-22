@@ -361,7 +361,7 @@ public class DragController implements DragDriver.EventListener, TouchController
     }
 
     /**
-     * Clamps the position to the drag layer bounds.
+     * Clamps（夹） the position to the drag layer bounds（界限）.
      */
     private int[] getClampedDragLayerPos(float x, float y) {
         mLauncher.getDragLayer().getLocalVisibleRect(mDragLayerRect);
@@ -385,7 +385,6 @@ public class DragController implements DragDriver.EventListener, TouchController
     @Override
     public void onDriverDragMove(float x, float y) {
         final int[] dragLayerPos = getClampedDragLayerPos(x, y);
-
         handleMoveEvent(dragLayerPos[0], dragLayerPos[1]);
     }
 
@@ -420,6 +419,7 @@ public class DragController implements DragDriver.EventListener, TouchController
     /**
      * Call this from a drag source view.
      */
+    @Override
     public boolean onControllerInterceptTouchEvent(MotionEvent ev) {
         if (mOptions != null && mOptions.isAccessibleDrag) {
             return false;
@@ -528,6 +528,7 @@ public class DragController implements DragDriver.EventListener, TouchController
     /**
      * Call this from a drag source view.
      */
+    @Override
     public boolean onControllerTouchEvent(MotionEvent ev) {
         if (mDragDriver == null || mOptions == null || mOptions.isAccessibleDrag) {
             return false;

@@ -53,11 +53,13 @@ public class PinchToOverviewListener extends ScaleGestureDetector.SimpleOnScaleG
         mPinchDetector = new ScaleGestureDetector(mLauncher, this);
     }
 
+    @Override
     public boolean onControllerInterceptTouchEvent(MotionEvent ev) {
         mPinchDetector.onTouchEvent(ev);
         return mPinchStarted;
     }
 
+    @Override
     public boolean onControllerTouchEvent(MotionEvent ev) {
         if (mPinchStarted) {
             if (ev.getPointerCount() > 2) {
