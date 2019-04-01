@@ -10,3 +10,8 @@ local.properties
 mxlibrary/mxlibrary.iml
 mxtheme/mxtheme.iml
 Launcher3-master.iml
+mxlibrary/libs/
+mxlibrary/src/androidTest/
+mxlibrary/src/main/res/layout/
+mxlibrary/src/test/
+tests/src/
