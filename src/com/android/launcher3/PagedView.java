@@ -142,15 +142,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected T mPageIndicator;
 
     // add by codemx.cn ---- 2018/09/04 -- start
-    // The viewport whether the pages are to be contained (the actual view may be larger than the
-    // viewport)
-    private Rect mViewport = new Rect();
-    private int mMeasureWidth;
-    private int mLastWhichPage = 0;
-
     public static float mDensity;
     // add by codemx.cn ---- 2018/09/04 -- end
-
+    // Convenience/caching
     private static final Rect sTmpRect = new Rect();
 
     protected final Rect mInsets = new Rect();
@@ -389,8 +383,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
         mUnboundedScrollX = x;
 
-        boolean isXBeforeFirstPage = mIsRtl ? (x > mMaxScrollX) : (x < 0);
-        boolean isXAfterLastPage = mIsRtl ? (x < 0) : (x > mMaxScrollX);
+        boolean isXBeforeFirstPage = isXBeforeFirstPage(x);
+        boolean isXAfterLastPage = isXAfterLastPage(x);
         if (isXBeforeFirstPage) {
             super.scrollTo(mIsRtl ? mMaxScrollX : 0, y);
             if (mAllowOverScroll) {
@@ -465,16 +459,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             sendScrollAccessibilityEvent();
 
             int prevPage = mCurrentPage;
-            mCurrentPage = validateNewPage(mNextPage);
+            mCurrentPage = validateCircularNewPage();
             mNextPage = INVALID_PAGE;
-
-            // --- add by codemx ---- 2018/09/04 ----- start
-            if (getScrollX() < 0 && mCurrentPage == getChildCount() - 1) {
-                scrollTo(mMaxScrollX, 0);
-            } else if (getScrollX() > mMaxScrollX && mCurrentPage == 0) {
-                scrollTo(0, 0);
-            }
-            // --- add by codemx ---- 2018/09/04 ----- end
 
             notifyPageSwitchListener(prevPage);
 
@@ -539,11 +525,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        // --- add by codemx.cm --- 2018/09/04 -- start
-        mMeasureWidth = widthSize;
-        mViewport.set(0, 0, widthSize, heightSize);
-        // --- add by codemx.cm --- 2018/09/04 -- end
 
         if (widthMode == MeasureSpec.UNSPECIFIED || heightMode == MeasureSpec.UNSPECIFIED) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -694,6 +675,11 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
     protected int offsetForPageScrolls() {
         return 0;
+    }
+
+    public void setPageSpacing(int pageSpacing) {
+        mPageSpacing = pageSpacing;
+        requestLayout();
     }
 
     private void dispatchPageCountChanged() {
@@ -999,6 +985,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     public float getScrollProgress(int screenCenter, View v, int page) {
         final int halfScreenSize = getMeasuredWidth() / 2;
         int delta = screenCenter - (getScrollForPage(page) + halfScreenSize);
+
         final int totalDistance;
         int adjacentPage = page + 1;
         if ((delta < 0 && !mIsRtl) || (delta > 0 && mIsRtl)) {
@@ -1153,12 +1140,13 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                         boolean isDeltaXLeft = mIsRtl ? deltaX > 0 : deltaX < 0;
                         boolean isVelocityXLeft = mIsRtl ? velocityX > 0 : velocityX < 0;
                         if (((isSignificantMove && !isDeltaXLeft && !isFling) ||
-                                (isFling && !isVelocityXLeft)) && mCurrentPage > 0) {
+                            (isFling && !isVelocityXLeft))
+                            && mCurrentPage > getMinPageIndex()) {
                             finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage - 1;
                             snapToPageWithVelocity(finalPage, velocityX);
                         } else if (((isSignificantMove && isDeltaXLeft && !isFling) ||
                                 (isFling && isVelocityXLeft)) &&
-                                mCurrentPage < getChildCount() - 1) {
+                            mCurrentPage < getMaxPageIndex()) {
                             finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage + 1;
                             snapToPageWithVelocity(finalPage, velocityX);
                         } else {
@@ -1227,6 +1215,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
                 // End any intermediate reordering states
                 resetTouchState();
+            cancelCurrentPageLongPress();
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -1235,6 +1224,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     onScrollInteractionEnd();
                 }
                 resetTouchState();
+            cancelCurrentPageLongPress();
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
@@ -1391,7 +1381,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         whichPage = validateNewPage(whichPage);
         int halfScreenSize = getMeasuredWidth() / 2;
 
-        int newX = getScrollForPage(whichPage);
+        final int newX = getScrollForPage(whichPage);
         int delta = newX - getUnboundedScrollX();
         int duration = 0;
 
@@ -1437,7 +1427,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     protected boolean snapToPage(int whichPage, int duration, boolean immediate,
-                                 TimeInterpolator interpolator) {
+            TimeInterpolator interpolator) {
+        whichPage = validateNewPage(whichPage);
 
         int newX = getScrollForPage(whichPage);
         final int delta = newX - getUnboundedScrollX();
@@ -1595,16 +1586,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                 getNextPage() + 1, getChildCount());
     }
 
-    protected float getDownMotionX() {
-        return mDownMotionX;
-    }
-
-    protected float getDownMotionY() {
-        return mDownMotionY;
-    }
-
     protected interface ComputePageScrollsLogic {
-
         boolean shouldIncludeView(View view);
     }
 
@@ -1637,19 +1619,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         return mTmpIntPair;
     }
 
-    // ------ add by codemx.cn ---- 2018/09/04 --- start
-    int getViewportWidth() {
-        return mViewport.width();
-    }
+    // SPRD: add for circular sliding. adjust if need circular slide
 
-    int getViewportHeight() {
-        return mViewport.height();
-    }
-
-    protected abstract boolean isPagedViewCircledScroll();
-
-    // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- start
-    protected boolean isXBeforeFirstPage(int x) {
+    protected boolean isXBeforeFirstPage(int x){
         return mIsRtl ? (x > mMaxScrollX) : (x < 0);
     }
 
@@ -1682,6 +1654,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected int reComputeDelta(int delta, int screenCenter, int page, int totalDistance) {
         return delta;
     }
+
+    protected abstract boolean isPagedViewCircledScroll();
 
     // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- end
 
