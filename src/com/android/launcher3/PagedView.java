@@ -1029,17 +1029,27 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     // --- modify by codemx.cn --- 2018/09/08 -- start
-    // 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
+    /**
+     * 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
+     *
+     * @param scrollX getScrollX
+     * @param v       当前页面
+     * @param page    当前页面对应下标
+     *
+     * @return 滑动进度
+     */
     public float getScrollProgress(int scrollX, View v, int page) {
         final int halfScreenSize = getMeasuredWidth() / 2;
         int delta = scrollX - (getScrollForPage(page) + halfScreenSize);
 
         final int totalDistance;
+        // 滑动过程中正在进入的页面下标
         int adjacentPage = page + 1;
         if ((delta < 0 && !mIsRtl) || (delta > 0 && mIsRtl)) {
             adjacentPage = page - 1;
         }
 
+        // 计算一个页面从开始到结束（一个页面切换过程）走过的完整距离
         totalDistance = computeTotalDistance(v, adjacentPage, page);
         delta = reComputeDelta(delta, scrollX, page, totalDistance);
 
@@ -1704,6 +1714,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         if (adjacentPage < 0 || adjacentPage > getChildCount() - 1) {
             totalDistance = v.getMeasuredWidth() + mPageSpacing;
         } else {
+            // 正在进入页面左边缘到正在退出页面左边缘的距离
             totalDistance = Math.abs(getScrollForPage(adjacentPage) - getScrollForPage(page));
         }
         return totalDistance;
