@@ -166,17 +166,18 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
     protected int reComputeDelta(int delta, int screenCenter, int page, int totalDistance) {
         int index = 0;
         final int halfScreenSize = getMeasuredWidth() / 2;
-        if (enableLoop()) {
-            if (mIsRtl) {
+        if (enableLoop()) {// 循环滑动
+            if (mIsRtl) {// 反向排列
                 if (mOverScrollX < 0 && page == 0) {
                     index = getChildCount();
                 } else if (mOverScrollX > mMaxScrollX && page == getChildCount() - 1) {
                     index = OVER_FIRST_PAGE_INDEX;
                 }
-            } else {
+            } else {// 从左向右排列
+                // 从最后一屏继续向左滑动Workspace，此时应该循环到第一屏
                 if (mOverScrollX > mMaxScrollX && page == 0) {
                     index = getChildCount();
-                } else if (mOverScrollX < 0 && page == getChildCount() - 1) {
+                } else if (mOverScrollX < 0 && page == getChildCount() - 1) {// 从第一屏继续向右滑动，应该循环到最后一屏
                     index = OVER_FIRST_PAGE_INDEX;
                 }
             }
