@@ -186,7 +186,9 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
     }
 
     private void drawCircularPageIfNeed(Canvas canvas) {
+        // X在第一页之前，表示从第一页循环到最后一页
         boolean isXBeforeFirstPage = mIsRtl ? (mOverScrollX > mMaxScrollX) : (mOverScrollX < 0);
+        // X在最后一页之后，表示从从最后一页魂环到第一页
         boolean isXAfterLastPage = mIsRtl ? (mOverScrollX < 0) : (mOverScrollX > mMaxScrollX);
         if (isXBeforeFirstPage || isXAfterLastPage) {
             long drawingTime = getDrawingTime();
@@ -196,14 +198,23 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
                     getScrollY() + getBottom() - getTop());
             // here we assume that a page's horizontal padding plus it's measured width
             // equals to ViewPort's width
+            // 偏移量是所有页面的宽度之和
             int offset = (mIsRtl ? -childCount : childCount) * (mPageWidth);
             if (isXBeforeFirstPage) {
+                // 偏移画布
                 canvas.translate(-offset, 0);
+                // 从第一页循环到最后一页的过程中，画布中左侧部分会留出空白，此时，为了让我们看似是循环滑动，
+                // 就要把最后一页的一部分绘制到画布的空白部分上，一边滑动一边绘制，这样最后一页就是看似是一个
+                // 渐显的过程，在绘制之前要先移动画布到对应最后一页的位置
                 drawChild(canvas, getPageAt(childCount - 1), drawingTime);
+                // 还原画布位置
                 canvas.translate(+offset, 0);
             } else {
+                // 偏移画布
                 canvas.translate(+offset, 0);
+                // 类似上面的从第一页到最后一页的过程
                 drawChild(canvas, getPageAt(0), drawingTime);
+                // 还原画布
                 canvas.translate(-offset, 0);
             }
             canvas.restore();

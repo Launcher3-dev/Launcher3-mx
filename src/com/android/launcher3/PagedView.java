@@ -143,7 +143,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
      * 如果View左侧边缘从屏幕左侧边缘移动到了屏幕左侧，getScrollX为View左侧边缘到屏幕边缘距离；
      * 如果View左侧边缘从屏幕左侧边缘移动到了屏幕右侧，getScrollX为View左侧边缘到屏幕边缘距离的负值
      * 例如：View在左侧边缘与屏幕左侧边缘重合，那么getScrollX=0（屏幕宽度假设720）
-     * View左侧边缘到屏幕边缘的距离--getScrollX值
+     * View左侧边缘到屏幕边缘的距离|getScrollX值
      * -2260                 2260
      * -1440                 1440
      * -720                  720
@@ -152,6 +152,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
      * 1440                  -1440
      * 2260                  -2260
      * 距离为负值，说明View的左侧边缘在屏幕左侧边缘的左侧，反之在右侧
+     * (PageView向左滑动为正方向，getSrcollX为正值；反之负方向，getScrollX为负值)
      */
     protected int mOverScrollX;
 
@@ -1029,6 +1030,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     // --- modify by codemx.cn --- 2018/09/08 -- start
+
     /**
      * 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
      *
@@ -1053,6 +1055,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         totalDistance = computeTotalDistance(v, adjacentPage, page);
         delta = reComputeDelta(delta, scrollX, page, totalDistance);
 
+        // 范围：[-1,1]
         float scrollProgress = delta / (totalDistance * 1.0f);
         scrollProgress = Math.min(scrollProgress, MAX_SCROLL_PROGRESS);
         scrollProgress = Math.max(scrollProgress, -MAX_SCROLL_PROGRESS);
@@ -1060,6 +1063,13 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
     // --- modify by codemx.cn --- 2018/09/08 -- end
 
+    /**
+     * 获取下标为index的页面左侧边缘到PageView左侧边缘的距离
+     *
+     * @param index 页面下标
+     *
+     * @return 当前页面左侧边缘到PageView左侧边缘的距离
+     */
     public int getScrollForPage(int index) {
         if (mPageScrolls == null || index >= mPageScrolls.length || index < 0) {
             return 0;
@@ -1687,6 +1697,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         return mTmpIntPair;
     }
 
+    // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- start
     // SPRD: add for circular sliding. adjust if need circular slide
 
     protected boolean isXBeforeFirstPage(int x) {
@@ -1727,7 +1738,5 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected abstract boolean isPagedViewCircledScroll();
 
     // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- end
-
-    // ------ add by codemx.cn ---- 2018/09/04 --- end
 
 }
