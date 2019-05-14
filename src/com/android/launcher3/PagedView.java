@@ -45,6 +45,7 @@ import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.pageindicators.PageIndicator;
 import com.android.launcher3.touch.OverScroll;
 import com.android.launcher3.util.Thunk;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,10 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private static final String TAG = "PagedView";
     private static final boolean DEBUG = false;
 
-    protected static final int INVALID_PAGE = -1;
+
+    // ---- modify by codemx.cn(新的循环滑动(原始为-1)) --- 2019/05/14  --- start
+    protected static final int INVALID_PAGE = -2;
+    // ---- modify by codemx.cn(新的循环滑动) --- 2019/05/14  --- end
     protected static final ComputePageScrollsLogic SIMPLE_SCROLL_LOGIC = (v) -> v.getVisibility() != GONE;
 
     public static final int PAGE_SNAP_ANIMATION_DURATION = 750;
@@ -310,7 +314,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
     }
 
-    protected int validateNewPage(int newPage) {
+    protected int validateNewPage(int newPage, boolean isSnapTo) {
         // Ensure that it is clamped by the actual set of children in all cases
         return Utilities.boundToRange(newPage, 0, getPageCount() - 1);
     }
@@ -329,7 +333,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
 
         int prevPage = mCurrentPage;
-        mCurrentPage = validateNewPage(currentPage);
+        mCurrentPage = validateNewPage(currentPage, false);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
         updateCurrentPageScroll();
         notifyPageSwitchListener(prevPage);
         invalidate();
@@ -483,6 +488,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
             int prevPage = mCurrentPage;
             mCurrentPage = validateCircularNewPage();
+            XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
             mNextPage = INVALID_PAGE;
 
             notifyPageSwitchListener(prevPage);
@@ -749,7 +755,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     @Override
     public void onViewRemoved(View child) {
         super.onViewRemoved(child);
-        mCurrentPage = validateNewPage(mCurrentPage);
+        mCurrentPage = validateNewPage(mCurrentPage, false);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
         dispatchPageCountChanged();
     }
 
@@ -1454,7 +1461,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
      */
     protected boolean snapToPageWithVelocity(int whichPage, int velocity) {
 
-        whichPage = validateNewPage(whichPage);
+        whichPage = validateNewPage(whichPage, true);
         int halfScreenSize = getMeasuredWidth() / 2;
 
         final int newX = getScrollForPage(whichPage);
@@ -1505,7 +1512,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
     protected boolean snapToPage(int whichPage, int duration, boolean immediate,
                                  TimeInterpolator interpolator) {
-        whichPage = validateNewPage(whichPage);
+        whichPage = validateNewPage(whichPage, true);
 
         int newX = getScrollForPage(whichPage);
         final int delta = newX - getUnboundedScrollX();
@@ -1527,11 +1534,12 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             duration *= Settings.System.getFloat(getContext().getContentResolver(),
                     Settings.System.WINDOW_ANIMATION_SCALE, 1);
         }
-
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "whichPage:  " + whichPage);
         // 验证whichPage是否有效
-        whichPage = validateNewPage(whichPage);
+        whichPage = validateNewPage(whichPage, true);
 
         mNextPage = whichPage;
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mNextPage:  " + mNextPage);
 
         awakenScrollBars(duration);
         if (immediate) {
@@ -1717,7 +1725,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     protected int validateCircularNewPage() {
-        return validateNewPage(mNextPage);
+        return validateNewPage(mNextPage, false);
     }
 
     protected int computeTotalDistance(View v, int adjacentPage, int page) {

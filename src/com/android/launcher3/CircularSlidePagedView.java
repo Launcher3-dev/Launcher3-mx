@@ -50,13 +50,13 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
     }
 
     @Override
-    protected int validateNewPage(int newPage) {
+    protected int validateNewPage(int newPage, boolean isSnapTo) {
         int validatedPage = newPage;
-        if (enableLoop()) {
+        if (enableLoop() && isSnapTo) {
             validatedPage = Math.max(OVER_FIRST_PAGE_INDEX, Math.min(validatedPage, getPageCount()));
         } else {
             // Ensure that it is clamped by the actual set of children in all cases
-            validatedPage = super.validateNewPage(newPage);
+            validatedPage = super.validateNewPage(newPage, isSnapTo);
         }
         return validatedPage;
     }
@@ -139,7 +139,7 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
             } else if (mNextPage == getPageCount() && mPageScrolls != null) {
                 currentPage = 0;
             } else {
-                currentPage = validateNewPage(mNextPage);
+                currentPage = validateNewPage(mNextPage, false);
             }
             scrollTo(mPageScrolls[currentPage], getScrollY());
         } else {
