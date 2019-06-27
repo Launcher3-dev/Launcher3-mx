@@ -67,8 +67,8 @@
             android:id="@+id/circle_menu"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/colorPrimaryDark"
+            android:layout_gravity="center"
+            android:background="@color/colorAccent"
             android:visibility="visible"/>
 
         <include

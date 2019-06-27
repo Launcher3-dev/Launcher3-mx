@@ -20,7 +20,7 @@ import java.util.List;
  * Created by yuchuan on 2018/4/4.
  */
 
-public class MenuEffectAdapter extends BaseMenuAdapter implements IMenuAdapter<MenuItem> {
+public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapter<MenuItem> {
 
     private int mSelectPosition;
     private View mContainer;

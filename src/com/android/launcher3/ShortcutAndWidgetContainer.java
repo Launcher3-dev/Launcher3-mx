@@ -130,8 +130,8 @@ public class ShortcutAndWidgetContainer extends ViewGroup {
             child.setPadding(cellPaddingX, cellPaddingY, cellPaddingX, 0);
         }
         int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(lp.width, MeasureSpec.EXACTLY);
-        int childheightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.height, MeasureSpec.EXACTLY);
-        child.measure(childWidthMeasureSpec, childheightMeasureSpec);
+        int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(lp.height, MeasureSpec.EXACTLY);
+        child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
     }
 
     public boolean invertLayoutHorizontally() {

@@ -14,6 +14,8 @@ import com.android.launcher3.menu.view.MenuLayout;
 import java.util.List;
 
 /**
+ * 特效菜单
+ * <p>
  * Created by CodeMX
  * DATE 2018/4/4
  * TIME 15:41

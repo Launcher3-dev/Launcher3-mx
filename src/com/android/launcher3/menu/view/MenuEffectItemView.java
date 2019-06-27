@@ -47,7 +47,6 @@ public class MenuEffectItemView extends BubbleTextView {
         applyFromMenuItem(item);
     }
 
-
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);

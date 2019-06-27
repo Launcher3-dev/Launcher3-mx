@@ -120,8 +120,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:${SUPPORT_LIBS_VERSION}"
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.2.0rc2'
     quickstepImplementation fileTree(dir: "quickstep/libs", include: 'sysui_shared.jar')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'org.mockito:mockito-core:2.15.0'
+    testImplementation 'junit:junit:4.13-beta-3'
+    androidTestImplementation 'org.mockito:mockito-core:2.27.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

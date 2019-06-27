@@ -27,18 +27,18 @@ import java.util.Comparator;
 public abstract class SupperMenuController<T> {
 
     protected Launcher mLauncher;
-    public IMenuAdapter<T> mMenuAdapter;
-    public MenuLayout mMenuLayout;
-    public HorizontalPageScrollView mScrollView;
-    protected MenuStateTransitionAnimation mMenuTransition;
-    protected MenuController mController;
+    IMenuAdapter<T> mMenuAdapter;
+    MenuLayout mMenuLayout;
+    HorizontalPageScrollView mScrollView;
+    private MenuStateTransitionAnimation mMenuTransition;
+    MenuController mController;
 
     public SupperMenuController(Context context, MenuLayout menuLayout) {
         this.mLauncher = Launcher.getLauncher(context);
         this.mMenuLayout = menuLayout;
     }
 
-    protected boolean beginDragging(View v, View widgetIcon) {
+    boolean beginDragging(View v, View widgetIcon) {
         if (v instanceof WidgetCell) {
             if (!beginDraggingWidget((WidgetCell) v, widgetIcon)) {
                 return false;

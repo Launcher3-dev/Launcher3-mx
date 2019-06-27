@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -29,6 +30,9 @@ import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.ShortcutInfo;
+import com.android.launcher3.menu.bean.MenuItem;
+import com.android.launcher3.menu.view.MenuItemView;
+import com.android.mxlibrary.util.XLog;
 import com.android.mxlibrary.view.RingEffectView;
 
 import java.util.ArrayList;
@@ -67,6 +71,7 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
 
     private EventListener mListener;
     private Launcher mLauncher;
+    private LayoutInflater mInflater;
 
     /**
      * CircleMenu event listener.
@@ -156,6 +161,7 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
             a.recycle();
         }
 
+        mInflater = LayoutInflater.from(context);
         initLayout(context);
         initMenu(menuButtonColor);
         initButtons(context);
@@ -193,7 +199,17 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        initData();
+    }
 
+    private void initData() {
+        List<MenuItem> menuItems = MenuDataModel.getMenuItemList();
+        for (MenuItem item : menuItems) {
+            MenuItemView itemView = (MenuItemView) mInflater.inflate(R.layout.menu_item_layout, this, false);
+            itemView.applyFromMenuItem(item);
+            mButtons.add(itemView);
+            addView(itemView);
+        }
     }
 
     @Override
@@ -287,7 +303,8 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
     private void initButtons(@NonNull Context context) {
         final int buttonsCount = mChildren.size();
         for (int i = 0; i < buttonsCount; i++) {
-            final BubbleTextView view = (BubbleTextView) Launcher.getLauncher(context).createShortcut(this, mChildren.get(i));
+            final BubbleTextView view = (BubbleTextView) Launcher.getLauncher(context)
+                    .createShortcut(this, mChildren.get(i));
             view.setClickable(true);
             view.setOnClickListener(this);
             view.setScaleX(0);
@@ -653,11 +670,13 @@ public class CircleMenuView extends FrameLayout implements View.OnClickListener,
 
     @Override
     public void setInsets(Rect insets) {
+        XLog.e(XLog.getTag(),XLog.TAG_GU);
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
         DeviceProfile grid = mLauncher.getDeviceProfile();
         // TODO 设置宽高
-
-
+        lp.gravity = Gravity.CENTER;
+        lp.width = 200;
+        lp.height = 200;
         setLayoutParams(lp);
         InsettableFrameLayout.dispatchInsets(this, insets);
     }

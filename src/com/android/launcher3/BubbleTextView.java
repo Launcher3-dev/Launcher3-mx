@@ -311,7 +311,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
         }
     }
 
-    private void applyIconAndLabel(MenuItem item) {
+    protected void applyIconAndLabel(MenuItem item) {
         mIcon = getContext().getDrawable(item.getIcon());
         if (mIcon != null) {
             mIcon.setBounds(0, 0, mIconSize, mIconSize);
