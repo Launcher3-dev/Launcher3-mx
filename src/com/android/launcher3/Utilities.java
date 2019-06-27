@@ -453,6 +453,8 @@ public final class Utilities {
      * Ensures that a value is within given bounds. Specifically:
      * If value is less than lowerBound, return lowerBound; else if value is greater than upperBound,
      * return upperBound; else return value unchanged.
+     *
+     * 判断所给值是否在限定范围内，如果小于最小值，则返回最小值；如果大于最大值，则返回最大值；否则返回该值
      */
     public static int boundToRange(int value, int lowerBound, int upperBound) {
         return Math.max(lowerBound, Math.min(value, upperBound));

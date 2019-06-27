@@ -110,7 +110,7 @@ import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_OVERLAY;
  * Each page contains a number of icons, folders or widgets the user can
  * interact with. A workspace is meant to be used with a fixed width only.
  */
-public class Workspace extends PagedView<WorkspacePageIndicator>
+public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         implements DropTarget, DragSource, View.OnTouchListener,
         DragController.DragListener, Insettable, LauncherStateManager.StateHandler {
     private static final String TAG = "Launcher.Workspace";
@@ -3555,11 +3555,6 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     protected String getCurrentPageDescription() {
         int page = (mNextPage != INVALID_PAGE) ? mNextPage : mCurrentPage;
         return getPageDescription(page);
-    }
-
-    @Override
-    protected boolean isPagedViewCircledScroll() {
-        return MxSettings.sIsPagedViewCircleScroll;
     }
 
     private String getPageDescription(int page) {

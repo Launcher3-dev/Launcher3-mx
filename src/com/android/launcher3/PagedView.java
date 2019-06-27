@@ -21,7 +21,6 @@ import android.animation.TimeInterpolator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -46,6 +45,7 @@ import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.pageindicators.PageIndicator;
 import com.android.launcher3.touch.OverScroll;
 import com.android.launcher3.util.Thunk;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 
@@ -60,7 +60,10 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private static final String TAG = "PagedView";
     private static final boolean DEBUG = false;
 
-    protected static final int INVALID_PAGE = -1;
+
+    // ---- modify by codemx.cn(新的循环滑动(原始为-1)) --- 2019/05/14  --- start
+    protected static final int INVALID_PAGE = -2;
+    // ---- modify by codemx.cn(新的循环滑动) --- 2019/05/14  --- end
     protected static final ComputePageScrollsLogic SIMPLE_SCROLL_LOGIC = (v) -> v.getVisibility() != GONE;
 
     public static final int PAGE_SNAP_ANIMATION_DURATION = 750;
@@ -87,7 +90,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private boolean mSettleOnPageInFreeScroll = false;
 
     protected int mFlingThresholdVelocity;
-    protected int mMinFlingVelocity;
+    protected int mMinFlingVelocity;// 最小惯性速度
     protected int mMinSnapVelocity;
 
     protected boolean mFirstLayout = true;
@@ -109,6 +112,11 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private float mLastMotionXRemainder;
     private float mTotalMotionX;
 
+    /**
+     * 记录每个未隐藏页面的左边界到PageView最左侧起始位置的距离，正常情况，
+     * 所有页面是从左到右排列，这里就是记录每个页面需要从第一个页面移动到当前位置
+     * 需要的移动的距离
+     */
     protected int[] mPageScrolls;
 
     protected final static int TOUCH_STATE_REST = 0;
@@ -130,9 +138,26 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
     protected boolean mWasInOverscroll = false;
 
-    // mOverScrollX is equal to getScrollX() when we're within the normal scroll range. Otherwise
-    // it is equal to the scaled overscroll position. We use a separate value so as to prevent
-    // the screens from continuing to translate beyond the normal bounds.
+    /**
+     * mOverScrollX is equal to getScrollX() when we're within the normal scroll range.
+     * Otherwise(否则) it is equal to the scaled overscroll position. We use a separate
+     * value so as to prevent the screens from continuing to translate beyond the normal bounds.
+     * <p>
+     * getScrollX():表示PageView左侧边缘位置从屏幕左侧边缘位置（Y轴）滑动到当前位置的滑动变量，
+     * 如果View左侧边缘从屏幕左侧边缘移动到了屏幕左侧，getScrollX为View左侧边缘到屏幕边缘距离；
+     * 如果View左侧边缘从屏幕左侧边缘移动到了屏幕右侧，getScrollX为View左侧边缘到屏幕边缘距离的负值
+     * 例如：View在左侧边缘与屏幕左侧边缘重合，那么getScrollX=0（屏幕宽度假设720）
+     * View左侧边缘到屏幕边缘的距离|getScrollX值
+     * -2260                 2260
+     * -1440                 1440
+     * -720                  720
+     * 0                       0
+     * 720                   -720
+     * 1440                  -1440
+     * 2260                  -2260
+     * 距离为负值，说明View的左侧边缘在屏幕左侧边缘的左侧，反之在右侧
+     * (PageView向左滑动为正方向，getSrcollX为正值；反之负方向，getScrollX为负值)
+     */
     protected int mOverScrollX;
 
     protected int mUnboundedScrollX;
@@ -143,15 +168,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected T mPageIndicator;
 
     // add by codemx.cn ---- 2018/09/04 -- start
-    // The viewport whether the pages are to be contained (the actual view may be larger than the
-    // viewport)
-    private Rect mViewport = new Rect();
-    private int mMeasureWidth;
-    private int mLastWhichPage = 0;
-
     public static float mDensity;
     // add by codemx.cn ---- 2018/09/04 -- end
-
+    // Convenience/caching
     private static final Rect sTmpRect = new Rect();
 
     protected final Rect mInsets = new Rect();
@@ -199,10 +218,11 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         mDensity = getResources().getDisplayMetrics().density;
         // --- add by codemx.cn --- 2018/09/06 --- end
 
-        float density = getResources().getDisplayMetrics().density;
-        mFlingThresholdVelocity = (int) (FLING_THRESHOLD_VELOCITY * density);
-        mMinFlingVelocity = (int) (MIN_FLING_VELOCITY * density);
-        mMinSnapVelocity = (int) (MIN_SNAP_VELOCITY * density);
+        // --- modify by codemx.cn --- 2019/04/05 --- start
+        mFlingThresholdVelocity = (int) (FLING_THRESHOLD_VELOCITY * mDensity);
+        mMinFlingVelocity = (int) (MIN_FLING_VELOCITY * mDensity);
+        mMinSnapVelocity = (int) (MIN_SNAP_VELOCITY * mDensity);
+        // --- modify by codemx.cn --- 2019/04/05 --- end
 
         if (Utilities.ATLEAST_OREO) {
             setDefaultFocusHighlightEnabled(false);
@@ -294,7 +314,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
     }
 
-    private int validateNewPage(int newPage) {
+    protected int validateNewPage(int newPage, boolean isSnapTo) {
         // Ensure that it is clamped by the actual set of children in all cases
         return Utilities.boundToRange(newPage, 0, getPageCount() - 1);
     }
@@ -313,7 +333,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
 
         int prevPage = mCurrentPage;
-        mCurrentPage = validateNewPage(currentPage);
+        mCurrentPage = validateNewPage(currentPage, false);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
         updateCurrentPageScroll();
         notifyPageSwitchListener(prevPage);
         invalidate();
@@ -390,41 +411,35 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
         mUnboundedScrollX = x;
 
-        // --- add by codemx --- 2018/09/04 --------start
-        if (isPagedViewCircledScroll()) {
-            super.scrollTo(x, y);
-        } else {
-            // --- add by codemx --- 2018/09/04 --------end
-            boolean isXBeforeFirstPage = mIsRtl ? (x > mMaxScrollX) : (x < 0);
-            boolean isXAfterLastPage = mIsRtl ? (x < 0) : (x > mMaxScrollX);
-            if (isXBeforeFirstPage) {
-                super.scrollTo(mIsRtl ? mMaxScrollX : 0, y);
-                if (mAllowOverScroll) {
-                    mWasInOverscroll = true;
-                    if (mIsRtl) {
-                        overScroll(x - mMaxScrollX);
-                    } else {
-                        overScroll(x);
-                    }
+        boolean isXBeforeFirstPage = isXBeforeFirstPage(x);
+        boolean isXAfterLastPage = isXAfterLastPage(x);
+        if (isXBeforeFirstPage) {
+            super.scrollTo(mIsRtl ? mMaxScrollX : 0, y);
+            if (mAllowOverScroll) {
+                mWasInOverscroll = true;
+                if (mIsRtl) {
+                    overScroll(x - mMaxScrollX);
+                } else {
+                    overScroll(x);
                 }
-            } else if (isXAfterLastPage) {
-                super.scrollTo(mIsRtl ? 0 : mMaxScrollX, y);
-                if (mAllowOverScroll) {
-                    mWasInOverscroll = true;
-                    if (mIsRtl) {
-                        overScroll(x);
-                    } else {
-                        overScroll(x - mMaxScrollX);
-                    }
-                }
-            } else {
-                if (mWasInOverscroll) {
-                    overScroll(0);
-                    mWasInOverscroll = false;
-                }
-                mOverScrollX = x;
-                super.scrollTo(x, y);
             }
+        } else if (isXAfterLastPage) {
+            super.scrollTo(mIsRtl ? 0 : mMaxScrollX, y);
+            if (mAllowOverScroll) {
+                mWasInOverscroll = true;
+                if (mIsRtl) {
+                    overScroll(x);
+                } else {
+                    overScroll(x - mMaxScrollX);
+                }
+            }
+        } else {
+            if (mWasInOverscroll) {
+                overScroll(0);
+                mWasInOverscroll = false;
+            }
+            mOverScrollX = x;
+            super.scrollTo(x, y);
         }
     }
 
@@ -472,16 +487,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             sendScrollAccessibilityEvent();
 
             int prevPage = mCurrentPage;
-            mCurrentPage = validateNewPage(mNextPage);
+            mCurrentPage = validateCircularNewPage();
+            XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
             mNextPage = INVALID_PAGE;
-
-            // --- add by codemx ---- 2018/09/04 ----- start
-            if (getScrollX() < 0 && mCurrentPage == getChildCount() - 1) {
-                scrollTo(mMaxScrollX, 0);
-            } else if (getScrollX() > mMaxScrollX && mCurrentPage == 0) {
-                scrollTo(0, 0);
-            }
-            // --- add by codemx ---- 2018/09/04 ----- end
 
             notifyPageSwitchListener(prevPage);
 
@@ -547,11 +555,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        // --- add by codemx.cm --- 2018/09/04 -- start
-        mMeasureWidth = widthSize;
-        mViewport.set(0, 0, widthSize, heightSize);
-        // --- add by codemx.cm --- 2018/09/04 -- end
-
         if (widthMode == MeasureSpec.UNSPECIFIED || heightMode == MeasureSpec.UNSPECIFIED) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
@@ -587,15 +590,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mIsLayoutValid = true;
         final int childCount = getChildCount();
-
-        // add by codemx.cn --- 2018/09/04 --- start
-        int offsetX = getViewportOffsetX();
-        int offsetY = getViewportOffsetY();
-
-        // Update the viewport offsets
-        mViewport.offset(offsetX, offsetY);
-        // add by codemx.cn --- 2018/09/04 --- start
-
         boolean pageScrollChanged = false;
         if (mPageScrolls == null || childCount != mPageScrolls.length) {
             mPageScrolls = new int[childCount];
@@ -608,12 +602,13 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
         if (DEBUG) Log.d(TAG, "PagedView.onLayout()");
 
+        // 如果页面变化了
         if (getPageScrolls(mPageScrolls, true, SIMPLE_SCROLL_LOGIC)) {
             pageScrollChanged = true;
         }
 
         final LayoutTransition transition = getLayoutTransition();
-        // If the transition is running defer updating max scroll, as some empty pages could
+        // If the transition is running defer（推迟） updating max scroll, as some empty pages could
         // still be present, and a max scroll change could cause sudden jumps in scroll.
         if (transition != null && transition.isRunning()) {
             transition.addTransitionListener(new LayoutTransition.TransitionListener() {
@@ -650,50 +645,68 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     /**
      * Initializes {@code outPageScrolls} with scroll positions for view at that index. The length
      * of {@code outPageScrolls} should be same as the the childCount
+     *
+     * @param outPageScrolls 记录每个未隐藏页面的左边界到PageView最左侧起始位置的距离，正常情况，
+     *                       所有页面是从左到右排列，这里就是记录每个页面需要从第一个页面移动到当前位置
+     *                       需要的移动的距离
+     * @param layoutChildren 是否排列Children
+     * @param scrollLogic    接口，用来判断该页面是否隐藏，隐藏则不计算
+     *
+     * @return 记录每个未隐藏页面滑动起始位置的数据是否改变
      */
     protected boolean getPageScrolls(int[] outPageScrolls, boolean layoutChildren,
                                      ComputePageScrollsLogic scrollLogic) {
         final int childCount = getChildCount();
 
+        // 起始下标（正常从左到右排列，起始是下标是0）
         final int startIndex = mIsRtl ? childCount - 1 : 0;
+        // 结束下标（正常从左到右，结束下标是最后一个）
         final int endIndex = mIsRtl ? -1 : childCount;
+        // 差量（从右到左是负值，是减；从左到右是正值，是加）
         final int delta = mIsRtl ? -1 : 1;
 
+        // 竖直(Y)方向的中心位置
         final int verticalCenter = (getPaddingTop() + getMeasuredHeight() + mInsets.top
                 - mInsets.bottom - getPaddingBottom()) / 2;
 
-        // ---- modify by codemx.cn --- 2018/09/04 --- start
-        final int scrollOffsetLeft = mPageSpacing = mInsets.left + getPaddingLeft();
-        // ---- modify by codemx.cn --- 2018/09/04 --- end
+        // 最左边的页面的起始位置（有可能是有边距的）
+        final int scrollOffsetLeft = mInsets.left + getPaddingLeft();
         boolean pageScrollChanged = false;
+        // 从第1屏到最后一屏计算每屏的距离
         for (int i = startIndex, childLeft = scrollOffsetLeft + offsetForPageScrolls();
              i != endIndex;
              i += delta) {
             final View child = getPageAt(i);
+            // 如果当前第i个屏幕隐藏则不计算
             if (scrollLogic.shouldIncludeView(child)) {
+                // 页面顶部
                 final int childTop = verticalCenter - child.getMeasuredHeight() / 2;
+                // 页面宽度
                 final int childWidth = child.getMeasuredWidth();
 
+                // 排列该页面
                 if (layoutChildren) {
+                    // 页面高度
                     final int childHeight = child.getMeasuredHeight();
+                    // 布局该页面
                     child.layout(childLeft, childTop,
                             childLeft + child.getMeasuredWidth(), childTop + childHeight);
                 }
 
+                // 每个页面左侧的滑动有效位置
                 final int pageScroll = childLeft - scrollOffsetLeft;
                 if (outPageScrolls[i] != pageScroll) {
                     pageScrollChanged = true;
                     outPageScrolls[i] = pageScroll;
                 }
 
-                // ---- modify by codemx.cn --- 2018/09/04 --- start
-                childLeft += childWidth + scrollOffsetLeft * 2 + getChildGap();
-                // ---- modify by codemx.cn --- 2018/09/04 --- end
+                childLeft += childWidth + mPageSpacing + getChildGap();
             }
         }
         return pageScrollChanged;
     }
 
+    // 每个页面的间距（默认为0）
     protected int getChildGap() {
         return 0;
     }
@@ -702,6 +715,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         mMaxScrollX = computeMaxScrollX();
     }
 
+    // 计算X方向最大滚动距离
     protected int computeMaxScrollX() {
         int childCount = getChildCount();
         if (childCount > 0) {
@@ -712,8 +726,15 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         }
     }
 
+    // 页面偏移距离
     protected int offsetForPageScrolls() {
         return 0;
+    }
+
+    // 设置页面间距
+    public void setPageSpacing(int pageSpacing) {
+        mPageSpacing = pageSpacing;
+        requestLayout();
     }
 
     private void dispatchPageCountChanged() {
@@ -734,7 +755,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     @Override
     public void onViewRemoved(View child) {
         super.onViewRemoved(child);
-        mCurrentPage = validateNewPage(mCurrentPage);
+        mCurrentPage = validateNewPage(mCurrentPage, false);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mCurrentPage= " + mCurrentPage);
         dispatchPageCountChanged();
     }
 
@@ -1015,24 +1037,46 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     // --- modify by codemx.cn --- 2018/09/08 -- start
-    // 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
-    public float getScrollProgress(int screenScroll, View v, int page) {
-        final int halfScreenSize = getViewportWidth() / 2;
-        int screenCenter = screenScroll + getViewportWidth() / 2;
-        int totalDistance = mMeasureWidth;
-        int delta = screenCenter - (getScrollForPage(page) + halfScreenSize);
-        float scrollProgress = delta / (totalDistance * 1.0f);
-        if (screenScroll < 0 && page == getPageCount() - 1) {
-            scrollProgress = getPageCount() + scrollProgress;
-        } else if (screenScroll > mMaxScrollX && page == 0) {
-            scrollProgress = scrollProgress - getPageCount();
+
+    /**
+     * 影响特效存在情况下循环滑动时最后一页与第一页切换时特效不对的问题
+     *
+     * @param scrollX getScrollX
+     * @param v       当前页面
+     * @param page    当前页面对应下标
+     *
+     * @return 滑动进度
+     */
+    public float getScrollProgress(int scrollX, View v, int page) {
+        final int halfScreenSize = getMeasuredWidth() / 2;
+        int delta = scrollX - (getScrollForPage(page) + halfScreenSize);
+
+        final int totalDistance;
+        // 滑动过程中正在进入的页面下标
+        int adjacentPage = page + 1;
+        if ((delta < 0 && !mIsRtl) || (delta > 0 && mIsRtl)) {
+            adjacentPage = page - 1;
         }
+
+        // 计算一个页面从开始到结束（一个页面切换过程）走过的完整距离
+        totalDistance = computeTotalDistance(v, adjacentPage, page);
+        delta = reComputeDelta(delta, scrollX, page, totalDistance);
+
+        // 范围：[-1,1]
+        float scrollProgress = delta / (totalDistance * 1.0f);
         scrollProgress = Math.min(scrollProgress, MAX_SCROLL_PROGRESS);
         scrollProgress = Math.max(scrollProgress, -MAX_SCROLL_PROGRESS);
         return scrollProgress;
     }
     // --- modify by codemx.cn --- 2018/09/08 -- end
 
+    /**
+     * 获取下标为index的页面左侧边缘到PageView左侧边缘的距离
+     *
+     * @param index 页面下标
+     *
+     * @return 当前页面左侧边缘到PageView左侧边缘的距离
+     */
     public int getScrollForPage(int index) {
         if (mPageScrolls == null || index >= mPageScrolls.length || index < 0) {
             return 0;
@@ -1170,45 +1214,19 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                         // move to the left and fling to the right will register as a fling to the right.
                         boolean isDeltaXLeft = mIsRtl ? deltaX > 0 : deltaX < 0;
                         boolean isVelocityXLeft = mIsRtl ? velocityX > 0 : velocityX < 0;
-
-                        // --- add by codemx.cn --- 2018/09/04--- start
-                        if (isPagedViewCircledScroll()) {
-                            if (((isSignificantMove && deltaX > 0 && !isFling) ||
-                                    (isFling && velocityX > 0)) && mCurrentPage >= 0) {
-                                if (mCurrentPage == 0) {
-                                    finalPage = returnToOriginalPage ? mCurrentPage : getChildCount() - 1;
-                                } else {
-                                    finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage - 1;
-                                }
-                                snapToPageWithVelocity(finalPage, velocityX);
-                            } else if (((isSignificantMove && deltaX < 0 && !isFling) ||
-                                    (isFling && velocityX < 0)) &&
-                                    mCurrentPage <= getChildCount() - 1) {
-                                if (mCurrentPage == getChildCount() - 1) {
-                                    finalPage = returnToOriginalPage ? mCurrentPage : 0;
-                                } else {
-                                    finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage + 1;
-                                }
-                                snapToPageWithVelocity(finalPage, velocityX);
-                            } else {
-                                snapToDestination();
-                            }
+                        if (((isSignificantMove && !isDeltaXLeft && !isFling) ||
+                                (isFling && !isVelocityXLeft))
+                                && mCurrentPage > getMinPageIndex()) {
+                            finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage - 1;
+                            snapToPageWithVelocity(finalPage, velocityX);
+                        } else if (((isSignificantMove && isDeltaXLeft && !isFling) ||
+                                (isFling && isVelocityXLeft)) &&
+                                mCurrentPage < getMaxPageIndex()) {
+                            finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage + 1;
+                            snapToPageWithVelocity(finalPage, velocityX);
                         } else {
-                            // --- add by codemx.cn --- 2018/09/04--- end
-                            if (((isSignificantMove && !isDeltaXLeft && !isFling) ||
-                                    (isFling && !isVelocityXLeft)) && mCurrentPage > 0) {
-                                finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage - 1;
-                                snapToPageWithVelocity(finalPage, velocityX);
-                            } else if (((isSignificantMove && isDeltaXLeft && !isFling) ||
-                                    (isFling && isVelocityXLeft)) &&
-                                    mCurrentPage < getChildCount() - 1) {
-                                finalPage = returnToOriginalPage ? mCurrentPage : mCurrentPage + 1;
-                                snapToPageWithVelocity(finalPage, velocityX);
-                            } else {
-                                snapToDestination();
-                            }
+                            snapToDestination();
                         }
-
                     } else {
                         if (!mScroller.isFinished()) {
                             abortScrollerAnimation(true);
@@ -1272,6 +1290,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
                 // End any intermediate reordering states
                 resetTouchState();
+                cancelCurrentPageLongPress();
                 break;
 
             case MotionEvent.ACTION_CANCEL:
@@ -1280,6 +1299,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     onScrollInteractionEnd();
                 }
                 resetTouchState();
+                cancelCurrentPageLongPress();
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
@@ -1388,7 +1408,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     }
 
     private int getPageNearestToCenterOfScreen(int scaledScrollX) {
-        int screenCenter = scaledScrollX + (getMeasuredWidth() / 2) + getViewportOffsetX();
+        int screenCenter = scaledScrollX + (getMeasuredWidth() / 2);
         int minDistanceFromScreenCenter = Integer.MAX_VALUE;
         int minDistanceFromScreenCenterIndex = -1;
         final int childCount = getChildCount();
@@ -1396,18 +1416,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             View layout = getPageAt(i);
             int childWidth = layout.getMeasuredWidth();
             int halfChildWidth = (childWidth / 2);
-            int childCenter = getViewportOffsetX() + getChildOffset(i) + halfChildWidth;
-
-            // --- add by codemx.cn --- 2018/09/08 --- start
-            if (isPagedViewCircledScroll()) {
-                if (getScrollX() < 0 && i == childCount - 1) {
-                    childCenter = -mMeasureWidth + halfChildWidth;
-                } else if (getScrollX() > mMaxScrollX && i == 0) {
-                    childCenter = getChildCount() * mMeasureWidth + halfChildWidth;
-                }
-            }
-            // --- add by codemx.cn --- 2018/09/08 --- end
-
+            int childCenter = getChildOffset(i) + halfChildWidth;
             int distanceFromScreenCenter = Math.abs(childCenter - screenCenter);
             if (distanceFromScreenCenter < minDistanceFromScreenCenter) {
                 minDistanceFromScreenCenter = distanceFromScreenCenter;
@@ -1442,26 +1451,24 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         return (float) Math.sin(f);
     }
 
+    /**
+     * 按照给定速度滑向对应页面
+     *
+     * @param whichPage 要滑向的页面
+     * @param velocity  设定的速度
+     *
+     * @return 是否滑向成功
+     */
     protected boolean snapToPageWithVelocity(int whichPage, int velocity) {
 
-        whichPage = validateNewPage(whichPage);
+        whichPage = validateNewPage(whichPage, true);
         int halfScreenSize = getMeasuredWidth() / 2;
 
-        int newX = getScrollForPage(whichPage);
-
-        // --- add by codemx.cn ----- 2018/09/04 --- start
-        if (mLastWhichPage == 0 && whichPage == getChildCount() - 1) {//第一屏到最后一屏
-            newX = -mMeasureWidth;
-        } else if (mLastWhichPage == getChildCount() - 1 && whichPage == 0) {
-            newX = getChildCount() * mMeasureWidth;
-        }
-        mLastWhichPage = whichPage;
-        // --- add by codemx.cn ----- 2018/09/04 --- end
-
-        int delta = newX - getScrollX();
-//        int delta = newX - getUnboundedScrollX();
+        final int newX = getScrollForPage(whichPage);
+        int delta = newX - getUnboundedScrollX();
         int duration = 0;
 
+        // 如果当前速度小于最小速度，那么按照默认时间完成滑动
         if (Math.abs(velocity) < mMinFlingVelocity) {
             // If the velocity is low enough, then treat this more as an automatic page advance
             // as opposed to an apparent physical response to flinging
@@ -1505,18 +1512,9 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
     protected boolean snapToPage(int whichPage, int duration, boolean immediate,
                                  TimeInterpolator interpolator) {
+        whichPage = validateNewPage(whichPage, true);
 
         int newX = getScrollForPage(whichPage);
-        // --- add by codemx.cn ----- 2018/09/04 --- start
-        if (isPagedViewCircledScroll()) {
-            if (getScrollX() < 0 && whichPage == getChildCount() - 1) {
-                newX = -mMeasureWidth;
-            } else if (getScrollX() > mMaxScrollX && whichPage == 0) {
-                newX = getChildCount() * mMeasureWidth;
-            }
-        }
-        // --- add by codemx.cn ----- 2018/09/04 --- end
-
         final int delta = newX - getUnboundedScrollX();
         return snapToPage(whichPage, delta, duration, immediate, interpolator);
     }
@@ -1536,10 +1534,12 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             duration *= Settings.System.getFloat(getContext().getContentResolver(),
                     Settings.System.WINDOW_ANIMATION_SCALE, 1);
         }
-
-        whichPage = validateNewPage(whichPage);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "whichPage:  " + whichPage);
+        // 验证whichPage是否有效
+        whichPage = validateNewPage(whichPage, true);
 
         mNextPage = whichPage;
+        XLog.e(XLog.getTag(), XLog.TAG_GU + "mNextPage:  " + mNextPage);
 
         awakenScrollBars(duration);
         if (immediate) {
@@ -1672,16 +1672,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                 getNextPage() + 1, getChildCount());
     }
 
-    protected float getDownMotionX() {
-        return mDownMotionX;
-    }
-
-    protected float getDownMotionY() {
-        return mDownMotionY;
-    }
-
     protected interface ComputePageScrollsLogic {
-
         boolean shouldIncludeView(View view);
     }
 
@@ -1714,66 +1705,46 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         return mTmpIntPair;
     }
 
-    // ------ add by codemx.cn ---- 2018/09/04 --- start
-    int getViewportWidth() {
-        return mViewport.width();
+    // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- start
+    // SPRD: add for circular sliding. adjust if need circular slide
+
+    protected boolean isXBeforeFirstPage(int x) {
+        return mIsRtl ? (x > mMaxScrollX) : (x < 0);
     }
 
-    int getViewportHeight() {
-        return mViewport.height();
+    protected boolean isXAfterLastPage(int x) {
+        return mIsRtl ? (x < 0) : (x > mMaxScrollX);
     }
 
-    // Convenience methods to get the offset ASSUMING that we are centering the pages in the
-    // PagedView both horizontally and vertically
-    int getViewportOffsetX() {
-        return (getMeasuredWidth() - getViewportWidth()) / 2;
+    protected int getMinPageIndex() {
+        return 0;
     }
 
-    int getViewportOffsetY() {
-        return (getMeasuredHeight() - getViewportHeight()) / 2;
+    protected int getMaxPageIndex() {
+        return getChildCount() - 1;
     }
 
+    protected int validateCircularNewPage() {
+        return validateNewPage(mNextPage, false);
+    }
 
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        // Find out which screens are visible; as an optimization we only call draw on them
-        final int pageCount = getChildCount();
-        if (pageCount > 0) {
-
-            int halfScreenSize = getViewportWidth() / 2;
-            int screenCenter = getScrollX() + halfScreenSize;
-
-            if (isPagedViewCircledScroll()) {
-                boolean isXBeforeFirstPage = mIsRtl ? (getScrollX() > mMaxScrollX) : (getScrollX() < 0);
-                boolean isXAfterLastPage = mIsRtl ? (getScrollX() < 0) : (getScrollX() > mMaxScrollX);
-                if (isXBeforeFirstPage || isXAfterLastPage) {
-                    long drawingTime = getDrawingTime();
-                    int width = mViewport.width();
-                    int childCount = getChildCount();
-                    canvas.save();
-                    canvas.clipRect(getScrollX(), getScrollY(), getScrollX() + getRight() - getLeft(),
-                            getScrollY() + getBottom() - getTop());
-                    // here we assume that a page's horizontal padding plus it's measured width
-                    // equals to ViewPort's width
-                    int offset = (mIsRtl ? -childCount : childCount) * (width);
-                    if (isXBeforeFirstPage) {
-                        canvas.translate(-offset, 0);
-                        drawChild(canvas, getPageAt(childCount - 1), drawingTime);
-                        canvas.translate(+offset, 0);
-                    } else if (isXAfterLastPage) {
-                        canvas.translate(+offset, 0);
-                        drawChild(canvas, getPageAt(0), drawingTime);
-                        canvas.translate(-offset, 0);
-                    }
-                    canvas.restore();
-                }
-            }
-            super.dispatchDraw(canvas);
+    protected int computeTotalDistance(View v, int adjacentPage, int page) {
+        int totalDistance;
+        if (adjacentPage < 0 || adjacentPage > getChildCount() - 1) {
+            totalDistance = v.getMeasuredWidth() + mPageSpacing;
+        } else {
+            // 正在进入页面左边缘到正在退出页面左边缘的距离
+            totalDistance = Math.abs(getScrollForPage(adjacentPage) - getScrollForPage(page));
         }
+        return totalDistance;
+    }
+
+    protected int reComputeDelta(int delta, int screenCenter, int page, int totalDistance) {
+        return delta;
     }
 
     protected abstract boolean isPagedViewCircledScroll();
 
-    // ------ add by codemx.cn ---- 2018/09/04 --- end
+    // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- end
 
 }
