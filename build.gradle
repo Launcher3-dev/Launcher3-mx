@@ -7,8 +7,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.9'
     }
 }
 
@@ -121,7 +121,7 @@ dependencies {
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.2.0rc2'
     quickstepImplementation fileTree(dir: "quickstep/libs", include: 'sysui_shared.jar')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'org.mockito:mockito-core:2.15.0'
+    androidTestImplementation 'org.mockito:mockito-core:2.25.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
