@@ -388,7 +388,7 @@ public class LauncherProvider extends ContentProvider {
                 return null;
             }
             case LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES: {
-                // 加载配置信息
+                // 加载XML中配置的默认信息
                 loadDefaultFavoritesIfNecessary();
                 return null;
             }
@@ -488,7 +488,7 @@ public class LauncherProvider extends ContentProvider {
             // There might be some partially restored DB items, due to buggy restore logic in
             // previous versions of launcher.
             mOpenHelper.createEmptyDB(mOpenHelper.getWritableDatabase());
-            // Populate favorites table with initial favorites
+            // Populate（填充） favorites table with initial（最初的（默认配置的）） favorites
             if ((mOpenHelper.loadFavorites(mOpenHelper.getWritableDatabase(), loader) <= 0)
                     && usingExternallyProvidedLayout) {
                 // Unable to load external layout. Cleanup and load the internal layout.
@@ -501,7 +501,7 @@ public class LauncherProvider extends ContentProvider {
     }
 
     /**
-     * Creates workspace loader from an XML resource listed in the app restrictions.
+     * Creates workspace loader from an XML resource listed in the app restrictions（限制）.
      *
      * @return the loader if the restrictions are set and the resource exists; null otherwise.
      */
@@ -528,6 +528,7 @@ public class LauncherProvider extends ContentProvider {
         return null;
     }
 
+    // 获取布局解析器
     private DefaultLayoutParser getDefaultLayoutParser(AppWidgetHost widgetHost) {
         InvariantDeviceProfile idp = LauncherAppState.getIDP(getContext());
         int defaultLayout = idp.defaultLayoutId;

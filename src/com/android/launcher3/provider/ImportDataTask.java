@@ -50,6 +50,7 @@ import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.logging.FileLog;
 import com.android.launcher3.model.GridSizeMigrationTask;
 import com.android.launcher3.util.LongArrayMap;
+import com.android.mxlibrary.util.XLog;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -87,13 +88,14 @@ public class ImportDataTask {
     }
 
     public boolean importWorkspace() throws Exception {
+        // 查询数据库中保存的屏幕id列表
         ArrayList<Long> allScreens = LauncherDbUtils.getScreenIdsFromCursor(
                 mContext.getContentResolver().query(mOtherScreensUri, null, null, null,
                         LauncherSettings.WorkspaceScreens.SCREEN_RANK));
         FileLog.d(TAG, "Importing DB from " + mOtherFavoritesUri);
 
         // During import we reset the screen IDs to 0-indexed values.
-        if (allScreens.isEmpty()) {
+        if (allScreens.isEmpty()) {// 第一次进入是没有数据的，之后再进入会有数据
             // No thing to migrate
             FileLog.e(TAG, "No data found to import");
             return false;
@@ -104,6 +106,7 @@ public class ImportDataTask {
         // Build screen update
         ArrayList<ContentProviderOperation> screenOps = new ArrayList<>();
         int count = allScreens.size();
+        // 存放屏幕id-屏幕id下标的键值对
         LongSparseArray<Long> screenIdMap = new LongSparseArray<>(count);
         for (int i = 0; i < count; i++) {
             ContentValues v = new ContentValues();
@@ -113,6 +116,7 @@ public class ImportDataTask {
             screenOps.add(ContentProviderOperation.newInsert(
                     LauncherSettings.WorkspaceScreens.CONTENT_URI).withValues(v).build());
         }
+        // 整批次插入
         mContext.getContentResolver().applyBatch(LauncherProvider.AUTHORITY, screenOps);
         importWorkspaceItems(allScreens.get(0), screenIdMap);
 
@@ -128,9 +132,14 @@ public class ImportDataTask {
      * 1) Imports all the workspace entries from the source provider.
      * 2) For home screen entries, maps the screen id based on {@param screenIdMap}
      * 3) In the end fills any holes in hotseat with items from default hotseat layout.
+     *
+     * @param firstScreenId 第一屏id
+     * @param screenIdMap   屏幕id-屏幕id下标的键值对
+     *
+     * @throws Exception
      */
     private void importWorkspaceItems(
-            long firsetScreenId, LongSparseArray<Long> screenIdMap) throws Exception {
+            long firstScreenId, LongSparseArray<Long> screenIdMap) throws Exception {
         String profileId = Long.toString(UserManagerCompat.getInstance(mContext)
                 .getSerialNumberForUser(Process.myUserHandle()));
 
@@ -139,7 +148,7 @@ public class ImportDataTask {
             try (Cursor c = mContext.getContentResolver().query(mOtherFavoritesUri, null,
                     // get items on the first row of the first screen
                     "profileId = ? AND container = -100 AND screen = ? AND cellY = 0",
-                    new String[]{profileId, Long.toString(firsetScreenId)},
+                    new String[]{profileId, Long.toString(firstScreenId)},
                     null)) {
                 // First row of first screen is not empty
                 createEmptyRowOnFirstScreen = c.moveToNext();
@@ -182,6 +191,7 @@ public class ImportDataTask {
             final int iconPackageIndex = c.getColumnIndexOrThrow(Favorites.ICON_PACKAGE);
             final int iconResourceIndex = c.getColumnIndexOrThrow(Favorites.ICON_RESOURCE);
 
+            // 有效的文件夹列表
             SparseBooleanArray mValidFolders = new SparseBooleanArray();
             ContentValues values = new ContentValues();
 
@@ -285,6 +295,7 @@ public class ImportDataTask {
                 values.put(Favorites.SPANX, spanX);
                 values.put(Favorites.SPANY, spanY);
                 values.put(Favorites.TITLE, c.getString(titleIndex));
+                XLog.d(XLog.getTag(), XLog.TAG_GU + values.toString());
                 insertOperations.add(ContentProviderOperation
                         .newInsert(Favorites.CONTENT_URI).withValues(values).build());
                 if (container < 0) {
@@ -311,7 +322,7 @@ public class ImportDataTask {
         LongArrayMap<Object> hotseatItems = GridSizeMigrationTask.removeBrokenHotseatItems(mContext);
         int myHotseatCount = LauncherAppState.getIDP(mContext).numHotseatIcons;
         if (hotseatItems.size() < myHotseatCount) {
-            // Insufficient hotseat items. Add a few more.
+            // Insufficient（不足的） hotseat items. Add a few more.
             HotseatParserCallback parserCallback = new HotseatParserCallback(
                     hotseatTargetApps, hotseatItems, insertOperations, maxId + 1, myHotseatCount);
             new HotseatLayoutParser(mContext,

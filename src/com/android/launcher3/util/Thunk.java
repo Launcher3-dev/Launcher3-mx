@@ -22,12 +22,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the given field or method has package visibility solely to prevent the creation
- * of a synthetic method. In practice, you should treat this field/method as if it were private.
+ * Indicates that the given field or method has package visibility solely（仅仅） to prevent（防止） the creation
+ * of a synthetic（合成的） method. In practice, you should treat this field/method as if it were private.
  * <p>
  * <p>
  * When a private method is called from an inner class, the Java compiler generates a simple
- * package private shim method that the class generated from the inner class can call. This results
+ * package private shim（夹缝） method that the class generated from the inner class can call. This results
  * in unnecessary bloat and runtime method call overhead. It also gets us closer to the dex method
  * count limit.
  * <p>

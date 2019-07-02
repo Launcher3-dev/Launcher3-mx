@@ -32,6 +32,7 @@ import java.util.List;
 public class DefaultLayoutParser extends AutoInstallsLayout {
     private static final String TAG = "DefaultLayoutParser";
 
+    // Layout中的标签
     protected static final String TAG_RESOLVE = "resolve";
     private static final String TAG_FAVORITES = "favorites";
     protected static final String TAG_FAVORITE = "favorite";

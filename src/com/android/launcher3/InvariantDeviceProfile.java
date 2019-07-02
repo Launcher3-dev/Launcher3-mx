@@ -128,7 +128,7 @@ public class InvariantDeviceProfile {
         Point largestSize = new Point();
         display.getCurrentSizeRange(smallestSize, largestSize);
 
-        // This guarantees that width < height
+        // This guarantees（保证） that width < height
         minWidthDps = Utilities.dpiFromPx(Math.min(smallestSize.x, smallestSize.y), dm);
         minHeightDps = Utilities.dpiFromPx(Math.min(largestSize.x, largestSize.y), dm);
 
@@ -186,7 +186,7 @@ public class InvariantDeviceProfile {
      *
      * @param context 上下文
      *
-     * @return
+     * @return 返回解析xml文件夹中的device_profiles.xml文件中所有配合的数据列表
      */
     ArrayList<InvariantDeviceProfile> getPredefinedDeviceProfiles(Context context) {
         ArrayList<InvariantDeviceProfile> profiles = new ArrayList<>();

@@ -89,7 +89,7 @@ public class LauncherSettings {
     }
 
     /**
-     * Workspace Screens.
+     * Workspace Screens（workspace 屏幕）.
      * <p>
      * Tracks the order of workspace screens.
      */
@@ -104,14 +104,14 @@ public class LauncherSettings {
                 LauncherProvider.AUTHORITY + "/" + TABLE_NAME);
 
         /**
-         * The rank of this screen -- ie. how it is ordered relative to the other screens.
+         * The rank（排序） of this screen -- ie. how it is ordered relative to the other screens.
          * <P>Type: INTEGER</P>
          */
         public static final String SCREEN_RANK = "screenRank";
     }
 
     /**
-     * Favorites.
+     * Favorites（应用参数）.
      */
     public static final class Favorites implements BaseLauncherColumns {
 

@@ -237,6 +237,7 @@ public class LoaderTask implements Runnable {
         final Context context = mApp.getContext();
         final ContentResolver contentResolver = context.getContentResolver();
         final PackageManagerHelper pmHelper = new PackageManagerHelper(context);
+        // 是否是安全模式下启动，安全模式下非系统应用禁用
         final boolean isSafeMode = pmHelper.isSafeMode();
         final boolean isSdCardReady = Utilities.isBootCompleted();
         final MultiHashMap<UserHandle, String> pendingPackages = new MultiHashMap<>();
@@ -262,7 +263,7 @@ public class LoaderTask implements Runnable {
         }
 
         Log.d(TAG, "loadWorkspace: loading default favorites");
-        // 加载默认配置的App信息（会回调LauncherProvider里的call方法）
+        // 加载XML中配置的App信息（会回调LauncherProvider里的call方法）
         LauncherSettings.Settings.call(contentResolver,
                 LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);
 
@@ -534,6 +535,7 @@ public class LoaderTask implements Runnable {
                                     info.spanX = 1;
                                     info.spanY = 1;
                                     info.runtimeStatusFlags |= disabledState;
+                                    // 安全模式下，非系统应用设置禁用标签
                                     if (isSafeMode && !Utilities.isSystemApp(context, intent)) {
                                         info.runtimeStatusFlags |= FLAG_DISABLED_SAFEMODE;
                                     }

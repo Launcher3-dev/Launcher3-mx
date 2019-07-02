@@ -234,6 +234,7 @@ public class AutoInstallsLayout {
      * @param out array of size 2.
      */
     protected void parseContainerAndScreen(XmlResourceParser parser, long[] out) {
+        // -101，Hotseat（dw_phone_hotseat.xml）
         if (HOTSEAT_CONTAINER_NAME.equals(getAttributeValue(parser, ATTR_CONTAINER))) {
             out[0] = Favorites.CONTAINER_HOTSEAT;
             // Hack: hotseat items are stored using screen ids
@@ -241,6 +242,7 @@ public class AutoInstallsLayout {
             out[1] = (rank < mIdp.getAllAppsButtonRank())
                     ? rank : (rank + 1);
         } else {
+            // Hack: workspace items are stored using screen ids
             out[0] = Favorites.CONTAINER_DESKTOP;
             out[1] = Long.parseLong(getAttributeValue(parser, ATTR_SCREEN));
         }
@@ -255,6 +257,7 @@ public class AutoInstallsLayout {
             ArrayList<Long> screenIds)
             throws XmlPullParserException, IOException {
 
+        // include 标签，Hotseat
         if (TAG_INCLUDE.equals(parser.getName())) {
             final int resId = getAttributeResourceValue(parser, ATTR_WORKSPACE, 0);
             if (resId != 0) {
@@ -303,6 +306,7 @@ public class AutoInstallsLayout {
         mValues.put(Favorites.SPANX, 1);
         mValues.put(Favorites.SPANY, 1);
         mValues.put(Favorites._ID, id);
+        // 插入数据库
         if (mCallback.insertAndCheck(mDb, mValues) < 0) {
             return -1;
         } else {
@@ -318,13 +322,14 @@ public class AutoInstallsLayout {
         return parsers;
     }
 
+    // 添加各个解析器
     protected ArrayMap<String, TagParser> getLayoutElementsMap() {
         ArrayMap<String, TagParser> parsers = new ArrayMap<>();
-        parsers.put(TAG_APP_ICON, new AppShortcutParser());
+        parsers.put(TAG_APP_ICON, new AppShortcutParser());// app
         parsers.put(TAG_AUTO_INSTALL, new AutoInstallParser());
-        parsers.put(TAG_FOLDER, new FolderParser());
-        parsers.put(TAG_APPWIDGET, new PendingWidgetParser());
-        parsers.put(TAG_SHORTCUT, new ShortcutParser(mSourceRes));
+        parsers.put(TAG_FOLDER, new FolderParser());// Folder
+        parsers.put(TAG_APPWIDGET, new PendingWidgetParser());// Widget
+        parsers.put(TAG_SHORTCUT, new ShortcutParser(mSourceRes));// Shortcut
         return parsers;
     }
 
@@ -658,15 +663,39 @@ public class AutoInstallsLayout {
     /**
      * Return attribute value, attempting launcher-specific namespace first
      * before falling back to anonymous attribute.
+     * <p>
+     * 注意：
+     * 这里的XmlResourceParser.getAttributeValue(String namespace,String name)中的namespace要和
+     * default_workspace_3x3.xml
+     * default_workspace_4x4.xml
+     * default_workspace_5x5.xml
+     * default_workspace_6x6.xml
+     * device_profiles.xml
+     * dw_phone_hotseat.xml
+     * dw_tablet_hotseat.xml
+     * 这些文件中的xmlns:launcher="http://schemas.android.com/apk/res-auto"一样
+     * <p>
+     * 因为我把上面文件的命名空间都修改了所以这里需要把：
+     * "http://schemas.android.com/apk/res-auto/com.android.launcher3"
+     * 修改为：
+     * “http://schemas.android.com/apk/res-auto”
+     * 不然会解析不出来数据
+     * 这里配置一样就好，用上面带有Launcher3的也可以。
      */
     protected static String getAttributeValue(XmlResourceParser parser, String attribute) {
-        String value = parser.getAttributeValue(
-                "http://schemas.android.com/apk/res-auto/com.android.launcher3", attribute);
+        // modify by codemx --- 20190702 --- start---
+        String value = parser.getAttributeValue(NAME_SPACE, attribute);
+        // modify by codemx --- 20190702 --- end---
         if (value == null) {
             value = parser.getAttributeValue(null, attribute);
         }
         return value;
     }
+
+    // add by codemx --- 20190702 --- start---
+    //    private static final String NAME_SPACE = "http://schemas.android.com/apk/res-auto/com.android.launcher3";
+    private static final String NAME_SPACE = "http://schemas.android.com/apk/res-auto";
+    // add by codemx --- 20190702 --- end---
 
     /**
      * Return attribute resource value, attempting launcher-specific namespace
@@ -674,9 +703,9 @@ public class AutoInstallsLayout {
      */
     protected static int getAttributeResourceValue(XmlResourceParser parser, String attribute,
                                                    int defaultValue) {
-        int value = parser.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto/com.android.launcher3", attribute,
-                defaultValue);
+        // modify by codemx --- 20190702 --- start---
+        int value = parser.getAttributeResourceValue(NAME_SPACE, attribute, defaultValue);
+        // modify by codemx --- 20190702 --- end---
         if (value == defaultValue) {
             value = parser.getAttributeResourceValue(null, attribute, defaultValue);
         }
