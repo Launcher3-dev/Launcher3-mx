@@ -286,6 +286,7 @@ public class AutoInstallsLayout {
             if (LOGD) Log.d(TAG, "Ignoring unknown element tag: " + parser.getName());
             return 0;
         }
+        // 将mValues插入到数据库中
         long newElementId = tagParser.parseAndAdd(parser);
         if (newElementId >= 0) {
             // Keep track of the set of screens which need to be added to the db.

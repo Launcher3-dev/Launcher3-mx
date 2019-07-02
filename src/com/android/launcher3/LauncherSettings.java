@@ -252,7 +252,7 @@ public class LauncherSettings {
         public static final String APPWIDGET_PROVIDER = "appWidgetProvider";
 
         /**
-         * Boolean indicating that his item was restored and not yet successfully bound.
+         * Boolean indicating that his item was restored（恢复） and not yet successfully bound（绑定）.
          * <P>Type: INTEGER</P>
          */
         public static final String RESTORED = "restored";

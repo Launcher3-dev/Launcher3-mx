@@ -263,7 +263,7 @@ public class LoaderTask implements Runnable {
         }
 
         Log.d(TAG, "loadWorkspace: loading default favorites");
-        // 加载XML中配置的App信息（会回调LauncherProvider里的call方法）
+        // 解析XML中配置的App信息（会回调LauncherProvider里的call方法）并写入数据库
         LauncherSettings.Settings.call(contentResolver,
                 LauncherSettings.Settings.METHOD_LOAD_DEFAULT_FAVORITES);
 
@@ -281,6 +281,7 @@ public class LoaderTask implements Runnable {
 
             HashMap<ComponentKey, AppWidgetProviderInfo> widgetProvidersMap = null;
 
+            // 开始查询数据库中的所有应用数据，如果是第一次，查询出来的是解析XML中默认配置的应用信息
             try {
                 final int appWidgetIdIndex = c.getColumnIndexOrThrow(
                         LauncherSettings.Favorites.APPWIDGET_ID);
@@ -298,6 +299,7 @@ public class LoaderTask implements Runnable {
                 final LongSparseArray<UserHandle> allUsers = c.allUsers;
                 final LongSparseArray<Boolean> quietMode = new LongSparseArray<>();
                 final LongSparseArray<Boolean> unlockedUsers = new LongSparseArray<>();
+                // 获取手机上所有用户对象
                 for (UserHandle user : mUserManager.getUserProfiles()) {
                     long serialNo = mUserManager.getSerialNumberForUser(user);
                     allUsers.put(serialNo, user);
@@ -355,6 +357,7 @@ public class LoaderTask implements Runnable {
                                 ComponentName cn = intent.getComponent();
                                 targetPkg = cn == null ? intent.getPackage() : cn.getPackageName();
 
+                                // 用户不对
                                 if (!Process.myUserHandle().equals(c.user)) {
                                     if (c.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
                                         c.markDeleted("Legacy shortcuts are only allowed for default user");
@@ -365,14 +368,15 @@ public class LoaderTask implements Runnable {
                                         continue;
                                     }
                                 }
+                                // 包名为空并且不是快捷方式
                                 if (TextUtils.isEmpty(targetPkg) &&
                                         c.itemType != LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT) {
                                     c.markDeleted("Only legacy shortcuts can have null package");
                                     continue;
                                 }
 
-                                // If there is no target package, its an implicit intent
-                                // (legacy shortcut) which is always valid
+                                // If there is no target package, its an implicit（隐式的） intent
+                                // (legacy shortcut) which is always valid（有效的）
                                 boolean validTarget = TextUtils.isEmpty(targetPkg) ||
                                         mLauncherApps.isPackageEnabledForProfile(targetPkg, c.user);
 
