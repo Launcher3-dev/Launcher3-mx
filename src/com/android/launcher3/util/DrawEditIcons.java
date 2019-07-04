@@ -123,7 +123,9 @@ public class DrawEditIcons {
                 Rect bounds = compoundDrawable.getBounds();
                 int iconLeft = rect.centerX() - bounds.width() / 2 + uninstallIconLeft;
                 int iconTop = rect.centerY() - rect.height() / 2 + uninstallIconTop;
-                d.setBounds(iconLeft, iconTop, iconLeft + (int) (d.getIntrinsicWidth() * percent * 0.8f), iconTop + (int) (d.getIntrinsicHeight() * percent * 0.8f));
+                d.setBounds(iconLeft, iconTop, iconLeft
+                                + (int) (d.getIntrinsicWidth() * percent * 0.8f),
+                        iconTop + (int) (d.getIntrinsicHeight() * percent * 0.8f));
                 d.draw(canvas);
             }
             d.setAlpha((int) (percent * 255));
