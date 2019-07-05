@@ -31,17 +31,21 @@ import static android.view.MotionEvent.ACTION_DOWN;
 public class ShortcutAndWidgetContainer extends ViewGroup {
     static final String TAG = "ShortcutAndWidgetContainer";
 
-    // These are temporary variables to prevent having to allocate a new object just to
+    // These are temporary variables(变量) to prevent(防止) having to allocate(分配) a new object just to
     // return an (x, y) value from helper functions. Do NOT use them to maintain other state.
     private final int[] mTmpCellXY = new int[2];
 
+    // 功能类型{WORKSPACE, HOTSEAT, FOLDER}，三个控件用了CellLayout
     @ContainerType
     private final int mContainerType;
     private final WallpaperManager mWallpaperManager;
 
+    // 每一个图标占有的宽度
     private int mCellWidth;
+    // 每一个图标占有的高度
     private int mCellHeight;
 
+    // 每一行图标个数
     private int mCountX;
 
     private Launcher mLauncher;
@@ -60,6 +64,17 @@ public class ShortcutAndWidgetContainer extends ViewGroup {
         mCountX = countX;
     }
 
+    /**
+     * 根据坐标(x, y)获取对应的图标视图
+     * <p>
+     * 关于坐标参考博客：
+     * http://codemx.cn/2016/08/05/Launcher02/
+     *
+     * @param x x轴坐标
+     * @param y y轴坐标
+     *
+     * @return 该坐标对应的图标视图
+     */
     public View getChildAt(int x, int y) {
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {

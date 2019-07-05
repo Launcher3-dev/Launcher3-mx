@@ -104,6 +104,7 @@ public class CellLayout extends ViewGroup {
     @Thunk
     final int[] mTempLocation = new int[2];
 
+    // Occupancy 入住率
     private GridOccupancy mOccupied;
     private GridOccupancy mTmpOccupied;
 
@@ -161,6 +162,7 @@ public class CellLayout extends ViewGroup {
     public static final int HOTSEAT = 1;
     public static final int FOLDER = 2;
 
+    // 功能类型{WORKSPACE, HOTSEAT, FOLDER}，三个控件用了CellLayout
     @ContainerType
     private final int mContainerType;
 
@@ -2568,23 +2570,33 @@ public class CellLayout extends ViewGroup {
     public static class LayoutParams extends ViewGroup.MarginLayoutParams {
         /**
          * Horizontal location of the item in the grid.
+         * 网格中该图标的横向坐标(该坐标是图标位置坐标，不是视图到屏幕的距离)
+         * 关于坐标参考博客：
+         * http://codemx.cn/2016/08/05/Launcher02/
          */
         @ViewDebug.ExportedProperty
         public int cellX;
 
         /**
          * Vertical location of the item in the grid.
+         * 网格中该图标的垂直方向坐标(该坐标是图标位置坐标，不是视图到屏幕的距离)
+         * 关于坐标参考博客：
+         * http://codemx.cn/2016/08/05/Launcher02/
          */
         @ViewDebug.ExportedProperty
         public int cellY;
 
         /**
          * Temporary horizontal location of the item in the grid during reorder
+         * 排序过程中该视图的横向临时坐标(该坐标是图标位置坐标，不是视图到屏幕的距离)
+         * 关于坐标参考博客：
+         * http://codemx.cn/2016/08/05/Launcher02/
          */
         public int tmpCellX;
 
         /**
          * Temporary vertical location of the item in the grid during reorder
+         * 排序过程中该视图的纵向临时坐标
          */
         public int tmpCellY;
 
@@ -2595,12 +2607,14 @@ public class CellLayout extends ViewGroup {
 
         /**
          * Number of cells spanned horizontally by the item.
+         * 该视图横向占的位置，图标是一个，widget是一个或者多个
          */
         @ViewDebug.ExportedProperty
         public int cellHSpan;
 
         /**
          * Number of cells spanned vertically by the item.
+         *  该视图纵向占的位置，图标是一个，widget是一个或者多个
          */
         @ViewDebug.ExportedProperty
         public int cellVSpan;
@@ -2614,6 +2628,7 @@ public class CellLayout extends ViewGroup {
         /**
          * Indicates whether this item can be reordered. Always true except in the case of the
          * the AllApps button and QSB place holder.
+         * 是否可以排序，所有应用图标和搜索栏是不允许的（单层没有所有应用图标）
          */
         public boolean canReorder = true;
 
