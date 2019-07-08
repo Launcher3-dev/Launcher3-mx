@@ -49,15 +49,42 @@ public class ThemeService extends Service {
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (mIRemoteCallbackList == null || mIRemoteCallbackList.isEmpty()) {
+                return;
+            }
             String action = intent.getAction();
             if (ACTION_SET_THEME_SUCCESS.equals(action)) {// 设置主题成功
-
+                for (IRemoteCallback callback : mIRemoteCallbackList) {
+                    try {
+                        callback.onThemeSuccess(null);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (ACTION_SET_THEME_FAIL.equals(action)) {// 设置主题失败
-
+                for (IRemoteCallback callback : mIRemoteCallbackList) {
+                    try {
+                        callback.onThemeFail("err", null);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (ACTION_SET_WALLPAPER_SUCCESS.equals(action)) {// 设置壁纸成功
-
+                for (IRemoteCallback callback : mIRemoteCallbackList) {
+                    try {
+                        callback.onWallpaperSuccess(null);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             } else if (ACTION_SET_WALLPAPER_FAIL.equals(action)) {// 设置壁纸失败
-
+                for (IRemoteCallback callback : mIRemoteCallbackList) {
+                    try {
+                        callback.onWallpaperFail("err", null);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     };
