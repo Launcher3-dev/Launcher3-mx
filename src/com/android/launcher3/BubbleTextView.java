@@ -61,6 +61,7 @@ import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.uninstall.UninstallOrDeleteUtil;
 import com.android.launcher3.util.DrawEditIcons;
 import com.android.launcher3.widget.WidgetListRowEntry;
+import com.android.mxlibrary.util.XLog;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -435,7 +436,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
 
         // add by codemx.cn ---- 20181027 --- start
         // 绘制卸载按钮
-        if (isSupportsUninstall && (MxSettings.sShowUnInstallIcon && mLauncher.getStateManager().getState() == LauncherState.SPRING_LOADED)) {
+        if (isSupportsUninstall && (MxSettings.sShowUnInstallIcon
+                && mLauncher.getStateManager().getState() == LauncherState.SPRING_LOADED)) {
             if (!isPerformAnim) {
                 uninstallIconPercent = 1.0f;
             }
@@ -501,6 +503,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver, 
     }
 
     private void drawUninstallIndicator(Canvas canvas, float uninstallIconPercent) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         Drawable d = getContext().getDrawable(R.drawable.ic_uninstall);
         DrawEditIcons.drawUninstallIcon(canvas, this, d, uninstallIconPercent);
     }

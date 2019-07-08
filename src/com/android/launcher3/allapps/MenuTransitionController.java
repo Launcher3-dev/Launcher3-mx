@@ -68,7 +68,6 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
 
     public MenuTransitionController(Launcher l) {
         mLauncher = l;
-        mShiftRange = mLauncher.getDeviceProfile().heightPx;
         mProgress = 1f;
 
         mIsVerticalLayout = mLauncher.getDeviceProfile().isVerticalBarLayout();
@@ -78,6 +77,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
     // add by codemx.cn ---- 20180919 ---- start
     public void setMenuView(CircleMenuView circleMenuView) {
         this.mCircleMenuView = circleMenuView;
+        this.mShiftRange = circleMenuView.getMeasuredHeight();
     }
     // add by codemx.cn ---- 20180919 ---- end
 

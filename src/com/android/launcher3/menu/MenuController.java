@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import com.android.launcher3.R;
+import com.android.launcher3.menu.anim.MenuStateTransitionAnimation;
 import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.menu.view.MenuItemView;
 import com.android.launcher3.menu.view.MenuLayout;

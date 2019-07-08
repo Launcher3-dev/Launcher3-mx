@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.android.launcher3.Launcher;
 import com.android.launcher3.dragndrop.DragOptions;
+import com.android.launcher3.menu.anim.MenuStateTransitionAnimation;
 import com.android.launcher3.menu.imp.IMenuAdapter;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;
 import com.android.launcher3.menu.view.MenuLayout;

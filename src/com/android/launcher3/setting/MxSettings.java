@@ -14,7 +14,7 @@ public final class MxSettings {
 //    public static int sLauncherEffect = 3;
 
     // 是否显示卸载按钮标记
-    public static boolean sShowUnInstallIcon = false;
+    public static boolean sShowUnInstallIcon = true;
 
     /**
      * PagedView can scroll circle-endless.
@@ -32,7 +32,7 @@ public final class MxSettings {
     }
 
     public void loadSettings(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
 //        sLauncherEffect = LauncherSpUtil.getIntData(mContext, LauncherSpUtil.KEY_SCROLL_EFFECT, TransitionEffect.TRANSITION_EFFECT_NONE);
     }
 

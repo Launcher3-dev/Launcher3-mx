@@ -15,6 +15,7 @@ import com.android.launcher3.R;
 import com.android.launcher3.ShortcutInfo;
 import com.android.launcher3.folder.FolderPagedView;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
+import com.android.mxlibrary.util.XLog;
 
 public class DrawEditIcons {
 
@@ -101,6 +102,7 @@ public class DrawEditIcons {
     }
 
     public static void drawUninstallIcon(Canvas canvas, BubbleTextView icon, Drawable d, float percent) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         ItemInfo info = (ItemInfo) icon.getTag();
         if (info != null) {
             Resources res = icon.getResources();
