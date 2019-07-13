@@ -168,7 +168,7 @@ public class WorkspaceAndHotseatScrim implements
 
     public void draw(Canvas canvas) {
         // Draw the background below children.
-        if (mScrimAlpha > 0) {
+        if (mScrimAlpha > 0 && mScrimAlpha <= 255) {
             // Update the scroll position first to ensure scrim cutout is in the right place.
             mWorkspace.computeScrollWithoutInvalidation();
             CellLayout currCellLayout = mWorkspace.getCurrentDragOverlappingLayout();
@@ -216,7 +216,7 @@ public class WorkspaceAndHotseatScrim implements
         mDrawBottomScrim = !mLauncher.getDeviceProfile().isVerticalBarLayout();
     }
 
-    private void setScrimProgress(float progress) {
+    public void setScrimProgress(float progress) {
         if (mScrimProgress != progress) {
             mScrimProgress = progress;
             mScrimAlpha = Math.round(255 * mScrimProgress);

@@ -1,5 +1,8 @@
 package com.android.launcher3.customcontent;
 
+
+// add by codemx.cn ---- 20190712 ---plus- start
+// modify by codemx.cn ---- 20190712 ---plus- start
 public interface CustomContentCallbacks {
 
     // Custom content is completely shown. {@code fromResume} indicates whether this was caused

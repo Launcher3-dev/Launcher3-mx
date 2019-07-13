@@ -74,7 +74,6 @@ import com.android.launcher3.compat.LauncherAppsCompatVO;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.customcontent.CustomContent;
 import com.android.launcher3.customcontent.CustomContentCallbacks;
-import com.android.launcher3.customcontent.WorkspacePlus;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragView;
@@ -200,7 +199,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private Configuration mOldConfig;
 
     @Thunk
-    WorkspacePlus mWorkspace;
+    Workspace mWorkspace;
     private View mLauncherView;
     @Thunk
     DragLayer mDragLayer;
@@ -852,6 +851,22 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // Process any items that were added while Launcher was away.
         InstallShortcutReceiver.disableAndFlushInstallQueue(
                 InstallShortcutReceiver.FLAG_ACTIVITY_PAUSED, this);
+
+
+//        // We want to suppress callbacks about CustomContent being shown if we have just received
+//        // onNewIntent while the user was present within launcher. In that case, we post a call
+//        // to move the user to the main screen (which will occur after onResume). We don't want to
+//        // have onHide (from onPause), then onShow, then onHide again, which we get if we don't
+//        // suppress here.
+//        if (mWorkspace.getCustomContentCallbacks() != null
+//                && !mMoveToDefaultScreenFromNewIntent) {
+//            // If we are resuming and the custom content is the current effect_page, we call onShow().
+//            // It is also possible that onShow will instead be called slightly after first layout
+//            // if PagedView#setRestorePage was set to the custom content effect_page in onCreate().
+//            if (mWorkspace.isOnOrMovingToCustomContent()) {
+//                mWorkspace.getCustomContentCallbacks().onShow(true);
+//            }
+//        }
 
         // Refresh shortcuts if the permission changed.
         mModel.refreshShortcutsIfRequired();
@@ -2613,5 +2628,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     // --- add by codemx.cn --- 2018/09/06 --- end
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    protected void moveToCustomContentScreen(boolean animate) {
+        // Close any folders that may be open.
+        AbstractFloatingView.closeAllOpenViews(this, animate);
+        mWorkspace.moveToCustomContentScreen(animate);
+    }
+    // add by codemx.cn ---- 20190712 ---plus- end
 
 }

@@ -571,4 +571,20 @@ public class DragLayer extends BaseDragLayer<Launcher> {
     public WorkspaceAndHotseatScrim getScrim() {
         return mScrim;
     }
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    // Darkening scrim
+    public void setBackgroundAlpha(float progress) {
+        mScrim.setScrimProgress(progress);
+    }
+
+    public void clearResizeFrame() {
+//        if (mCurrentResizeFrame != null) {
+//            mCurrentResizeFrame.commitResize();
+//            removeView(mCurrentResizeFrame);
+//            mCurrentResizeFrame = null;
+//        }
+    }
+    // add by codemx.cn ---- 20190712 ---plus- end
+
 }

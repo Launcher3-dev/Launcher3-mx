@@ -59,6 +59,7 @@ import com.android.launcher3.anim.Interpolators;
 import com.android.launcher3.badge.FolderBadgeInfo;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.config.FeatureFlags;
+import com.android.launcher3.customcontent.CustomContentCallbacks;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragOptions;
@@ -530,6 +531,14 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         // Disable all layout transitions before removing all pages to ensure that we don't get the
         // transition animations competing with us changing the scroll when we add pages
         disableLayoutTransitions();
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        // Since we increment the current effect_page when we call addCustomContentPage via bindScreens
+        // (and other places), we need to adjust the current effect_page back when we clear the pages
+        if (hasCustomContent()) {
+            removeCustomContentPage();
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
 
         // Recycle the QSB widget
         View qsb = findViewById(R.id.search_container_workspace);
@@ -1115,6 +1124,11 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         }
 
         updatePageAlphaValues();
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        updateStateForCustomContent();
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         enableHwLayersOnVisiblePages();
 
         // --- add by comde.cn ---- 2018/09/06 --- start
@@ -1234,8 +1248,11 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
 
     @Override
     protected void overScroll(float amount) {
+        // modify by codemx.cn ---- 20190712 ---plus- start
         boolean shouldScrollOverlay = mLauncherOverlay != null &&
-                ((amount <= 0 && !mIsRtl) || (amount >= 0 && mIsRtl));
+                ((amount <= 0 && (!hasCustomContent() || !mIsRtl))
+                        || (amount >= 0 &&(!hasCustomContent() || mIsRtl)));
+        // modify by codemx.cn ---- 20190712 ---plus- end
 
         boolean shouldZeroOverlay = mLauncherOverlay != null && mLastOverlayScroll != 0 &&
                 ((amount >= 0 && !mIsRtl) || (amount <= 0 && mIsRtl));
@@ -1365,6 +1382,9 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         }
         return false;
     }
+    // add by codemx.cn ---- 20190712 ---plus- start
+    boolean mCustomContentShowing;
+    // add by codemx.cn ---- 20190712 ---plus- end
 
     @Override
     protected void notifyPageSwitchListener(int prevPage) {
@@ -1374,6 +1394,20 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             mLauncher.getUserEventDispatcher().logActionOnContainer(Action.Touch.SWIPE,
                     swipeDirection, ContainerType.WORKSPACE, prevPage);
         }
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        if (hasCustomContent() && getNextPage() == 0 && !mCustomContentShowing) {
+            mCustomContentShowing = true;
+            if (mCustomContentCallbacks != null) {
+                mCustomContentCallbacks.onShow(false);
+            }
+        } else if (hasCustomContent() && getNextPage() != 0 && mCustomContentShowing) {
+            mCustomContentShowing = false;
+            if (mCustomContentCallbacks != null) {
+                mCustomContentCallbacks.onHide();
+            }
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
     }
 
     protected void setWallpaperDimension() {
@@ -1919,7 +1953,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return false;
     }
 
-    protected boolean createUserFolderIfNecessary(View newView, long container, CellLayout target,
+    boolean createUserFolderIfNecessary(View newView, long container, CellLayout target,
                                         int[] targetCell, float distance, boolean external, DragView dragView) {
         if (distance > mMaxDistanceForFolderCreation) return false;
         View v = target.getChildAt(targetCell[0], targetCell[1]);
@@ -1976,7 +2010,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return false;
     }
 
-    protected boolean addToExistingFolderIfNecessary(View newView, CellLayout target, int[] targetCell,
+     boolean addToExistingFolderIfNecessary(View newView, CellLayout target, int[] targetCell,
                                            float distance, DragObject d, boolean external) {
         if (distance > mMaxDistanceForFolderCreation) return false;
 
@@ -3053,7 +3087,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
                 pixelX, pixelY, spanX, spanY, recycle);
     }
 
-    protected void setup(DragController dragController) {
+    void setup(DragController dragController) {
         mSpringLoadedDragController = new SpringLoadedDragController(mLauncher);
         mDragController = dragController;
 
@@ -3185,7 +3219,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
     /**
      * Returns a specific CellLayout
      */
-    protected CellLayout getParentCellLayoutForView(View v) {
+     CellLayout getParentCellLayoutForView(View v) {
         ArrayList<CellLayout> layouts = getWorkspaceAndHotseatCellLayouts();
         for (CellLayout layout : layouts) {
             if (layout.getShortcutsAndWidgets().indexOfChild(v) > -1) {
@@ -3273,7 +3307,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return value[0];
     }
 
-    protected void clearDropTargets() {
+     void clearDropTargets() {
         mapOverItems(MAP_NO_RECURSE, new ItemOperator() {
             @Override
             public boolean evaluate(ItemInfo info, View v) {
@@ -3554,6 +3588,12 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
 
     @Override
     protected String getCurrentPageDescription() {
+        // add by codemx.cn ---- 20190712 ---plus- start
+        if (hasCustomContent() && getNextPage() == 0) {
+            return mCustomContentDescription;
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         int page = (mNextPage != INVALID_PAGE) ? mNextPage : mCurrentPage;
         return getPageDescription(page);
     }
@@ -3714,9 +3754,223 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         final int N = getChildCount();
         for (int i = 0; i < N; i++) {
             CellLayout cellLayout = (CellLayout) getChildAt(i);
+
+            if (hasCustomContent() && cellLayout == mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID)) {
+                continue;
+            }
+
             cellLayout.showChildUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
         }
         mLauncher.mHotseat.showUninstallIcon(mUninstallIconAnimUtil, isPerformAnimation);
     }
     // add by codemx.cn ---- 20181029 --- end
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    private final static long CUSTOM_CONTENT_SCREEN_ID = -301;
+
+    CustomContentCallbacks mCustomContentCallbacks;
+    private float mLastCustomContentScrollProgress = -1f;
+    private String mCustomContentDescription = "";
+
+    public CellLayout getCustomContent() {
+        return getScreenWithId(CUSTOM_CONTENT_SCREEN_ID);
+    }
+
+    public boolean hasCustomContent() {
+        return (mScreenOrder.size() > 0 && mScreenOrder.get(0) == CUSTOM_CONTENT_SCREEN_ID);
+    }
+
+    public void createCustomContentContainer() {
+        CellLayout customScreen = (CellLayout)
+                mLauncher.getLayoutInflater().inflate(R.layout.workspace_screen, this, false);
+        customScreen.disableDragTarget();
+        customScreen.disableJailContent();
+
+        mWorkspaceScreens.put(CUSTOM_CONTENT_SCREEN_ID, customScreen);
+        mScreenOrder.add(0, CUSTOM_CONTENT_SCREEN_ID);
+
+        // We want no padding on the custom content
+        customScreen.setPadding(0, 0, 0, 0);
+
+        addFullScreenPage(customScreen);
+        // Update the custom content hint
+        setCurrentPage(getCurrentPage() + 1);
+    }
+
+    public void removeCustomContentPage() {
+        CellLayout customScreen = getScreenWithId(CUSTOM_CONTENT_SCREEN_ID);
+        if (customScreen == null) {
+            throw new RuntimeException("Expected custom content screen to exist");
+        }
+
+        mWorkspaceScreens.remove(CUSTOM_CONTENT_SCREEN_ID);
+        mScreenOrder.remove(CUSTOM_CONTENT_SCREEN_ID);
+        removeView(customScreen);
+
+        if (mCustomContentCallbacks != null) {
+            mCustomContentCallbacks.onScrollProgressChanged(0);
+            mCustomContentCallbacks.onHide();
+        }
+
+        mCustomContentCallbacks = null;
+
+        // Update the custom content hint
+        setCurrentPage(getCurrentPage() - 1);
+    }
+
+    /**
+     * 填充内容视图到负一屏
+     *
+     * @param customContent 内容视图，用来处理负一屏内容加载等
+     * @param callbacks     负一屏显示，隐藏，滑动等回调
+     * @param description   负一屏描述
+     */
+    public void addToCustomContentPage(View customContent, CustomContentCallbacks callbacks,
+                                       String description) {
+        if (getPageIndexForScreenId(CUSTOM_CONTENT_SCREEN_ID) < 0) {
+            throw new RuntimeException("Expected custom content screen to exist");
+        }
+
+        // Add the custom content to the full screen custom effect_page
+        CellLayout customScreen = getScreenWithId(CUSTOM_CONTENT_SCREEN_ID);
+        int spanX = customScreen.getCountX();
+        int spanY = customScreen.getCountY();
+        CellLayout.LayoutParams lp = new CellLayout.LayoutParams(0, 0, spanX, spanY);
+        lp.canReorder = false;
+        lp.isFullscreen = true;
+        if (customContent instanceof Insettable) {
+            ((Insettable) customContent).setInsets(mInsets);
+        }
+
+        // Verify that the child is removed from any existing parent.
+        if (customContent.getParent() instanceof ViewGroup) {
+            ViewGroup parent = (ViewGroup) customContent.getParent();
+            parent.removeView(customContent);
+        }
+        customScreen.removeAllViews();
+        customContent.setFocusable(true);
+        customContent.setOnKeyListener(new FullscreenKeyEventListener());
+        customContent.setOnFocusChangeListener(mLauncher.mFocusHandler
+                .getHideIndicatorOnFocusListener());
+        customScreen.addViewToCellLayout(customContent, 0, 0, lp, true);
+        mCustomContentDescription = description;
+        mCustomContentCallbacks = callbacks;
+    }
+
+    public CustomContentCallbacks getCustomContentCallbacks() {
+        return mCustomContentCallbacks;
+    }
+
+    // 获取主屏
+    public int getDefaultPage() {
+        return hasCustomContent() ? 1 : 0;
+    }
+
+    // 是否在负一屏或者正在移动到负一屏
+    public boolean isOnOrMovingToCustomContent() {
+        return hasCustomContent() && getNextPage() == 0;
+    }
+
+    void updateCustomContentVisibility() {
+        int visibility = mLauncher.getStateManager().getState() == LauncherState.NORMAL ? VISIBLE : INVISIBLE;
+        setCustomContentVisibility(visibility);
+    }
+
+    void setCustomContentVisibility(int visibility) {
+        if (hasCustomContent()) {
+            mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID).setVisibility(visibility);
+        }
+    }
+
+    void moveToCustomContentScreen(boolean animate) {
+        if (hasCustomContent()) {
+            int ccIndex = getPageIndexForScreenId(CUSTOM_CONTENT_SCREEN_ID);
+            if (animate) {
+                snapToPage(ccIndex);
+            } else {
+                setCurrentPage(ccIndex);
+            }
+            View child = getChildAt(ccIndex);
+            if (child != null) {
+                child.requestFocus();
+            }
+        }
+        exitWidgetResizeMode();
+    }
+
+    public void exitWidgetResizeMode() {
+        DragLayer dragLayer = mLauncher.getDragLayer();
+        dragLayer.clearResizeFrame();
+    }
+
+    // 显示负一屏
+    void showCustomContentIfNecessary() {
+        boolean show = mLauncher.getStateManager().getState() == LauncherState.NORMAL;
+        if (show && hasCustomContent()) {
+            mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID).setVisibility(VISIBLE);
+        }
+    }
+
+    // 隐藏负一屏
+    void hideCustomContentIfNecessary() {
+        boolean hide = mLauncher.getStateManager().getState() == LauncherState.NORMAL;
+        if (hide && hasCustomContent()) {
+            disableLayoutTransitions();
+            mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID).setVisibility(INVISIBLE);
+            enableLayoutTransitions();
+        }
+    }
+
+    // TODO 负一屏滑动过程处理
+    private void updateStateForCustomContent() {
+        float translationX = 0;
+        float progress = 0;
+        if (hasCustomContent()) {
+            int index = mScreenOrder.indexOf(CUSTOM_CONTENT_SCREEN_ID);
+
+            int scrollDelta = getScrollX() - getScrollForPage(index) -
+                    getLayoutTransitionOffsetForPage(index);
+            float scrollRange = getScrollForPage(index + 1) - getScrollForPage(index);
+            translationX = scrollRange - scrollDelta;
+            progress = (scrollRange - scrollDelta) / scrollRange;
+
+            if (mIsRtl) {
+                translationX = Math.min(0, translationX);
+            } else {
+                translationX = Math.max(0, translationX);
+            }
+            progress = Math.max(0, progress);
+        }
+
+        if (Float.compare(progress, mLastCustomContentScrollProgress) == 0) return;
+
+        CellLayout cc = mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID);
+        if (progress > 0 && cc.getVisibility() != VISIBLE && !workspaceInModalState()) {
+            cc.setVisibility(VISIBLE);
+        }
+
+        mLastCustomContentScrollProgress = progress;
+
+        // We should only update the drag layer background alpha if we are not in all apps or the
+        // widgets tray（设置滑动过程渐变色）
+        if (mLauncher.getStateManager().getState() == LauncherState.NORMAL) {
+            mLauncher.getDragLayer().setBackgroundAlpha(progress);
+        }
+
+        if (mLauncher.getHotseat() != null) {
+            mLauncher.getHotseat().setTranslationX(translationX);
+        }
+
+        if (mPageIndicator != null) {
+            mPageIndicator.setTranslationX(translationX);
+        }
+
+        if (mCustomContentCallbacks != null) {
+            mCustomContentCallbacks.onScrollProgressChanged(progress);
+        }
+    }
+
+    // add by codemx.cn ---- 20190712 ---plus- end
+
+
 }
