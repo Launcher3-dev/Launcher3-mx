@@ -151,9 +151,9 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
     private ShortcutAndWidgetContainer mDragSourceInternal;
 
     @Thunk
-    final LongArrayMap<CellLayout> mWorkspaceScreens = new LongArrayMap<>();
+    protected final LongArrayMap<CellLayout> mWorkspaceScreens = new LongArrayMap<>();
     @Thunk
-    final ArrayList<Long> mScreenOrder = new ArrayList<>();
+    protected final ArrayList<Long> mScreenOrder = new ArrayList<>();
 
     @Thunk
     Runnable mRemoveEmptyScreenRunnable;
@@ -189,7 +189,8 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
     private CellLayout mDropToLayout = null;
 
     @Thunk
-    final Launcher mLauncher;
+    protected final Launcher mLauncher;
+
     @Thunk
     DragController mDragController;
 
@@ -1918,7 +1919,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return false;
     }
 
-    boolean createUserFolderIfNecessary(View newView, long container, CellLayout target,
+    protected boolean createUserFolderIfNecessary(View newView, long container, CellLayout target,
                                         int[] targetCell, float distance, boolean external, DragView dragView) {
         if (distance > mMaxDistanceForFolderCreation) return false;
         View v = target.getChildAt(targetCell[0], targetCell[1]);
@@ -1975,7 +1976,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return false;
     }
 
-    boolean addToExistingFolderIfNecessary(View newView, CellLayout target, int[] targetCell,
+    protected boolean addToExistingFolderIfNecessary(View newView, CellLayout target, int[] targetCell,
                                            float distance, DragObject d, boolean external) {
         if (distance > mMaxDistanceForFolderCreation) return false;
 
@@ -3052,7 +3053,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
                 pixelX, pixelY, spanX, spanY, recycle);
     }
 
-    void setup(DragController dragController) {
+    protected void setup(DragController dragController) {
         mSpringLoadedDragController = new SpringLoadedDragController(mLauncher);
         mDragController = dragController;
 
@@ -3184,7 +3185,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
     /**
      * Returns a specific CellLayout
      */
-    CellLayout getParentCellLayoutForView(View v) {
+    protected CellLayout getParentCellLayoutForView(View v) {
         ArrayList<CellLayout> layouts = getWorkspaceAndHotseatCellLayouts();
         for (CellLayout layout : layouts) {
             if (layout.getShortcutsAndWidgets().indexOfChild(v) > -1) {
@@ -3272,7 +3273,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         return value[0];
     }
 
-    void clearDropTargets() {
+    protected void clearDropTargets() {
         mapOverItems(MAP_NO_RECURSE, new ItemOperator() {
             @Override
             public boolean evaluate(ItemInfo info, View v) {
@@ -3381,7 +3382,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         }
     }
 
-    void updateShortcuts(ArrayList<ShortcutInfo> shortcuts) {
+    protected void updateShortcuts(ArrayList<ShortcutInfo> shortcuts) {
         int total = shortcuts.size();
         final HashSet<ShortcutInfo> updates = new HashSet<>(total);
         final HashSet<Long> folderIds = new HashSet<>();
@@ -3521,7 +3522,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         }
     }
 
-    void moveToDefaultScreen() {
+    protected void moveToDefaultScreen() {
         int page = DEFAULT_PAGE;
         if (!workspaceInModalState() && getNextPage() != page) {
             snapToPage(page);

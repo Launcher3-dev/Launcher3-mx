@@ -25,6 +25,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -541,6 +542,78 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         super.forceLayout();
     }
 
+    // add by codemx.cn ---- 20190712 ---plus- start
+    public static class LayoutParams extends ViewGroup.LayoutParams {
+        public boolean isFullScreenPage = false;
+
+        /**
+         * {@inheritDoc}
+         */
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public LayoutParams(ViewGroup.LayoutParams source) {
+            super(source);
+        }
+    }
+
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new LayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+        return new LayoutParams(p);
+    }
+
+    public void addFullScreenPage(View page) {
+        LayoutParams lp = generateDefaultLayoutParams();
+        lp.isFullScreenPage = true;
+        super.addView(page, 0, lp);
+    }
+
+//    public int getNormalChildHeight() {
+//        return mNormalChildHeight;
+//    }
+
+    // Convenience methods to get the actual width/height of the PagedView (since it is measured
+    // to be larger to account for the minimum possible scale)
+    int getViewportWidth() {
+        return mViewport.width();
+    }
+
+    public int getViewportHeight() {
+        return mViewport.height();
+    }
+
+    // Convenience methods to get the offset ASSUMING that we are centering the pages in the
+    // PagedView both horizontally and vertically
+    int getViewportOffsetX() {
+        return (getMeasuredWidth() - getViewportWidth()) / 2;
+    }
+
+    int getViewportOffsetY() {
+        return (getMeasuredHeight() - getViewportHeight()) / 2;
+    }
+
+    private Rect mViewport = new Rect();
+    private float mMinScale = 1f;
+    private boolean mUseMinScale = false;
+    private int mNormalChildHeight;
+    // add by codemx.cn ---- 20190712 ---plus- end
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (getChildCount() == 0) {
@@ -555,6 +628,29 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
+
+        // NOTE: We multiply by 2f to account for the fact that depending on the offset of the
+        // viewport, we can be at most one and a half screens offset once we scale down
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int maxSize = Math.max(dm.widthPixels + mInsets.left + mInsets.right,
+                dm.heightPixels + mInsets.top + mInsets.bottom);
+
+        // -- gyc modify ------------20180314----
+        // 原始桌面缩放的是workspace，所以倍数是2f，现在缩放的是CellLayout，所以不需要再放大
+        int parentWidthSize = (int) (1f * maxSize);
+        int parentHeightSize = (int) (1f * maxSize);
+        // -- gyc modify ------------20180314----
+        int scaledWidthSize, scaledHeightSize;
+        if (mUseMinScale) {
+            scaledWidthSize = (int) (parentWidthSize / mMinScale);
+            scaledHeightSize = (int) (parentHeightSize / mMinScale);
+        } else {
+            scaledWidthSize = widthSize;
+            scaledHeightSize = heightSize;
+        }
+        mViewport.set(0, 0, widthSize, heightSize);
+
+
         if (widthMode == MeasureSpec.UNSPECIFIED || heightMode == MeasureSpec.UNSPECIFIED) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
             return;
@@ -566,18 +662,73 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             return;
         }
 
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        /* Allow the height to be set as WRAP_CONTENT. This allows the particular case
+         * of the All apps view on XLarge displays to not take up more space then it needs. Width
+         * is still not allowed to be set as WRAP_CONTENT since many parts of the code expect
+         * each effect_page to have the same width.
+         */
+        final int verticalPadding = getPaddingTop() + getPaddingBottom();
+        final int horizontalPadding = getPaddingLeft() + getPaddingRight();
+
+        int referenceChildWidth = 0;
         // The children are given the same width and height as the workspace
         // unless they were set to WRAP_CONTENT
         if (DEBUG) Log.d(TAG, "PagedView.onMeasure(): " + widthSize + ", " + heightSize);
+        if (DEBUG) Log.d(TAG, "PagedView.scaledSize: " + scaledWidthSize + ", " + scaledHeightSize);
+        if (DEBUG) Log.d(TAG, "PagedView.parentSize: " + parentWidthSize + ", " + parentHeightSize);
+        if (DEBUG) Log.d(TAG, "PagedView.horizontalPadding: " + horizontalPadding);
+        if (DEBUG) Log.d(TAG, "PagedView.verticalPadding: " + verticalPadding);
+        final int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            // disallowing padding in paged view (just pass 0)
+            final View child = getPageAt(i);
+            if (child.getVisibility() != GONE) {
+                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-        int myWidthSpec = MeasureSpec.makeMeasureSpec(
-                widthSize - mInsets.left - mInsets.right, MeasureSpec.EXACTLY);
-        int myHeightSpec = MeasureSpec.makeMeasureSpec(
-                heightSize - mInsets.top - mInsets.bottom, MeasureSpec.EXACTLY);
+                int childWidthMode;
+                int childHeightMode;
+                int childWidth;
+                int childHeight;
 
-        // measureChildren takes accounts for content padding, we only need to care about extra
-        // space due to insets.
-        measureChildren(myWidthSpec, myHeightSpec);
+                if (!lp.isFullScreenPage) {
+                    if (lp.width == LayoutParams.WRAP_CONTENT) {
+                        childWidthMode = MeasureSpec.AT_MOST;
+                    } else {
+                        childWidthMode = MeasureSpec.EXACTLY;
+                    }
+
+                    if (lp.height == LayoutParams.WRAP_CONTENT) {
+                        childHeightMode = MeasureSpec.AT_MOST;
+                    } else {
+                        childHeightMode = MeasureSpec.EXACTLY;
+                    }
+
+                    childWidth = getViewportWidth() - horizontalPadding
+                            - mInsets.left - mInsets.right;
+                    childHeight = getViewportHeight() - verticalPadding
+                            - mInsets.top - mInsets.bottom;
+                    mNormalChildHeight = childHeight;
+                } else {
+                    childWidthMode = MeasureSpec.EXACTLY;
+                    childHeightMode = MeasureSpec.EXACTLY;
+
+                    childWidth = getViewportWidth();
+                    childHeight = getViewportHeight();
+                }
+                if (referenceChildWidth == 0) {
+                    referenceChildWidth = childWidth;
+                }
+
+                final int childWidthMeasureSpec =
+                        MeasureSpec.makeMeasureSpec(childWidth, childWidthMode);
+                final int childHeightMeasureSpec =
+                        MeasureSpec.makeMeasureSpec(childHeight, childHeightMode);
+                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+            }
+        }
+        // modify by codemx.cn ---- 20190712 ---plus- end
+
         setMeasuredDimension(widthSize, heightSize);
     }
 
@@ -658,6 +809,14 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                                      ComputePageScrollsLogic scrollLogic) {
         final int childCount = getChildCount();
 
+        // add by codemx.cn ---- 20190712 ---plus- start
+        int offsetX = getViewportOffsetX();
+        int offsetY = getViewportOffsetY();
+
+        // Update the viewport offsets
+        mViewport.offset(offsetX, offsetY);
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         // 起始下标（正常从左到右排列，起始是下标是0）
         final int startIndex = mIsRtl ? childCount - 1 : 0;
         // 结束下标（正常从左到右，结束下标是最后一个）
@@ -669,8 +828,13 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         final int verticalCenter = (getPaddingTop() + getMeasuredHeight() + mInsets.top
                 - mInsets.bottom - getPaddingBottom()) / 2;
 
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        LayoutParams lp = (LayoutParams) getChildAt(startIndex).getLayoutParams();
+        LayoutParams nextLp;
         // 最左边的页面的起始位置（有可能是有边距的）
-        final int scrollOffsetLeft = mInsets.left + getPaddingLeft();
+        final int scrollOffsetLeft = mInsets.left +  (lp.isFullScreenPage ? 0 : getPaddingLeft());
+        // modify by codemx.cn ---- 20190712 ---plus- end
+
         boolean pageScrollChanged = false;
         // 从第1屏到最后一屏计算每屏的距离
         for (int i = startIndex, childLeft = scrollOffsetLeft + offsetForPageScrolls();
@@ -680,7 +844,12 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
             // 如果当前第i个屏幕隐藏则不计算
             if (scrollLogic.shouldIncludeView(child)) {
                 // 页面顶部
-                final int childTop = verticalCenter - child.getMeasuredHeight() / 2;
+                 int childTop;
+                 if (lp.isFullScreenPage) {
+                     childTop = offsetY;
+                 } else {
+                     childTop = verticalCenter - child.getMeasuredHeight() / 2;
+                 }
                 // 页面宽度
                 final int childWidth = child.getMeasuredWidth();
 
@@ -692,6 +861,23 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     child.layout(childLeft, childTop,
                             childLeft + child.getMeasuredWidth(), childTop + childHeight);
                 }
+
+                // modify by codemx.cn ---- 20190712 ---plus- start
+                int next = i + delta;
+                if (next != endIndex) {
+                    nextLp = (LayoutParams) getPageAt(next).getLayoutParams();
+                } else {
+                    nextLp = null;
+                }
+
+                // Prevent full screen pages from showing in the viewport
+                // when they are not the current effect_page.
+                if (lp.isFullScreenPage) {
+                    mPageSpacing = getPaddingLeft();
+                } else if (nextLp != null && nextLp.isFullScreenPage) {
+                    mPageSpacing = getPaddingRight();
+                }
+                // modify by codemx.cn ---- 20190712 ---plus- end
 
                 // 每个页面左侧的滑动有效位置
                 final int pageScroll = childLeft - scrollOffsetLeft;
@@ -1093,7 +1279,14 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         } else {
             View child = getChildAt(index);
 
-            int scrollOffset = mIsRtl ? getPaddingRight() : getPaddingLeft();
+            // modify by codemx.cn ---- 20190712 ---plus- start
+            int scrollOffset = 0;
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+            if (!lp.isFullScreenPage) {
+                scrollOffset = mIsRtl ? getPaddingRight() : getPaddingLeft();
+            }
+            // modify by codemx.cn ---- 20190712 ---plus- end
+
             int baselineX = mPageScrolls[index] + scrollOffset;
             return (int) (child.getX() - baselineX);
         }

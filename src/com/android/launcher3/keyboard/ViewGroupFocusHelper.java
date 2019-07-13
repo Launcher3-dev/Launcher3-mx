@@ -63,4 +63,26 @@ public class ViewGroupFocusHelper extends FocusIndicatorHelper {
             computeLocationRelativeToContainer(parent, outRect);
         }
     }
+
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    /**
+     * Sets the alpha of this FocusIndicatorHelper to 0 when a view with this listener
+     * receives focus.
+     */
+    public View.OnFocusChangeListener getHideIndicatorOnFocusListener() {
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    endCurrentAnimation();
+                    setCurrentView(null);
+                    setAlpha(0);
+                    invalidateDirty();
+                }
+            }
+        };
+    }
+    // add by codemx.cn ---- 20190712 ---plus- end
+
 }

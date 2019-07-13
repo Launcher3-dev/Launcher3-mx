@@ -407,14 +407,22 @@ public class CellLayout extends ViewGroup {
 
     @Override
     protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) {
-        ParcelableSparseArray jail = getJailedArray(container);
-        super.dispatchSaveInstanceState(jail);
-        container.put(R.id.cell_layout_jail_id, jail);
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        if (mJailContent) {
+            ParcelableSparseArray jail = getJailedArray(container);
+            super.dispatchSaveInstanceState(jail);
+            container.put(R.id.cell_layout_jail_id, jail);
+        } else {
+            super.dispatchSaveInstanceState(container);
+        }
+        // modify by codemx.cn ---- 20190712 ---plus- end
     }
 
     @Override
     protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
-        super.dispatchRestoreInstanceState(getJailedArray(container));
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        super.dispatchRestoreInstanceState(mJailContent ? getJailedArray(container) : container);
+        // modify by codemx.cn ---- 20190712 ---plus- end
     }
 
     /**
@@ -433,6 +441,12 @@ public class CellLayout extends ViewGroup {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        // add by codemx.cn ---- 20190712 ---plus- start
+        if (!mIsDragTarget) {
+            return;
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         // When we're large, we are either drawn in a "hover" state (ie when dragging an item to
         // a neighboring page) or with just a normal background (if backgroundAlpha > 0.0f)
         // When we're small, we are either drawn normally or in the "accepts drops" state (during
@@ -807,10 +821,23 @@ public class CellLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        // add by codemx.cn ---- 20190712 ---plus- start
+        boolean isFullscreen = mShortcutsAndWidgets.getChildCount() > 0 &&
+                ((LayoutParams) mShortcutsAndWidgets.getChildAt(0).getLayoutParams()).isFullscreen;
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         int left = getPaddingLeft();
-        left += (int) Math.ceil(getUnusedHorizontalSpace() / 2f);
+        // add by codemx.cn ---- 20190712 ---plus- start
+        if (!isFullscreen) {
+            // add by codemx.cn ---- 20190712 ---plus- end
+            left += (int) Math.ceil(getUnusedHorizontalSpace() / 2f);
+        }
         int right = r - l - getPaddingRight();
-        right -= (int) Math.ceil(getUnusedHorizontalSpace() / 2f);
+        // add by codemx.cn ---- 20190712 ---plus- start
+        if (!isFullscreen) {
+            // add by codemx.cn ---- 20190712 ---plus- end
+            right -= (int) Math.ceil(getUnusedHorizontalSpace() / 2f);
+        }
 
         int top = getPaddingTop();
         int bottom = b - t - getPaddingBottom();
@@ -840,7 +867,9 @@ public class CellLayout extends ViewGroup {
 
     @Override
     protected boolean verifyDrawable(Drawable who) {
-        return super.verifyDrawable(who) || (who == mBackground);
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        return super.verifyDrawable(who) || (mIsDragTarget && who == mBackground);
+        // modify by codemx.cn ---- 20190712 ---plus- end
     }
 
     public ShortcutAndWidgetContainer getShortcutsAndWidgets() {
@@ -2614,7 +2643,7 @@ public class CellLayout extends ViewGroup {
 
         /**
          * Number of cells spanned vertically by the item.
-         *  该视图纵向占的位置，图标是一个，widget是一个或者多个
+         * 该视图纵向占的位置，图标是一个，widget是一个或者多个
          */
         @ViewDebug.ExportedProperty
         public int cellVSpan;
@@ -2624,6 +2653,13 @@ public class CellLayout extends ViewGroup {
          * or whether these will be computed based on cellX, cellY, cellHSpan and cellVSpan.
          */
         public boolean isLockedToGrid = true;
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        /**
+         * Indicates that this item should use the full extents of its parent.
+         */
+        public boolean isFullscreen = false;
+        // add by codemx.cn ---- 20190712 ---plus- end
 
         /**
          * Indicates whether this item can be reordered. Always true except in the case of the
@@ -2814,4 +2850,21 @@ public class CellLayout extends ViewGroup {
         }
     }
     // add by codemx.cn ---- 20181029 --- end
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    private boolean mIsDragTarget = true;
+    private boolean mJailContent = true;
+
+    public void disableDragTarget() {
+        mIsDragTarget = false;
+    }
+
+    public boolean isDragTarget() {
+        return mIsDragTarget;
+    }
+
+    public void disableJailContent() {
+        mJailContent = false;
+    }
+    // add by codemx.cn ---- 20190712 ---plus- end
 }

@@ -59,4 +59,6 @@ abstract class BaseFlags {
     // 是否循环滑动
     public static final boolean LAUNCHER3_CIRCLE_SCROLL = true;
 
+    public static final boolean CUSTOM_CONTENT_ENABLED = true;
+
 }

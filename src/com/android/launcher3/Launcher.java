@@ -72,6 +72,9 @@ import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherAppsCompatVO;
 import com.android.launcher3.config.FeatureFlags;
+import com.android.launcher3.customcontent.CustomContent;
+import com.android.launcher3.customcontent.CustomContentCallbacks;
+import com.android.launcher3.customcontent.WorkspacePlus;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragView;
@@ -197,7 +200,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private Configuration mOldConfig;
 
     @Thunk
-    Workspace mWorkspace;
+    WorkspacePlus mWorkspace;
     private View mLauncherView;
     @Thunk
     DragLayer mDragLayer;
@@ -651,6 +654,58 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mDragLayer.clearAnimatedView();
     }
 
+    // add by codemx.cn ---- 20190712 ---plus- start
+    /**
+     * TODO 开启负一屏
+     * To be overridden by subclasses to hint to Launcher that we have custom content
+     */
+    protected boolean hasCustomContentToLeft() {
+        if (mLauncherCallbacks != null) {
+            return mLauncherCallbacks.hasCustomContentToLeft();
+        }
+        return FeatureFlags.CUSTOM_CONTENT_ENABLED;
+    }
+
+    /**
+     * To be overridden by subclasses to populate the custom content container and call
+     * {@link #addToCustomContentPage}. This will only be invoked if
+     * {@link #hasCustomContentToLeft()} is {@code true}.
+     */
+    protected void populateCustomContentContainer() {
+        CellLayout cellLayout = mWorkspace.getCustomContent();
+        CustomContent customContent = (CustomContent) LayoutInflater.from(Launcher.this)
+                .inflate(R.layout.custom_content, cellLayout, false);
+        addToCustomContentPage(customContent, customContent, "customContent");
+        if (mLauncherCallbacks != null) {
+            mLauncherCallbacks.populateCustomContentContainer();
+        }
+    }
+
+    /**
+     * Invoked by subclasses to signal a change to the {@link #addToCustomContentPage} value to
+     * ensure the custom content effect_page is added or removed if necessary.
+     */
+    protected void invalidateHasCustomContentToLeft() {
+        if (mWorkspace == null || mWorkspace.getScreenOrder().isEmpty()) {
+            // Not bound yet, wait for bindScreens to be called.
+            return;
+        }
+        if (!mWorkspace.hasCustomContent() && hasCustomContentToLeft()) {
+            // Create the custom content effect_page and call the subclass to populate it.
+            mWorkspace.createCustomContentContainer();
+            populateCustomContentContainer();
+        } else if (mWorkspace.hasCustomContent() && !hasCustomContentToLeft()) {
+            mWorkspace.removeCustomContentPage();
+        }
+    }
+
+    public void addToCustomContentPage(View customContent,
+                                       CustomContentCallbacks callbacks, String description) {
+        mWorkspace.addToCustomContentPage(customContent, callbacks, description);
+    }
+
+    // add by codemx.cn ---- 20190712 ---plus- end
+
     @Override
     public void onActivityResult(
             final int requestCode, final int resultCode, final Intent data) {
@@ -818,6 +873,14 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         super.onPause();
         mDragController.cancelDrag();
         mDragController.resetLastGestureUpTime();
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        // We call onHide() aggressively. The custom content callbacks should be able to
+        // debounce excess onHide calls.
+        if (mWorkspace.getCustomContentCallbacks() != null) {
+            mWorkspace.getCustomContentCallbacks().onHide();
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
 
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onPause();
@@ -1822,6 +1885,15 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             mWorkspace.addExtraEmptyScreen();
         }
         bindAddScreens(orderedScreenIds);
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        // Create the custom content effect_page (this call updates mDefaultScreen which calls
+        // setCurrentPage() so ensure that all pages are added before calling this).
+        if (hasCustomContentToLeft()) {
+            mWorkspace.createCustomContentContainer();
+            populateCustomContentContainer();
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
 
         // After we have added all the screens, if the wallpaper was locked to the default state,
         // then notify to indicate that it can be released and a proper wallpaper offset can be
