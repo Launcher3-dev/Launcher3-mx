@@ -13,6 +13,8 @@ import com.android.mxtheme.bean.ThemeBean;
 import com.android.mxtheme.bean.WallpaperBean;
 
 /**
+ * 切换主题和壁纸的客户端，launcher进程为服务端（ThemeService）
+ *
  * Created by CodeMX
  * DATE 2019/2/22
  * TIME 10:50
