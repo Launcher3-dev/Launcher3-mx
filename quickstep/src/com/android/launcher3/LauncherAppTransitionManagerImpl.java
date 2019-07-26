@@ -688,7 +688,7 @@ public class LauncherAppTransitionManagerImpl extends LauncherAppTransitionManag
                     // is initialized.
                     if (launcherIsATargetWithMode(targetCompats, MODE_OPENING)
                             || mLauncher.isForceInvisible()) {
-                        // Only register the content animation for cancellation when state changes
+                        // Only registerRemoteCallback the content animation for cancellation when state changes
                         mLauncher.getStateManager().setCurrentAnimation(anim);
                         createLauncherResumeAnimation(anim);
                     }

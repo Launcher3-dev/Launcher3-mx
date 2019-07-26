@@ -1,4 +1,4 @@
-// IThemeService.aidl
+// IThemeLife.aidl
 package com.android.mxtheme;
 
 import com.android.mxtheme.IRemoteCallback;

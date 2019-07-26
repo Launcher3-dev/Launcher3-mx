@@ -154,7 +154,7 @@ public class SwipeDetector {
 
     private final float mTouchSlop;
 
-    /* Client of this gesture detector can register a callback. */
+    /* Client of this gesture detector can registerRemoteCallback a callback. */
     private final Listener mListener;
 
     private long mCurrentMillis;

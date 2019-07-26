@@ -17,7 +17,7 @@ import com.android.mxtheme.bean.WallpaperBean;
  */
 public class ThemeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    ThemeChangeUtil mThemeUtil;
+    ThemeClient mThemeChangeClient;
     private Button mBtnTheme;
     private Button mBtnWallpaper;
     private TextView mTv;
@@ -33,13 +33,13 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
         mBtnTheme.setOnClickListener(this);
         mBtnWallpaper.setOnClickListener(this);
 
-        mThemeUtil = new ThemeChangeUtil();
-        mThemeUtil.startService(this);
+        mThemeChangeClient = new ThemeClient();
+        mThemeChangeClient.bindService(this);
     }
 
     @Override
     protected void onDestroy() {
-        mThemeUtil.endService(this);
+        mThemeChangeClient.unbindService(this);
         super.onDestroy();
     }
 
@@ -49,11 +49,11 @@ public class ThemeActivity extends AppCompatActivity implements View.OnClickList
         if (i == R.id.theme_activity_set_theme) {
             ThemeBean bean = new ThemeBean();
             bean.setThemeName("theme");
-            mThemeUtil.changeTheme(bean);
+            mThemeChangeClient.changeTheme(bean);
         } else if (i == R.id.theme_activity_set_wallpaper) {
             WallpaperBean wallpaperBean = new WallpaperBean();
             wallpaperBean.setWallpaperName("theme");
-            mThemeUtil.changeWallpaper(wallpaperBean);
+            mThemeChangeClient.changeWallpaper(wallpaperBean);
         } else {
         }
     }
