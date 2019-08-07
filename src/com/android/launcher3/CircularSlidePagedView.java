@@ -188,7 +188,7 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
     private void drawCircularPageIfNeed(Canvas canvas) {
         // X在第一页之前，表示从第一页循环到最后一页
         boolean isXBeforeFirstPage = mIsRtl ? (mOverScrollX > mMaxScrollX) : (mOverScrollX < 0);
-        // X在最后一页之后，表示从从最后一页魂环到第一页
+        // X在最后一页之后，表示从从最后一页循环到第一页
         boolean isXAfterLastPage = mIsRtl ? (mOverScrollX < 0) : (mOverScrollX > mMaxScrollX);
         if (isXBeforeFirstPage || isXAfterLastPage) {
             long drawingTime = getDrawingTime();

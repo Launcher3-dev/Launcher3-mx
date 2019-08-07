@@ -43,6 +43,7 @@ import com.android.launcher3.Utilities;
 import com.android.launcher3.Workspace;
 import com.android.launcher3.uioverrides.WallpaperColorInfo;
 import com.android.launcher3.util.Themes;
+import com.android.mxlibrary.util.XLog;
 
 import static android.content.Intent.ACTION_SCREEN_OFF;
 import static android.content.Intent.ACTION_USER_PRESENT;
@@ -179,7 +180,7 @@ public class WorkspaceAndHotseatScrim implements
                         .getDescendantRectRelativeToSelf(currCellLayout, mHighlightRect);
                 canvas.clipRect(mHighlightRect, Region.Op.DIFFERENCE);
             }
-
+            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + mScrimAlpha);
             canvas.drawColor(ColorUtils.setAlphaComponent(mFullScrimColor, mScrimAlpha));
             canvas.restore();
         }

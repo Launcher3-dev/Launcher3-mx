@@ -105,7 +105,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected LauncherScroller mScroller;
     private Interpolator mDefaultInterpolator;
     private VelocityTracker mVelocityTracker;
-    protected int mPageSpacing = 0;
 
     private float mDownMotionX;
     private float mDownMotionY;
@@ -157,7 +156,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
      * 1440                  -1440
      * 2260                  -2260
      * 距离为负值，说明View的左侧边缘在屏幕左侧边缘的左侧，反之在右侧
-     * (PageView向左滑动为正方向，getSrcollX为正值；反之负方向，getScrollX为负值)
+     * (PageView向左滑动为正方向，getScrollX为正值；反之负方向，getScrollX为负值)
      */
     protected int mOverScrollX;
 
@@ -715,6 +714,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
 
                     childWidth = getViewportWidth();
                     childHeight = getViewportHeight();
+                    XLog.d(XLog.getTag(), XLog.TAG_GU + childWidth + "  " + childHeight);
                 }
                 if (referenceChildWidth == 0) {
                     referenceChildWidth = childWidth;
@@ -812,7 +812,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         // add by codemx.cn ---- 20190712 ---plus- start
         int offsetX = getViewportOffsetX();
         int offsetY = getViewportOffsetY();
-
         // Update the viewport offsets
         mViewport.offset(offsetX, offsetY);
         // add by codemx.cn ---- 20190712 ---plus- end
@@ -823,7 +822,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         final int endIndex = mIsRtl ? -1 : childCount;
         // 差量（从右到左是负值，是减；从左到右是正值，是加）
         final int delta = mIsRtl ? -1 : 1;
-
         // 竖直(Y)方向的中心位置
         final int verticalCenter = (getPaddingTop() + getMeasuredHeight() + mInsets.top
                 - mInsets.bottom - getPaddingBottom()) / 2;
@@ -832,31 +830,30 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         LayoutParams lp = (LayoutParams) getChildAt(startIndex).getLayoutParams();
         LayoutParams nextLp;
         // 最左边的页面的起始位置（有可能是有边距的）
-        final int scrollOffsetLeft = mInsets.left +  (lp.isFullScreenPage ? 0 : getPaddingLeft());
+        final int scrollOffsetLeft = mInsets.left + (lp.isFullScreenPage ? 0 : getPaddingLeft());
         // modify by codemx.cn ---- 20190712 ---plus- end
-
         boolean pageScrollChanged = false;
         // 从第1屏到最后一屏计算每屏的距离
         for (int i = startIndex, childLeft = scrollOffsetLeft + offsetForPageScrolls();
              i != endIndex;
              i += delta) {
             final View child = getPageAt(i);
+            lp = (LayoutParams) child.getLayoutParams();
             // 如果当前第i个屏幕隐藏则不计算
             if (scrollLogic.shouldIncludeView(child)) {
                 // 页面顶部
-                 int childTop;
-                 if (lp.isFullScreenPage) {
-                     childTop = offsetY;
-                 } else {
-                     childTop = verticalCenter - child.getMeasuredHeight() / 2;
-                 }
+                int childTop;
+                if (lp.isFullScreenPage) {
+                    childTop = offsetY;
+                } else {
+                    childTop = verticalCenter - child.getMeasuredHeight() / 2;
+                }
                 // 页面宽度
                 final int childWidth = child.getMeasuredWidth();
-
+                // 页面高度
+                final int childHeight = child.getMeasuredHeight();
                 // 排列该页面
                 if (layoutChildren) {
-                    // 页面高度
-                    final int childHeight = child.getMeasuredHeight();
                     // 布局该页面
                     child.layout(childLeft, childTop,
                             childLeft + child.getMeasuredWidth(), childTop + childHeight);
@@ -870,31 +867,28 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                     nextLp = null;
                 }
 
+                int pageSpacing = 0;
                 // Prevent full screen pages from showing in the viewport
                 // when they are not the current effect_page.
                 if (lp.isFullScreenPage) {
-                    mPageSpacing = getPaddingLeft();
+                    pageSpacing = getPaddingLeft();
                 } else if (nextLp != null && nextLp.isFullScreenPage) {
-                    mPageSpacing = getPaddingRight();
+                    pageSpacing = getPaddingRight();
+                } else {
+                    pageSpacing = getPaddingRight() + getPaddingLeft();
                 }
                 // modify by codemx.cn ---- 20190712 ---plus- end
 
                 // 每个页面左侧的滑动有效位置
-                final int pageScroll = childLeft - scrollOffsetLeft;
+                final int pageScroll = childLeft - (lp.isFullScreenPage ? 0 : getPaddingLeft());
                 if (outPageScrolls[i] != pageScroll) {
                     pageScrollChanged = true;
                     outPageScrolls[i] = pageScroll;
                 }
-
-                childLeft += childWidth + mPageSpacing + getChildGap();
+                childLeft += childWidth + pageSpacing;
             }
         }
         return pageScrollChanged;
-    }
-
-    // 每个页面的间距（默认为0）
-    protected int getChildGap() {
-        return 0;
     }
 
     private void updateMaxScrollX() {
@@ -915,12 +909,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     // 页面偏移距离
     protected int offsetForPageScrolls() {
         return 0;
-    }
-
-    // 设置页面间距
-    public void setPageSpacing(int pageSpacing) {
-        mPageSpacing = pageSpacing;
-        requestLayout();
     }
 
     private void dispatchPageCountChanged() {
@@ -1924,7 +1912,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     protected int computeTotalDistance(View v, int adjacentPage, int page) {
         int totalDistance;
         if (adjacentPage < 0 || adjacentPage > getChildCount() - 1) {
-            totalDistance = v.getMeasuredWidth() + mPageSpacing;
+            totalDistance = v.getMeasuredWidth();
         } else {
             // 正在进入页面左边缘到正在退出页面左边缘的距离
             totalDistance = Math.abs(getScrollForPage(adjacentPage) - getScrollForPage(page));
