@@ -49,23 +49,6 @@ class HotseatIconKeyEventListener implements View.OnKeyListener {
 }
 
 /**
- * A keyboard listener we set on full screen pages (e.g. custom content).
- */
-class FullscreenKeyEventListener implements View.OnKeyListener {
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
-                || keyCode == KeyEvent.KEYCODE_PAGE_DOWN || keyCode == KeyEvent.KEYCODE_PAGE_UP) {
-            // Handle the key event just like a workspace icon would in these cases. In this case,
-            // it will basically act as if there is a single icon in the top left (so you could
-            // think of the fullscreen page as a focusable fullscreen widget).
-            return FocusHelper.handleIconKeyEvent(v, keyCode, event);
-        }
-        return false;
-    }
-}
-
-/**
  * TODO: Reevaluate if this is still required
  */
 public class FocusHelper {
@@ -291,11 +274,32 @@ public class FocusHelper {
             case FocusLogic.PREVIOUS_PAGE_RIGHT_COLUMN:
                 // Go to the previous page but keep the focus on the same hotseat icon.
                 workspace.snapToPage(pageIndex - 1);
+
+                // add by codemx.cn ---- 20190712 ---plus- start
+                CellLayout prevPage = (CellLayout) workspace.getPageAt(pageIndex - 1);
+                boolean isPrevPageFullscreen = ((CellLayout.LayoutParams) prevPage
+                        .getShortcutsAndWidgets().getChildAt(0).getLayoutParams()).isFullscreen;
+                if (isPrevPageFullscreen) {
+                    workspace.getPageAt(pageIndex - 1).requestFocus();
+                }
+                // add by codemx.cn ---- 20190712 ---plus- end
+
                 break;
             case FocusLogic.NEXT_PAGE_LEFT_COLUMN:
             case FocusLogic.NEXT_PAGE_RIGHT_COLUMN:
                 // Go to the next page but keep the focus on the same hotseat icon.
                 workspace.snapToPage(pageIndex + 1);
+
+                // add by codemx.cn ---- 20190712 ---plus- start
+                // If the effect_page we are going to is fullscreen, have it take the focus from hotseat.
+                CellLayout nextPage = (CellLayout) workspace.getPageAt(pageIndex + 1);
+                boolean isNextPageFullscreen = ((CellLayout.LayoutParams) nextPage
+                        .getShortcutsAndWidgets().getChildAt(0).getLayoutParams()).isFullscreen;
+                if (isNextPageFullscreen) {
+                    workspace.getPageAt(pageIndex + 1).requestFocus();
+                }
+                // add by codemx.cn ---- 20190712 ---plus- end
+
                 break;
         }
         if (parent == iconParent && newIconIndex >= iconParent.getChildCount()) {

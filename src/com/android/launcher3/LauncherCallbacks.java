@@ -81,4 +81,8 @@ public interface LauncherCallbacks {
      * Extensions points for adding / replacing some other aspects of the Launcher experience.
      */
     boolean hasSettings();
+
+    boolean hasCustomContentToLeft();
+
+    void populateCustomContentContainer();
 }

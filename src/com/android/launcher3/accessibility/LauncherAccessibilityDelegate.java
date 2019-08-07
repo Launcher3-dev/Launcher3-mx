@@ -396,7 +396,10 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
      * Find empty space on the workspace and returns the screenId.
      */
     protected long findSpaceOnWorkspace(ItemInfo info, int[] outCoordinates) {
+        // modify by codemx.cn ---- 20190712 ---plus- start
         Workspace workspace = mLauncher.getWorkspace();
+        // modify by codemx.cn ---- 20190712 ---plus- end
+
         ArrayList<Long> workspaceScreens = workspace.getScreenOrder();
         long screenId;
 
@@ -406,7 +409,10 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
         CellLayout layout = (CellLayout) workspace.getPageAt(screenIndex);
 
         boolean found = layout.findCellForSpan(outCoordinates, info.spanX, info.spanY);
-        screenIndex = 0;
+        // modify by codemx.cn ---- 20190712 ---plus- start
+        screenIndex = workspace.hasCustomContent() ? 1 : 0;
+        // modify by codemx.cn ---- 20190712 ---plus- end
+
         while (!found && screenIndex < workspaceScreens.size()) {
             screenId = workspaceScreens.get(screenIndex);
             layout = (CellLayout) workspace.getPageAt(screenIndex);

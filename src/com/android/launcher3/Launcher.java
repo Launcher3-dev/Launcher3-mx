@@ -72,6 +72,8 @@ import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherAppsCompatVO;
 import com.android.launcher3.config.FeatureFlags;
+import com.android.launcher3.customcontent.CustomContent;
+import com.android.launcher3.customcontent.CustomContentCallbacks;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragView;
@@ -651,6 +653,58 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mDragLayer.clearAnimatedView();
     }
 
+    // add by codemx.cn ---- 20190712 ---plus- start
+    /**
+     * TODO 开启负一屏
+     * To be overridden by subclasses to hint to Launcher that we have custom content
+     */
+    protected boolean hasCustomContentToLeft() {
+        if (mLauncherCallbacks != null) {
+            return mLauncherCallbacks.hasCustomContentToLeft();
+        }
+        return FeatureFlags.CUSTOM_CONTENT_ENABLED;
+    }
+
+    /**
+     * To be overridden by subclasses to populate the custom content container and call
+     * {@link #addToCustomContentPage}. This will only be invoked if
+     * {@link #hasCustomContentToLeft()} is {@code true}.
+     */
+    protected void populateCustomContentContainer() {
+        CellLayout cellLayout = mWorkspace.getCustomContent();
+        CustomContent customContent = (CustomContent) LayoutInflater.from(Launcher.this)
+                .inflate(R.layout.custom_content, cellLayout, false);
+        addToCustomContentPage(customContent, customContent, "customContent");
+        if (mLauncherCallbacks != null) {
+            mLauncherCallbacks.populateCustomContentContainer();
+        }
+    }
+
+    /**
+     * Invoked by subclasses to signal a change to the {@link #addToCustomContentPage} value to
+     * ensure the custom content effect_page is added or removed if necessary.
+     */
+    protected void invalidateHasCustomContentToLeft() {
+        if (mWorkspace == null || mWorkspace.getScreenOrder().isEmpty()) {
+            // Not bound yet, wait for bindScreens to be called.
+            return;
+        }
+        if (!mWorkspace.hasCustomContent() && hasCustomContentToLeft()) {
+            // Create the custom content effect_page and call the subclass to populate it.
+            mWorkspace.createCustomContentContainer();
+            populateCustomContentContainer();
+        } else if (mWorkspace.hasCustomContent() && !hasCustomContentToLeft()) {
+            mWorkspace.removeCustomContentPage();
+        }
+    }
+
+    public void addToCustomContentPage(View customContent,
+                                       CustomContentCallbacks callbacks, String description) {
+        mWorkspace.addToCustomContentPage(customContent, callbacks, description);
+    }
+
+    // add by codemx.cn ---- 20190712 ---plus- end
+
     @Override
     public void onActivityResult(
             final int requestCode, final int resultCode, final Intent data) {
@@ -798,6 +852,22 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         InstallShortcutReceiver.disableAndFlushInstallQueue(
                 InstallShortcutReceiver.FLAG_ACTIVITY_PAUSED, this);
 
+
+//        // We want to suppress callbacks about CustomContent being shown if we have just received
+//        // onNewIntent while the user was present within launcher. In that case, we post a call
+//        // to move the user to the main screen (which will occur after onResume). We don't want to
+//        // have onHide (from onPause), then onShow, then onHide again, which we get if we don't
+//        // suppress here.
+//        if (mWorkspace.getCustomContentCallbacks() != null
+//                && !mMoveToDefaultScreenFromNewIntent) {
+//            // If we are resuming and the custom content is the current effect_page, we call onShow().
+//            // It is also possible that onShow will instead be called slightly after first layout
+//            // if PagedView#setRestorePage was set to the custom content effect_page in onCreate().
+//            if (mWorkspace.isOnOrMovingToCustomContent()) {
+//                mWorkspace.getCustomContentCallbacks().onShow(true);
+//            }
+//        }
+
         // Refresh shortcuts if the permission changed.
         mModel.refreshShortcutsIfRequired();
 
@@ -818,6 +888,14 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         super.onPause();
         mDragController.cancelDrag();
         mDragController.resetLastGestureUpTime();
+
+        // add by codemx.cn ---- 20190712 ---plus- start
+        // We call onHide() aggressively. The custom content callbacks should be able to
+        // debounce excess onHide calls.
+        if (mWorkspace.getCustomContentCallbacks() != null) {
+            mWorkspace.getCustomContentCallbacks().onHide();
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
 
         if (mLauncherCallbacks != null) {
             mLauncherCallbacks.onPause();
@@ -1823,6 +1901,15 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         }
         bindAddScreens(orderedScreenIds);
 
+        // add by codemx.cn ---- 20190712 ---plus- start
+        // Create the custom content effect_page (this call updates mDefaultScreen which calls
+        // setCurrentPage() so ensure that all pages are added before calling this).
+        if (hasCustomContentToLeft()) {
+            mWorkspace.createCustomContentContainer();
+            populateCustomContentContainer();
+        }
+        // add by codemx.cn ---- 20190712 ---plus- end
+
         // After we have added all the screens, if the wallpaper was locked to the default state,
         // then notify to indicate that it can be released and a proper wallpaper offset can be
         // computed before the next layout
@@ -2541,5 +2628,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     // --- add by codemx.cn --- 2018/09/06 --- end
+
+    // add by codemx.cn ---- 20190712 ---plus- start
+    protected void moveToCustomContentScreen(boolean animate) {
+        // Close any folders that may be open.
+        AbstractFloatingView.closeAllOpenViews(this, animate);
+        mWorkspace.moveToCustomContentScreen(animate);
+    }
+    // add by codemx.cn ---- 20190712 ---plus- end
 
 }

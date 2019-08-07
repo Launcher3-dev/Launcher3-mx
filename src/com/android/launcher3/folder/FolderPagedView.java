@@ -271,11 +271,6 @@ public class FolderPagedView extends PagedView<PageIndicatorDots> {
         return page;
     }
 
-    @Override
-    protected int getChildGap() {
-        return getPaddingLeft() + getPaddingRight();
-    }
-
     public void setFixedSize(int width, int height) {
         width -= (getPaddingLeft() + getPaddingRight());
         height -= (getPaddingTop() + getPaddingBottom());
