@@ -13,15 +13,18 @@ import com.android.mxtheme.bean.ThemeBean;
 import com.android.mxtheme.bean.WallpaperBean;
 
 /**
+ * 切换主题和壁纸的客户端，launcher进程为服务端（ThemeService）
+ *
  * Created by CodeMX
  * DATE 2019/2/22
  * TIME 10:50
  */
-public class ThemeChangeUtil {
+public class ThemeClient implements IThemeClient {
 
     private IThemeService mIThemeService;
     private ThemeServiceDeathRecipient mThemeServiceDeathRecipient;
 
+    // 返回一个Binder对象
     private IRemoteCallback mIRemoteCallback = new IRemoteCallback.Stub() {
         @Override
         public void onThemeSuccess(ThemeBean bean) throws RemoteException {
@@ -44,7 +47,6 @@ public class ThemeChangeUtil {
         }
     };
 
-
     // 监听远程服务是否挂掉了
     private class ThemeServiceDeathRecipient implements IBinder.DeathRecipient {
 
@@ -57,54 +59,50 @@ public class ThemeChangeUtil {
     private ServiceConnection mThemeConnection = new ServiceConnection() {
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
-            if (mIThemeService != null) {
-                try {
-                    mIThemeService.unRegister(mIRemoteCallback);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                mIThemeService = null;
-            }
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mIThemeService = IThemeService.Stub.asInterface(service);
+            linkToDeath(service);
+            registerRemoteCallback();
         }
 
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mIThemeService = IThemeService.Stub.asInterface(service);
-            try {
-                if (mIThemeService != null) {
-                    mIThemeService.register(mIRemoteCallback);
-                }
-                service.linkToDeath(mThemeServiceDeathRecipient, 0);
-            } catch (RemoteException e) {// 要链接的服务已经挂掉
-                e.printStackTrace();
-            }
+        public void onServiceDisconnected(ComponentName name) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + "onServiceDisconnected:  " + name);
         }
     };
 
-    ThemeChangeUtil() {
+    ThemeClient() {
         this.mThemeServiceDeathRecipient = new ThemeServiceDeathRecipient();
     }
 
     /**
-     * 开始服务
+     * 绑定服务
      */
-    void startService(Context context) {
+    @Override
+    public void bindService(Context context) {
         Intent service = new Intent();
-        service.setAction("cn.bgxt.Service.CUSTOM_TYPE_SERVICE");
-        service.setClassName("com.android.launcher3",
-                "com.android.launcher3.theme.ThemeService");
+        service.setAction("action.mxlauncher3.ThemeService");
         context.bindService(service, mThemeConnection, Service.BIND_AUTO_CREATE);
     }
 
     /**
-     * 停止服务
+     * 解除绑定服务
      */
-    void endService(Context context) {
+    @Override
+    public void unbindService(Context context) {
+        unRegisterRemoteCallback();
+        unlinkToDeath();
         context.unbindService(mThemeConnection);
+        mIThemeService = null;
     }
 
-    void changeTheme(ThemeBean themeBean) {
+    /**
+     * 更改主题
+     *
+     * @param themeBean 主题对象
+     */
+    @Override
+    public void changeTheme(ThemeBean themeBean) {
         if (mIThemeService != null) {
             try {
                 mIThemeService.setTheme(themeBean);
@@ -114,13 +112,59 @@ public class ThemeChangeUtil {
         }
     }
 
-    void changeWallpaper(WallpaperBean wallpaperBean) {
+    /**
+     * 更改壁纸
+     *
+     * @param wallpaperBean 壁纸对象
+     */
+    @Override
+    public void changeWallpaper(WallpaperBean wallpaperBean) {
         if (mIThemeService != null) {
             try {
                 mIThemeService.setWallpaper(wallpaperBean);
             } catch (RemoteException e) {
                 XLog.e(XLog.getTag(), XLog.TAG_GU + "change wallpaper failed !!!");
             }
+        }
+    }
+
+    @Override
+    public void registerRemoteCallback() {
+        if (mIThemeService != null) {
+            try {
+                mIThemeService.register(mIRemoteCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void unRegisterRemoteCallback() {
+        if (mIThemeService != null) {
+            try {
+                mIThemeService.unRegister(mIRemoteCallback);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void linkToDeath(IBinder service) {
+        if (service != null) {
+            try {
+                service.linkToDeath(mThemeServiceDeathRecipient, 0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void unlinkToDeath() {
+        if (mIThemeService != null) {
+            mIThemeService.asBinder().unlinkToDeath(mThemeServiceDeathRecipient, 0);
         }
     }
 

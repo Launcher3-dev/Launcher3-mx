@@ -45,6 +45,51 @@ public class ThemeService extends Service {
     private LocalBroadcastManager mLocalBroadcastManager;
     private List<IRemoteCallback> mIRemoteCallbackList;
 
+    private class ThemeBinder extends IThemeService.Stub {
+
+        @Override
+        public void register(IRemoteCallback callback) throws RemoteException {
+            mIRemoteCallbackList.add(callback);
+        }
+
+        @Override
+        public void unRegister(IRemoteCallback callback) throws RemoteException {
+            mIRemoteCallbackList.remove(callback);
+        }
+
+        @Override
+        public boolean setTheme(ThemeBean themeBean) throws RemoteException {
+            if (themeBean != null) {
+                XLog.e(XLog.getTag(), XLog.TAG_GU + themeBean.toString());
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("theme", themeBean);
+                intent.putExtra("theme", bundle);
+                intent.putExtra("type", TYPE_SET_THEME);
+                mLocalBroadcastManager.sendBroadcastSync(intent);
+            } else {
+                XLog.e(XLog.getTag(), XLog.TAG_GU + "themeBean is null");
+            }
+            return true;
+        }
+
+        @Override
+        public boolean setWallpaper(WallpaperBean wallpaperBean) throws RemoteException {
+            if (wallpaperBean != null) {
+                XLog.e(XLog.getTag(), XLog.TAG_GU + wallpaperBean.toString());
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("wallpaper", wallpaperBean);
+                intent.putExtra("wallpaper", bundle);
+                intent.putExtra("type", TYPE_SET_WALLPAPER);
+                mLocalBroadcastManager.sendBroadcastSync(intent);
+            } else {
+                XLog.e(XLog.getTag(), XLog.TAG_GU + "wallpaperBean is null");
+            }
+            return true;
+        }
+    }
+
     // 切换主题、壁纸的广播
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -129,50 +174,7 @@ public class ThemeService extends Service {
         super.onRebind(intent);
     }
 
-    private class ThemeBinder extends IThemeService.Stub {
 
-        @Override
-        public void register(IRemoteCallback callback) throws RemoteException {
-            mIRemoteCallbackList.add(callback);
-        }
-
-        @Override
-        public void unRegister(IRemoteCallback callback) throws RemoteException {
-            mIRemoteCallbackList.remove(callback);
-        }
-
-        @Override
-        public boolean setTheme(ThemeBean themeBean) throws RemoteException {
-            if (themeBean != null) {
-                XLog.e(XLog.getTag(), XLog.TAG_GU + themeBean.toString());
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("theme", themeBean);
-                intent.putExtra("theme", bundle);
-                intent.putExtra("type", TYPE_SET_THEME);
-                mLocalBroadcastManager.sendBroadcastSync(intent);
-            } else {
-                XLog.e(XLog.getTag(), XLog.TAG_GU + "themeBean is null");
-            }
-            return true;
-        }
-
-        @Override
-        public boolean setWallpaper(WallpaperBean wallpaperBean) throws RemoteException {
-            if (wallpaperBean != null) {
-                XLog.e(XLog.getTag(), XLog.TAG_GU + wallpaperBean.toString());
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("wallpaper", wallpaperBean);
-                intent.putExtra("wallpaper", bundle);
-                intent.putExtra("type", TYPE_SET_WALLPAPER);
-                mLocalBroadcastManager.sendBroadcastSync(intent);
-            } else {
-                XLog.e(XLog.getTag(), XLog.TAG_GU + "wallpaperBean is null");
-            }
-            return true;
-        }
-    }
 
 
 }

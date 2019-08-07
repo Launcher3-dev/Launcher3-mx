@@ -195,7 +195,7 @@ public class RecentsModel extends TaskStackChangeListener {
     public void onTaskStackChangedBackground() {
         int userId = UserHandle.myUserId();
         if (!mPreloadTasksInBackground || !checkCurrentOrManagedUserId(userId, mContext)) {
-            // TODO: Only register this for the current user
+            // TODO: Only registerRemoteCallback this for the current user
             return;
         }
 

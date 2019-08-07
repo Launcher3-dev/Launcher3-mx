@@ -1211,7 +1211,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                         int finalPage;
                         // We give flings precedence over large moves, which is why we short-circuit our
                         // test for a large move if a fling has been registered. That is, a large
-                        // move to the left and fling to the right will register as a fling to the right.
+                        // move to the left and fling to the right will registerRemoteCallback as a fling to the right.
                         boolean isDeltaXLeft = mIsRtl ? deltaX > 0 : deltaX < 0;
                         boolean isVelocityXLeft = mIsRtl ? velocityX > 0 : velocityX < 0;
                         if (((isSignificantMove && !isDeltaXLeft && !isFling) ||
