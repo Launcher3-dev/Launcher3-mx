@@ -168,6 +168,7 @@ public class WorkspaceAndHotseatScrim implements
     }
 
     public void draw(Canvas canvas) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + mScrimAlpha + " mFullScrimColor= " + mFullScrimColor);
         // Draw the background below children.
         if (mScrimAlpha > 0 && mScrimAlpha <= 255) {
             // Update the scroll position first to ensure scrim cutout is in the right place.
@@ -180,9 +181,10 @@ public class WorkspaceAndHotseatScrim implements
                         .getDescendantRectRelativeToSelf(currCellLayout, mHighlightRect);
                 canvas.clipRect(mHighlightRect, Region.Op.DIFFERENCE);
             }
-            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + mScrimAlpha);
-            canvas.drawColor(ColorUtils.setAlphaComponent(mFullScrimColor, mScrimAlpha));
-            canvas.restore();
+            if (mScrimAlpha > 0 && mScrimAlpha <= 255) {
+                canvas.drawColor(ColorUtils.setAlphaComponent(mFullScrimColor, mScrimAlpha));
+                canvas.restore();
+            }
         }
 
         if (!mHideSysUiScrim && mHasSysUiScrim) {

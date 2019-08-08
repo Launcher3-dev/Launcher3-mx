@@ -583,10 +583,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         super.addView(page, 0, lp);
     }
 
-//    public int getNormalChildHeight() {
-//        return mNormalChildHeight;
-//    }
-
     // Convenience methods to get the actual width/height of the PagedView (since it is measured
     // to be larger to account for the minimum possible scale)
     int getViewportWidth() {
@@ -610,7 +606,6 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     private Rect mViewport = new Rect();
     private float mMinScale = 1f;
     private boolean mUseMinScale = false;
-    private int mNormalChildHeight;
     // add by codemx.cn ---- 20190712 ---plus- end
 
     @Override
@@ -707,14 +702,12 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                             - mInsets.left - mInsets.right;
                     childHeight = getViewportHeight() - verticalPadding
                             - mInsets.top - mInsets.bottom;
-                    mNormalChildHeight = childHeight;
                 } else {
                     childWidthMode = MeasureSpec.EXACTLY;
                     childHeightMode = MeasureSpec.EXACTLY;
 
                     childWidth = getViewportWidth();
                     childHeight = getViewportHeight();
-                    XLog.d(XLog.getTag(), XLog.TAG_GU + childWidth + "  " + childHeight);
                 }
                 if (referenceChildWidth == 0) {
                     referenceChildWidth = childWidth;
@@ -879,6 +872,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
                 }
                 // modify by codemx.cn ---- 20190712 ---plus- end
 
+                // TODO 要考虑反向排列问题
                 // 每个页面左侧的滑动有效位置
                 final int pageScroll = childLeft - (lp.isFullScreenPage ? 0 : getPaddingLeft());
                 if (outPageScrolls[i] != pageScroll) {
@@ -1889,10 +1883,12 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
     // ---- add by codemx.cn(新的循环滑动) --- 2019/04/01  --- start
     // SPRD: add for circular sliding. adjust if need circular slide
 
+    // X在第一页之前，表示从第一页循环到最后一页
     protected boolean isXBeforeFirstPage(int x) {
         return mIsRtl ? (x > mMaxScrollX) : (x < 0);
     }
 
+    // X在最后一页之后，表示从从最后一页循环到第一页
     protected boolean isXAfterLastPage(int x) {
         return mIsRtl ? (x < 0) : (x > mMaxScrollX);
     }
