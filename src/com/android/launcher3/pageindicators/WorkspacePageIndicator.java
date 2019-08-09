@@ -141,8 +141,8 @@ public class WorkspacePageIndicator extends View implements Insettable, PageIndi
         int lineLeft = (int) (progress * (availableWidth - lineWidth));
         int lineRight = lineLeft + lineWidth;
 
-        canvas.drawRoundRect(lineLeft, getHeight() / 2 - mLineHeight / 2, lineRight,
-                getHeight() / 2 + mLineHeight / 2, mLineHeight, mLineHeight, mLinePaint);
+        canvas.drawRoundRect(lineLeft, getHeight() / 2.0f - mLineHeight / 2.0f, lineRight,
+                getHeight() / 2.0f + mLineHeight / 2.0f, mLineHeight, mLineHeight, mLinePaint);
     }
 
     @Override
