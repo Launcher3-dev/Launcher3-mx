@@ -141,17 +141,26 @@ public class WorkspaceTouchListener implements OnTouchListener, Runnable {
         return result;
     }
 
+    // modify by codemx.cn ---- 20190809 --- start
     // 是否可以执行长按事件
     private boolean canHandleLongPress() {
         return AbstractFloatingView.getTopOpenView(mLauncher) == null
-                && mLauncher.isInState(NORMAL);
+                && mLauncher.isInState(NORMAL) && !isCustomContentView();
     }
+    // modify by codemx.cn ---- 20190809 --- end
 
     // 取消长按事件
     private void cancelLongPress() {
         mWorkspace.removeCallbacks(this);
         mLongPressState = STATE_CANCELLED;
     }
+
+    // add by codemx.cn ---- 20190809 --- start
+    // 是不是负一屏，负一屏不允许桌面长按
+    private boolean isCustomContentView() {
+        return mWorkspace.hasCustomContent() && mWorkspace.getNextPage() == 0;
+    }
+    // add by codemx.cn ---- 20190809 --- end
 
     @Override
     public void run() {
