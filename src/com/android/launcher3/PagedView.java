@@ -198,7 +198,8 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         a.recycle();
 
         setHapticFeedbackEnabled(false);
-        mIsRtl = Utilities.isRtl(getResources());
+//        mIsRtl = Utilities.isRtl(getResources());
+        mIsRtl = true;
         init();
     }
 

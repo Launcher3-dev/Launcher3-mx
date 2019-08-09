@@ -3931,26 +3931,27 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         boolean isXBeforeFirstPage = mIsRtl ? (mOverScrollX > mMaxScrollX) : (mOverScrollX < 0);
         // X在最后一页之后，表示从从最后一页循环到第一页
         boolean isXAfterLastPage = mIsRtl ? (mOverScrollX < 0) : (mOverScrollX > mMaxScrollX);
-        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "isXBeforeFirstPage= " + isXBeforeFirstPage + "  isXAfterLastPage= " + isXAfterLastPage);
         if (hasCustomContent()) {
             int index = mScreenOrder.indexOf(CUSTOM_CONTENT_SCREEN_ID);
             int scrollDelta = getScrollX() - getScrollForPage(index) -
                     getLayoutTransitionOffsetForPage(index);
             int scrollRange = getScrollForPage(index + 1) - getScrollForPage(index);
             if (isXBeforeFirstPage) {
-                translationX = -(scrollRange + scrollDelta % scrollRange);
+                translationX = -(scrollRange + scrollDelta);
                 progress = Math.abs(translationX / scrollRange);
             } else if (isXAfterLastPage) {
-                translationX = -scrollDelta % scrollRange;
+                translationX = -scrollDelta + scrollRange * (getChildCount() - 1);
                 progress = Math.abs(translationX / scrollRange);
             } else {
                 translationX = scrollRange - scrollDelta;
                 progress = translationX / scrollRange;
             }
-            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "scrollRange= " + scrollRange + "  scrollDelta= " + scrollDelta);
-            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "translationX= " + translationX + "  progress= " + progress);
             if (mIsRtl) {
-                translationX = Math.min(0, translationX);
+                if (isXBeforeFirstPage || isXAfterLastPage) {
+                    translationX = Math.max(0, translationX);
+                } else {
+                    translationX = Math.min(0, translationX);
+                }
             } else {
                 if (isXBeforeFirstPage || isXAfterLastPage) {
                     translationX = Math.min(0, translationX);
@@ -3960,7 +3961,6 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             }
             progress = Math.max(0, progress);
         }
-        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "1111translationX= " + translationX + "  progress= " + progress);
         if (Float.compare(progress, mLastCustomContentScrollProgress) == 0) return;
 
         CellLayout customContent = mWorkspaceScreens.get(CUSTOM_CONTENT_SCREEN_ID);
@@ -3972,9 +3972,9 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
 
         // We should only update the drag layer background alpha if we are not in all apps or the
         // widgets tray（设置滑动过程渐变色）
-//        if (mLauncher.getStateManager().getState() == LauncherState.NORMAL) {
-//            mLauncher.getDragLayer().setBackgroundAlpha(progress);
-//        }
+        if (mLauncher.getStateManager().getState() == LauncherState.NORMAL) {
+            mLauncher.getDragLayer().setBackgroundAlpha(progress);
+        }
 
         if (mLauncher.getHotseat() != null) {
             mLauncher.getHotseat().setTranslationX(translationX);
