@@ -8,7 +8,7 @@ import android.view.View;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
-import com.android.launcher3.menu.SupperMenuController;
+import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.imp.IMenuWidgetPreviewLoader;
 import com.android.launcher3.model.WidgetItem;
 import com.android.launcher3.widget.WidgetCell;

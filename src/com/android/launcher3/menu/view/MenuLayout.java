@@ -16,7 +16,7 @@ import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.R;
-import com.android.launcher3.menu.MenuController;
+import com.android.launcher3.menu.controller.MenuController;
 import com.android.launcher3.widget.WidgetListRowEntry;
 import com.android.mxlibrary.util.XLog;
 

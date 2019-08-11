@@ -1,4 +1,4 @@
-package com.android.launcher3.menu;
+package com.android.launcher3.menu.controller;
 
 import android.content.Context;
 import android.view.View;
@@ -39,7 +39,7 @@ public final class MenuController extends SupperMenuController implements View.O
     private MenuStateTransitionAnimation mMenuTransition;
 
     public MenuController(Context context, MenuLayout menuLayout) {
-        super(context,menuLayout);
+        super(context, menuLayout);
         this.mContext = context;
         this.mMenuLayout = menuLayout;
         mMenuTransition = new MenuStateTransitionAnimation(mContext, menuLayout);
@@ -74,27 +74,25 @@ public final class MenuController extends SupperMenuController implements View.O
         if (o instanceof MenuItem) {
             final int type = ((MenuItem) o).getType();
             switch (type) {
-                case MenuItem.MENU:
-                    switch (((MenuItem) o).getTitle()) {
-                        case R.string.menu_widget_title:
-                            mMenuController = mMenuWidgetController;
-                            break;
-                        case R.string.menu_effect_title:
-                            mMenuController = mMenuEffectController;
-                            break;
-                        case R.string.theme:
-//                                mMenuController = mMenuThemeController;
-                            break;
-                        default:
-                            break;
-                    }
-                    mMenuController.showView();
+                case MenuItem.WIDGET:
+                    mMenuController = mMenuWidgetController;
+                    break;
+                case MenuItem.EFFECT:
+                    mMenuController = mMenuEffectController;
+                    break;
+                case MenuItem.THEME:
+//                  mMenuController = mMenuThemeController;
+                    break;
+                case MenuItem.WALLPAPER:
                     break;
                 default:
                     break;
             }
+
         }
+        mMenuController.showView();
     }
+
 
     @Override
     public void onLongClick(View v) {

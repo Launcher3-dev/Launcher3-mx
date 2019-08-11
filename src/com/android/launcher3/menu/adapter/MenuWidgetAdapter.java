@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.launcher3.menu.SupperMenuController;
+import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.imp.IMenuAdapter;
 import com.android.launcher3.menu.imp.IMenuWidgetPreviewLoader;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;

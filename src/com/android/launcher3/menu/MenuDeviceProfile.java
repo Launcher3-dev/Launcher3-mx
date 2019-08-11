@@ -25,7 +25,6 @@ public class MenuDeviceProfile {
     public int menuCellCountX = 4;
     public int menuCellCountY = 1;
 
-
     public MenuDeviceProfile(Context context) {
         mContext = context;
         menuCellCountX = context.getResources().getInteger(R.integer.menu_num_columns);

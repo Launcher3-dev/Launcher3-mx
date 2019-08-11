@@ -71,7 +71,7 @@ import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.folder.PreviewBackground;
 import com.android.launcher3.graphics.DragPreviewProvider;
 import com.android.launcher3.graphics.PreloadIconDrawable;
-import com.android.launcher3.menu.MenuEffectController;
+import com.android.launcher3.menu.controller.MenuEffectController;
 import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
@@ -94,7 +94,6 @@ import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
 import com.android.launcher3.widget.PendingAppWidgetHostView;
-import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;

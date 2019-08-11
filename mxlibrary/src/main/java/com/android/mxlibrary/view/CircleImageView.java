@@ -31,7 +31,7 @@ import android.view.ViewOutlineProvider;
 
 import com.android.mxlibrary.R;
 
-public class CircleImageView extends AppCompatImageView {
+public class CircleImageView<T> extends AppCompatImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
@@ -55,6 +55,7 @@ public class CircleImageView extends AppCompatImageView {
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
     private int mCircleBackgroundColor = DEFAULT_CIRCLE_BACKGROUND_COLOR;
 
+    private T t;
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
     private int mBitmapWidth;
@@ -417,5 +418,13 @@ public class CircleImageView extends AppCompatImageView {
             outline.setRoundRect(bounds, bounds.width() / 2.0f);
         }
 
+    }
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
     }
 }

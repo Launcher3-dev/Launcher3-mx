@@ -1,9 +1,10 @@
-package com.android.launcher3.menu;
+package com.android.launcher3.menu.controller;
 
 import android.content.Context;
 import android.view.View;
 
 import com.android.launcher3.R;
+import com.android.launcher3.menu.MenuDataModel;
 import com.android.launcher3.menu.adapter.MenuAdapter;
 import com.android.launcher3.menu.adapter.MenuEffectAdapter;
 import com.android.launcher3.menu.bean.MenuItem;

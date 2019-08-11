@@ -16,6 +16,7 @@ import com.android.launcher3.anim.AnimationSuccessListener;
 import com.android.launcher3.anim.AnimatorSetBuilder;
 import com.android.launcher3.anim.PropertySetter;
 import com.android.launcher3.menu.CircleMenuView;
+import com.android.mxlibrary.util.XLog;
 
 import static com.android.launcher3.LauncherState.OVERVIEW;
 import static com.android.launcher3.anim.AnimatorSetBuilder.ANIM_OVERVIEW_SCALE;
@@ -78,6 +79,7 @@ public class MenuTransitionController implements StateHandler, OnDeviceProfileCh
     public void setMenuView(CircleMenuView circleMenuView) {
         this.mCircleMenuView = circleMenuView;
         this.mShiftRange = circleMenuView.getMeasuredHeight();
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + mShiftRange);
     }
     // add by codemx.cn ---- 20180919 ---- end
 

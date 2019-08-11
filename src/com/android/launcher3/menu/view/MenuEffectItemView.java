@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import com.android.launcher3.BubbleTextView;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
-import com.android.launcher3.menu.SupperMenuController;
+import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.setting.MxSettings;
 

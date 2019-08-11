@@ -1,4 +1,4 @@
-package com.android.launcher3.menu;
+package com.android.launcher3.menu.controller;
 
 import android.content.Context;
 import android.view.View;

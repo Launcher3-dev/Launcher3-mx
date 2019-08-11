@@ -200,7 +200,7 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
             }
         }
-
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "w= " + w + "  h= " + h);
         setMeasuredDimension(w, h);
     }
 
@@ -231,9 +231,10 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
                 continue;
             }
             mStartAngle %= 360;
+            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "mStartAngle= " + mStartAngle);
             // 计算，中心点到menu item中心的距离
             float tmp = (mDiameter - getPaddingLeft() - getPaddingRight()) / 2f - mChildDiameter / 2f;
-
+            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + "tmp= " + tmp);
             // tmp cosa 即menu item中心点的横坐标
             childLeft = mDiameter
                     / 2

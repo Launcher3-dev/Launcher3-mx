@@ -16,8 +16,19 @@ import java.util.List;
 
 public final class MenuDataModel {
 
-    private static final int[] MENU_ID = {R.drawable.selector_menu_widget, R.drawable.selector_menu_effect,R.drawable.selector_menu_theme};
-    private static final int[] MENU_TITLE = {R.string.menu_widget_title, R.string.menu_effect_title,R.string.theme};
+    private static final int[] MENU_ID =
+            {R.drawable.setting,
+                    R.drawable.theme,
+                    R.drawable.wallpapaer,
+                    R.drawable.widget,
+                    R.drawable.effect};
+
+    private static final int[] MENU_TITLE =
+            {R.string.menu_setting_title,
+                    R.string.menu_theme_title,
+                    R.string.menu_wallpaper_title,
+                    R.string.menu_widget_title,
+                    R.string.menu_effect_title};
 
     public static List<MenuItem> getMenuItemList() {
         List<MenuItem> list = new ArrayList<>();
@@ -25,8 +36,8 @@ public final class MenuDataModel {
             MenuItem item = new MenuItem();
             item.setId(i);
             item.setIcon(MENU_ID[i]);
-            item.setTitle(MENU_TITLE[i]);
-            item.setType(MenuItem.MENU);
+            item.setTitleId(MENU_TITLE[i]);
+            item.setPosition(i);
             list.add(item);
         }
         return list;
@@ -57,7 +68,7 @@ public final class MenuDataModel {
             MenuItem item = new MenuItem();
             item.setId(i);
             item.setIcon(MENU_EFFECT_ID[i]);
-            item.setTitle(MENU_EFFECT_TITLE[i]);
+            item.setTitleId(MENU_EFFECT_TITLE[i]);
             item.setType(MenuItem.EFFECT);
             item.setPosition(MENU_EFFECT_POSITION[i]);
             list.add(item);
