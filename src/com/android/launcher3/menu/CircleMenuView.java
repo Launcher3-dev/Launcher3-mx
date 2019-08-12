@@ -4,7 +4,6 @@ package com.android.launcher3.menu;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -38,8 +37,6 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
 
     private boolean mIsAnimating = false;
 
-    private Drawable mIconMenu;
-    private Drawable mIconClose;
     private int mDurationRing;
     private int mDurationOpen;
     private int mDurationClose;
@@ -68,9 +65,6 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         final TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.CircleMenuView, 0, 0);
         try {
-            mIconMenu = getResources().getDrawable(R.drawable.ic_menu_black_24dp);
-            mIconClose = getResources().getDrawable(R.drawable.ic_close_black_24dp);
-
             mDurationRing = a.getInteger(R.styleable.CircleMenuView_duration_ring, getResources().getInteger(android.R.integer.config_mediumAnimTime));
             mDurationOpen = a.getInteger(R.styleable.CircleMenuView_duration_open, getResources().getInteger(android.R.integer.config_mediumAnimTime));
             mDurationClose = a.getInteger(R.styleable.CircleMenuView_duration_close, getResources().getInteger(android.R.integer.config_mediumAnimTime));
