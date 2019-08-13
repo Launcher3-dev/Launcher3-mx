@@ -104,6 +104,7 @@ public class MenuSweeper {
             }
             SPLINE_POSITION[i] = coef * ((1.0f - x) * START_TENSION + x) + x * x * x;
         }
+        SPLINE_POSITION[NB_SAMPLES] = 1.0f;
         // This controls the viscous fluid effect (how much of it)
         sViscousFluidScale = 8.0f;
         // must be set to 1.0 (used in viscousFluid())
