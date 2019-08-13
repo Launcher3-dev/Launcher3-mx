@@ -363,7 +363,7 @@ public class LauncherScroller {
      *                 content to the left.
      * @param dy       Vertical distance to travel. Positive numbers will scroll the
      *                 content up.
-     * @param duration Duration of the scroll in milliseconds.
+     * @param duration Duration of the scroll in milliseconds.（scroll需要的时间）
      */
     public void startScroll(int startX, int startY, int dx, int dy, int duration) {
         mMode = SCROLL_MODE;

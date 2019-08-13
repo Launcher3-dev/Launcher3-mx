@@ -106,6 +106,8 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         if (!changed && mIsAnimating) {
             return;
         }
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
         int childCount = getChildCount();
 
         // 根据menu item的个数，计算角度
@@ -118,27 +120,22 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
             if (child.getVisibility() == View.GONE) {
                 continue;
             }
+            int childWidth = child.getMeasuredWidth();
+            int childHeight = child.getMeasuredHeight();
             // 中间按钮
             if (child.getId() == R.id.circle_menu_main_button) {
-                child.layout(getMeasuredWidth() / 2 - child.getMeasuredWidth() / 2,
-                        getMeasuredHeight() / 2 - child.getMeasuredHeight() / 2,
-                        getMeasuredWidth() / 2 + child.getMeasuredWidth() / 2,
-                        getMeasuredHeight() / 2 + child.getMeasuredHeight() / 2);
+                child.layout(width / 2 - childWidth / 2, height / 2 - childHeight / 2,
+                        width / 2 + childWidth / 2, height / 2 + childHeight / 2);
                 child.setOnClickListener(this);
                 continue;
             }
             mStartAngle %= 360;
+            int radius = mChildDiameter / 2;
+            // 转换为弧度
+            double radians = Math.toRadians(mStartAngle);
             // 计算，中心点到menu item中心的距离
-            childLeft = mDiameter
-                    / 2
-                    + (int) Math.round(tmp
-                    * Math.cos(Math.toRadians(mStartAngle)) - 1 / 2f
-                    * mChildDiameter);
-            childTop = mDiameter
-                    / 2
-                    + (int) Math.round(tmp
-                    * Math.sin(Math.toRadians(mStartAngle)) - 1 / 2f
-                    * mChildDiameter);
+            childLeft = mDiameter / 2 + (int) Math.round(tmp * Math.cos(radians) - radius);
+            childTop = mDiameter / 2 + (int) Math.round(tmp * Math.sin(radians) - radius);
             child.layout(childLeft, childTop, childLeft + mChildDiameter, childTop + mChildDiameter);
             // 叠加尺寸
             mStartAngle += angleDelay;
