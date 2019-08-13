@@ -3,6 +3,7 @@
 ## 目录
 
 * [解析配置信息错误](#解析配置信息错误)
+* [高斯模糊](@高斯模糊)
 
 ## 解析配置信息错误
 
@@ -49,3 +50,9 @@ parser.getAttributeResourceValue("http://schemas.android.com/apk/res-auto/com.an
 ```
 "http://schemas.android.com/apk/res-auto"
 ```
+
+## 高斯模糊
+* [RealtimeBlurView](https://github.com/mmin18/RealtimeBlurView)
+* [blurkit-android](https://github.com/CameraKit/blurkit-android)
+* [Blurry](https://github.com/wasabeef/Blurry)
+* [BlurEffectForAndroidDesign](https://github.com/PomepuyN/BlurEffectForAndroidDesign)
