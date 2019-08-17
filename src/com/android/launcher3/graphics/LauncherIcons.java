@@ -249,7 +249,7 @@ public class LauncherIcons implements AutoCloseable {
             AdaptiveIconDrawable dr = (AdaptiveIconDrawable) mWrapperIcon;
             dr.setBounds(0, 0, 1, 1);
             scale = getNormalizer().getScale(icon, outIconBounds, dr.getIconMask(), outShape);
-            if (Utilities.ATLEAST_OREO && !outShape[0] && !(icon instanceof AdaptiveIconDrawable)) {
+            if (!outShape[0] && !(icon instanceof AdaptiveIconDrawable)) {
                 FixedScaleDrawable fsd = ((FixedScaleDrawable) dr.getForeground());
                 fsd.setDrawable(icon);
                 fsd.setScale(scale);

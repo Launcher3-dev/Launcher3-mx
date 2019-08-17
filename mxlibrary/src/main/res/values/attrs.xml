@@ -31,6 +31,7 @@
         <attr name="icon_color" format="color"/>
         <!-- Ring effect duration. -->
         <attr name="duration_ring" format="integer"/>
+        <attr name="menu_child_diameter" format="integer"/>
         <!-- Menu opening animation duration. -->
         <attr name="duration_open" format="integer"/>
         <!-- Menu closing animation duration. -->

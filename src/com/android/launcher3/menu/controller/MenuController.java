@@ -93,7 +93,6 @@ public final class MenuController extends SupperMenuController implements View.O
         mMenuController.showView();
     }
 
-
     @Override
     public void onLongClick(View v) {
 

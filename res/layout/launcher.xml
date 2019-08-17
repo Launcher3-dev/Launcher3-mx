@@ -15,6 +15,7 @@
 <com.android.launcher3.LauncherRootView
     android:id="@+id/launcher"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -68,7 +69,16 @@
             android:layout_width="400dp"
             android:layout_height="400dp"
             android:layout_gravity="center"
-            android:visibility="visible"/>
+            android:visibility="visible">
+
+            <com.android.mxlibrary.view.CircleImageView
+                android:id="@+id/circle_menu_main_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_menu_black_24dp"
+                app:backgroundTint="@android:color/white"/>
+        </com.android.launcher3.menu.CircleMenuView>
 
         <include
             android:id="@+id/menu_layout"

@@ -37,16 +37,15 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
 
     private boolean mIsAnimating = false;
 
-    private int mDurationRing;
+    private int mMenuChildDiameter;
     private int mDurationOpen;
     private int mDurationClose;
     private float mDistance;
 
+    private MenuSweeper mSweeper;
     private Launcher mLauncher;
     private LayoutInflater mInflater;
 
-    //布局时的开始角度
-    private int mStartAngle = 0;
     // 圆形菜单直径
     private int mDiameter = 0;
     private int mChildDiameter = 0;
@@ -58,6 +57,7 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
 
     public void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         mLauncher = Launcher.getLauncher(context);
+        mSweeper = new MenuSweeper(this);
         if (attrs == null) {
             throw new IllegalArgumentException("No buttons icons or colors set");
         }
@@ -65,7 +65,7 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         final TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.CircleMenuView, 0, 0);
         try {
-            mDurationRing = a.getInteger(R.styleable.CircleMenuView_duration_ring, getResources().getInteger(android.R.integer.config_mediumAnimTime));
+            mMenuChildDiameter = a.getInteger(R.styleable.CircleMenuView_menu_child_diameter, 0);
             mDurationOpen = a.getInteger(R.styleable.CircleMenuView_duration_open, getResources().getInteger(android.R.integer.config_mediumAnimTime));
             mDurationClose = a.getInteger(R.styleable.CircleMenuView_duration_close, getResources().getInteger(android.R.integer.config_mediumAnimTime));
 
@@ -86,6 +86,9 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         final int h = MeasureSpec.getSize(heightMeasureSpec);
         mDiameter = Math.min(w, h);
         mChildDiameter = (int) (mDiameter * DEFAULT_CHILD_SCALE_RATIO);
+        if (mMenuChildDiameter > 0 && mChildDiameter != mMenuChildDiameter) {
+            mChildDiameter = mMenuChildDiameter;
+        }
         int childCount = getChildCount();
         if (childCount > 0) {
             int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(mChildDiameter, MeasureSpec.EXACTLY);
@@ -93,6 +96,10 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
             for (int i = 0; i < childCount; i++) {
                 View child = getChildAt(i);
                 if (child.getVisibility() == View.GONE) {
+                    continue;
+                }
+                if (child.getId() == R.id.circle_menu_main_item) {
+                    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
                     continue;
                 }
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
@@ -108,13 +115,13 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         }
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-        int childCount = getChildCount();
-
+        final int childCount = getChildCount();
         // 根据menu item的个数，计算角度
-        float angleDelay = 360 / (float) (childCount);
+        float angleDelay = 360 / (float) (isContainCenterMenuItem(childCount) ? childCount - 1 : childCount);
         float tmp = (mDiameter - getPaddingLeft() - getPaddingRight()) / 2f - mChildDiameter / 2f;
         int childLeft;
         int childTop;
+        int startAngle = mSweeper.getStartAngle();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             if (child.getVisibility() == View.GONE) {
@@ -123,23 +130,37 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
             int childWidth = child.getMeasuredWidth();
             int childHeight = child.getMeasuredHeight();
             // 中间按钮
-            if (child.getId() == R.id.circle_menu_main_button) {
+            if (child.getId() == R.id.circle_menu_main_item) {
                 child.layout(width / 2 - childWidth / 2, height / 2 - childHeight / 2,
                         width / 2 + childWidth / 2, height / 2 + childHeight / 2);
                 child.setOnClickListener(this);
                 continue;
             }
-            mStartAngle %= 360;
+
+            startAngle %= 360;
             int radius = mChildDiameter / 2;
             // 转换为弧度
-            double radians = Math.toRadians(mStartAngle);
+            double radians = Math.toRadians(startAngle);
             // 计算，中心点到menu item中心的距离
             childLeft = mDiameter / 2 + (int) Math.round(tmp * Math.cos(radians) - radius);
             childTop = mDiameter / 2 + (int) Math.round(tmp * Math.sin(radians) - radius);
             child.layout(childLeft, childTop, childLeft + mChildDiameter, childTop + mChildDiameter);
             // 叠加尺寸
-            mStartAngle += angleDelay;
+            startAngle += angleDelay;
         }
+    }
+
+    private boolean isContainCenterMenuItem(int childCount) {
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() == View.GONE) {
+                continue;
+            }
+            if (child.getId() == R.id.circle_menu_main_item) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -153,6 +174,8 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         for (MenuItem item : menuItems) {
             CircleImageView itemView = (CircleImageView) mInflater.inflate(R.layout.menu_item_layout, this, false);
             itemView.setImageResource(item.getIcon());
+            itemView.setTag(item);
+            itemView.setOnClickListener(this);
             addView(itemView);
         }
     }
@@ -161,6 +184,10 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
     public void onClick(final View view) {
         if (mIsAnimating) {
             return;
+        }
+        Object tag = view.getTag();
+        if (tag instanceof MenuItem) {
+
         }
     }
 
@@ -172,29 +199,16 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         InsettableFrameLayout.dispatchInsets(this, insets);
     }
 
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+    }
+
     /**
      * 记录上一次的x，y坐标
      */
     private float mLastX;
     private float mLastY;
-
-    /**
-     * 自动滚动的Runnable
-     */
-    private AutoFlingRunnable mFlingRunnable;
-    /**
-     * 检测按下到抬起时旋转的角度
-     */
-    private float mTmpAngle;
-    /**
-     * 检测按下到抬起时使用的时间
-     */
-    private long mDownTime;
-
-    /**
-     * 如果移动角度达到该值，则屏蔽点击
-     */
-    private static final int NOCLICK_VALUE = 3;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -204,48 +218,37 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
             case MotionEvent.ACTION_DOWN:
                 mLastX = x;
                 mLastY = y;
-                mDownTime = System.currentTimeMillis();
-                mTmpAngle = 0;
+                mSweeper.initActionDown();
                 // 如果当前已经在快速滚动
-                if (isFling) {
+                if (mSweeper.isFling()) {
                     // 移除快速滚动的回调
-                    removeCallbacks(mFlingRunnable);
-                    isFling = false;
+                    mSweeper.abortSweeperAnimation();
                     return true;
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 // 获得开始的角度
-                float start = getAngle(mLastX, mLastY);
+                float start = mSweeper.getAngle(mDiameter, mLastX, mLastY);
                 // 获得当前的角度
-                float end = getAngle(x, y);
-                // Log.e("TAG", "start = " + start + " , end =" + end);
+                float end = mSweeper.getAngle(mDiameter, x, y);
                 // 如果是一、四象限，则直接end-start，角度值都是正值
-                int quadrant = getQuadrant(x, y);
-                if (quadrant == 1 || quadrant == 4) {
-                    mStartAngle += end - start;
-                    mTmpAngle += end - start;
-                } else {// 二、三象限，色角度值是付值
-                    mStartAngle += start - end;
-                    mTmpAngle += start - end;
-                }
+                boolean isQuadrant1Or4 = mSweeper.isQuadrant1Or4(mDiameter, x, y);
+                float delta = isQuadrant1Or4 ? end - start : start - end;
+                mSweeper.startFling(delta);
                 // 重新布局
                 requestLayout();
                 mLastX = x;
                 mLastY = y;
                 break;
             case MotionEvent.ACTION_UP:
-                // 计算，每秒移动的角度
-                float anglePerSecond = mTmpAngle * 1000
-                        / (System.currentTimeMillis() - mDownTime);
                 // 如果达到该值认为是快速移动
-                if (Math.abs(anglePerSecond) > mFlingAbleValue && !isFling) {
+                if (mSweeper.isFastSweep() && !mSweeper.isFling()) {
                     // post一个任务，去自动滚动
-                    post(mFlingRunnable = new AutoFlingRunnable(anglePerSecond));
+                    mSweeper.fling();
                     return true;
                 }
-                // 如果当前旋转角度超过NOCLICK_VALUE屏蔽点击
-                if (Math.abs(mTmpAngle) > NOCLICK_VALUE) {
+                // 如果当前旋转角度超过SWEEP_SLOT屏蔽点击
+                if (mSweeper.isNoClick()) {
                     return true;
                 }
                 break;
@@ -261,79 +264,5 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
         return true;
     }
 
-    /**
-     * 根据触摸的位置，计算角度
-     *
-     * @param xTouch 触摸点的x坐标值
-     * @param yTouch 触摸点的y坐标值
-     *
-     * @return 触摸点相对中点的角度
-     */
-    private float getAngle(float xTouch, float yTouch) {
-        double x = xTouch - (mDiameter / 2d);
-        double y = yTouch - (mDiameter / 2d);
-        return (float) (Math.asin(y / Math.hypot(x, y)) * 180 / Math.PI);
-    }
-
-    /**
-     * 根据当前位置计算象限
-     *
-     * @param x x坐标值
-     * @param y y坐标值
-     *
-     * @return 坐标所在象限
-     */
-    private int getQuadrant(float x, float y) {
-        int tmpX = (int) (x - mDiameter / 2);
-        int tmpY = (int) (y - mDiameter / 2);
-        if (tmpX >= 0) {
-            return tmpY >= 0 ? 4 : 1;
-        } else {
-            return tmpY >= 0 ? 3 : 2;
-        }
-    }
-
-    private int mFlingAbleValue;
-
-    /**
-     * 如果每秒旋转角度到达该值，则认为是自动滚动
-     *
-     * @param flingAbleValue
-     */
-    public void setFlingAbleValue(int flingAbleValue) {
-        this.mFlingAbleValue = flingAbleValue;
-    }
-
-    private boolean isFling = false;
-
-    /**
-     * 自动滚动的任务
-     *
-     * @author zhy
-     */
-    private class AutoFlingRunnable implements Runnable {
-
-        private float angelPerSecond;
-
-        AutoFlingRunnable(float velocity) {
-            this.angelPerSecond = velocity;
-        }
-
-        public void run() {
-            // 如果小于20,则停止
-            if ((int) Math.abs(angelPerSecond) < 20) {
-                isFling = false;
-                return;
-            }
-            isFling = true;
-            // 不断改变mStartAngle，让其滚动，/30为了避免滚动太快
-            mStartAngle += (angelPerSecond / 30);
-            // 逐渐减小这个值
-            angelPerSecond /= 1.0666F;
-            postDelayed(this, 30);
-            // 重新布局
-            requestLayout();
-        }
-    }
 
 }
