@@ -3,10 +3,10 @@ package com.android.launcher3.menu.anim;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAnimUtils;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;
 import com.android.launcher3.menu.view.MenuLayout;
@@ -20,13 +20,13 @@ import com.android.mxlibrary.util.XLog;
 
 public class MenuStateTransitionAnimation {
 
-    public static final int MENU_DURATION = 600;
+    private static final int MENU_DURATION = 600;
     public static final int BACKGROUND_FADE_OUT_DURATION = 600;
 
     private MenuLayout mMenuLayout;
     private AnimatorSet mStateAnimator;
 
-    public MenuStateTransitionAnimation(Context context, MenuLayout menuLayout) {
+    public MenuStateTransitionAnimation(Launcher launcher, MenuLayout menuLayout) {
         this.mMenuLayout = menuLayout;
     }
 

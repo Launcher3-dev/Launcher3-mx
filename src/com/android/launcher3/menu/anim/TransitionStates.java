@@ -3,19 +3,7 @@ package com.android.launcher3.menu.anim;
 import com.android.launcher3.menu.view.MenuLayout;
 import com.android.mxlibrary.util.XLog;
 
-public class TransitionStates {
-
-    final boolean oldStateIsNone;
-    final boolean oldStateIsMenu;
-    final boolean oldStateIsWidget;
-    final boolean oldStateIsWidgetList;
-    final boolean oldStateIsEffect;
-
-    final boolean stateIsNone;
-    final boolean stateIsMenu;
-    final boolean stateIsWidget;
-    final boolean stateIsWidgetList;
-    final boolean stateIsEffect;
+class TransitionStates {
 
     final boolean noneToMenu;
     final boolean menuToNone;
@@ -27,20 +15,20 @@ public class TransitionStates {
     final boolean widgetListToWidget;
 
 
-    public TransitionStates(final MenuLayout.State fromState, final MenuLayout.State toState) {
+    TransitionStates(final MenuLayout.State fromState, final MenuLayout.State toState) {
 
         XLog.e(XLog.getTag(), XLog.TAG_GU + "  fromState==  " + fromState + "  toState==  " + toState);
-        oldStateIsNone = (fromState == MenuLayout.State.NONE);
-        oldStateIsMenu = (fromState == MenuLayout.State.MENU);
-        oldStateIsWidget = (fromState == MenuLayout.State.WIDGET);
-        oldStateIsWidgetList = (fromState == MenuLayout.State.WIDGET_LIST);
-        oldStateIsEffect = (fromState == MenuLayout.State.EFFECT);
+        boolean oldStateIsNone = (fromState == MenuLayout.State.NONE);
+        boolean oldStateIsMenu = (fromState == MenuLayout.State.MENU);
+        boolean oldStateIsWidget = (fromState == MenuLayout.State.WIDGET);
+        boolean oldStateIsWidgetList = (fromState == MenuLayout.State.WIDGET_LIST);
+        boolean oldStateIsEffect = (fromState == MenuLayout.State.EFFECT);
 
-        stateIsNone = (toState == MenuLayout.State.NONE);
-        stateIsMenu = (toState == MenuLayout.State.MENU);
-        stateIsWidget = (toState == MenuLayout.State.WIDGET);
-        stateIsWidgetList = (toState == MenuLayout.State.WIDGET_LIST);
-        stateIsEffect = (toState == MenuLayout.State.EFFECT);
+        boolean stateIsNone = (toState == MenuLayout.State.NONE);
+        boolean stateIsMenu = (toState == MenuLayout.State.MENU);
+        boolean stateIsWidget = (toState == MenuLayout.State.WIDGET);
+        boolean stateIsWidgetList = (toState == MenuLayout.State.WIDGET_LIST);
+        boolean stateIsEffect = (toState == MenuLayout.State.EFFECT);
 
         noneToMenu = (oldStateIsNone && stateIsMenu);
         menuToNone = (oldStateIsMenu && stateIsNone);

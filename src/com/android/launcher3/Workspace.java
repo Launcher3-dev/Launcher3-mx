@@ -94,6 +94,7 @@ import com.android.launcher3.widget.LauncherAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
 import com.android.launcher3.widget.PendingAppWidgetHostView;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -311,6 +312,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         mOverviewModeShrinkFactor =
                 getResources().getInteger(R.integer.config_workspaceOverviewShrinkPercentage) / 100f;
 
+        mTransitionEffectHandler = new TransitionEffectHandler(this);
         mTransitionEffect = new TransitionEffect(mLauncher);
         mTransitionEffect.setWorkspace(this);
         // --- add by comde.cn ---- 2018/09/06 --- end
@@ -1161,6 +1163,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         if (!mScroller.isFinished() || getChildCount() < 2) {
             return;
         }
+        XLog.d(XLog.getTag(),XLog.TAG_GU_STATE + effect);
         MxSettings.getInstance().setLauncherEffect(effect.getPosition());
         controller.getAdapter().setSelected(effect);
         mTransitionEffectHandler.removeMessages(WORKSPACE_MSG_PREVIEW_EFFECT);

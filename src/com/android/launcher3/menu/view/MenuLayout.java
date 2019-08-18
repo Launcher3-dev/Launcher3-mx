@@ -30,19 +30,12 @@ import java.util.ArrayList;
 
 public class MenuLayout extends FrameLayout implements Insettable {
 
-
     private MenuController mMenuController;
     private HorizontalPageScrollView mMenuListLayout;
     private HorizontalPageScrollView mMenuWidgetAndEffectLayout;
     private HorizontalPageScrollView mMenuWidgetListLayout;
     private State mState = State.NONE;
     private Launcher mLauncher;
-
-    public void setWidgets(ArrayList<WidgetListRowEntry> allWidgets) {
-        if (mMenuController != null) {
-            mMenuController.setWidgets(allWidgets);
-        }
-    }
 
     public enum State {
         NONE,
@@ -58,20 +51,29 @@ public class MenuLayout extends FrameLayout implements Insettable {
 
     public MenuLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        XLog.e(XLog.getTag(),XLog.TAG_GU_STATE);
         mLauncher = Launcher.getLauncher(context);
-        mMenuController = new MenuController(context, this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        XLog.e(XLog.getTag(), XLog.TAG_GU);
         mMenuListLayout = findViewById(R.id.mx_menu);
-        mMenuController.setLayoutAnimation(mMenuListLayout);
         mMenuWidgetAndEffectLayout = findViewById(R.id.menu_widget_effect);
-        mMenuController.setLayoutAnimation(mMenuWidgetAndEffectLayout);
         mMenuWidgetListLayout = findViewById(R.id.menu_widget_list);
+    }
+
+    public void setup(MenuController menuController) {
+        this.mMenuController = menuController;
+        mMenuController.setLayoutAnimation(mMenuListLayout);
+        mMenuController.setLayoutAnimation(mMenuWidgetAndEffectLayout);
         mMenuController.setLayoutAnimation(mMenuWidgetListLayout);
+    }
+
+    public void setWidgets(ArrayList<WidgetListRowEntry> allWidgets) {
+        if (mMenuController != null) {
+            mMenuController.setWidgets(allWidgets);
+        }
     }
 
     public void setPadding(int left, int top, int right, int bottom) {
@@ -166,10 +168,15 @@ public class MenuLayout extends FrameLayout implements Insettable {
             lp.gravity = Gravity.BOTTOM;
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
             lp.height = grid.hotseatBarSizePx + insets.bottom;
-            lp.bottomMargin = grid.hotseatBarBottomMarginPx + lp.height;
+            lp.bottomMargin = grid.hotseatBarBottomMarginPx;
+
+          XLog.d(XLog.getTag(),XLog.TAG_GU_STATE + lp.height);
         }
+        Rect padding = grid.getHotseatLayoutPadding();
+        setPadding(padding.left, padding.top, padding.right, padding.bottom);
+
         setLayoutParams(lp);
         InsettableFrameLayout.dispatchInsets(this, insets);
-
     }
+
 }

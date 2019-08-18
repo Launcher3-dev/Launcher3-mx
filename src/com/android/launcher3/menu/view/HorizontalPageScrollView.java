@@ -204,7 +204,7 @@ public class HorizontalPageScrollView<T extends MenuItem> extends LinearLayout
         }
     }
 
-    public void setAdapter(IMenuAdapter<T> adapter) {
+    public void setAdapter(IMenuAdapter adapter) {
         removeAllViews();
         resetPage();
         adapter.setContainer(this);

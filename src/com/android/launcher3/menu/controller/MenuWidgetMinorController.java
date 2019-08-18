@@ -1,8 +1,8 @@
 package com.android.launcher3.menu.controller;
 
-import android.content.Context;
 import android.view.View;
 
+import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.menu.adapter.MenuWidgetMinorAdapter;
 import com.android.launcher3.menu.view.MenuLayout;
@@ -24,9 +24,10 @@ public class MenuWidgetMinorController extends SupperMenuController<WidgetItem> 
 
     private WidgetListRowEntry entry;
 
-    public MenuWidgetMinorController(Context context, MenuLayout menuLayout) {
-        super(context, menuLayout);
-        mMenuAdapter = new MenuWidgetMinorAdapter(context, this, null);
+    MenuWidgetMinorController(Launcher launcher, MenuLayout menuLayout) {
+        super(launcher);
+        this.mMenuLayout = menuLayout;
+        mMenuAdapter = new MenuWidgetMinorAdapter(launcher, this, null);
     }
 
     public void setEntry(WidgetListRowEntry entry) {
@@ -45,7 +46,7 @@ public class MenuWidgetMinorController extends SupperMenuController<WidgetItem> 
                 new PackageUserKey(
                         entry.pkgItem.getTargetComponent().getPackageName(),
                         entry.pkgItem.user));
-        mMenuAdapter.addAll(widgets);
+        mMenuAdapter.addAllData(widgets);
     }
 
     @Override

@@ -19,6 +19,9 @@ import com.android.launcher3.InsettableFrameLayout;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.menu.bean.MenuItem;
+import com.android.launcher3.menu.imp.OnMenuClickListener;
+import com.android.launcher3.menu.imp.OnMenuLongClickListener;
+import com.android.mxlibrary.util.XLog;
 import com.android.mxlibrary.view.CircleImageView;
 
 import java.util.List;
@@ -27,7 +30,7 @@ import java.util.List;
 /**
  * CircleMenuView
  */
-public class CircleMenuView extends ViewGroup implements View.OnClickListener, Insettable {
+public class CircleMenuView extends ViewGroup implements View.OnClickListener, Insettable, View.OnLongClickListener {
 
     private static final int DEFAULT_BUTTON_SIZE = 56;
     private static final float DEFAULT_DISTANCE = DEFAULT_BUTTON_SIZE * 1.5f;
@@ -45,6 +48,8 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
     private MenuSweeper mSweeper;
     private Launcher mLauncher;
     private LayoutInflater mInflater;
+    private OnMenuClickListener mOnClickListener;
+    private OnMenuLongClickListener mOnLongClickListener;
 
     // 圆形菜单直径
     private int mDiameter = 0;
@@ -56,6 +61,7 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
     }
 
     public void init(@NonNull Context context, @Nullable AttributeSet attrs) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU_STATE);
         mLauncher = Launcher.getLauncher(context);
         mSweeper = new MenuSweeper(this);
         if (attrs == null) {
@@ -76,6 +82,12 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
             a.recycle();
         }
         mInflater = LayoutInflater.from(context);
+    }
+
+    public void setMenuController(OnMenuClickListener onClickListener,
+                                  OnMenuLongClickListener onLongClickListener) {
+        this.mOnClickListener = onClickListener;
+        this.mOnLongClickListener = onLongClickListener;
     }
 
     @Override
@@ -134,6 +146,7 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
                 child.layout(width / 2 - childWidth / 2, height / 2 - childHeight / 2,
                         width / 2 + childWidth / 2, height / 2 + childHeight / 2);
                 child.setOnClickListener(this);
+                child.setOnLongClickListener(this);
                 continue;
             }
 
@@ -182,13 +195,10 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
 
     @Override
     public void onClick(final View view) {
-        if (mIsAnimating) {
+        if (mSweeper.isFling()) {
             return;
         }
-        Object tag = view.getTag();
-        if (tag instanceof MenuItem) {
-
-        }
+        mOnClickListener.onMenuClick(view);
     }
 
     @Override
@@ -265,4 +275,9 @@ public class CircleMenuView extends ViewGroup implements View.OnClickListener, I
     }
 
 
+    @Override
+    public boolean onLongClick(View v) {
+        mOnLongClickListener.onMenuLongClick(v);
+        return false;
+    }
 }

@@ -30,6 +30,7 @@ import com.android.launcher3.logging.UserEventDispatcher.LogContainerProvider;
 import com.android.launcher3.uninstall.UninstallIconAnimUtil;
 import com.android.launcher3.userevent.nano.LauncherLogProto.ContainerType;
 import com.android.launcher3.userevent.nano.LauncherLogProto.Target;
+import com.android.mxlibrary.util.XLog;
 
 public class Hotseat extends FrameLayout implements LogContainerProvider, Insettable {
 
@@ -121,6 +122,7 @@ public class Hotseat extends FrameLayout implements LogContainerProvider, Insett
             lp.bottomMargin = grid.hotseatBarBottomMarginPx;
             lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
             lp.height = grid.hotseatBarSizePx + insets.bottom;
+            XLog.d(XLog.getTag(),XLog.TAG_GU_STATE + lp.height);
         }
         Rect padding = grid.getHotseatLayoutPadding();
         getLayout().setPadding(padding.left, padding.top, padding.right, padding.bottom);

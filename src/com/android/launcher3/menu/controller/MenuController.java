@@ -1,18 +1,21 @@
 package com.android.launcher3.menu.controller;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
+import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
+import com.android.launcher3.menu.CircleMenuView;
 import com.android.launcher3.menu.anim.MenuStateTransitionAnimation;
 import com.android.launcher3.menu.bean.MenuItem;
-import com.android.launcher3.menu.view.MenuItemView;
+import com.android.launcher3.menu.imp.OnMenuClickListener;
+import com.android.launcher3.menu.imp.OnMenuLongClickListener;
 import com.android.launcher3.menu.view.MenuLayout;
 import com.android.launcher3.widget.WidgetListRowEntry;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 
@@ -22,31 +25,34 @@ import java.util.ArrayList;
  * DATE 2018/1/16
  * TIME 11:51
  */
-public final class MenuController extends SupperMenuController implements View.OnClickListener {
-
-    private Context mContext;
-    private MenuLayout mMenuLayout;
+public final class MenuController extends SupperMenuController implements OnMenuClickListener,
+        OnMenuLongClickListener {
 
     private SupperMenuController mMenuController;
     private SupperMenuController mMenuEffectController;
     private SupperMenuController mMenuWidgetController;
     private SupperMenuController mMenuWidgetMinorController;
 
-    public MenuStateTransitionAnimation getMenuTransition() {
+    MenuStateTransitionAnimation getMenuTransition() {
         return mMenuTransition;
     }
 
     private MenuStateTransitionAnimation mMenuTransition;
 
-    public MenuController(Context context, MenuLayout menuLayout) {
-        super(context, menuLayout);
-        this.mContext = context;
+    public MenuController(Launcher launcher) {
+        super(launcher);
+    }
+
+    public void setup(CircleMenuView circleMenuView, MenuLayout menuLayout) {
         this.mMenuLayout = menuLayout;
-        mMenuTransition = new MenuStateTransitionAnimation(mContext, menuLayout);
-        mMenuController = new MenuMainController(context, menuLayout);
-        mMenuEffectController = new MenuEffectController(context, menuLayout);
-        mMenuWidgetController = new MenuWidgetController(context, menuLayout);
-        mMenuWidgetMinorController = new MenuWidgetMinorController(context, menuLayout);
+        this.mCircleMenuView = circleMenuView;
+        mMenuLayout.setup(this);
+        mCircleMenuView.setMenuController(this, this);
+        mMenuTransition = new MenuStateTransitionAnimation(mLauncher, menuLayout);
+        mMenuController = mMenuEffectController = new MenuEffectController(mLauncher, menuLayout);
+        mMenuWidgetController = new MenuWidgetController(mLauncher, menuLayout);
+        mMenuWidgetMinorController = new MenuWidgetMinorController(mLauncher, menuLayout);
+        loadAdapter();
     }
 
     @Override
@@ -70,27 +76,7 @@ public final class MenuController extends SupperMenuController implements View.O
 
     @Override
     public void onClick(View view) {
-        Object o = ((MenuItemView) view).getMenuTag();
-        if (o instanceof MenuItem) {
-            final int type = ((MenuItem) o).getType();
-            switch (type) {
-                case MenuItem.WIDGET:
-                    mMenuController = mMenuWidgetController;
-                    break;
-                case MenuItem.EFFECT:
-                    mMenuController = mMenuEffectController;
-                    break;
-                case MenuItem.THEME:
-//                  mMenuController = mMenuThemeController;
-                    break;
-                case MenuItem.WALLPAPER:
-                    break;
-                default:
-                    break;
-            }
-
-        }
-        mMenuController.showView();
+        mMenuController.onClick(view);
     }
 
     @Override
@@ -134,5 +120,35 @@ public final class MenuController extends SupperMenuController implements View.O
     public void showMinorWidgetList(WidgetListRowEntry entry) {
         ((MenuWidgetMinorController) mMenuWidgetMinorController).setEntry(entry);
         mMenuWidgetMinorController.showView();
+    }
+
+    @Override
+    public void onMenuClick(View view) {
+        Object o = view.getTag();
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + o);
+        if (o instanceof MenuItem) {
+            final int type = ((MenuItem) o).getType();
+            switch (type) {
+                case MenuItem.WIDGET:
+                    mMenuController = mMenuWidgetController;
+                    break;
+                case MenuItem.EFFECT:
+                    mMenuController = mMenuEffectController;
+                    break;
+                case MenuItem.THEME:
+//                  mMenuController = mMenuThemeController;
+                    break;
+                case MenuItem.WALLPAPER:
+                    break;
+                default:
+                    break;
+            }
+        }
+        mMenuController.showView();
+    }
+
+    @Override
+    public void onMenuLongClick(View view) {
+
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface IMenuAdapter<T> {
 
-    void addAll(List<T> list);
+    void addAllData(List<T> list);
 
     void setContainer(HorizontalPageScrollView container);
 

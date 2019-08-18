@@ -1,8 +1,8 @@
 package com.android.launcher3.menu.controller;
 
-import android.content.Context;
 import android.view.View;
 
+import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.R;
 import com.android.launcher3.WidgetPreviewLoader;
@@ -16,6 +16,7 @@ import com.android.launcher3.model.WidgetItem;
 import com.android.launcher3.util.PackageUserKey;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
 import com.android.launcher3.widget.WidgetListRowEntry;
+import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,17 +33,19 @@ public class MenuWidgetController extends SupperMenuController implements IMenuW
     private final AlphabeticIndexCompat mIndexer;
     private ArrayList<WidgetListRowEntry> mAllWidgets;
 
-    public MenuWidgetController(Context context, MenuLayout menuLayout) {
-        super(context, menuLayout);
-        mMenuAdapter = new MenuWidgetAdapter(context, this, this);
-        mWidgetPreviewLoader = LauncherAppState.getInstance(context).getWidgetCache();
-        mIndexer = new AlphabeticIndexCompat(context);
+    MenuWidgetController(Launcher launcher, MenuLayout menuLayout) {
+        super(launcher);
+        this.mMenuLayout = menuLayout;
+        mMenuAdapter = new MenuWidgetAdapter(launcher, this, this);
+        mWidgetPreviewLoader = LauncherAppState.getInstance(launcher).getWidgetCache();
+        mIndexer = new AlphabeticIndexCompat(launcher);
     }
 
     public void setWidgets(ArrayList<WidgetListRowEntry> allWidgets) {
         if (allWidgets == null || allWidgets.size() == 0) {
             return;
         }
+        XLog.e(XLog.getTag(), XLog.TAG_GU_STATE + allWidgets.size());
         if (mAllWidgets == null) {
             mAllWidgets = new ArrayList<>();
         } else {
@@ -58,7 +61,7 @@ public class MenuWidgetController extends SupperMenuController implements IMenuW
 
     @Override
     public void loadAdapter() {
-        mMenuAdapter.addAll(mAllWidgets);
+        mMenuAdapter.addAllData(mAllWidgets);
     }
 
     @Override

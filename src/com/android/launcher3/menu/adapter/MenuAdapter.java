@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.bean.MenuItem;
+import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.imp.IMenuAdapter;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;
-import com.android.launcher3.menu.view.MenuItemView;
+import com.android.mxlibrary.view.CircleImageView;
 
 import java.util.List;
 
@@ -21,7 +21,8 @@ import java.util.List;
  * TIME 10:32
  */
 
-public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapter<MenuItem> {
+public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapter<MenuItem>,
+        View.OnClickListener {
 
     private View mContainer;
     private SupperMenuController mMenuController;
@@ -31,7 +32,7 @@ public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapt
         this.mMenuController = controller;
     }
 
-    public MenuAdapter(@NonNull Context context, @LayoutRes int resource) {
+    private MenuAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
     }
 
@@ -41,10 +42,12 @@ public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapt
         if (convertView == null) {
             convertView = createShortcut(parent);
         }
-        MenuItemView view = (MenuItemView) convertView;
+        CircleImageView view = (CircleImageView) convertView;
 
         MenuItem item = (MenuItem) getItem(position);
-        view.setMenuAction(item, mMenuController);
+        view.setImageResource(item.getIcon());
+        view.setOnClickListener(this);
+        view.setTag(item);
         return view;
     }
 
@@ -53,9 +56,8 @@ public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapt
         mContainer = container;
     }
 
-
     @Override
-    public void addAll(List<MenuItem> list) {
+    public void addAllData(List<MenuItem> list) {
         addAll(list);
     }
 
@@ -74,4 +76,8 @@ public class MenuAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapt
         return getView(position, convertView, parent);
     }
 
+    @Override
+    public void onClick(View v) {
+        mMenuController.onClick(v);
+    }
 }

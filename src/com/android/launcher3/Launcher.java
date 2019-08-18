@@ -85,6 +85,7 @@ import com.android.launcher3.logging.FileLog;
 import com.android.launcher3.logging.UserEventDispatcher;
 import com.android.launcher3.logging.UserEventDispatcher.UserEventDelegate;
 import com.android.launcher3.menu.CircleMenuView;
+import com.android.launcher3.menu.controller.MenuController;
 import com.android.launcher3.menu.view.MenuLayout;
 import com.android.launcher3.model.ModelWriter;
 import com.android.launcher3.notification.NotificationListener;
@@ -216,6 +217,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private View mHotseatSearchBox;
 
     private DropTargetBar mDropTargetBar;
+    private MenuController mMenuController;
     // add by codemx.cn ---- 20180919 ---- start
     // 中间主菜单
     private CircleMenuView mCircleMenuView;
@@ -223,7 +225,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private MenuLayout mMenuLayout;
     // add by codemx.cn ---- 20180919 ---- end
 
-    MenuTransitionController mMenuController;
+    MenuTransitionController mMenuTransitionController;
 
     // UI and state for the overview panel
     private View mOverviewPanel;
@@ -298,7 +300,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mAccessibilityDelegate = new LauncherAccessibilityDelegate(this);
 
         mDragController = new DragController(this);
-        mMenuController = new MenuTransitionController(this);
+        mMenuTransitionController = new MenuTransitionController(this);
         mStateManager = new LauncherStateManager(this);
         UiFactory.onCreate(this);
 
@@ -306,6 +308,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         mAppWidgetHost = new LauncherAppWidgetHost(this);
         mAppWidgetHost.startListening();
+
+        mMenuController = new MenuController(this);
 
         mLauncherView = LayoutInflater.from(this).inflate(R.layout.launcher, null);
 
@@ -654,6 +658,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     // add by codemx.cn ---- 20190712 ---plus- start
+
     /**
      * TODO 开启负一屏
      * To be overridden by subclasses to hint to Launcher that we have custom content
@@ -1035,9 +1040,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mDropTargetBar.setup(mDragController);
         // add by codemx.cn ---- 20180919 ---- start
         mCircleMenuView = findViewById(R.id.circle_menu);
-        mMenuController.setMenuView(mCircleMenuView);
-
         mMenuLayout = findViewById(R.id.menu_layout);
+        mMenuTransitionController.setMenuView(mCircleMenuView);
+        mMenuController.setup(mCircleMenuView, mMenuLayout);
         // add by codemx.cn ---- 20180919 ---- end
     }
 
@@ -1236,7 +1241,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     public MenuTransitionController getMenuTransitionController() {
-        return mMenuController;
+        return mMenuTransitionController;
     }
 
     @Override

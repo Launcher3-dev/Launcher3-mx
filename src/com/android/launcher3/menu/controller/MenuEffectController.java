@@ -1,15 +1,13 @@
 package com.android.launcher3.menu.controller;
 
-import android.content.Context;
 import android.view.View;
 
+import com.android.launcher3.Launcher;
 import com.android.launcher3.R;
 import com.android.launcher3.menu.MenuDataModel;
-import com.android.launcher3.menu.adapter.MenuAdapter;
 import com.android.launcher3.menu.adapter.MenuEffectAdapter;
 import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.menu.imp.IMenuSelectListener;
-import com.android.launcher3.menu.view.MenuItemView;
 import com.android.launcher3.menu.view.MenuLayout;
 
 import java.util.List;
@@ -24,9 +22,10 @@ import java.util.List;
 
 public class MenuEffectController extends SupperMenuController implements IMenuSelectListener {
 
-    public MenuEffectController(Context context, MenuLayout menuLayout) {
-        super(context, menuLayout);
-        mMenuAdapter = new MenuAdapter(context, this);
+    MenuEffectController(Launcher launcher, MenuLayout menuLayout) {
+        super(launcher);
+        this.mMenuLayout = menuLayout;
+        mMenuAdapter = new MenuEffectAdapter(launcher, this);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class MenuEffectController extends SupperMenuController implements IMenuS
     @Override
     public void loadAdapter() {
         List<MenuItem> list = MenuDataModel.getEffectList();
-        mMenuAdapter.addAll(list);
+        mMenuAdapter.addAllData(list);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class MenuEffectController extends SupperMenuController implements IMenuS
 
     @Override
     public void onClick(View v) {
-        Object o = ((MenuItemView) v).getMenuTag();
+        Object o =  v.getTag();
         mLauncher.getWorkspace().previewTransitionEffect((MenuItem) o, this);
     }
 

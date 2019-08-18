@@ -115,7 +115,7 @@ public class PinchAnimationManager {
      *
      * @param interpolatedProgress The progress from 0 to 1, where 0 is overview and 1 is workspace.
      */
-    public void setAnimationProgress(float interpolatedProgress) {
+    void setAnimationProgress(float interpolatedProgress) {
         float interpolatedScale = interpolatedProgress * (1f - mOverviewScale) + mOverviewScale;
         float menuTranslationY = (1f - interpolatedProgress) * mMenuTranslationY;
         setWorkspaceAnimationProgress(interpolatedScale);
@@ -179,8 +179,8 @@ public class PinchAnimationManager {
      * @param goingTowards {@link LauncherState#NORMAL} or {@link LauncherState#OVERVIEW}.
      *                     Note that this doesn't have to be the opposite of startState;
      */
-    public void animateThreshold(float threshold, LauncherState startState,
-                                 LauncherState goingTowards) {
+    void animateThreshold(float threshold, LauncherState startState,
+                          LauncherState goingTowards) {
         if (threshold == PinchThresholdManager.THRESHOLD_ONE) {
 
         } else if (threshold == PinchThresholdManager.THRESHOLD_TWO) {

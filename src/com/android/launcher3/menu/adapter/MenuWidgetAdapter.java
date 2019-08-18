@@ -61,7 +61,7 @@ public class MenuWidgetAdapter extends BaseMenuAdapter<WidgetListRowEntry>
     }
 
     @Override
-    public void addAll(List<WidgetListRowEntry> list) {
+    public void addAllData(List<WidgetListRowEntry> list) {
         clear();
         addAll(list);
     }

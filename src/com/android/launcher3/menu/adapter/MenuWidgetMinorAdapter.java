@@ -29,7 +29,8 @@ public class MenuWidgetMinorAdapter extends BaseMenuAdapter<WidgetItem>
     private SupperMenuController mMenuController;
     private IMenuWidgetPreviewLoader mLoader;
 
-    public MenuWidgetMinorAdapter(Context context, SupperMenuController controller, IMenuWidgetPreviewLoader loader) {
+    public MenuWidgetMinorAdapter(Context context, SupperMenuController controller,
+                                  IMenuWidgetPreviewLoader loader) {
         this(context, 0);
         this.mMenuController = controller;
         this.mLoader = loader;
@@ -62,7 +63,7 @@ public class MenuWidgetMinorAdapter extends BaseMenuAdapter<WidgetItem>
     }
 
     @Override
-    public void addAll(List<WidgetItem> list) {
+    public void addAllData(List<WidgetItem> list) {
         clear();
         addAll(list);
     }

@@ -17,18 +17,32 @@ import java.util.List;
 public final class MenuDataModel {
 
     private static final int[] MENU_ID =
-            {R.drawable.setting,
+            {
                     R.drawable.theme,
                     R.drawable.wallpapaer,
                     R.drawable.widget,
-                    R.drawable.effect};
+                    R.drawable.effect,
+                    R.drawable.setting
+            };
 
     private static final int[] MENU_TITLE =
-            {R.string.menu_setting_title,
+            {
+
                     R.string.menu_theme_title,
                     R.string.menu_wallpaper_title,
                     R.string.menu_widget_title,
-                    R.string.menu_effect_title};
+                    R.string.menu_effect_title,
+                    R.string.menu_setting_title
+            };
+
+    private static final int[] MENU_TYPE =
+            {
+                    MenuItem.THEME,
+                    MenuItem.WALLPAPER,
+                    MenuItem.WIDGET,
+                    MenuItem.EFFECT,
+                    MenuItem.SETTING,
+            };
 
     public static List<MenuItem> getMenuItemList() {
         List<MenuItem> list = new ArrayList<>();
@@ -38,6 +52,7 @@ public final class MenuDataModel {
             item.setIcon(MENU_ID[i]);
             item.setTitleId(MENU_TITLE[i]);
             item.setPosition(i);
+            item.setType(MENU_TYPE[i]);
             list.add(item);
         }
         return list;

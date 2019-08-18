@@ -7,12 +7,12 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.bean.MenuItem;
+import com.android.launcher3.menu.controller.SupperMenuController;
 import com.android.launcher3.menu.imp.IMenuAdapter;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;
-import com.android.launcher3.menu.view.MenuItemView;
 import com.android.launcher3.setting.MxSettings;
+import com.android.mxlibrary.view.CircleImageView;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * Created by yuchuan on 2018/4/4.
  */
 
-public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapter<MenuItem> {
+public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMenuAdapter<MenuItem>, View.OnClickListener {
 
     private int mSelectPosition;
     private View mContainer;
@@ -31,7 +31,7 @@ public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMen
         this.mMenuController = controller;
     }
 
-    public MenuEffectAdapter(@NonNull Context context, @LayoutRes int resource) {
+    private MenuEffectAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
     }
 
@@ -41,10 +41,12 @@ public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMen
         if (convertView == null) {
             convertView = createShortcut(parent);
         }
-        MenuItemView view = (MenuItemView) convertView;
+        CircleImageView view = (CircleImageView) convertView;
         MenuItem item = (MenuItem) getItem(position);
-        view.setMenuAction(item, mMenuController);
-        if (item != null && item.getPosition() == MxSettings.sLauncherEffect) {
+        view.setImageResource(item.getIcon());
+        view.setTag(item);
+        convertView.setOnClickListener(this);
+        if (item.getPosition() == MxSettings.sLauncherEffect) {
             mSelectPosition = item.getId();
         }
         return view;
@@ -64,8 +66,8 @@ public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMen
     private void invalidateView(int position, boolean select) {
         if (mContainer instanceof HorizontalPageScrollView) {
             HorizontalPageScrollView psv = (HorizontalPageScrollView) mContainer;
-            MenuItemView view = (MenuItemView) psv.getChildAt(position);
-            view.invalidate(select);
+//            MenuItemView view = (MenuItemView) psv.getChildAt(position);
+//            view.invalidate(select);
         }
     }
 
@@ -76,7 +78,7 @@ public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMen
 
 
     @Override
-    public void addAll(List<MenuItem> list) {
+    public void addAllData(List<MenuItem> list) {
         addAll(list);
     }
 
@@ -93,5 +95,10 @@ public class MenuEffectAdapter extends BaseMenuAdapter<MenuItem> implements IMen
     @Override
     public View getChildView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return getView(position, convertView, parent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        mMenuController.onClick(v);
     }
 }

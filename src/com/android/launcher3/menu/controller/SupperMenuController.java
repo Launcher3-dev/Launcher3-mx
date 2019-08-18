@@ -1,12 +1,13 @@
 package com.android.launcher3.menu.controller;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.view.View;
 
 import com.android.launcher3.Launcher;
 import com.android.launcher3.dragndrop.DragOptions;
+import com.android.launcher3.menu.CircleMenuView;
 import com.android.launcher3.menu.anim.MenuStateTransitionAnimation;
+import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.menu.imp.IMenuAdapter;
 import com.android.launcher3.menu.view.HorizontalPageScrollView;
 import com.android.launcher3.menu.view.MenuLayout;
@@ -27,16 +28,16 @@ import java.util.Comparator;
 
 public abstract class SupperMenuController<T> {
 
-    protected Launcher mLauncher;
+    MenuController mController;
     IMenuAdapter<T> mMenuAdapter;
     MenuLayout mMenuLayout;
-    HorizontalPageScrollView mScrollView;
+    CircleMenuView mCircleMenuView;
+    HorizontalPageScrollView<MenuItem> mScrollView;
+    protected Launcher mLauncher;
     private MenuStateTransitionAnimation mMenuTransition;
-    MenuController mController;
 
-    public SupperMenuController(Context context, MenuLayout menuLayout) {
-        this.mLauncher = Launcher.getLauncher(context);
-        this.mMenuLayout = menuLayout;
+    public SupperMenuController(Launcher launcher) {
+        this.mLauncher = launcher;
     }
 
     boolean beginDragging(View v, View widgetIcon) {
@@ -56,7 +57,7 @@ public abstract class SupperMenuController<T> {
         return true;
     }
 
-    protected boolean beginDraggingWidget(WidgetCell v, View widgetIcon) {
+    private boolean beginDraggingWidget(WidgetCell v, View widgetIcon) {
         // Get the widget preview as the drag representation
         WidgetImageView image = v.getWidgetImage();
 
@@ -90,6 +91,7 @@ public abstract class SupperMenuController<T> {
     }
 
     protected void show(MenuLayout.State fromState, MenuLayout.State toState, boolean animated) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + fromState + "  to " + toState + "  " + animated);
         if (mMenuTransition == null) {
             mMenuTransition = mLauncher.getMenuLayout().getMenuController().getMenuTransition();
         }
