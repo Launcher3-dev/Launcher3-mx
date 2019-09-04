@@ -28,7 +28,7 @@ public class ThemeClient implements IThemeClient {
     private IRemoteCallback mIRemoteCallback = new IRemoteCallback.Stub() {
         @Override
         public void onThemeSuccess(ThemeBean bean) throws RemoteException {
-
+            XLog.e(XLog.getTag(), XLog.TAG_GU + bean);
         }
 
         @Override
@@ -38,7 +38,7 @@ public class ThemeClient implements IThemeClient {
 
         @Override
         public void onWallpaperSuccess(WallpaperBean bean) throws RemoteException {
-
+            XLog.e(XLog.getTag(), XLog.TAG_GU + bean);
         }
 
         @Override
@@ -82,6 +82,7 @@ public class ThemeClient implements IThemeClient {
     public void bindService(Context context) {
         Intent service = new Intent();
         service.setAction("action.mxlauncher3.ThemeService");
+        service.setPackage(context.getPackageName());
         context.bindService(service, mThemeConnection, Service.BIND_AUTO_CREATE);
     }
 

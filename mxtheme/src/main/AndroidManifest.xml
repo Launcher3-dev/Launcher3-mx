@@ -3,9 +3,9 @@
 
 
     <application>
-
         <activity
             android:name=".ThemeActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:process="com.android.mxtheme"/>
 
     </application>

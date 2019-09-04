@@ -110,4 +110,16 @@ public class ThemeBean implements Parcelable {
         dest.writeString(themeAuthor);
         dest.writeString(themePublishDate);
     }
+
+    @Override
+    public String toString() {
+        return "ThemeBean{" +
+                "themeId='" + themeId + '\'' +
+                ", themeName='" + themeName + '\'' +
+                ", themePath='" + themePath + '\'' +
+                ", themeUrl='" + themeUrl + '\'' +
+                ", themeAuthor='" + themeAuthor + '\'' +
+                ", themePublishDate='" + themePublishDate + '\'' +
+                '}';
+    }
 }

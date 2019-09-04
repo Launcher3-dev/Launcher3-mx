@@ -1,5 +1,7 @@
 package com.android.mxtheme;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,12 @@ import com.android.mxtheme.bean.WallpaperBean;
  * TIME 9:22
  */
 public class ThemeActivity extends AppCompatActivity implements View.OnClickListener {
+
+    public static void startThemeActivity(Context context){
+        Intent intent = new Intent();
+        intent.setClass(context, ThemeActivity.class);
+        context.startActivity(intent);
+    }
 
     ThemeClient mThemeChangeClient;
     private Button mBtnTheme;

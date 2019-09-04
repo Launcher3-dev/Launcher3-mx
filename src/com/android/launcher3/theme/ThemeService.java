@@ -142,6 +142,7 @@ public class ThemeService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         mThemeBinder = new ThemeBinder();
         mIRemoteCallbackList = new ArrayList<>();
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
@@ -166,6 +167,7 @@ public class ThemeService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU );
         return super.onUnbind(intent);
     }
 

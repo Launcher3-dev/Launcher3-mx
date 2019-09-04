@@ -110,4 +110,16 @@ public class WallpaperBean implements Parcelable {
         dest.writeString(wallpaperAuthor);
         dest.writeString(wallpaperPublishDate);
     }
+
+    @Override
+    public String toString() {
+        return "WallpaperBean{" +
+                "wallpaperId='" + wallpaperId + '\'' +
+                ", wallpaperName='" + wallpaperName + '\'' +
+                ", wallpaperPath='" + wallpaperPath + '\'' +
+                ", wallpaperUrl='" + wallpaperUrl + '\'' +
+                ", wallpaperAuthor='" + wallpaperAuthor + '\'' +
+                ", wallpaperPublishDate='" + wallpaperPublishDate + '\'' +
+                '}';
+    }
 }

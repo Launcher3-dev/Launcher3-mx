@@ -16,6 +16,7 @@ import com.android.launcher3.menu.imp.OnMenuLongClickListener;
 import com.android.launcher3.menu.view.MenuLayout;
 import com.android.launcher3.widget.WidgetListRowEntry;
 import com.android.mxlibrary.util.XLog;
+import com.android.mxtheme.ThemeActivity;
 
 import java.util.ArrayList;
 
@@ -137,6 +138,7 @@ public final class MenuController extends SupperMenuController implements OnMenu
                     break;
                 case MenuItem.THEME:
 //                  mMenuController = mMenuThemeController;
+                    ThemeActivity.startThemeActivity(mLauncher);
                     break;
                 case MenuItem.WALLPAPER:
                     break;
