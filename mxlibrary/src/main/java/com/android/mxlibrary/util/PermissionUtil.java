@@ -22,7 +22,7 @@ public final class PermissionUtil {
     }
 
 
-    public static boolean isNeedRequestPermission() {
+    private static boolean isNeedRequestPermission() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 

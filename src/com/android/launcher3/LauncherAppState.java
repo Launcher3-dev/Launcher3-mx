@@ -43,7 +43,7 @@ import static com.android.launcher3.SettingsActivity.NOTIFICATION_BADGING;
 
 public class LauncherAppState {
 
-    public static final String ACTION_FORCE_ROLOAD = "force-reload-launcher";
+    static final String ACTION_FORCE_ROLOAD = "force-reload-launcher";
 
     // We do not need any synchronization for this variable as its only written on UI thread.
     private static LauncherAppState INSTANCE;
@@ -61,12 +61,9 @@ public class LauncherAppState {
                 INSTANCE = new LauncherAppState(context.getApplicationContext());
             } else {
                 try {
-                    return new MainThreadExecutor().submit(new Callable<LauncherAppState>() {
-                        @Override
-                        public LauncherAppState call() throws Exception {
-                            return LauncherAppState.getInstance(context);
-                        }
-                    }).get();
+                    return new MainThreadExecutor()
+                            .submit(() -> LauncherAppState.getInstance(context))
+                            .get();
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }

@@ -1,14 +1,14 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         google()
         maven {
             url 'https://maven.google.com'
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.9'
+        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
 
@@ -17,13 +17,18 @@ final String SUPPORT_LIBS_VERSION = '28.0.0'
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.protobuf'
 
+ext {
+    compileSdkVersion = 29
+    minSdkVersion = 21
+    targetSdkVersion = 29
+}
+
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion rootProject.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -106,7 +111,6 @@ android {
 repositories {
     maven { url "../../../prebuilts/fullsdk-darwin/extras/android/m2repository" }
     maven { url "../../../prebuilts/fullsdk-linux/extras/android/m2repository" }
-    mavenCentral()
     google()
     jcenter()
     maven {
@@ -122,7 +126,7 @@ dependencies {
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.2.0rc2'
     quickstepImplementation fileTree(dir: "quickstep/libs", include: 'sysui_shared.jar')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'org.mockito:mockito-core:2.27.0'
+    androidTestImplementation 'org.mockito:mockito-core:3.1.0'
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -153,3 +157,5 @@ protobuf {
         }
     }
 }
+
+
