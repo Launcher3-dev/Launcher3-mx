@@ -18,7 +18,7 @@ package com.android.launcher3.notification;
 
 import android.app.Notification;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;

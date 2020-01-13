@@ -21,8 +21,8 @@ import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.BinderThread;
-import android.support.annotation.UiThread;
+import androidx.annotation.BinderThread;
+import androidx.annotation.UiThread;
 
 import com.android.systemui.shared.system.RemoteAnimationRunnerCompat;
 import com.android.systemui.shared.system.RemoteAnimationTargetCompat;

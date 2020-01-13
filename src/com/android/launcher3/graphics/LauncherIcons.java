@@ -36,7 +36,7 @@ import android.graphics.drawable.PaintDrawable;
 import android.os.Build;
 import android.os.Process;
 import android.os.UserHandle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.android.launcher3.FastBitmapDrawable;
 import com.android.launcher3.IconCache;

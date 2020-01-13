@@ -18,7 +18,7 @@ package com.android.launcher3.accessibility;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.View;
 

@@ -17,7 +17,7 @@
 package com.android.launcher3.uioverrides.dynamicui;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.android.launcher3.Utilities;
 

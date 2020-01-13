@@ -18,7 +18,7 @@ package com.android.quickstep.views;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;

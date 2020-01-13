@@ -16,7 +16,7 @@
 package com.android.launcher3.model;
 
 import android.content.Context;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 import android.util.Log;
 
 import com.android.launcher3.AllAppsList;

@@ -28,7 +28,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Process;
 import android.os.UserHandle;
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 import android.util.ArrayMap;
 import android.util.Log;
 

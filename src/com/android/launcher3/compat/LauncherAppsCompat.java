@@ -24,7 +24,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.UserHandle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.android.launcher3.Utilities;
 import com.android.launcher3.shortcuts.ShortcutInfoCompat;

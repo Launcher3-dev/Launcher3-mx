@@ -17,8 +17,8 @@ package com.android.launcher3.touch;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;

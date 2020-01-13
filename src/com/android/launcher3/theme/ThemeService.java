@@ -8,7 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.mxlibrary.util.XLog;
 import com.android.mxtheme.IRemoteCallback;

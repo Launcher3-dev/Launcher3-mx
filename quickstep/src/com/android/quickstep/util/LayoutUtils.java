@@ -18,8 +18,8 @@ package com.android.quickstep.util;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.support.annotation.AnyThread;
-import android.support.annotation.IntDef;
+import androidx.annotation.AnyThread;
+import androidx.annotation.IntDef;
 
 import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.R;

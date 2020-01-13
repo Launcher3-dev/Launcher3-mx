@@ -28,7 +28,7 @@ import android.os.Bundle;
 import android.os.Process;
 import android.os.StrictMode;
 import android.os.UserHandle;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.View;

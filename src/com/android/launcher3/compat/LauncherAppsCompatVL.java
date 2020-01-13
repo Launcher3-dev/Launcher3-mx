@@ -29,8 +29,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Process;
 import android.os.UserHandle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.ArrayMap;
 
 import com.android.launcher3.compat.ShortcutConfigActivityInfo.ShortcutConfigActivityInfoVL;

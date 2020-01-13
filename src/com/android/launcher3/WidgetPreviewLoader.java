@@ -25,7 +25,7 @@ import android.os.AsyncTask;
 import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.util.LongSparseArray;
 

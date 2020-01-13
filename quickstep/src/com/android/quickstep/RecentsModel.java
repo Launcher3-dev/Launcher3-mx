@@ -28,7 +28,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.UserHandle;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 import android.util.Log;
 import android.util.LruCache;
 import android.util.SparseArray;

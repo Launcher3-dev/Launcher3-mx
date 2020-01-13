@@ -24,7 +24,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.provider.Settings;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 import android.util.Log;
 
 import com.android.launcher3.MainThreadExecutor;

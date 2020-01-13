@@ -29,8 +29,8 @@ import com.android.launcher3.R;
 import com.android.launcher3.uioverrides.OverviewState;
 import com.android.launcher3.util.Themes;
 
-import static android.support.v4.graphics.ColorUtils.compositeColors;
-import static android.support.v4.graphics.ColorUtils.setAlphaComponent;
+import static androidx.core.graphics.ColorUtils.compositeColors;
+import static androidx.core.graphics.ColorUtils.setAlphaComponent;
 import static com.android.launcher3.LauncherState.OVERVIEW;
 import static com.android.launcher3.anim.Interpolators.ACCEL_2;
 

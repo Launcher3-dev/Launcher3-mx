@@ -20,8 +20,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.LauncherActivityInfo;
 import android.os.UserHandle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.android.launcher3.compat.LauncherAppsCompat;

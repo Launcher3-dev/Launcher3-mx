@@ -18,7 +18,7 @@ package com.android.launcher3.popup;
 
 import android.content.ComponentName;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.android.launcher3.ItemInfo;
