@@ -23,6 +23,14 @@ android {
 
 }
 
+repositories {
+    maven { url "../../../prebuilts/fullsdk-darwin/extras/android/m2repository" }
+    maven { url "../../../prebuilts/fullsdk-linux/extras/android/m2repository" }
+    mavenCentral()
+    google()
+    jcenter()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

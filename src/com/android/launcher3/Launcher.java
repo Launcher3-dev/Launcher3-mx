@@ -46,7 +46,6 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.StrictMode;
 import android.os.UserHandle;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.TextKeyListener;
 import android.util.Log;
@@ -127,6 +126,7 @@ import com.android.launcher3.widget.WidgetsFullSheet;
 import com.android.launcher3.widget.custom.CustomWidgetParser;
 import com.android.mxlibrary.util.PermissionUtil;
 import com.android.mxlibrary.util.XLog;
+import com.codemx.effectivecard.launcherclient.LauncherClient;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -135,6 +135,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import androidx.annotation.Nullable;
 
 import static android.content.pm.ActivityInfo.CONFIG_ORIENTATION;
 import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
@@ -225,6 +227,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     private MenuLayout mMenuLayout;
     // add by codemx.cn ---- 20180919 ---- end
 
+    // add by codemx.cn ---- 20200417 ---- start
+    private LauncherClient mClient;
+    // add by codemx.cn ---- 20200417 ---- end
+
     MenuTransitionController mMenuTransitionController;
 
     // UI and state for the overview panel
@@ -291,6 +297,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         PermissionUtil.requestStoragePermission(this);
 
         LauncherAppState app = LauncherAppState.getInstance(this);
+
         mOldConfig = new Configuration(getResources().getConfiguration());
         mModel = app.setLauncher(this);
         initDeviceProfile(app.getInvariantDeviceProfile());
@@ -314,6 +321,15 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mLauncherView = LayoutInflater.from(this).inflate(R.layout.launcher, null);
 
         setupViews();
+
+        // add by codemx.cn ---- 20200417 ---- start
+        // 与负一屏进程通信初始化
+//        mClient = new LauncherClient(this);
+//        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " onCreate  ");
+//        setLauncherCallbacks(new LauncherCallbacksImpl(mClient));
+//        setLauncherOverlay(new LauncherOverlayImpl(mClient));
+        // add by codemx.cn ---- 20200417 ---- end
+
         mPopupDataProvider = new PopupDataProvider(this);
 
         mRotationHelper = new RotationHelper(this);

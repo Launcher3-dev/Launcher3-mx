@@ -301,7 +301,7 @@ public class LauncherClient {
 
     public void reconnect() {
         if (!this.mDestroyed) {
-            if (!this.sApplicationConnection.mo74c() || !this.mSimpleServiceConnection.mo74c()) {
+            if (!this.sApplicationConnection.reconnect() || !this.mSimpleServiceConnection.reconnect()) {
                 this.mActivity.runOnUiThread(new NotifyStatusRunnable(this));
             }
         }
@@ -485,8 +485,8 @@ public class LauncherClient {
         printWriter.println(String.valueOf(str).concat("LauncherClient"));
         String concat = String.valueOf(str).concat("  ");
         printWriter.println(new StringBuilder(concat.length() + 18).append(concat).append("isConnected: ").append(isConnected()).toString());
-        printWriter.println(new StringBuilder(concat.length() + 18).append(concat).append("act.isBound: ").append(this.mSimpleServiceConnection.mo73b()).toString());
-        printWriter.println(new StringBuilder(concat.length() + 18).append(concat).append("app.isBound: ").append(this.sApplicationConnection.mo73b()).toString());
+        printWriter.println(new StringBuilder(concat.length() + 18).append(concat).append("act.isBound: ").append(this.mSimpleServiceConnection.isConnected()).toString());
+        printWriter.println(new StringBuilder(concat.length() + 18).append(concat).append("app.isBound: ").append(this.sApplicationConnection.isConnected()).toString());
         printWriter.println(new StringBuilder(concat.length() + 27).append(concat).append("serviceVersion: ").append(sServiceVersion).toString());
         printWriter.println(new StringBuilder(concat.length() + 17).append(concat).append("clientVersion: 14").toString());
         printWriter.println(new StringBuilder(concat.length() + 27).append(concat).append("mActivityState: ").append(this.mState).toString());

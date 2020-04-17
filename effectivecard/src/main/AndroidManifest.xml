@@ -2,8 +2,10 @@
     package="com.codemx.effectivecard">
 
     <application>
-        <service android:name=".CardService"
-            android:process="com.codemx.effectivecard">
+        <service
+            android:name="com.codemx.effectivecard.CardService"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.codemx.launcher3.WINDOW_OVERLAY" />
             </intent-filter>

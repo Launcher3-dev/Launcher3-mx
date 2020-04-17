@@ -7,12 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.IBinder;
-import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.WindowManager.LayoutParams;
+
+import com.android.mxlibrary.util.XLog;
+import com.codemx.effectivecard.CardService;
 
 public class LauncherClient {
     private static final boolean HIDE_WINDOW_WHEN_OVERLAY_OPEN = false;
@@ -63,6 +64,7 @@ public class LauncherClient {
     }
 
     public LauncherClient(Activity activity, LauncherClientCallbacks callbacks, String targetPackage, boolean overlayEnabled) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " LauncherClient  ");
         mUpdateReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 Log.d("LauncherClient", "PACKAGE_ADDED reconnect");
@@ -188,16 +190,19 @@ public class LauncherClient {
     private void reconnect() {
         if (!mDestroyed && mServiceConnectionOptions == OPTIONS_FLAG_DEFAULT) {
             if (mState == STATE_DISCONNECTED) {
+                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection： " + sApplicationConnection);
                 if (sApplicationConnection != null && !sApplicationConnection.packageName.equals(mServiceIntent.getPackage())) {
                     mActivity.getApplicationContext().unbindService(sApplicationConnection);
                     sApplicationConnection = null;
                 }
+                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection2： " + sApplicationConnection);
                 if (sApplicationConnection == null) {
                     sApplicationConnection = new AppServiceConnection(mServiceIntent.getPackage());
-                    if (!connectSafely(mActivity.getApplicationContext(), sApplicationConnection, 32)) {
+                    if (!connectSafely(mActivity.getApplicationContext(), sApplicationConnection, Context.BIND_WAIVE_PRIORITY)) {
                         sApplicationConnection = null;
                     }
                 }
+                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection3： " + sApplicationConnection);
                 if (sApplicationConnection != null) {
                     mState = STATE_CONNECTING;
                     if (connectSafely(mActivity, mServiceConnection, 192)) {
@@ -220,7 +225,11 @@ public class LauncherClient {
 
     private boolean connectSafely(Context context, ServiceConnection conn, int flags) {
         try {
-            return context.bindService(mServiceIntent, conn, flags | Context.BIND_AUTO_CREATE);
+            Intent intent = new Intent(Constant.ACTION);
+            intent.setPackage(Constant.GSA_PACKAGE);
+            intent.setClass(context, CardService.class);
+            return context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
+//            return context.bindService(mServiceIntent, conn, flags | Context.BIND_AUTO_CREATE);
         } catch (SecurityException var5) {
             Log.e("LauncherClient", "Unable to connect to overlay service", var5);
             return false;
@@ -355,15 +364,22 @@ public class LauncherClient {
     }
 
     static Intent getServiceIntent(Context context, String targetPackage) {
-        String str = String.valueOf(context.getPackageName());
-        int var4 = Process.myUid();
-        Uri uri = Uri.parse((new StringBuilder(18 + str.length()))
-                .append("app://")
-                .append(str)
-                .append(":")
-                .append(var4)
-                .toString()).buildUpon().appendQueryParameter("v", Integer.toString(0)).build();
-        return (new Intent(Constant.ACTION)).setPackage(targetPackage).setData(uri);
+        String packageName = context.getPackageName();
+//        return new Intent(Constant.ACTION)
+//                .setPackage(Constant.GSA_PACKAGE)
+//                .setData(Uri.parse(new StringBuilder(String.valueOf(packageName).length() + 18)
+//                        .append("app://")
+//                        .append(packageName)
+//                        .append(":")
+//                        .append(Process.myUid())
+//                        .toString()).buildUpon()
+//                        .appendQueryParameter("v", Integer.toString(9))
+//                        .appendQueryParameter("cv", Integer.toString(14))
+//                        .build());
+
+        Intent intent = new Intent(Constant.ACTION);
+        intent.setPackage(Constant.GSA_PACKAGE);
+        return intent;
     }
 
     private static final class AppServiceConnection implements ServiceConnection {

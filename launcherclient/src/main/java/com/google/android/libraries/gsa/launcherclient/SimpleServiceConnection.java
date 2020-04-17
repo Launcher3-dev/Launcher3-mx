@@ -8,15 +8,15 @@ import android.util.Log;
 
 class SimpleServiceConnection implements ServiceConnection {
 
-    private final Context f44a;
+    private final Context mContext;
 
-    private final int f45b;
+    private final int flags;
 
-    private boolean f46c;
+    private boolean isConnected;
 
-    SimpleServiceConnection(Context context, int i) {
-        this.f44a = context;
-        this.f45b = i;
+    SimpleServiceConnection(Context context, int flags) {
+        this.mContext = context;
+        this.flags = flags;
     }
 
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -26,24 +26,24 @@ class SimpleServiceConnection implements ServiceConnection {
     }
 
     public final void unbindService() {
-        if (this.f46c) {
-            this.f44a.unbindService(this);
-            this.f46c = false;
+        if (this.isConnected) {
+            this.mContext.unbindService(this);
+            this.isConnected = false;
         }
     }
 
-    public final boolean mo73b() {
-        return this.f46c;
+    public final boolean isConnected() {
+        return this.isConnected;
     }
 
-    public final boolean mo74c() {
-        if (!this.f46c) {
+    public final boolean reconnect() {
+        if (!this.isConnected) {
             try {
-                this.f46c = this.f44a.bindService(LauncherClient.getIntent(this.f44a), this, this.f45b);
+                this.isConnected = this.mContext.bindService(LauncherClient.getIntent(this.mContext), this, this.flags);
             } catch (SecurityException e) {
                 Log.e("LauncherClient", "Unable to connect to overlay service", e);
             }
         }
-        return this.f46c;
+        return this.isConnected;
     }
 }

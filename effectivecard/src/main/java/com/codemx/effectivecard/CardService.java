@@ -17,7 +17,6 @@ import com.codemx.effectivecard.launcherclient.ILauncherOverlayCallback;
 public class CardService extends Service {
 
     private ILauncherOverlay.Stub mStub;
-    private WindowManager.LayoutParams mParams;
     private ILauncherOverlayCallback mCallback;
 
     @Override
@@ -31,34 +30,29 @@ public class CardService extends Service {
         return mStub;
     }
 
-    private class CardBinder extends ILauncherOverlay.Stub {
+    // Launcher通过服务会调用这里的函数来达到与launcher同步，然后控制window滑动
+    private static class CardBinder extends ILauncherOverlay.Stub {
 
         @Override
         public void startScroll() throws RemoteException {
-
         }
 
         @Override
         public void onScroll(float progress) throws RemoteException {
-
         }
 
         @Override
         public void endScroll() throws RemoteException {
-
         }
 
         @Override
         public void windowAttached(WindowManager.LayoutParams layoutParams,
                                    ILauncherOverlayCallback overlayCallback, int flags) throws RemoteException {
-            mParams = layoutParams;
-            mCallback = overlayCallback;
 
         }
 
         @Override
         public void windowDetached(boolean isChangingConfigurations) throws RemoteException {
-
         }
 
         @Override
@@ -68,17 +62,14 @@ public class CardService extends Service {
 
         @Override
         public void onPause() throws RemoteException {
-
         }
 
         @Override
         public void onResume() throws RemoteException {
-
         }
 
         @Override
         public void openOverlay(int flags) throws RemoteException {
-
         }
 
         @Override
