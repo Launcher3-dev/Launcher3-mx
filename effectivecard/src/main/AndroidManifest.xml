@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.codemx.effectivecard">
+
+    <application>
+        <service android:name=".CardService"
+            android:process="com.codemx.effectivecard">
+            <intent-filter>
+                <action android:name="com.codemx.launcher3.WINDOW_OVERLAY" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

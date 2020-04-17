@@ -3,11 +3,9 @@
 .gradle/
 .idea/
 build/
-gradle/
-gradlew
-gradlew.bat
-local.properties
 mxlibrary/mxlibrary.iml
 mxtheme/mxtheme.iml
 Launcher3-master.iml
 
+effectivecard/effectivecard.iml
+launcherclient/launcherclient.iml

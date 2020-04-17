@@ -2,12 +2,9 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven {
-            url 'https://maven.google.com'
-        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:3.6.1'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
@@ -113,9 +110,6 @@ repositories {
     maven { url "../../../prebuilts/fullsdk-linux/extras/android/m2repository" }
     google()
     jcenter()
-    maven {
-        url 'https://maven.google.com'
-    }
 }
 
 dependencies {
@@ -123,7 +117,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.2.0rc2'
     quickstepImplementation fileTree(dir: "quickstep/libs", include: 'sysui_shared.jar')
     testImplementation 'junit:junit:4.12'
@@ -136,6 +130,7 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'
     implementation project(':mxlibrary')
     implementation project(':mxtheme')
+    implementation project(':effectivecard')
 }
 
 protobuf {
