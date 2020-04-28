@@ -9,13 +9,16 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.codemx.effectivecard.launcherclient.Constant;
+import com.codemx.effectivecard.launcherclient.ILauncherOverlayCallback;
+import com.codemx.effectivecard.launcherclient.MxLayoutParams;
+import com.codemx.effectivecard.launcherclient.MxMessage;
 
 /**
  * Created by yuchuan
  * DATE 2020/4/17
  * TIME 16:03
  */
-public class CardWindowManager {
+public class CardWindowManager implements IWindowCallback{
 
     private Context mContext;
     private Context mCardContext;
@@ -59,5 +62,87 @@ public class CardWindowManager {
         mWindowManager.removeView(mContentView);
     }
 
+    // 向Launcher通信的回调函数，对应LauncherOverlayCallbacks
+    private ILauncherOverlayCallback mOverlayCallback;
 
+    @Override
+    public void startScroll() {
+
+    }
+
+    @Override
+    public void onScroll(float progress, boolean isRtl) {
+
+    }
+
+    @Override
+    public void endScroll() {
+
+    }
+
+    @Override
+    public void windowAttached(MxLayoutParams layoutParams, ILauncherOverlayCallback overlayCallback, int flags) {
+
+        mOverlayCallback = overlayCallback;
+    }
+
+    @Override
+    public void windowDetached(boolean isChangingConfigurations) {
+
+    }
+
+    @Override
+    public void openOverlay(int flags) {
+
+    }
+
+    @Override
+    public void closeOverlay(int flags) {
+
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onTransact(MxMessage msg) {
+
+    }
+
+    @Override
+    public void requestVoiceDetection(boolean start) {
+
+    }
+
+    @Override
+    public String getVoiceSearchLanguage() {
+        return null;
+    }
+
+    @Override
+    public boolean isVoiceDetectionRunning() {
+        return false;
+    }
+
+    @Override
+    public void enableScroll(boolean left, boolean right) {
+
+    }
+
+    @Override
+    public void enableTransparentWallpaper(boolean isTransparent) {
+
+    }
+
+    @Override
+    public void enableLoopWithOverlay(boolean enableLoop) {
+
+    }
 }

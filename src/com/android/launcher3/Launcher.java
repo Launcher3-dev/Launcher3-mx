@@ -323,11 +323,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         setupViews();
 
         // add by codemx.cn ---- 20200417 ---- start
-        // 与负一屏进程通信初始化
-        mClient = new LauncherClient(this);
-        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " onCreate  ");
-        setLauncherCallbacks(new LauncherCallbacksImpl(mClient));
-        setLauncherOverlay(new LauncherOverlayImpl(mClient));
+        if (FeatureFlags.LAUNCHER_OVERLAY_ENABLED) {
+            // 与负一屏进程通信初始化
+            mClient = new LauncherClient(this);
+            XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " onCreate  ");
+            setLauncherCallbacks(new LauncherCallbacksImpl(mClient));
+            setLauncherOverlay(new LauncherOverlayImpl(mClient));
+        }
         // add by codemx.cn ---- 20200417 ---- end
 
         mPopupDataProvider = new PopupDataProvider(this);
