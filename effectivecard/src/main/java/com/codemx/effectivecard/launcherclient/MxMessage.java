@@ -45,6 +45,13 @@ public class MxMessage implements Parcelable, Serializable {
         what = in.readInt();
         msg1 = in.readString();
         msg2 = in.readString();
+        if (in.readInt() == 1) {
+            this.obj = in.readParcelable(getClass().getClassLoader());
+        } else if (in.readInt() == 2) {
+            this.obj = in.readSerializable();
+        } else {
+            this.obj = null;
+        }
     }
 
     public static final Creator<MxMessage> CREATOR = new Creator<MxMessage>() {
@@ -79,16 +86,12 @@ public class MxMessage implements Parcelable, Serializable {
         dest.writeInt(what);
         dest.writeString(msg1);
         dest.writeString(msg2);
-        if (obj != null) {
-            if (obj instanceof Parcelable) {
-                dest.writeInt(1);
-                dest.writeParcelable((Parcelable) obj, flags);
-            } else if (obj instanceof Serializable) {
-                dest.writeInt(1);
-                dest.writeSerializable((Serializable) obj);
-            } else {
-                dest.writeInt(0);
-            }
+        if (obj instanceof Parcelable) {
+            dest.writeInt(1);
+            dest.writeParcelable((Parcelable) obj, flags);
+        } else if (obj instanceof Serializable) {
+            dest.writeInt(2);
+            dest.writeSerializable((Serializable) obj);
         } else {
             dest.writeInt(0);
         }
