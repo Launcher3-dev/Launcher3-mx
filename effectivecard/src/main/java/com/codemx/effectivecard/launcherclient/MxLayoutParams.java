@@ -6,7 +6,7 @@ import android.view.WindowManager;
 
 public class MxLayoutParams extends WindowManager.LayoutParams implements Parcelable{
 
-    public MxLayoutParams() {
+    MxLayoutParams() {
         super();
     }
 

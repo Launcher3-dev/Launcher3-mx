@@ -17,20 +17,15 @@ import com.codemx.effectivecard.CardService;
 
 public class LauncherClient {
     private static final boolean HIDE_WINDOW_WHEN_OVERLAY_OPEN = false;
-    private static final String TAG = "DrawerOverlayClient";
-    private static final boolean DEBUG = false;
+
     private static final int VERSION = 0;
 
     private static final int OPTIONS_FLAG_OVERLAY = 1;
     private static final int OPTIONS_FLAG_HOTWORD = 2;
     private static final int OPTIONS_FLAG_DEFAULT = 3;
 
-    private static final int SERVICE_STATUS_DEFAULT = 0;
-    private static final int SERVICE_STATUS_OVERLAY_ATTACHED = 1;
-    private static final int SERVICE_STATUS_HOTWORD_ACTIVE = 2;
-
-    private static final int OVERLAY_OPTION_FLAG_IMMEDIATE = 0;
-    private static final int OVERLAY_OPTION_FLAG_ANIMATE = 1;
+    private static final int OVERLAY_OPTION_FLAG_IMMEDIATE = 0;// 直接显示
+    private static final int OVERLAY_OPTION_FLAG_ANIMATE = 1;// 动画效果
 
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_CONNECTED = 1;
@@ -60,11 +55,13 @@ public class LauncherClient {
         this(activity, callbacks, true);
     }
 
-    public LauncherClient(Activity activity, LauncherClientCallback callbacks, boolean overlayEnabled) {
+    public LauncherClient(Activity activity, LauncherClientCallback callbacks,
+                          boolean overlayEnabled) {
         this(activity, callbacks, Constant.GSA_PACKAGE, overlayEnabled);
     }
 
-    public LauncherClient(Activity activity, LauncherClientCallback callbacks, String targetPackage, boolean overlayEnabled) {
+    public LauncherClient(Activity activity, LauncherClientCallback callbacks,
+                          String targetPackage, boolean overlayEnabled) {
         XLog.d(XLog.getTag(), " LauncherClient init ");
         mUpdateReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -155,14 +152,13 @@ public class LauncherClient {
     }
 
     public void setOverlayEnabled(boolean isEnabled) {
-        int newOptions = isEnabled ? 3 : 2;
+        int newOptions = isEnabled ? OPTIONS_FLAG_DEFAULT : OPTIONS_FLAG_HOTWORD;
         if (newOptions != mServiceConnectionOptions) {
             mServiceConnectionOptions = newOptions;
             if (mWindowAttrs != null) {
                 applyWindowToken();
             }
         }
-
     }
 
     private void removeClient(boolean removeAppConnection) {
@@ -220,7 +216,6 @@ public class LauncherClient {
                     });
                 }
             }
-
         }
     }
 
@@ -325,7 +320,7 @@ public class LauncherClient {
     public void hideOverlay(boolean animate) {
         if (mOverlay != null) {
             try {
-                mOverlay.closeOverlay(animate ? 1 : 0);
+                mOverlay.closeOverlay(animate ? OVERLAY_OPTION_FLAG_ANIMATE : OVERLAY_OPTION_FLAG_IMMEDIATE);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -335,7 +330,7 @@ public class LauncherClient {
     public void showOverlay(boolean animate) {
         if (mOverlay != null) {
             try {
-                mOverlay.openOverlay(animate ? 1 : 0);
+                mOverlay.openOverlay(animate ? OVERLAY_OPTION_FLAG_ANIMATE : OVERLAY_OPTION_FLAG_IMMEDIATE);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
