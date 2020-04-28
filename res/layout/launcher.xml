@@ -76,7 +76,7 @@
             android:layout_width="400dp"
             android:layout_height="400dp"
             android:layout_gravity="center"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <com.android.mxlibrary.view.CircleImageView
                 android:id="@+id/circle_menu_main_item"

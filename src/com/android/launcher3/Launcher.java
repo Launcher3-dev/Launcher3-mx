@@ -324,10 +324,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
         // add by codemx.cn ---- 20200417 ---- start
         // 与负一屏进程通信初始化
-//        mClient = new LauncherClient(this);
-//        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " onCreate  ");
-//        setLauncherCallbacks(new LauncherCallbacksImpl(mClient));
-//        setLauncherOverlay(new LauncherOverlayImpl(mClient));
+        mClient = new LauncherClient(this);
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " onCreate  ");
+        setLauncherCallbacks(new LauncherCallbacksImpl(mClient));
+        setLauncherOverlay(new LauncherOverlayImpl(mClient));
         // add by codemx.cn ---- 20200417 ---- end
 
         mPopupDataProvider = new PopupDataProvider(this);
@@ -938,7 +938,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     public interface LauncherOverlay {
 
         /**
-         * Touch interaction leading to overscroll has begun
+         * Touch interaction（交互） leading to overscroll has begun
          */
         void onScrollInteractionBegin();
 

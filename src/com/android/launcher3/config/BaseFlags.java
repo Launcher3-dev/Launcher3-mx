@@ -57,7 +57,7 @@ abstract class BaseFlags {
     public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = false;
 
     // 是否循环滑动
-    public static final boolean LAUNCHER3_CIRCLE_SCROLL = true;
+    public static final boolean LAUNCHER3_CIRCLE_SCROLL = false;
 
     // 是否系那是负一屏
     public static final boolean CUSTOM_CONTENT_ENABLED = true;

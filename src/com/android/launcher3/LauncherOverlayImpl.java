@@ -27,7 +27,7 @@ public class LauncherOverlayImpl implements Launcher.LauncherOverlay {
 
     @Override
     public void onScrollChange(float progress, boolean rtl) {
-        mClient.updateMove(progress);
+        mClient.updateMove(progress, rtl);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import com.android.mxtheme.bean.WallpaperBean;
  * DATE 2019/2/22
  * TIME 9:22
  */
-public class ThemeActivity extends AppCompatActivity implements View.OnClickListener {
+public class ThemeActivity extends AppCompatActivity implements OnClickListener {
 
     public static void startThemeActivity(Context context){
         Intent intent = new Intent();

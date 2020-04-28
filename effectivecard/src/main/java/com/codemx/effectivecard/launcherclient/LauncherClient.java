@@ -32,16 +32,17 @@ public class LauncherClient {
     private static final int OVERLAY_OPTION_FLAG_IMMEDIATE = 0;
     private static final int OVERLAY_OPTION_FLAG_ANIMATE = 1;
 
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTED = 1;
-    private static final int STATE_CONNECTING = 2;
-    private static AppServiceConnection sApplicationConnection;
+    public static final int STATE_DISCONNECTED = 0;
+    public static final int STATE_CONNECTED = 1;
+    public static final int STATE_CONNECTING = 2;
+
+    private static LauncherOverlayServiceConnection sApplicationConnection;
     private final Activity mActivity;
     private final Intent mServiceIntent;
-    private final LauncherClientCallbacks mLauncherClientCallbacks;
+    private final LauncherClientCallback mLauncherClientCallbacks;
     private final OverlayServiceConnection mServiceConnection;
     private final BroadcastReceiver mUpdateReceiver;
-    protected ILauncherOverlay mOverlay;
+    private ILauncherOverlay mOverlay;
     private int mState;
     private boolean mIsResumed;
     private boolean mDestroyed;
@@ -49,25 +50,25 @@ public class LauncherClient {
     private int mServiceStatus;
     private int mServiceConnectionOptions;
     private LayoutParams mWindowAttrs;
-    private OverlayCallbacks mCurrentCallbacks;
+    private LauncherOverlayCallbacks mLauncherOverlayCallbacks;
 
     public LauncherClient(Activity activity) {
-        this(activity, new LauncherClientCallbacksAdapter());
+        this(activity, new LauncherClientCallbackAdapter());
     }
 
-    public LauncherClient(Activity activity, LauncherClientCallbacks callbacks) {
+    public LauncherClient(Activity activity, LauncherClientCallback callbacks) {
         this(activity, callbacks, true);
     }
 
-    public LauncherClient(Activity activity, LauncherClientCallbacks callbacks, boolean overlayEnabled) {
+    public LauncherClient(Activity activity, LauncherClientCallback callbacks, boolean overlayEnabled) {
         this(activity, callbacks, Constant.GSA_PACKAGE, overlayEnabled);
     }
 
-    public LauncherClient(Activity activity, LauncherClientCallbacks callbacks, String targetPackage, boolean overlayEnabled) {
-        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " LauncherClient  ");
+    public LauncherClient(Activity activity, LauncherClientCallback callbacks, String targetPackage, boolean overlayEnabled) {
+        XLog.d(XLog.getTag(), " LauncherClient init ");
         mUpdateReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
-                Log.d("LauncherClient", "PACKAGE_ADDED reconnect");
+                XLog.d(XLog.getTag(), "PACKAGE_ADDED reconnect");
                 reconnect();
             }
         };
@@ -139,9 +140,9 @@ public class LauncherClient {
             mNeedsServiceUnbind = false;
         }
 
-        if (mCurrentCallbacks != null) {
-            mCurrentCallbacks.clear();
-            mCurrentCallbacks = null;
+        if (mLauncherOverlayCallbacks != null) {
+            mLauncherOverlayCallbacks.clear();
+            mLauncherOverlayCallbacks = null;
         }
 
         if (sApplicationConnection != null) {
@@ -176,9 +177,9 @@ public class LauncherClient {
             mNeedsServiceUnbind = false;
         }
 
-        if (mCurrentCallbacks != null) {
-            mCurrentCallbacks.clear();
-            mCurrentCallbacks = null;
+        if (mLauncherOverlayCallbacks != null) {
+            mLauncherOverlayCallbacks.clear();
+            mLauncherOverlayCallbacks = null;
         }
 
         if (removeAppConnection && sApplicationConnection != null) {
@@ -190,19 +191,19 @@ public class LauncherClient {
     private void reconnect() {
         if (!mDestroyed && mServiceConnectionOptions == OPTIONS_FLAG_DEFAULT) {
             if (mState == STATE_DISCONNECTED) {
-                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection： " + sApplicationConnection);
+                XLog.d(XLog.getTag(), " sApplicationConnection： " + sApplicationConnection);
                 if (sApplicationConnection != null && !sApplicationConnection.packageName.equals(mServiceIntent.getPackage())) {
                     mActivity.getApplicationContext().unbindService(sApplicationConnection);
                     sApplicationConnection = null;
                 }
-                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection2： " + sApplicationConnection);
+                XLog.d(XLog.getTag(), " sApplicationConnection2： " + sApplicationConnection);
                 if (sApplicationConnection == null) {
-                    sApplicationConnection = new AppServiceConnection(mServiceIntent.getPackage());
+                    sApplicationConnection = new LauncherOverlayServiceConnection(this, mServiceIntent.getPackage());
                     if (!connectSafely(mActivity.getApplicationContext(), sApplicationConnection, Context.BIND_WAIVE_PRIORITY)) {
                         sApplicationConnection = null;
                     }
                 }
-                XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + " sApplicationConnection3： " + sApplicationConnection);
+                XLog.d(XLog.getTag(), " sApplicationConnection3： " + sApplicationConnection);
                 if (sApplicationConnection != null) {
                     mState = STATE_CONNECTING;
                     if (connectSafely(mActivity, mServiceConnection, 192)) {
@@ -254,13 +255,15 @@ public class LauncherClient {
     private void applyWindowToken() {
         if (mOverlay != null) {
             try {
-                if (mCurrentCallbacks == null) {
-                    mCurrentCallbacks = new OverlayCallbacks();
+                if (mLauncherOverlayCallbacks == null) {
+                    mLauncherOverlayCallbacks = new LauncherOverlayCallbacks();
                 }
 
-                mCurrentCallbacks.setClient(this);
+                mLauncherOverlayCallbacks.setClient(this);
                 Log.d("LauncherClient", "applyWindowToken mServiceConnectionOptions=" + mServiceConnectionOptions);
-                mOverlay.windowAttached(mWindowAttrs, mCurrentCallbacks, mServiceConnectionOptions);
+                MxLayoutParams windowAttrs = new MxLayoutParams();
+                windowAttrs.copyFrom(mWindowAttrs);
+                mOverlay.windowAttached(windowAttrs, mLauncherOverlayCallbacks, mServiceConnectionOptions);
                 if (mIsResumed) {
                     mOverlay.onResume();
                 } else {
@@ -272,7 +275,6 @@ public class LauncherClient {
                 e.printStackTrace();
             }
         }
-
     }
 
     private boolean isConnected() {
@@ -308,18 +310,16 @@ public class LauncherClient {
                 e.printStackTrace();
             }
         }
-
     }
 
-    public void updateMove(float progressX) {
+    public void updateMove(float progressX, boolean rtl) {
         if (isConnected()) {
             try {
-                mOverlay.onScroll(progressX);
+                mOverlay.onScroll(progressX, rtl);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void hideOverlay(boolean animate) {
@@ -330,7 +330,6 @@ public class LauncherClient {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void showOverlay(boolean animate) {
@@ -341,7 +340,6 @@ public class LauncherClient {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void requestHotwordDetection(boolean start) {
@@ -352,15 +350,14 @@ public class LauncherClient {
                 e.printStackTrace();
             }
         }
-
     }
 
     void notifyStatusChanged(int status) {
         if (mServiceStatus != status) {
             mServiceStatus = status;
-            mLauncherClientCallbacks.onServiceStateChanged((status & 1) != VERSION, (status & 2) != VERSION);
+            mLauncherClientCallbacks.onServiceStateChanged((status & STATE_CONNECTED) != VERSION,
+                    (status & STATE_CONNECTING) != VERSION);
         }
-
     }
 
     static Intent getServiceIntent(Context context, String targetPackage) {
@@ -382,23 +379,6 @@ public class LauncherClient {
         return intent;
     }
 
-    private static final class AppServiceConnection implements ServiceConnection {
-        public final String packageName;
-
-        AppServiceConnection(String pkg) {
-            packageName = pkg;
-        }
-
-        public void onServiceConnected(ComponentName name, IBinder service) {
-        }
-
-        public void onServiceDisconnected(ComponentName name) {
-            if (name.getPackageName().equals(packageName)) {
-                LauncherClient.sApplicationConnection = null;
-            }
-        }
-    }
-
     public Activity getActivity() {
         return mActivity;
     }
@@ -407,8 +387,52 @@ public class LauncherClient {
         return mServiceStatus;
     }
 
-    LauncherClientCallbacks getLauncherClientCallbacks() {
+    LauncherClientCallback getLauncherClientCallbacks() {
         return mLauncherClientCallbacks;
+    }
+
+    // 通过AIDL连接负一屏（Launcher Overlay）的ServiceConnection
+    private static final class LauncherOverlayServiceConnection implements ServiceConnection {
+
+        private LauncherClient mClient;
+        public final String packageName;
+
+        LauncherOverlayServiceConnection(LauncherClient launcherClient, String pkg) {
+            mClient = launcherClient;
+            packageName = pkg;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            XLog.d(XLog.getTag(), "onServiceConnected " + name);
+            try {
+                service.linkToDeath(mRecipient, 0);
+                mClient.mState = STATE_CONNECTED;
+                mClient.mOverlay = ILauncherOverlay.Stub.asInterface(service);
+                if (mClient.mWindowAttrs != null) {
+                    mClient.applyWindowToken();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            XLog.d(XLog.getTag(), "onServiceDisconnected " + name);
+            if (name.getPackageName().equals(packageName)) {
+                LauncherClient.sApplicationConnection = null;
+            }
+        }
+
+        private IBinder.DeathRecipient mRecipient = new IBinder.DeathRecipient() {
+            @Override
+            public void binderDied() {
+                XLog.d(XLog.getTag(), "binderDied");
+                mClient.notifyStatusChanged(STATE_DISCONNECTED);
+                mClient.mOverlay = null;
+            }
+        };
     }
 
     private class OverlayServiceConnection implements ServiceConnection {
