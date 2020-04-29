@@ -64,6 +64,7 @@ public class CardWindowManager implements IWindowCallback {
                 | WindowManager.LayoutParams.FLAG_FULLSCREEN
                 | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
                 | WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
+                | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS// 可以置顶并被状态栏覆盖
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         mWindowManager.addView(mContentView, mWindowParams);
