@@ -258,6 +258,8 @@ public class LauncherClient {
                 Log.d("LauncherClient", "applyWindowToken mServiceConnectionOptions=" + mServiceConnectionOptions);
                 MxLayoutParams windowAttrs = new MxLayoutParams();
                 windowAttrs.copyFrom(mWindowAttrs);
+//                windowAttrs.setWidth(mWindowAttrs.width);
+//                windowAttrs.setHeight(mWindowAttrs.height);
                 mOverlay.windowAttached(windowAttrs, mLauncherOverlayCallbacks, mServiceConnectionOptions);
                 if (mIsResumed) {
                     mOverlay.onResume();

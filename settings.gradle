@@ -1,3 +1,3 @@
-include ':mxtheme', ':mxlibrary'
+include ':mxtheme', ':mxlibrary', ':floatwindow'
 include ':effectivecard'
 include ':launcherclient'

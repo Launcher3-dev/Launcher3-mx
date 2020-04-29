@@ -23,19 +23,12 @@ android {
 
 }
 
-repositories {
-    maven { url "../../../prebuilts/fullsdk-darwin/extras/android/m2repository" }
-    maven { url "../../../prebuilts/fullsdk-linux/extras/android/m2repository" }
-    mavenCentral()
-    google()
-    jcenter()
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':mxlibrary')
-    implementation project(':floatwindow')
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation project(path: ':mxlibrary')
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
