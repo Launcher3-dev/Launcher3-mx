@@ -1470,12 +1470,7 @@ public class Folder extends AbstractFloatingView implements DragSource,
                 }
                 return false;
             } else if (!dl.isEventOverView(this, ev)) {
-                if (mLauncher.getAccessibilityDelegate().isInAccessibleDrag()) {
-                    // Do not close the container if in drag and drop.
-                    if (!dl.isEventOverView(mLauncher.getDropTargetBar(), ev)) {
-                        return true;
-                    }
-                } else {
+                if (!mLauncher.getAccessibilityDelegate().isInAccessibleDrag()) {
                     mLauncher.getUserEventDispatcher().logActionTapOutside(
                             LoggerUtils.newContainerTarget(ContainerType.FOLDER));
                     close(true);

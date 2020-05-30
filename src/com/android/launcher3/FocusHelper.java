@@ -339,7 +339,6 @@ public class FocusHelper {
         CellLayout iconLayout = (CellLayout) parent.getParent();
         final Workspace workspace = (Workspace) iconLayout.getParent();
         final ViewGroup dragLayer = (ViewGroup) workspace.getParent();
-        final ViewGroup tabs = (ViewGroup) dragLayer.findViewById(R.id.drop_target_bar);
         final Hotseat hotseat = (Hotseat) dragLayer.findViewById(R.id.hotseat);
 
         final ItemInfo itemInfo = (ItemInfo) v.getTag();
@@ -371,9 +370,6 @@ public class FocusHelper {
         CellLayout workspaceLayout = (CellLayout) workspace.getChildAt(pageIndex);
         switch (newIconIndex) {
             case FocusLogic.NOOP:
-                if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                    newIcon = tabs;
-                }
                 break;
             case FocusLogic.PREVIOUS_PAGE_RIGHT_COLUMN:
             case FocusLogic.NEXT_PAGE_RIGHT_COLUMN:

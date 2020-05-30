@@ -53,10 +53,6 @@
             android:layout_gravity="bottom|center_horizontal"
             android:theme="@style/HomeScreenElementTheme"/>
 
-        <include
-            android:id="@+id/drop_target_bar"
-            layout="@layout/drop_target_bar"/>
-
         <!-- DO NOT CHANGE THE ID -->
         <include
             android:id="@+id/hotseat"

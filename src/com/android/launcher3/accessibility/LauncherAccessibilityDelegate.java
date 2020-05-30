@@ -119,12 +119,6 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
                     ? SHORTCUTS_AND_NOTIFICATIONS : DEEP_SHORTCUTS));
         }
 
-        for (ButtonDropTarget target : mLauncher.getDropTargetBar().getDropTargets()) {
-            if (target.supportsAccessibilityDrop(item, host)) {
-                info.addAction(mActions.get(target.getAccessibilityAction()));
-            }
-        }
-
         // Do not add move actions for keyboard request as this uses virtual nodes.
         if (!fromKeyboard && ((item instanceof ShortcutInfo)
                 || (item instanceof LauncherAppWidgetInfo)
@@ -230,14 +224,6 @@ public class LauncherAccessibilityDelegate extends AccessibilityDelegate impleme
             return true;
         } else if (action == DEEP_SHORTCUTS) {
             return PopupContainerWithArrow.showForIcon((BubbleTextView) host) != null;
-        } else {
-            for (ButtonDropTarget dropTarget : mLauncher.getDropTargetBar().getDropTargets()) {
-                if (dropTarget.supportsAccessibilityDrop(item, host) &&
-                        action == dropTarget.getAccessibilityAction()) {
-                    dropTarget.onAccessibilityDrop(host, item);
-                    return true;
-                }
-            }
         }
         return false;
     }

@@ -153,7 +153,7 @@ public class DragLayer extends BaseDragLayer<Launcher> {
     }
 
     private boolean isEventOverAccessibleDropTargetBar(MotionEvent ev) {
-        return isInAccessibleDrag() && isEventOverView(mActivity.getDropTargetBar(), ev);
+        return isInAccessibleDrag();
     }
 
     @Override
@@ -231,9 +231,6 @@ public class DragLayer extends BaseDragLayer<Launcher> {
                 AbstractFloatingView.TYPE_ACCESSIBLE);
         if (topView != null) {
             addAccessibleChildToList(topView, childrenForAccessibility);
-            if (isInAccessibleDrag()) {
-                addAccessibleChildToList(mActivity.getDropTargetBar(), childrenForAccessibility);
-            }
         } else {
             super.addChildrenForAccessibility(childrenForAccessibility);
         }

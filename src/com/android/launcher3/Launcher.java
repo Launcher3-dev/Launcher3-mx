@@ -218,7 +218,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Nullable
     private View mHotseatSearchBox;
 
-    private DropTargetBar mDropTargetBar;
     private MenuController mMenuController;
     // add by codemx.cn ---- 20180919 ---- start
     // 中间主菜单
@@ -1050,12 +1049,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mWorkspace.bindAndInitFirstWorkspaceScreen(null /* recycled qsb */);
         mDragController.addDragListener(mWorkspace);
 
-        // Get the search/delete/uninstall bar
-        mDropTargetBar = mDragLayer.findViewById(R.id.drop_target_bar);
-
         // Setup the drag controller (drop targets have to be added in reverse order in priority)
         mDragController.setMoveTarget(mWorkspace);
-        mDropTargetBar.setup(mDragController);
         // add by codemx.cn ---- 20180919 ---- start
         mCircleMenuView = findViewById(R.id.circle_menu);
         mMenuLayout = findViewById(R.id.menu_layout);
@@ -1290,10 +1285,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     public <T extends View> T getOverviewPanelContainer() {
         return (T) mOverviewPanelContainer;
-    }
-
-    public DropTargetBar getDropTargetBar() {
-        return mDropTargetBar;
     }
 
     public LauncherAppWidgetHost getAppWidgetHost() {
