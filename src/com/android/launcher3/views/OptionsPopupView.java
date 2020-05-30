@@ -160,12 +160,14 @@ public class OptionsPopupView extends ArrowPopup
     public static void showDefaultOptions(Launcher launcher, float x, float y) {
         float halfSize = launcher.getResources().getDimension(R.dimen.options_menu_thumb_size) / 2;
         if (x < 0 || y < 0) {
-            x = launcher.getDragLayer().getWidth() / 2;
-            y = launcher.getDragLayer().getHeight() / 2;
+            x = launcher.getDragLayer().getWidth() / 2.0f;
+            y = launcher.getDragLayer().getHeight() / 2.0f;
         }
         RectF target = new RectF(x - halfSize, y - halfSize, x + halfSize, y + halfSize);
 
         ArrayList<OptionItem> options = new ArrayList<>();
+        options.add(new OptionItem(R.string.menu, R.drawable.ic_menu_black_24dp,
+                ControlType.MENU_PANL, OptionsPopupView::startShowMenuPannel));
         options.add(new OptionItem(R.string.wallpaper_button_text, R.drawable.ic_wallpaper,
                 ControlType.WALLPAPER_BUTTON, OptionsPopupView::startWallpaperPicker));
         options.add(new OptionItem(R.string.widget_button_text, R.drawable.ic_widget,
@@ -234,6 +236,11 @@ public class OptionsPopupView extends ArrowPopup
             intent.putExtra(INTENT_EXTRA_IGNORE_LAUNCH_ANIMATION, true);
         }
         return launcher.startActivitySafely(v, intent, null);
+    }
+
+    public static boolean startShowMenuPannel(View view) {
+
+        return true;
     }
 
     public static class OptionItem {
