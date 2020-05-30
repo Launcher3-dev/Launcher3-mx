@@ -18,7 +18,6 @@ package com.android.launcher3.popup;
 
 import android.content.ComponentName;
 import android.service.notification.StatusBarNotification;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.android.launcher3.ItemInfo;
@@ -41,6 +40,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+
 /**
  * Provides data for the popup menu that appears after long-clicking on apps.
  */
@@ -53,6 +54,7 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
      * Note that these are in order of priority.
      */
     private static final SystemShortcut[] SYSTEM_SHORTCUTS = new SystemShortcut[]{
+            new SystemShortcut.Uninstall(),
             new SystemShortcut.AppInfo(),
             new SystemShortcut.Widgets(),
             new SystemShortcut.Install()

@@ -218,8 +218,10 @@ public class PopupContainerWithArrow extends ArrowPopup implements DragSource,
     }
 
     @TargetApi(Build.VERSION_CODES.P)
-    private void populateAndShow(final BubbleTextView originalIcon, final List<String> shortcutIds,
-                                 final List<NotificationKeyData> notificationKeys, List<SystemShortcut> systemShortcuts) {
+    private void populateAndShow(final BubbleTextView originalIcon,
+                                 final List<String> shortcutIds,
+                                 final List<NotificationKeyData> notificationKeys,
+                                 List<SystemShortcut> systemShortcuts) {
         mNumNotifications = notificationKeys.size();
         mOriginalIcon = originalIcon;
 

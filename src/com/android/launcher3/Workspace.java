@@ -933,7 +933,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
 
         ViewGroup.LayoutParams genericLp = child.getLayoutParams();
         CellLayout.LayoutParams lp;
-        if (genericLp == null || !(genericLp instanceof CellLayout.LayoutParams)) {
+        if (!(genericLp instanceof CellLayout.LayoutParams)) {
             lp = new CellLayout.LayoutParams(x, y, spanX, spanY);
         } else {
             lp = (CellLayout.LayoutParams) genericLp;

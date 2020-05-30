@@ -31,7 +31,7 @@ import com.android.launcher3.R;
  * <p>
  * Not to be confused with {@link com.android.launcher3.ShortcutInfo}.
  */
-@TargetApi(Build.VERSION_CODES.N)
+@TargetApi(Build.VERSION_CODES.N_MR1)
 public class ShortcutInfoCompat {
     private static final String INTENT_CATEGORY = "com.android.launcher3.DEEP_SHORTCUT";
     private static final String EXTRA_BADGEPKG = "badge_package";

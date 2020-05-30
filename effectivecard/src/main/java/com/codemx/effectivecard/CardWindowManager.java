@@ -1,11 +1,11 @@
 package com.codemx.effectivecard;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -51,13 +51,13 @@ public class CardWindowManager implements IWindowCallback {
 
         mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mWindowParams = new WindowManager.LayoutParams();
-//        mWindowParams.width = layoutParams.width;
-//        mWindowParams.height = layoutParams.height;
-        mWindowParams.width = 600;
-        mWindowParams.height = 600;
+        mWindowParams.width = layoutParams.width;
+        mWindowParams.height = layoutParams.height;
         XLog.d(XLog.getTag(), "width= " + layoutParams.width + "  ,height= " + layoutParams.height);
         mWindowParams.x = 0;
         mWindowParams.y = 0;
+        // 设置透明
+        mWindowParams.format = PixelFormat.RGBA_8888;
         mWindowParams.gravity = Gravity.TOP | Gravity.START;
         mWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -68,32 +68,7 @@ public class CardWindowManager implements IWindowCallback {
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         mWindowManager.addView(mContentView, mWindowParams);
-        mContentView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mStartX = event.getRawX();
-                        XLog.d(XLog.getTag(), "ACTION_DOWN= " + event.getRawX());
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-//                        mWindowParams.x += (int) (event.getRawX() - mStartX);
-//                        mStartX = event.getRawX();
-//                        XLog.d(XLog.getTag(), "ACTION_MOVE= " + event.getRawX());
-//                        mWindowManager.updateViewLayout(v, mWindowParams);
-                        v.setTranslationX(-100);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        break;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
     }
-
-    private float mStartX;
 
     public void hideWindow() {
         FloatWindow.destroy();

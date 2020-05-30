@@ -36,13 +36,19 @@ public class ItemLongClickListener {
     public static OnLongClickListener INSTANCE_WORKSPACE =
             ItemLongClickListener::onWorkspaceItemLongClick;
 
+    /**
+     * 桌面图标长按监听
+     *
+     * @param v 图标视图
+     *
+     * @return 是否相应长按
+     */
     private static boolean onWorkspaceItemLongClick(View v) {
         Launcher launcher = Launcher.getLauncher(v.getContext());
         if (!canStartDrag(launcher)) return false;
         if (!launcher.isInState(NORMAL) && !launcher.isInState(OVERVIEW) && !launcher.isInState(EDITING))
             return false;
         if (!(v.getTag() instanceof ItemInfo)) return false;
-
         launcher.setWaitingForResult(null);
         beginDrag(v, launcher, (ItemInfo) v.getTag(), new DragOptions());
         return true;
