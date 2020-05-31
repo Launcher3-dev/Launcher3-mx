@@ -58,6 +58,11 @@ public class ItemClickHandler {
      */
     public static final OnClickListener INSTANCE = ItemClickHandler::onClick;
 
+    /**
+     * 点击事件处理
+     *
+     * @param v 被点击的视图
+     */
     private static void onClick(View v) {
         // Make sure that rogue clicks don't get through while allapps is launching, or after the
         // view has detached (it's possible for this to happen if the view is removed mid touch).
