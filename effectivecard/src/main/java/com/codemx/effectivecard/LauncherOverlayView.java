@@ -40,16 +40,18 @@ public class LauncherOverlayView extends FrameLayout {
     }
 
     private float mStartX;
+    private float mTranslationX;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mStartX = event.getRawX();
+                mTranslationX = getTranslationX() % getResources().getDisplayMetrics().widthPixels;
                 XLog.d(XLog.getTag(), "ACTION_DOWN= " + event.getRawX());
                 break;
             case MotionEvent.ACTION_MOVE:
-                setTranslationX(getTranslationX()%getResources().getDisplayMetrics().widthPixels + (int) (event.getRawX() - mStartX));
+                setTranslationX(mTranslationX + (int) (event.getRawX() - mStartX));
                 break;
             case MotionEvent.ACTION_UP:
                 break;
