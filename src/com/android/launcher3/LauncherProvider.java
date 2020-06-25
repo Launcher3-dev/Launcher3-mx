@@ -72,6 +72,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import androidx.annotation.NonNull;
+
 public class LauncherProvider extends ContentProvider {
     private static final String TAG = "LauncherProvider";
     private static final boolean LOGD = false;
@@ -306,8 +308,9 @@ public class LauncherProvider extends ContentProvider {
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
+    public @NonNull ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
+        XLog.e(XLog.getTag(), XLog.TAG_GU + operations);
         createDbIfNotExists();
         try (SQLiteTransaction t = new SQLiteTransaction(mOpenHelper.getWritableDatabase())) {
             ContentProviderResult[] result = super.applyBatch(operations);

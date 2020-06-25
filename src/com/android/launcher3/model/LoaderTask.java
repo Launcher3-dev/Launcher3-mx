@@ -790,6 +790,7 @@ public class LoaderTask implements Runnable {
             // If there are any empty screens remove them, and update.
             if (unusedScreens.size() != 0) {
                 mBgDataModel.workspaceScreens.removeAll(unusedScreens);
+                XLog.e(XLog.getTag(), XLog.TAG_GU + mBgDataModel.workspaceScreens);
                 LauncherModel.updateWorkspaceScreenOrder(context, mBgDataModel.workspaceScreens);
             }
         }

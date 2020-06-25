@@ -16,6 +16,7 @@
 package com.android.launcher3.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.UserHandle;
 import android.util.LongSparseArray;
 import android.util.Pair;
@@ -32,6 +33,7 @@ import com.android.launcher3.LauncherModel.Callbacks;
 import com.android.launcher3.LauncherModel.ModelUpdateTask;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.ShortcutInfo;
+import com.android.launcher3.Utilities;
 import com.android.launcher3.util.ComponentKey;
 import com.android.launcher3.util.GridOccupancy;
 import com.android.launcher3.util.ItemInfoMatcher;
@@ -191,7 +193,6 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
             found = findNextAvailableIconSpaceInScreen(
                     app, screenItems.get(screenId), cordinates, spanX, spanY);
         }
-
         if (!found) {
             // Search on any of the screens starting from the first screen.
             for (int screen = 1; screen < screenCount; screen++) {
@@ -204,7 +205,6 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
                 }
             }
         }
-
         if (!found) {
             // Still no position found. Add a new screen to the end.
             screenId = LauncherSettings.Settings.call(app.getContext().getContentResolver(),
@@ -218,6 +218,7 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
             // If we still can't find an empty space, then God help us all!!!
             if (!findNextAvailableIconSpaceInScreen(
                     app, screenItems.get(screenId), cordinates, spanX, spanY)) {
+                XLog.e(XLog.getTag(), XLog.TAG_GU);
                 throw new RuntimeException("Can't find space to add the item");
             }
         }
@@ -247,7 +248,6 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
                     addedWorkspaceScreensFinal, item.spanX, item.spanY);
             long screenId = coords.first;
             int[] cordinates = coords.second;
-
             ItemInfo itemInfo;
             if (item instanceof ShortcutInfo || item instanceof FolderInfo ||
                     item instanceof LauncherAppWidgetInfo) {
@@ -264,6 +264,7 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
             // Save the ShortcutInfo for binding in the workspace
             addedItemsFinal.add(itemInfo);
         }
+        XLog.e(XLog.getTag(), XLog.TAG_GU + workspaceScreens);
     }
 
     protected void bindAddedItemsFinal(ArrayList<Long> addedWorkspaceScreensFinal,
@@ -291,6 +292,62 @@ public abstract class BaseModelUpdateTask implements ModelUpdateTask {
                 }
             });
         }
+    }
+
+    /**
+     * Returns true if the shortcuts already exists on the workspace. This must be called after
+     * the workspace has been loaded. We identify a shortcut by its intent.
+     */
+    protected boolean shortcutExists(BgDataModel dataModel, Intent intent, UserHandle user) {
+        final String compPkgName, intentWithPkg, intentWithoutPkg;
+        if (intent == null) {
+            // Skip items with null intents
+            return true;
+        }
+        if (intent.getComponent() != null) {
+            // If component is not null, an intent with null package will produce
+            // the same result and should also be a match.
+            compPkgName = intent.getComponent().getPackageName();
+            if (intent.getPackage() != null) {
+                intentWithPkg = intent.toUri(0);
+                intentWithoutPkg = new Intent(intent).setPackage(null).toUri(0);
+            } else {
+                intentWithPkg = new Intent(intent).setPackage(compPkgName).toUri(0);
+                intentWithoutPkg = intent.toUri(0);
+            }
+        } else {
+            compPkgName = null;
+            intentWithPkg = intent.toUri(0);
+            intentWithoutPkg = intent.toUri(0);
+        }
+
+        boolean isLauncherAppTarget = Utilities.isLauncherAppTarget(intent);
+        synchronized (dataModel) {
+            for (ItemInfo item : dataModel.itemsIdMap) {
+                if (item instanceof ShortcutInfo) {
+                    ShortcutInfo info = (ShortcutInfo) item;
+                    if (item.getIntent() != null && info.user.equals(user)) {
+                        Intent copyIntent = new Intent(item.getIntent());
+                        copyIntent.setSourceBounds(intent.getSourceBounds());
+                        String s = copyIntent.toUri(0);
+                        if (intentWithPkg.equals(s) || intentWithoutPkg.equals(s)) {
+                            return true;
+                        }
+
+                        // checking for existing promise icon with same package name
+                        if (isLauncherAppTarget
+                                && info.isPromise()
+                                && info.hasStatusFlag(ShortcutInfo.FLAG_AUTOINSTALL_ICON)
+                                && info.getTargetComponent() != null
+                                && compPkgName != null
+                                && compPkgName.equals(info.getTargetComponent().getPackageName())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     protected void updateScreens(Context context, ArrayList<Long> workspaceScreens) {

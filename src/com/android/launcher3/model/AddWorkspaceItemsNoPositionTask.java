@@ -6,6 +6,7 @@ import com.android.launcher3.AllAppsList;
 import com.android.launcher3.ItemInfo;
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherModel;
+import com.android.launcher3.LauncherSettings;
 import com.android.mxlibrary.util.XLog;
 
 import java.util.ArrayList;
@@ -35,10 +36,30 @@ public class AddWorkspaceItemsNoPositionTask extends BaseModelUpdateTask {
         // called.
         ArrayList<Long> workspaceScreens = LauncherModel.loadWorkspaceScreensDb(context);
 
+        XLog.e(XLog.getTag(), XLog.TAG_GU + workspaceScreens);
         XLog.e(XLog.getTag(), XLog.TAG_GU + mAllAppsNoPotion.size());
+        synchronized (dataModel) {
+            List<ItemInfo> filteredItems = new ArrayList<>();
+            for (ItemInfo itemInfo : mAllAppsNoPotion) {
+                if (itemInfo == null) {
+                    continue;
+                }
+                if (itemInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPLICATION ||
+                        itemInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT ||
+                        itemInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET ||
+                        itemInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_CUSTOM_APPWIDGET ||
+                        itemInfo.itemType == LauncherSettings.Favorites.ITEM_TYPE_FOLDER) {
+                    // Short-circuit this logic if the icon exists somewhere on the workspace
+                    if (shortcutExists(dataModel, itemInfo.getIntent(), itemInfo.user)) {
+                        continue;
+                    }
+                }
+                filteredItems.add(itemInfo);
+            }
 
-        filterAddedItemsFinal(app, dataModel, apps, workspaceScreens, mAllAppsNoPotion, addedWorkspaceScreensFinal, addedItemsFinal);
-
+            filterAddedItemsFinal(app, dataModel, apps, workspaceScreens, filteredItems, addedWorkspaceScreensFinal, addedItemsFinal);
+            XLog.e(XLog.getTag(), XLog.TAG_GU + workspaceScreens + " final " + addedWorkspaceScreensFinal);
+        }
         // Update the workspace screens
         updateScreens(context, workspaceScreens);
 

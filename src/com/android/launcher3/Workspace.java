@@ -655,7 +655,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             // if this is the last screen, convert it to the empty screen
             mWorkspaceScreens.put(EXTRA_EMPTY_SCREEN_ID, finalScreen);
             mScreenOrder.add(EXTRA_EMPTY_SCREEN_ID);
-
+            XLog.e(XLog.getTag(), XLog.TAG_GU + mScreenOrder);
             // Update the model if we have changed any screens
             LauncherModel.updateWorkspaceScreenOrder(mLauncher, mScreenOrder);
         }
@@ -766,7 +766,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
                 .getLong(LauncherSettings.Settings.EXTRA_VALUE);
         mWorkspaceScreens.put(newId, cl);
         mScreenOrder.add(newId);
-
+        XLog.e(XLog.getTag(),XLog.TAG_GU + mScreenOrder);
         // Update the model for the new screen
         LauncherModel.updateWorkspaceScreenOrder(mLauncher, mScreenOrder);
 

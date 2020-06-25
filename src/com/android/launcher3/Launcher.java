@@ -1903,6 +1903,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     @Override
     public void bindScreens(ArrayList<Long> orderedScreenIds) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU + orderedScreenIds);
         // Make sure the first screen is always at the start.
         if (FeatureFlags.QSB_ON_FIRST_SCREEN &&
                 orderedScreenIds.indexOf(Workspace.FIRST_SCREEN_ID) != 0) {
@@ -1931,6 +1932,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     private void bindAddScreens(ArrayList<Long> orderedScreenIds) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU + orderedScreenIds);
         int count = orderedScreenIds.size();
         for (int i = 0; i < count; i++) {
             long screenId = orderedScreenIds.get(i);

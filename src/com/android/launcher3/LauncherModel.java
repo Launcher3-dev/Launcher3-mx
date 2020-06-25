@@ -28,7 +28,6 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Process;
 import android.os.UserHandle;
-import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -61,6 +60,7 @@ import com.android.launcher3.util.Provider;
 import com.android.launcher3.util.Thunk;
 import com.android.launcher3.util.ViewOnDrawExecutor;
 import com.android.launcher3.widget.WidgetListRowEntry;
+import com.android.mxlibrary.util.XLog;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -71,6 +71,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
+
+import androidx.annotation.Nullable;
 
 import static com.android.launcher3.LauncherAppState.ACTION_FORCE_ROLOAD;
 import static com.android.launcher3.config.FeatureFlags.IS_DOGFOOD_BUILD;
@@ -197,12 +199,18 @@ public class LauncherModel extends BroadcastReceiver
      * Runs the specified runnable immediately if called from the worker thread, otherwise it is
      * posted on the worker thread handler.
      */
-    private static void runOnWorkerThread(Runnable r) {
+    private static void runOnWorkerThread(Runnable r, boolean isRemoveAfterRun) {
         if (sWorkerThread.getThreadId() == Process.myTid()) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU);
             r.run();
         } else {
+            XLog.e(XLog.getTag(), XLog.TAG_GU);
             // If we are not on the worker thread, then post to the worker handler
             sWorker.post(r);
+            // TODO 存在部分系统会重新调用问题
+            if (isRemoveAfterRun) {
+                sWorker.removeCallbacks(r);
+            }
         }
     }
 
@@ -289,7 +297,7 @@ public class LauncherModel extends BroadcastReceiver
                 }
             }
         };
-        runOnWorkerThread(r);
+        runOnWorkerThread(r, false);
     }
 
     /**
@@ -297,10 +305,11 @@ public class LauncherModel extends BroadcastReceiver
      * a list of screen ids in the order that they should appear.
      */
     public static void updateWorkspaceScreenOrder(Context context, final ArrayList<Long> screens) {
-        final ArrayList<Long> screensCopy = new ArrayList<Long>(screens);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + screens);
+        final ArrayList<Long> screensCopy = new ArrayList<>(screens);
         final ContentResolver cr = context.getContentResolver();
         final Uri uri = LauncherSettings.WorkspaceScreens.CONTENT_URI;
-
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         // Remove any negative screen ids -- these aren't persisted
         Iterator<Long> iter = screensCopy.iterator();
         while (iter.hasNext()) {
@@ -309,13 +318,14 @@ public class LauncherModel extends BroadcastReceiver
                 iter.remove();
             }
         }
-
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         Runnable r = new Runnable() {
             @Override
             public void run() {
                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
                 // Clear the table
                 ops.add(ContentProviderOperation.newDelete(uri).build());
+                XLog.e(XLog.getTag(), XLog.TAG_GU + screensCopy);
                 int count = screensCopy.size();
                 for (int i = 0; i < count; i++) {
                     ContentValues v = new ContentValues();
@@ -326,8 +336,10 @@ public class LauncherModel extends BroadcastReceiver
                 }
 
                 try {
+                    XLog.e(XLog.getTag(), XLog.TAG_GU + ops);
                     cr.applyBatch(LauncherProvider.AUTHORITY, ops);
                 } catch (Exception ex) {
+                    XLog.e(XLog.getTag(), XLog.TAG_GU + ex.getMessage());
                     throw new RuntimeException(ex);
                 }
 
@@ -337,7 +349,8 @@ public class LauncherModel extends BroadcastReceiver
                 }
             }
         };
-        runOnWorkerThread(r);
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
+        runOnWorkerThread(r, true);
     }
 
     /**
@@ -455,6 +468,7 @@ public class LauncherModel extends BroadcastReceiver
      * not be called as DB updates are automatically followed by UI update
      */
     public void forceReload() {
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         synchronized (mLock) {
             // Stop any existing loaders first, so they don't set mModelLoaded to true later
             stopLoader();
@@ -479,6 +493,7 @@ public class LauncherModel extends BroadcastReceiver
      * @return true if the page could be bound synchronously.
      */
     public boolean startLoader(int synchronousBindPage) {
+        XLog.e(XLog.getTag(), XLog.TAG_GU);
         // Enable queue before starting loader. It will get disabled in Launcher#finishBindingItems
         InstallShortcutReceiver.enableInstallQueue(InstallShortcutReceiver.FLAG_LOADER_RUNNING);
         synchronized (mLock) {
@@ -527,7 +542,7 @@ public class LauncherModel extends BroadcastReceiver
         synchronized (mLock) {
             stopLoader();
             mLoaderTask = new LoaderTask(mApp, mBgAllAppsList, sBgDataModel, results);
-            runOnWorkerThread(mLoaderTask);
+            runOnWorkerThread(mLoaderTask, false);
         }
     }
 
@@ -614,7 +629,7 @@ public class LauncherModel extends BroadcastReceiver
 
     public void enqueueModelUpdateTask(ModelUpdateTask task) {
         task.init(mApp, this, sBgDataModel, mBgAllAppsList, mUiExecutor);
-        runOnWorkerThread(task);
+        runOnWorkerThread(task, false);
     }
 
     /**

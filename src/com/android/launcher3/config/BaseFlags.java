@@ -54,13 +54,13 @@ abstract class BaseFlags {
     public static final boolean OVERVIEW_USE_SCREENSHOT_ORIENTATION = true;
 
     // 是否禁用双指捏掐到预览模式
-    public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = false;
+    public static final boolean LAUNCHER3_DISABLE_PINCH_TO_OVERVIEW = true;
 
     // 是否循环滑动
-    public static final boolean LAUNCHER3_CIRCLE_SCROLL = false;
+    public static final boolean LAUNCHER3_CIRCLE_SCROLL = true;
 
     // 是否开启负一屏，当LAUNCHER_OVERLAY_ENABLED = false才起作用
-    public static final boolean CUSTOM_CONTENT_ENABLED = true;
+    public static final boolean CUSTOM_CONTENT_ENABLED = false;
     // 是否开启跨进程的负一屏，如果开启，则不会开启CustomContent负一屏
     public static final boolean LAUNCHER_OVERLAY_ENABLED = false;
 

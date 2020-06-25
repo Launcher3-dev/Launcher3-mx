@@ -212,7 +212,6 @@ public class DragLayer extends BaseDragLayer<Launcher> {
         return false;
     }
 
-
     private boolean isInAccessibleDrag() {
         return mActivity.getAccessibilityDelegate().isInAccessibleDrag();
     }

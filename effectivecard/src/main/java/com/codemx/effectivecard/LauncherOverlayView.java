@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
  * TIME 18:16
  */
 public class LauncherOverlayView extends FrameLayout {
+
     public LauncherOverlayView(@NonNull Context context) {
         super(context);
     }

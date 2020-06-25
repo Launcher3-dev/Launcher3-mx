@@ -4,8 +4,6 @@ package com.android.launcher3.menu;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,11 +24,15 @@ import com.android.mxlibrary.view.CircleImageView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 
 /**
  * CircleMenuView
  */
-public class CircleMenuView extends ViewGroup implements View.OnClickListener, Insettable, View.OnLongClickListener {
+public class CircleMenuView extends ViewGroup implements View.OnClickListener, Insettable,
+        View.OnLongClickListener {
 
     private static final int DEFAULT_BUTTON_SIZE = 56;
     private static final float DEFAULT_DISTANCE = DEFAULT_BUTTON_SIZE * 1.5f;
