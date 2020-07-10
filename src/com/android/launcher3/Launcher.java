@@ -1946,7 +1946,12 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     @Override
     public void bindAppsAdded(ArrayList<Long> newScreens, ArrayList<ItemInfo> addNotAnimated,
                               ArrayList<ItemInfo> addAnimated) {
-        XLog.e(XLog.getTag(), XLog.TAG_GU + addNotAnimated.size() + "     " + addAnimated.size());
+        if (addNotAnimated != null) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + addNotAnimated.size());
+        }
+        if (addAnimated != null) {
+            XLog.e(XLog.getTag(), XLog.TAG_GU + addAnimated.size());
+        }
         // Add the new screens
         if (newScreens != null) {
             bindAddScreens(newScreens);
@@ -1976,7 +1981,10 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // Get the list of added items and intersect them with the set of items here
         final AnimatorSet anim = LauncherAnimUtils.createAnimatorSet();
         final Collection<Animator> bounceAnims = new ArrayList<>();
-        final boolean animateIcons = forceAnimateIcons && canRunNewAppsAnimation();
+        // modify by codemx.cn ---- 20200710 ---- start
+        final boolean animateIcons = FeatureFlags.SCROLL_TO_LAST_PAGE_WHEN_BIND_FINISH
+                && forceAnimateIcons && canRunNewAppsAnimation();
+        // modify by codemx.cn ---- 20200710 ---- start
         Workspace workspace = mWorkspace;
         long newItemsScreenId = -1;
         int end = items.size();
@@ -2060,15 +2068,13 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
                 if (newItemsScreenId != currentScreenId) {
                     // We post the animation slightly delayed to prevent slowdowns
                     // when we are loading right after we return to launcher.
-                    mWorkspace.postDelayed(new Runnable() {
-                        public void run() {
-                            if (mWorkspace != null) {
-                                AbstractFloatingView.closeAllOpenViews(Launcher.this, false);
+                    mWorkspace.postDelayed(() -> {
+                        if (mWorkspace != null) {
+                            AbstractFloatingView.closeAllOpenViews(Launcher.this, false);
 
-                                mWorkspace.snapToPage(newScreenIndex);
-                                mWorkspace.postDelayed(startBounceAnimRunnable,
-                                        NEW_APPS_ANIMATION_DELAY);
-                            }
+                            mWorkspace.snapToPage(newScreenIndex);
+                            mWorkspace.postDelayed(startBounceAnimRunnable,
+                                    NEW_APPS_ANIMATION_DELAY);
                         }
                     }, NEW_APPS_PAGE_MOVE_DELAY);
                 } else {
@@ -2205,7 +2211,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      */
     private LauncherAppWidgetInfo completeRestoreAppWidget(int appWidgetId, int finalRestoreFlag) {
         LauncherAppWidgetHostView view = mWorkspace.getWidgetForAppWidgetId(appWidgetId);
-        if ((view == null) || !(view instanceof PendingAppWidgetHostView)) {
+        if (!(view instanceof PendingAppWidgetHostView)) {
             Log.e(TAG, "Widget update called, when the widget no longer exists.");
             return null;
         }
