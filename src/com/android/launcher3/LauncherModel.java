@@ -307,7 +307,6 @@ public class LauncherModel extends BroadcastReceiver
         final ArrayList<Long> screensCopy = new ArrayList<>(screens);
         final ContentResolver cr = context.getContentResolver();
         final Uri uri = LauncherSettings.WorkspaceScreens.CONTENT_URI;
-        XLog.e(XLog.getTag(), XLog.TAG_GU);
         // Remove any negative screen ids -- these aren't persisted
         Iterator<Long> iter = screensCopy.iterator();
         while (iter.hasNext()) {
@@ -343,7 +342,6 @@ public class LauncherModel extends BroadcastReceiver
                 }
             }
         };
-        XLog.e(XLog.getTag(), XLog.TAG_GU);
         runOnWorkerThread(r, true);
     }
 

@@ -70,7 +70,7 @@ public class ItemClickHandler {
         if (v.getWindowToken() == null) {
             return;
         }
-
+        XLog.d(XLog.getTag(), XLog.TAG_GU + v);
         Launcher launcher = Launcher.getLauncher(v.getContext());
         if (!launcher.getWorkspace().isFinishedSwitchingState()) {
             return;
