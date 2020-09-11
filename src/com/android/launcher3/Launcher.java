@@ -1725,6 +1725,8 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         } else if (isInState(SPRING_LOADED)) {
             XLog.e(XLog.getTag(), XLog.TAG_GU_STATE + "is Normal----");
             mStateManager.goToState(NORMAL);
+        } else if (mWorkspace.getNextPage() != (hasCustomContentToLeft() ? 1 : 0)) {
+            mWorkspace.snapToPage(hasCustomContentToLeft() ? 1 : 0);
         } else {
             // Back button is a no-op here, but give at least some feedback for the button press
             mWorkspace.showOutlinesTemporarily();

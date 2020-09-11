@@ -60,7 +60,7 @@ abstract class BaseFlags {
     public static final boolean LAUNCHER3_CIRCLE_SCROLL = true;
 
     // 是否开启负一屏，当LAUNCHER_OVERLAY_ENABLED = false才起作用
-    public static final boolean CUSTOM_CONTENT_ENABLED = false;
+    public static final boolean CUSTOM_CONTENT_ENABLED = true;
 
     // 是否开启跨进程的负一屏，如果开启，则不会开启CustomContent负一屏
     public static final boolean LAUNCHER_OVERLAY_ENABLED = false;
