@@ -1065,6 +1065,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
      * @param info The data structure describing the shortcut.
      */
     View createShortcut(ShortcutInfo info) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU + info.getIntent().getComponent().getClassName());
         return createShortcut((ViewGroup) mWorkspace.getChildAt(mWorkspace.getCurrentPage()), info);
     }
 

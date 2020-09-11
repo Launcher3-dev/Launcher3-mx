@@ -39,6 +39,7 @@ import com.android.launcher3.folder.FolderIcon;
 import com.android.launcher3.util.PackageManagerHelper;
 import com.android.launcher3.widget.PendingAppWidgetHostView;
 import com.android.launcher3.widget.WidgetAddFlowHandler;
+import com.android.mxlibrary.util.XLog;
 
 import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_BY_PUBLISHER;
 import static com.android.launcher3.ItemInfoWithIcon.FLAG_DISABLED_LOCKED_USER;
@@ -82,7 +83,7 @@ public class ItemClickHandler {
             return;
         }
         // --- add by comde.cn ---- 20181026 --- end
-
+        XLog.d(XLog.getTag(), XLog.TAG_GU);
         Object tag = v.getTag();
         if (tag instanceof ShortcutInfo) {
             onClickAppShortcut(v, (ShortcutInfo) tag, launcher);

@@ -201,10 +201,8 @@ public class LauncherModel extends BroadcastReceiver
      */
     private static void runOnWorkerThread(Runnable r, boolean isRemoveAfterRun) {
         if (sWorkerThread.getThreadId() == Process.myTid()) {
-            XLog.e(XLog.getTag(), XLog.TAG_GU);
             r.run();
         } else {
-            XLog.e(XLog.getTag(), XLog.TAG_GU);
             // If we are not on the worker thread, then post to the worker handler
             sWorker.post(r);
             // TODO 存在部分系统会重新调用问题
@@ -318,14 +316,12 @@ public class LauncherModel extends BroadcastReceiver
                 iter.remove();
             }
         }
-        XLog.e(XLog.getTag(), XLog.TAG_GU);
         Runnable r = new Runnable() {
             @Override
             public void run() {
                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
                 // Clear the table
                 ops.add(ContentProviderOperation.newDelete(uri).build());
-                XLog.e(XLog.getTag(), XLog.TAG_GU + screensCopy);
                 int count = screensCopy.size();
                 for (int i = 0; i < count; i++) {
                     ContentValues v = new ContentValues();
@@ -336,10 +332,8 @@ public class LauncherModel extends BroadcastReceiver
                 }
 
                 try {
-                    XLog.e(XLog.getTag(), XLog.TAG_GU + ops);
                     cr.applyBatch(LauncherProvider.AUTHORITY, ops);
                 } catch (Exception ex) {
-                    XLog.e(XLog.getTag(), XLog.TAG_GU + ex.getMessage());
                     throw new RuntimeException(ex);
                 }
 

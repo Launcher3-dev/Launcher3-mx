@@ -902,6 +902,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
      */
     private void addInScreen(View child, long container, long screenId, int x, int y,
                              int spanX, int spanY) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU  + " container= " + container + "  screenId= " + screenId);
         if (container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
             if (getScreenWithId(screenId) == null) {
                 Log.e(TAG, "Skipping child, screenId " + screenId + " not found");
@@ -958,7 +959,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             // maybe we should be deleting these items from the LauncherModel?
             Log.e(TAG, "Failed to add to item at (" + lp.cellX + "," + lp.cellY + ") to CellLayout");
         }
-
+        XLog.d(XLog.getTag(), XLog.TAG_GU  + " container= " + container);
         child.setHapticFeedbackEnabled(false);
         child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
         if (child instanceof DropTarget) {

@@ -23,6 +23,7 @@ import com.android.launcher3.ItemInfo;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.dragndrop.DragOptions;
 import com.android.launcher3.folder.Folder;
+import com.android.mxlibrary.util.XLog;
 
 import static com.android.launcher3.LauncherState.EDITING;
 import static com.android.launcher3.LauncherState.NORMAL;
@@ -44,6 +45,7 @@ public class ItemLongClickListener {
      * @return 是否相应长按
      */
     private static boolean onWorkspaceItemLongClick(View v) {
+        XLog.d(XLog.getTag(), XLog.TAG_GU);
         Launcher launcher = Launcher.getLauncher(v.getContext());
         if (!canStartDrag(launcher)) return false;
         if (!launcher.isInState(NORMAL) && !launcher.isInState(OVERVIEW) && !launcher.isInState(EDITING))

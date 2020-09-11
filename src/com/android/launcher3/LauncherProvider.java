@@ -310,7 +310,7 @@ public class LauncherProvider extends ContentProvider {
     @Override
     public @NonNull ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations)
             throws OperationApplicationException {
-        XLog.e(XLog.getTag(), XLog.TAG_GU + operations);
+//        XLog.e(XLog.getTag(), XLog.TAG_GU + operations);
         createDbIfNotExists();
         try (SQLiteTransaction t = new SQLiteTransaction(mOpenHelper.getWritableDatabase())) {
             ContentProviderResult[] result = super.applyBatch(operations);

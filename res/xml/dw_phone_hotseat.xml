@@ -39,10 +39,6 @@
         <favorite launcher:uri="mmsto:"/>
     </resolve>
 
-    <resolve>
-
-    </resolve>
-
     <resolve
         launcher:container="-101"
         launcher:screen="2"
