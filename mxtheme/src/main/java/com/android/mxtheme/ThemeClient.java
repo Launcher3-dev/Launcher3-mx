@@ -22,10 +22,10 @@ import com.android.mxtheme.bean.WallpaperBean;
 public class ThemeClient implements IThemeClient {
 
     private IThemeService mIThemeService;
-    private ThemeServiceDeathRecipient mThemeServiceDeathRecipient;
+    private final ThemeServiceDeathRecipient mThemeServiceDeathRecipient;
 
     // 返回一个Binder对象
-    private IRemoteCallback mIRemoteCallback = new IRemoteCallback.Stub() {
+    private final IRemoteCallback mIRemoteCallback = new IRemoteCallback.Stub() {
         @Override
         public void onThemeSuccess(ThemeBean bean) throws RemoteException {
             XLog.e(XLog.getTag(), XLog.TAG_GU + bean);
@@ -48,7 +48,7 @@ public class ThemeClient implements IThemeClient {
     };
 
     // 监听远程服务是否挂掉了
-    private class ThemeServiceDeathRecipient implements IBinder.DeathRecipient {
+    private static class ThemeServiceDeathRecipient implements IBinder.DeathRecipient {
 
         @Override
         public void binderDied() {
@@ -56,7 +56,7 @@ public class ThemeClient implements IThemeClient {
         }
     }
 
-    private ServiceConnection mThemeConnection = new ServiceConnection() {
+    private final ServiceConnection mThemeConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
