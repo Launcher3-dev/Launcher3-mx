@@ -63,7 +63,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.android.launcher3.DropTarget.DragObject;
-import com.android.launcher3.Workspace.ItemOperator;
 import com.android.launcher3.accessibility.LauncherAccessibilityDelegate;
 import com.android.launcher3.allapps.DiscoveryBounce;
 import com.android.launcher3.allapps.MenuTransitionController;
@@ -798,12 +797,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             final AppWidgetHostView layout = mAppWidgetHost.createView(this, appWidgetId,
                     requestArgs.getWidgetHandler().getProviderInfo(this));
             boundWidget = layout;
-            onCompleteRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    completeAddAppWidget(appWidgetId, requestArgs, layout, null);
-                    mStateManager.goToState(NORMAL, SPRING_LOADED_EXIT_DELAY);
-                }
+            onCompleteRunnable = () -> {
+                completeAddAppWidget(appWidgetId, requestArgs, layout, null);
+                mStateManager.goToState(NORMAL, SPRING_LOADED_EXIT_DELAY);
             };
         } else if (resultCode == RESULT_CANCELED) {
             mAppWidgetHost.deleteAppWidgetId(appWidgetId);
@@ -1168,12 +1164,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
     }
 
     public FolderIcon findFolderIcon(final long folderIconId) {
-        return (FolderIcon) mWorkspace.getFirstMatch(new ItemOperator() {
-            @Override
-            public boolean evaluate(ItemInfo info, View view) {
-                return info != null && info.id == folderIconId;
-            }
-        });
+        return (FolderIcon) mWorkspace.getFirstMatch((info, view) -> info != null && info.id == folderIconId);
     }
 
     /**
@@ -1524,12 +1515,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         if (!addFlowHandler.startConfigActivity(this, appWidgetId, info, REQUEST_CREATE_APPWIDGET)) {
             // If the configuration flow was not started, add the widget
 
-            Runnable onComplete = new Runnable() {
-                @Override
-                public void run() {
-                    // Exit spring loaded mode if necessary after adding the widget
-                    mStateManager.goToState(NORMAL, SPRING_LOADED_EXIT_DELAY);
-                }
+            Runnable onComplete = () -> {
+                // Exit spring loaded mode if necessary after adding the widget
+                mStateManager.goToState(NORMAL, SPRING_LOADED_EXIT_DELAY);
             };
             completeAddAppWidget(appWidgetId, info, boundWidget, addFlowHandler.getProviderInfo(this));
             mWorkspace.removeExtraEmptyScreenDelayed(true, onComplete, delay, false);
@@ -1798,8 +1786,7 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     boolean isHotseatLayout(View layout) {
         // TODO: Remove this method
-        return mHotseat != null && layout != null &&
-                (layout instanceof CellLayout) && (layout == mHotseat.getLayout());
+        return mHotseat != null && (layout instanceof CellLayout) && (layout == mHotseat.getLayout());
     }
 
     /**
@@ -2062,11 +2049,9 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
             if (newItemsScreenId > -1) {
                 long currentScreenId = mWorkspace.getScreenIdForPageIndex(mWorkspace.getNextPage());
                 final int newScreenIndex = mWorkspace.getPageIndexForScreenId(newItemsScreenId);
-                final Runnable startBounceAnimRunnable = new Runnable() {
-                    public void run() {
-                        anim.playTogether(bounceAnims);
-                        anim.start();
-                    }
+                final Runnable startBounceAnimRunnable = () -> {
+                    anim.playTogether(bounceAnims);
+                    anim.start();
                 };
                 if (newItemsScreenId != currentScreenId) {
                     // We post the animation slightly delayed to prevent slowdowns
@@ -2594,18 +2579,15 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         if (mExitSpringLoadedModeRunnable != null) {
             mHandler.removeCallbacks(mExitSpringLoadedModeRunnable);
         }
-        mExitSpringLoadedModeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (successfulDrop) {
-                    if (isStateSpringLoaded()) {
+        mExitSpringLoadedModeRunnable = () -> {
+            if (successfulDrop) {
+                if (isStateSpringLoaded()) {
 //                        setState(LauncherState.OVERVIEW);
-                    }
-                } else {
-                    exitSpringLoadedDragMode();
                 }
-                mExitSpringLoadedModeRunnable = null;
+            } else {
+                exitSpringLoadedDragMode();
             }
+            mExitSpringLoadedModeRunnable = null;
         };
         mHandler.postDelayed(mExitSpringLoadedModeRunnable, delay);
     }

@@ -1856,7 +1856,7 @@ public abstract class PagedView<T extends View & PageIndicator> extends ViewGrou
         float visibleRight = visibleLeft + getMeasuredWidth();
         float scaleX = getScaleX();
         if (scaleX < 1 && scaleX > 0) {
-            float mid = getMeasuredWidth() / 2;
+            float mid = getMeasuredWidth() / 2.f;
             visibleLeft = mid - ((mid - visibleLeft) / scaleX);
             visibleRight = mid + ((visibleRight - mid) / scaleX);
         }
