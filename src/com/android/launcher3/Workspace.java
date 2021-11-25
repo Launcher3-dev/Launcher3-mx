@@ -210,6 +210,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
     private boolean mStripScreensOnPageStopMoving = false;
 
     private DragPreviewProvider mOutlineProvider = null;
+    // 横屏或者平板模式
     private boolean mWorkspaceFadeInAdjacentScreens;
 
     final WallpaperOffsetInterpolator mWallpaperOffset;
@@ -1468,6 +1469,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
                 CellLayout child = (CellLayout) getChildAt(i);
                 if (child != null) {
                     float scrollProgress = getScrollProgress(getScrollX(), child, i);
+                    // TODO 平板或者横屏界面会半透明
                     float alpha = 1 - Math.abs(scrollProgress);
                     if (mWorkspaceFadeInAdjacentScreens) {
                         child.getShortcutsAndWidgets().setAlpha(alpha);
