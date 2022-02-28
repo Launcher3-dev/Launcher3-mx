@@ -52,6 +52,10 @@ public abstract class SystemShortcut<T extends BaseDraggingActivity> extends Ite
 
     public abstract View.OnClickListener getOnClickListener(T activity, ItemInfo itemInfo);
 
+    public View.OnClickListener getOnClickListener(T activity, ItemInfo itemInfo, View view) {
+        return null;
+    }
+
     public static class Widgets extends SystemShortcut<Launcher> {
 
         public Widgets() {
@@ -215,6 +219,30 @@ public abstract class SystemShortcut<T extends BaseDraggingActivity> extends Ite
             return createOnClickListener(Launcher.getLauncher(activity), itemInfo);
         }
 
+        @Override
+        public View.OnClickListener getOnClickListener(BaseDraggingActivity activity, ItemInfo itemInfo, View view) {
+            if (itemInfo instanceof FolderInfo || itemInfo instanceof ShortcutInfo) {
+                return null;
+            }
+            return createOnClickListener(Launcher.getLauncher(activity), itemInfo, view);
+        }
+
+        public View.OnClickListener createOnClickListener(Launcher launcher,
+                                                          ItemInfo itemInfo,
+                                                          View widget) {
+            return view -> {
+                launcher.getWorkspace().removeWorkspaceItem(widget);
+                launcher.getWorkspace().stripEmptyScreens();
+                launcher.getDragLayer()
+                        .announceForAccessibility(launcher.getString(R.string.item_removed));
+                launcher.getModelWriter().deleteItemFromDatabase(itemInfo);
+                PopupWidgetWithArrow arrow = PopupWidgetWithArrow.getOpen(launcher);
+                if (arrow != null) {
+                    arrow.closeComplete();
+                }
+            };
+        }
+
         public View.OnClickListener createOnClickListener(Launcher launcher,
                                                           ItemInfo itemInfo) {
             return view -> {
@@ -222,9 +250,13 @@ public abstract class SystemShortcut<T extends BaseDraggingActivity> extends Ite
                 launcher.getWorkspace().stripEmptyScreens();
                 launcher.getDragLayer()
                         .announceForAccessibility(launcher.getString(R.string.item_removed));
+                launcher.getModelWriter().deleteItemFromDatabase(itemInfo);
+                PopupWidgetWithArrow arrow = PopupWidgetWithArrow.getOpen(launcher);
+                if (arrow != null) {
+                    arrow.closeComplete();
+                }
             };
         }
-
 
     }
 }

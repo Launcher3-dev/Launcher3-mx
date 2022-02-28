@@ -60,6 +60,10 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
             new SystemShortcut.Install()
     };
 
+    private static final SystemShortcut[] SYSTEM_WIDGET = new SystemShortcut[]{
+            new SystemShortcut.Delete()
+    };
+
     private final Launcher mLauncher;
 
     /**
@@ -214,6 +218,16 @@ public class PopupDataProvider implements NotificationListener.NotificationsChan
             }
         }
         return systemShortcuts;
+    }
+
+    public List<SystemShortcut> getEnabledSystemWidget(ItemInfo info) {
+        List<SystemShortcut> systemWidgets = new ArrayList<>();
+        for (SystemShortcut shortcut : SYSTEM_WIDGET) {
+            if (shortcut.getOnClickListener(mLauncher, info) != null) {
+                systemWidgets.add(shortcut);
+            }
+        }
+        return systemWidgets;
     }
 
     public void cancelNotification(String notificationKey) {
