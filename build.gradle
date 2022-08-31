@@ -128,7 +128,12 @@ dependencies {
 protobuf {
     // Configure the protoc executable
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.0.0'
+        def protobuf_version = "3.0.0"
+        if (osdetector.os == "osx") {
+            artifact = "com.google.protobuf:protoc:${protobuf_version}:osx-x86_64"
+        } else {
+            artifact = "com.google.protobuf:protoc:${protobuf_version}"
+        }
 
         generateProtoTasks {
             all().each { task ->
