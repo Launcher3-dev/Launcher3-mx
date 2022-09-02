@@ -223,7 +223,7 @@ public abstract class CircularSlidePagedView<T extends View & PageIndicator> ext
 
     @Override
     protected boolean isPagedViewCircledScroll() {
-        return MxSettings.sIsPagedViewCircleScroll;
+        return MxSettings.getInstance().isPageViewCircleScroll();
     }
 
 }

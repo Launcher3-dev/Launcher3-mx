@@ -33,6 +33,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -41,6 +42,7 @@ import android.widget.ListView;
 
 import com.android.launcher3.graphics.IconShapeOverride;
 import com.android.launcher3.notification.NotificationListener;
+import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.util.ListViewHighlighter;
 import com.android.launcher3.util.SettingsObserver;
 import com.android.launcher3.views.ButtonPreference;
@@ -56,6 +58,9 @@ import static com.android.launcher3.states.RotationHelper.getAllowRotationDefaul
 public class SettingsActivity extends Activity {
 
     private static final String ICON_BADGING_PREFERENCE_KEY = "pref_icon_badging";
+
+    public static final String ALLOW_CIRCLE_SCROLL_PREFERENCE_KEY = "pref_allowCircleScroll";
+
     /**
      * Hidden field MxSettings.Secure.NOTIFICATION_BADGING
      */
@@ -141,6 +146,17 @@ public class SettingsActivity extends Activity {
                 // Initialize the UI once
                 rotationPref.setDefaultValue(getAllowRotationDefaultValue());
             }
+
+            SwitchPreference circleScroll = (SwitchPreference) findPreference(ALLOW_CIRCLE_SCROLL_PREFERENCE_KEY);
+            circleScroll.setDefaultValue(MxSettings.getInstance().isPageViewCircleScroll());
+            circleScroll.setChecked(MxSettings.getInstance().isPageViewCircleScroll());
+            circleScroll.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isChecked = (boolean) newValue;
+                MxSettings.getInstance().setPagedViewCircleScroll(isChecked);
+                circleScroll.setChecked(isChecked);
+                return true;
+            });
+
         }
 
         @Override

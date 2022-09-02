@@ -362,4 +362,6 @@
 
     <string name="widget_count_format">(%1$d)</string>
     <string name="widget_span_format">(%1$dx%2$d)</string>
+
+    <string name="allow_circle_scroll_title">允许循环滑动</string>
 </resources>

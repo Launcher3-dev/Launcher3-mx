@@ -19,7 +19,7 @@ public final class MxSettings {
     /**
      * PagedView can scroll circle-endless.
      */
-    public static boolean sIsPagedViewCircleScroll = FeatureFlags.LAUNCHER3_CIRCLE_SCROLL;
+    private boolean isPagedViewCircleScroll = FeatureFlags.LAUNCHER3_CIRCLE_SCROLL;
     private Context mContext;
 
 
@@ -34,15 +34,20 @@ public final class MxSettings {
     public void loadSettings(Context context) {
         mContext = context.getApplicationContext();
 //        sLauncherEffect = LauncherSpUtil.getIntData(mContext, LauncherSpUtil.KEY_SCROLL_EFFECT, TransitionEffect.TRANSITION_EFFECT_NONE);
+        loadScreenCycle();
     }
 
     public void setPagedViewCircleScroll(boolean isPagedViewCircleScroll) {
-        MxSettings.sIsPagedViewCircleScroll = isPagedViewCircleScroll;
+        this.isPagedViewCircleScroll = isPagedViewCircleScroll;
         LauncherSpUtil.saveBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE, isPagedViewCircleScroll);
     }
 
     public void loadScreenCycle() {
-        sIsPagedViewCircleScroll = LauncherSpUtil.getBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE);
+        isPagedViewCircleScroll = LauncherSpUtil.getBooleanData(mContext, LauncherSpUtil.KEY_PAGE_CIRCLE);
+    }
+
+    public boolean isPageViewCircleScroll() {
+        return isPagedViewCircleScroll;
     }
 
     public void setLauncherEffect(int effect) {
