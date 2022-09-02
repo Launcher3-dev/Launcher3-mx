@@ -75,6 +75,7 @@ import com.android.launcher3.menu.controller.MenuEffectController;
 import com.android.launcher3.menu.bean.MenuItem;
 import com.android.launcher3.pageindicators.WorkspacePageIndicator;
 import com.android.launcher3.popup.PopupContainerWithArrow;
+import com.android.launcher3.popup.PopupWidgetWithArrow;
 import com.android.launcher3.setting.MxSettings;
 import com.android.launcher3.shortcuts.ShortcutDragPreviewProvider;
 import com.android.launcher3.touch.ItemClickHandler;
@@ -755,11 +756,11 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         mScreenOrder.remove(EXTRA_EMPTY_SCREEN_ID);
 
         long newId = LauncherSettings.Settings.call(getContext().getContentResolver(),
-                LauncherSettings.Settings.METHOD_NEW_SCREEN_ID)
+                        LauncherSettings.Settings.METHOD_NEW_SCREEN_ID)
                 .getLong(LauncherSettings.Settings.EXTRA_VALUE);
         mWorkspaceScreens.put(newId, cl);
         mScreenOrder.add(newId);
-        XLog.e(XLog.getTag(),XLog.TAG_GU + mScreenOrder);
+        XLog.e(XLog.getTag(), XLog.TAG_GU + mScreenOrder);
         // Update the model for the new screen
         LauncherModel.updateWorkspaceScreenOrder(mLauncher, mScreenOrder);
 
@@ -895,7 +896,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
      */
     private void addInScreen(View child, long container, long screenId, int x, int y,
                              int spanX, int spanY) {
-        XLog.d(XLog.getTag(), XLog.TAG_GU  + " container= " + container + "  screenId= " + screenId);
+        XLog.d(XLog.getTag(), XLog.TAG_GU + " container= " + container + "  screenId= " + screenId);
         if (container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
             if (getScreenWithId(screenId) == null) {
                 Log.e(TAG, "Skipping child, screenId " + screenId + " not found");
@@ -952,7 +953,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             // maybe we should be deleting these items from the LauncherModel?
             Log.e(TAG, "Failed to add to item at (" + lp.cellX + "," + lp.cellY + ") to CellLayout");
         }
-        XLog.d(XLog.getTag(), XLog.TAG_GU  + " container= " + container);
+        XLog.d(XLog.getTag(), XLog.TAG_GU + " container= " + container);
         child.setHapticFeedbackEnabled(false);
         child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
         if (child instanceof DropTarget) {
@@ -1157,7 +1158,7 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
         if (!mScroller.isFinished() || getChildCount() < 2) {
             return;
         }
-        XLog.d(XLog.getTag(),XLog.TAG_GU_STATE + effect);
+        XLog.d(XLog.getTag(), XLog.TAG_GU_STATE + effect);
         MxSettings.getInstance().setLauncherEffect(effect.getPosition());
         controller.getAdapter().setSelected(effect);
         mTransitionEffectHandler.removeMessages(WORKSPACE_MSG_PREVIEW_EFFECT);
@@ -1796,13 +1797,24 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
             mDragSourceInternal = (ShortcutAndWidgetContainer) child.getParent();
         }
 
-        if (child instanceof BubbleTextView && !dragOptions.isAccessibleDrag) {
-            PopupContainerWithArrow popupContainer = PopupContainerWithArrow
-                    .showForIcon((BubbleTextView) child);
-            if (popupContainer != null) {
-                dragOptions.preDragCondition = popupContainer.createPreDragCondition();
+        if ((child instanceof BubbleTextView || child instanceof LauncherAppWidgetHostView)
+                && !dragOptions.isAccessibleDrag) {
+            if (child instanceof BubbleTextView) {
+                PopupContainerWithArrow popupContainer = PopupContainerWithArrow
+                        .showForIcon((BubbleTextView) child);
+                if (popupContainer != null) {
+                    dragOptions.preDragCondition = popupContainer.createPreDragCondition();
 
-                mLauncher.getUserEventDispatcher().resetElapsedContainerMillis("dragging started");
+                    mLauncher.getUserEventDispatcher().resetElapsedContainerMillis("dragging started");
+                }
+            } else {
+               PopupWidgetWithArrow popupContainer = PopupWidgetWithArrow
+                        .showForIcon((LauncherAppWidgetHostView) child);
+                if (popupContainer != null) {
+                    dragOptions.preDragCondition = popupContainer.createPreDragCondition();
+
+                    mLauncher.getUserEventDispatcher().resetElapsedContainerMillis("dragging started");
+                }
             }
         }
 
@@ -3339,7 +3351,6 @@ public class Workspace extends CircularSlidePagedView<WorkspacePageIndicator>
          *
          * @param info info for the shortcut
          * @param view view for the shortcut
-         *
          * @return true if done, false to continue the map
          */
         boolean evaluate(ItemInfo info, View view);

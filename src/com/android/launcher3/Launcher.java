@@ -62,6 +62,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.android.launcher3.DropTarget.DragObject;
 import com.android.launcher3.accessibility.LauncherAccessibilityDelegate;
 import com.android.launcher3.allapps.DiscoveryBounce;
@@ -134,8 +136,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import androidx.annotation.Nullable;
 
 import static android.content.pm.ActivityInfo.CONFIG_ORIENTATION;
 import static android.content.pm.ActivityInfo.CONFIG_SCREEN_SIZE;
@@ -2366,18 +2366,11 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     @Override
     public void bindAllWidgets(final ArrayList<WidgetListRowEntry> allWidgets) {
-
-        if (mMenuLayout != null && allWidgets != null) {
-            mMenuLayout.setWidgets(allWidgets);
-            return;
+        mPopupDataProvider.setAllWidgets(allWidgets);
+        AbstractFloatingView topView = AbstractFloatingView.getTopOpenView(this);
+        if (topView != null) {
+            topView.onWidgetsBound();
         }
-
-        // 二级菜单
-//        mPopupDataProvider.setAllWidgets(allWidgets);
-//        AbstractFloatingView topView = AbstractFloatingView.getTopOpenView(this);
-//        if (topView != null) {
-//            topView.onWidgetsBound();
-//        }
     }
 
     /**
